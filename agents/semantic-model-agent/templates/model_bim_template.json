@@ -1,0 +1,134 @@
+{
+  "compatibilityLevel": 1604,
+  "model": {
+    "name": "SM_Template",
+    "defaultMode": "directLake",
+    "culture": "en-US",
+    "tables": [
+      {
+        "name": "dim_example",
+        "columns": [
+          {
+            "name": "id",
+            "dataType": "string",
+            "sourceColumn": "id",
+            "annotations": [{"name": "SummarizationSetBy", "value": "Automatic"}]
+          },
+          {
+            "name": "name",
+            "dataType": "string",
+            "sourceColumn": "name",
+            "annotations": [{"name": "SummarizationSetBy", "value": "Automatic"}]
+          },
+          {
+            "name": "category",
+            "dataType": "string",
+            "sourceColumn": "category",
+            "annotations": [{"name": "SummarizationSetBy", "value": "Automatic"}]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_example",
+            "source": {
+              "type": "entity",
+              "expression": "DatabaseQuery",
+              "entityName": "dim_example",
+              "schemaName": "dbo",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ]
+      },
+      {
+        "name": "fact_example",
+        "columns": [
+          {
+            "name": "id",
+            "dataType": "string",
+            "sourceColumn": "id",
+            "annotations": [{"name": "SummarizationSetBy", "value": "Automatic"}]
+          },
+          {
+            "name": "dim_id",
+            "dataType": "string",
+            "sourceColumn": "dim_id",
+            "annotations": [{"name": "SummarizationSetBy", "value": "Automatic"}]
+          },
+          {
+            "name": "amount",
+            "dataType": "decimal",
+            "sourceColumn": "amount",
+            "formatString": "#,0.00",
+            "annotations": [{"name": "SummarizationSetBy", "value": "Automatic"}]
+          },
+          {
+            "name": "event_date",
+            "dataType": "dateTime",
+            "sourceColumn": "event_date",
+            "formatString": "yyyy-MM-dd",
+            "annotations": [{"name": "SummarizationSetBy", "value": "Automatic"}]
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total Amount",
+            "expression": "SUM(fact_example[amount])",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Row Count",
+            "expression": "COUNTROWS(fact_example)",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Average Amount",
+            "expression": "AVERAGE(fact_example[amount])",
+            "formatString": "#,0.00"
+          },
+          {
+            "name": "Amount by Category",
+            "expression": "CALCULATE(SUM(fact_example[amount]), ALLEXCEPT(dim_example, dim_example[category]))",
+            "formatString": "#,0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_example",
+            "source": {
+              "type": "entity",
+              "expression": "DatabaseQuery",
+              "entityName": "fact_example",
+              "schemaName": "dbo",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "rel_fact_to_dim",
+        "fromTable": "fact_example",
+        "fromColumn": "dim_id",
+        "toTable": "dim_example",
+        "toColumn": "id",
+        "crossFilteringBehavior": "oneDirection"
+      }
+    ],
+    "expressions": [
+      {
+        "name": "DatabaseQuery",
+        "kind": "m",
+        "expression": [
+          "let",
+          "    database = Sql.Database(\"YOUR_SQL_ENDPOINT_HERE\", \"YOUR_LAKEHOUSE_NAME\")",
+          "in",
+          "    database"
+        ]
+      }
+    ],
+    "roles": [],
+    "annotations": []
+  }
+}

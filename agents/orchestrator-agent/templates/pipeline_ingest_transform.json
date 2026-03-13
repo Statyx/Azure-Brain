@@ -1,0 +1,52 @@
+{
+    "properties": {
+        "description": "Template: Ingest CSV files via OneLake, transform with Notebook",
+        "parameters": {
+            "source_folder": {
+                "type": "String",
+                "defaultValue": "raw"
+            },
+            "notebook_id": {
+                "type": "String",
+                "defaultValue": ""
+            }
+        },
+        "activities": [
+            {
+                "name": "Wait_For_File_Propagation",
+                "type": "Wait",
+                "dependsOn": [],
+                "typeProperties": {
+                    "waitTimeInSeconds": 10
+                }
+            },
+            {
+                "name": "Run_CSV_to_Delta_Notebook",
+                "type": "SparkNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Wait_For_File_Propagation",
+                        "dependencyConditions": ["Succeeded"]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.00:30:00",
+                    "retry": 1,
+                    "retryIntervalInSeconds": 60
+                },
+                "typeProperties": {
+                    "notebookId": {
+                        "value": "@pipeline().parameters.notebook_id",
+                        "type": "Expression"
+                    },
+                    "parameters": {
+                        "input_folder": {
+                            "value": "@pipeline().parameters.source_folder",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}
