@@ -41,6 +41,26 @@ Do you have a semantic model with DAX measures?
 
 ---
 
+## Folder Naming Convention
+
+Data source files live inside folders named `{type}-{displayName}` under `draft/` and `published/`:
+
+```
+Files/Config/draft/semantic-model-SM_Finance/datasource.json
+Files/Config/draft/semantic-model-SM_Finance/fewshots.json
+```
+
+**Critical**: The folder prefix uses a **hyphen** (`semantic-model-`), not an underscore. The `displayName` part matches the item's display name exactly (case-sensitive).
+
+| Data Source Type | Folder Prefix | Example |
+|-----------------|---------------|---------|
+| Semantic Model | `semantic-model-` | `semantic-model-SM_Finance` |
+| Lakehouse | `lakehouse-` | `lakehouse-MyLakehouse` |
+| Data Warehouse | `data_warehouse-` | `data_warehouse-SalesWarehouse` |
+| KQL Database | `kusto-` | `kusto-LogsDB` |
+
+---
+
 ## Configuring a Semantic Model Data Source
 
 ### datasource.json

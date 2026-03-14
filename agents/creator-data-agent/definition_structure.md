@@ -23,7 +23,7 @@ Files/Config/
 ├── publish_info.json                        # Publishing metadata (after publish)
 ├── draft/
 │   ├── stage_config.json                    # AI instructions (draft)
-│   ├── semantic_model-SM_Finance/
+│   ├── semantic-model-SM_Finance/
 │   │   ├── datasource.json                  # Data source config
 │   │   └── fewshots.json                    # Few-shot examples
 │   └── lakehouse-MyLakehouse/               # (if using lakehouse)
@@ -31,7 +31,7 @@ Files/Config/
 │       └── fewshots.json
 └── published/                               # (after publishing)
     ├── stage_config.json                    # AI instructions (published)
-    └── semantic_model-SM_Finance/
+    └── semantic-model-SM_Finance/
         ├── datasource.json
         └── fewshots.json
 ```
@@ -41,7 +41,7 @@ Data source folders follow the pattern: `{dataSourceType}-{dataSourceName}`
 
 | Data Source Type | Folder Prefix | Example |
 |-----------------|---------------|---------|
-| Semantic Model | `semantic_model-` | `semantic_model-SM_Finance` |
+| Semantic Model | `semantic-model-` | `semantic-model-SM_Finance` |
 | Lakehouse | `lakehouse-` | `lakehouse-MyLakehouse` |
 | Data Warehouse | `data_warehouse-` | `data_warehouse-SalesWarehouse` |
 | KQL Database | `kusto-` | `kusto-LogsDB` |

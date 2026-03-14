@@ -42,22 +42,22 @@
 | Issue | Symptom | Workaround |
 |-------|---------|------------|
 | 202 with no body | Seems like nothing happened | This is normal — poll `x-ms-operation-id` until Succeeded |
+| `/operations/{id}/result` endpoint hangs | SSL read timeout on `api.fabric.microsoft.com` | Use the `Location` header redirect URL instead (e.g., `wabi-west-us3-a-primary-redirect.analysis.windows.net`). For `updateDefinition`, skip result fetch entirely — just poll status |
+| Location header URL also hangs for updates | SSL timeout on result fetch | For `updateDefinition` operations, don't fetch the result — just confirm status is "Succeeded" |
 | "CorruptedPayload" error | 400 Bad Request | Validate JSON before base64-encoding; check for unicode issues |
 | "ItemDisplayNameAlreadyInUse" | Cannot create agent | Delete existing agent first or use a different name |
 | Rate limiting (429) | Too many requests | Respect `Retry-After` header; add delays between API calls |
 | getDefinition returns encrypted | Can't read definition | Report has sensitivity label with encryption; cannot retrieve via API |
 
-## Agent Response Quality
+## Publishing & M365 Copilot
 
-| Issue | Symptom | Fix |
-|-------|---------|-----|
-| Agent hallucinating table names | References tables that don't exist | Add element descriptions in datasource.json |
-| Agent using wrong measure | "Net Profit" instead of "Net Income" | Add the correct term to instructions + few-shot example |
-| Agent doesn't filter correctly | Returns all data instead of filtered | Add few-shot examples with FILTER/CALCULATETABLE patterns |
-| Agent gives wrong variance direction | Says "Favorable" when it's unfavorable | Explicitly define favorable/unfavorable logic in instructions |
-| Agent responds in wrong language | English questions get French answers | Set language preference in instructions |
-
----
+| Issue | Symptom | Workaround |
+|-------|---------|------------|
+| No public API for M365 Copilot toggle | Cannot enable "Share with M365 Copilot" via REST | Portal-only: Data Agent → Settings → M365 Copilot toggle. No REST API as of 2025-06 |
+| Publish via API | Need to publish agent programmatically | Include `publish_info.json` + duplicate draft parts into `published/` folder. Use `updateDefinition` with all parts |
+| Published version out of date | Users see old behavior | Re-run updateDefinition with both draft/ and published/ parts |
+| Draft works, published doesn't | Published agent gives errors | Ensure published/ folder has same parts as draft/ |
+| Missing publish_info.json | Publish state unclear | Add `publish_info.json` with schema 1.0.0 and description |
 
 ## Portal vs API Differences
 
