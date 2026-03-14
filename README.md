@@ -30,6 +30,7 @@ references it. Every new session starts with this context.
 | **orchestrator-agent** | Data Pipelines, Ingestion, Notebooks, Copy Jobs, Monitoring | `agents/orchestrator-agent/` |
 | **semantic-model-agent** | Semantic Models, DAX Measures, Relationships, model.bim, Direct Lake | `agents/semantic-model-agent/` |
 | **report-builder-agent** | Power BI Reports, Visuals, Pages, Themes, Legacy PBIX Format | `agents/report-builder-agent/` |
+| **creator-data-agent** | Fabric Data Agents, AI Instructions, Data Sources, Few-Shots, Publishing | `agents/creator-data-agent/` |
 
 Each agent has its own `README.md`, `instructions.md` (system prompt), and domain-specific knowledge files.  
 Load the agent's `instructions.md` at session start when working in its domain.
@@ -58,6 +59,14 @@ For a new session working on **semantic models / DAX**:
 4. `agents/semantic-model-agent/dax_queries.md` — Validation queries, debugging, performance
 5. `agents/semantic-model-agent/relationships.md` — Star schema, relationship rules, role-playing dims
 6. `agents/semantic-model-agent/known_issues.md` — Semantic-model-specific gotchas & fixes
+
+For a new session working on **Fabric Data Agents**:
+1. `agents/creator-data-agent/instructions.md` — Agent system prompt, 5 mandatory rules, decision trees
+2. `agents/creator-data-agent/instruction_writing_guide.md` — 7-section framework for writing AI instructions
+3. `agents/creator-data-agent/definition_structure.md` — JSON format, parts layout, encoding
+4. `agents/creator-data-agent/datasource_configuration.md` — Binding semantic models, lakehouses, warehouses
+5. `agents/creator-data-agent/fewshot_examples.md` — How to write effective Q&A training pairs
+6. `agents/creator-data-agent/known_issues.md` — Gotchas, debugging checklist
 
 ## Key Insight (TL;DR)
 
