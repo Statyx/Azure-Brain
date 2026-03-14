@@ -1,4 +1,24 @@
-# Themes & Styling — Expression Language, Colors, Python Helpers
+# Themes & Styling — Expression Language, Colors, Typography, Python Helpers
+
+> **See also**: `dashboard_design_guide.md` for complete design system, layout templates, and setup checklist.
+
+---
+
+## Typography Quick Reference
+
+Use **ONE font family** (Segoe UI) and differentiate via size and weight only.
+
+| Role | Size | Weight | JSON Value |
+|------|------|--------|------------|
+| Page title | 14pt | Bold | `"14D"` |
+| Visual title | 11pt | Regular | `"11D"` |
+| KPI callout | 27pt | Semibold | `"27D"` — **never leave default** |
+| Axis / Legend / Labels | 10pt | Regular | `"10D"` |
+| Data labels | 9pt | Regular | `"9D"` |
+| Table header | 11pt | Semibold | `"11D"` |
+| Table body | 10pt | Regular | `"10D"` |
+
+**Minimum readable size**: 9pt. Never go below this.
 
 ---
 

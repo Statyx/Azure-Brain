@@ -1,5 +1,17 @@
 # Pages & Layout — Canvas Grid System
 
+> **See also**: `dashboard_design_guide.md` for comprehensive design principles, typography scale, color system, and setup checklist.
+
+---
+
+## Design Principles (Quick Reference)
+
+1. **F-Pattern reading**: KPIs top-left → charts middle → detail tables bottom
+2. **One story per page**: Each page answers ONE business question
+3. **Consistent grid**: All visuals align to the column system below — no arbitrary positioning
+4. **White space matters**: Minimum 10px gap between visuals; don't fill every pixel
+5. **5-second rule**: User understands the main message within 5 seconds
+
 ---
 
 ## Standard Canvas

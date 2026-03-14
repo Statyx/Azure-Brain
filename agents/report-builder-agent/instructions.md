@@ -155,6 +155,12 @@ Is it container-level styling (title, shadow, border, background)?
 
 ## Cross-References
 
+- **Dashboard design guide (layout, fonts, colors, setup)**: `dashboard_design_guide.md`
+- Grid coordinates & column systems: `pages_layout.md`
+- Expression language & vcObjects: `themes_styling.md`
+- Visual type catalog & prototypeQuery patterns: `visual_catalog.md`
+- Known issues & gotchas: `known_issues.md`
+- Report JSON structure: `report_structure.md`
 - Semantic model details: `agents/semantic-model-agent/`
 - All 26 finance DAX measures: `agents/semantic-model-agent/dax_measures.md`
 - Resource IDs & endpoints: `../../resource_ids.md`

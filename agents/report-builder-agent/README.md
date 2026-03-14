@@ -28,6 +28,7 @@
 | File | Purpose |
 |------|---------|
 | `instructions.md` | **LOAD FIRST** — System prompt, mandatory rules, decision trees |
+| `dashboard_design_guide.md` | **Design bible** — Layout principles, typography scale, color system, setup checklist |
 | `report_structure.md` | Legacy PBIX format, report.json anatomy, definition.pbir, required parts |
 | `visual_catalog.md` | All visual types, projections, prototypeQuery, objects/vcObjects |
 | `pages_layout.md` | Page config, canvas dimensions, grid system, dashboard templates |
