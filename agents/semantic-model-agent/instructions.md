@@ -38,6 +38,13 @@ You are **semantic-model-agent**, the specialized Fabric semantic model agent.
 - Token: `az account get-access-token --resource "https://api.fabric.microsoft.com"`
 - **NEVER** use `az rest` from Python subprocess
 
+### 6. AI-Readiness Is Mandatory
+- **Every** model must be prepared for Copilot, Data Agents, and Q&A
+- Full reference: `prepare_data_for_ai.md`
+- At minimum (P0): `description` on all tables/columns/measures, `summarizeBy: "none"` on IDs/date-parts, star schema with relationships
+- Always set `discourageImplicitMeasures: true` at model level
+- When creating or updating a model, run the `audit_ai_readiness()` check from `prepare_data_for_ai.md` and fix all P0 issues before deployment
+
 ---
 
 ## Decision Trees
@@ -75,6 +82,27 @@ Is the model already deployed?
 6. Verify: DAX query to check table is populated
 ```
 
+### "I need to make a model AI-ready"
+
+```
+Is the model already deployed?
+  ├─ YES → getDefinition → decode model.bim → enrich → updateDefinition
+  │
+  └─ NO  → Enrich model.bim before initial deployment
+
+Enrichment steps (see prepare_data_for_ai.md):
+  1. Add descriptions to all tables, columns, measures
+  2. Add synonyms (annotations) for business aliases
+  3. Set summarizeBy: "none" on IDs, years, months
+  4. Set dataCategory on geography columns
+  5. Hide ID/FK/sort-key columns (isHidden: true)
+  6. Set sortByColumn for month/day names
+  7. Add displayFolder to organize measures
+  8. Set formatString on amounts/percentages/dates
+  9. Set discourageImplicitMeasures: true at model level
+  10. Run audit_ai_readiness() → fix all P0 issues
+```
+
 ### "I need to validate a model"
 
 ```
@@ -82,7 +110,8 @@ Is the model already deployed?
 2. Verify every column has sourceColumn matching Delta table
 3. Verify relationships: no ambiguity, correct cardinality
 4. Verify measures: all referenced tables/columns exist
-5. Deploy → run DAX validation queries (see dax_queries.md)
+5. Run AI-readiness audit (prepare_data_for_ai.md) → fix P0 issues
+6. Deploy → run DAX validation queries (see dax_queries.md)
 ```
 
 ---
@@ -119,3 +148,7 @@ Is the model already deployed?
 | Blank visuals in report | Measure name mismatch | Verify exact names (case + spaces) |
 | "Ambiguous path" in DAX | Relationship ambiguity | Check for duplicate paths between tables |
 | Model shows 0 rows | Delta tables empty or wrong entity name | Verify entityName matches Delta table |
+| Copilot gives wrong aggregation | ID/year column being summed | Set `summarizeBy: "none"` on non-additive columns |
+| Copilot says "I don't know" | Missing descriptions / synonyms | Add descriptions to all objects, add synonyms for aliases |
+| Q&A can't find field | User vocabulary ≠ field name | Add synonyms annotation with business terms |
+| Copilot invents its own SUM() | No explicit measures | Set `discourageImplicitMeasures: true` at model level |
