@@ -53,8 +53,9 @@
 
 | Issue | Symptom | Workaround |
 |-------|---------|------------|
+| **Draft-only agent not visible** | Agent exists in workspace but can't be opened/tested in portal | **CRITICAL**: You MUST publish. Add `published/` parts + `publish_info.json`. Draft-only agents are invisible in the portal UI |
 | No public API for M365 Copilot toggle | Cannot enable "Share with M365 Copilot" via REST | Portal-only: Data Agent → Settings → M365 Copilot toggle. No REST API as of 2025-06 |
-| Publish via API | Need to publish agent programmatically | Include `publish_info.json` + duplicate draft parts into `published/` folder. Use `updateDefinition` with all parts |
+| Publish via API | Need to publish agent programmatically | Include `publish_info.json` + duplicate draft parts into `published/` folder. Use `updateDefinition` with all 8 parts |
 | Published version out of date | Users see old behavior | Re-run updateDefinition with both draft/ and published/ parts |
 | Draft works, published doesn't | Published agent gives errors | Ensure published/ folder has same parts as draft/ |
 | Missing publish_info.json | Publish state unclear | Add `publish_info.json` with schema 1.0.0 and description |

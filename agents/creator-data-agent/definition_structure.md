@@ -244,8 +244,12 @@ payload = b64({"$schema": "2.1.0"})
 # → "eyIkc2NoZW1hIjogIjIuMS4wIn0="
 ```
 
-The full definition body:
+The full definition body (always include published parts — draft-only agents are **NOT visible** in the portal):
 ```python
+ds_stage = b64(stage_config)
+ds_datasource = b64(datasource)
+ds_fewshots = b64(fewshots)
+
 body = {
     "displayName": "Finance_Controller",
     "description": "Finance Controller for P&L, Budget, Cash Flow analysis",
@@ -253,13 +257,23 @@ body = {
     "definition": {
         "parts": [
             {"path": "Files/Config/data_agent.json", "payload": b64(data_agent_json), "payloadType": "InlineBase64"},
-            {"path": "Files/Config/draft/stage_config.json", "payload": b64(stage_config), "payloadType": "InlineBase64"},
-            {"path": "Files/Config/draft/semantic_model-SM_Finance/datasource.json", "payload": b64(datasource), "payloadType": "InlineBase64"},
-            {"path": "Files/Config/draft/semantic_model-SM_Finance/fewshots.json", "payload": b64(fewshots), "payloadType": "InlineBase64"},
+            # Draft
+            {"path": "Files/Config/draft/stage_config.json", "payload": ds_stage, "payloadType": "InlineBase64"},
+            {"path": "Files/Config/draft/semantic-model-SM_Finance/datasource.json", "payload": ds_datasource, "payloadType": "InlineBase64"},
+            {"path": "Files/Config/draft/semantic-model-SM_Finance/fewshots.json", "payload": ds_fewshots, "payloadType": "InlineBase64"},
+            # Publish info
+            {"path": "Files/Config/publish_info.json", "payload": b64(publish_info), "payloadType": "InlineBase64"},
+            # Published (same payloads as draft)
+            {"path": "Files/Config/published/stage_config.json", "payload": ds_stage, "payloadType": "InlineBase64"},
+            {"path": "Files/Config/published/semantic-model-SM_Finance/datasource.json", "payload": ds_datasource, "payloadType": "InlineBase64"},
+            {"path": "Files/Config/published/semantic-model-SM_Finance/fewshots.json", "payload": ds_fewshots, "payloadType": "InlineBase64"},
         ]
     }
 }
 ```
+
+> **WARNING**: If you only send draft parts (no `published/` folder, no `publish_info.json`),
+> the agent will NOT be visible or testable in the Fabric portal. Always publish.
 
 ---
 

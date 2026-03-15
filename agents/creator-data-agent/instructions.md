@@ -19,21 +19,24 @@ You are **creator-data-agent**, the specialized agent for creating, configuring,
 - Empty instructions = useless agent — the LLM has no context about your data
 - Write instructions first, validate them, THEN deploy
 
-### Rule 2: Data Sources Must Be Added After Creation
-- The REST API creates the agent shell and sets instructions
-- **Data source binding** (attaching a semantic model, lakehouse, etc.) must be done via the portal OR via `updateDefinition` with a `datasource.json` part
+### Rule 2: Data Sources Are Deployed WITH the Agent
+- Include `datasource.json` in the initial definition parts — no need for a separate step
 - The `datasource.json` requires the exact `artifactId` and `workspaceId` of the data source
+- Use `build_elements()` from `model.bim` to auto-select all tables/columns/measures
+- Without elements, the agent may not see any tables in the portal
 
 ### Rule 3: Few-Shot Examples Are Critical for Quality
 - Data Agents with few-shot examples produce dramatically better results
 - Each example needs: `id` (UUID), `question` (natural language), `query` (DAX/SQL/KQL)
 - Minimum 5 examples covering different query patterns; aim for 10–15
 
-### Rule 4: Draft vs Published Are Separate Stages
-- `draft/` — The working version you edit and test
+### Rule 4: ALWAYS Publish — Draft-Only Agents Are Invisible
+- `draft/` — The working version you edit in the portal
 - `published/` — The production version users interact with
-- Always test in draft first, then publish when validated
+- **CRITICAL**: Agents deployed with only draft parts are **NOT visible or testable** in the Fabric portal. You MUST include `published/` parts + `publish_info.json` for the agent to appear.
+- Deploy script default should always be `--publish` (or publish by default). Use `--draft-only` only for CI/CD staging.
 - Both stages have independent `stage_config.json`, `datasource.json`, and `fewshots.json`
+- To update: copy draft parts to published/ and re-run updateDefinition with all 8 parts
 
 ### Rule 5: Validate End-to-End Before Declaring Done
 - After deployment: open the agent in Fabric portal
@@ -67,10 +70,10 @@ You are **creator-data-agent**, the specialized agent for creating, configuring,
    │  d. draft/{type}-{name}/fewshots.json (few-shot examples)
    │
 6. Deploy via REST API: POST /v1/workspaces/{wsId}/items
+   │  IMPORTANT: Include published/ parts + publish_info.json
+   │  Draft-only agents are NOT visible in the portal
    │
 7. Verify in portal + test with sample questions
-   │
-8. Publish when ready (add published/ parts + publish_info.json)
 ```
 
 ### "I need to update an existing Data Agent"

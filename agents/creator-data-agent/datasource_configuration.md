@@ -115,6 +115,46 @@ Use `elements` to control which tables/measures are visible and add descriptions
 - **Describe dimension tables** — "dim_calendar: fiscal year, quarter, month" helps the agent pick the right filter
 - **Use `dataSourceInstructions`** — Tell the agent to prefer measures: "Always use DAX measures when available rather than raw column calculations"
 
+### Auto-Generating Elements from model.bim
+
+Instead of manually listing every table/column, read `model.bim` and generate the full elements array:
+
+```python
+DTYPE_MAP = {
+    "string": "string", "int64": "int64", "double": "double",
+    "boolean": "boolean", "dateTime": "dateTime", "decimal": "decimal",
+}
+
+def build_elements():
+    """Read model.bim and generate elements with all tables selected."""
+    with open("model.bim", "r", encoding="utf-8") as f:
+        model = json.load(f)
+    elements = []
+    for table in model["model"]["tables"]:
+        children = []
+        for col in table.get("columns", []):
+            children.append({
+                "id": None, "display_name": col["name"],
+                "type": "semantic_model.column",
+                "data_type": DTYPE_MAP.get(col.get("dataType", "string"), "string"),
+                "is_selected": True, "description": None, "children": [],
+            })
+        for measure in table.get("measures", []):
+            children.append({
+                "id": None, "display_name": measure["name"],
+                "type": "semantic_model.measure",
+                "is_selected": True, "description": None, "children": [],
+            })
+        elements.append({
+            "id": None, "display_name": table["name"],
+            "type": "semantic_model.table", "is_selected": True,
+            "description": None, "children": children,
+        })
+    return elements
+```
+
+This ensures the agent sees ALL tables and measures. Without elements, the agent may show "no tables selected" in the portal.
+
 ---
 
 ## Configuring a Lakehouse Data Source
@@ -191,7 +231,7 @@ A Data Agent can have **multiple data sources**. Each gets its own folder:
 
 ```
 Files/Config/draft/
-├── semantic_model-SM_Finance/
+├── semantic-model-SM_Finance/
 │   ├── datasource.json
 │   └── fewshots.json
 ├── lakehouse-LH_RawData/
