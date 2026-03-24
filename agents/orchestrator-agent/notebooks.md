@@ -12,17 +12,18 @@ Primary use: read raw files from OneLake Files → transform → write Delta tab
 ### Run Notebook via API
 ```python
 resp = requests.post(
-    f"{API}/workspaces/{WS_ID}/items/{notebook_id}/jobs/instances?jobType=SparkJob",
+    f"{API}/workspaces/{WS_ID}/items/{notebook_id}/jobs/instances?jobType=RunNotebook",
     headers=headers,
-    json={"executionData": {}}
 )
-# Always 202 → poll x-ms-operation-id
+# Returns 202 → poll Location header URL until status "Completed"
 ```
+
+> **CRITICAL**: The jobType is `RunNotebook`, NOT `SparkJob`. Using `SparkJob` will fail.
 
 ### Run Notebook with Parameters
 ```python
 resp = requests.post(
-    f"{API}/workspaces/{WS_ID}/items/{notebook_id}/jobs/instances?jobType=SparkJob",
+    f"{API}/workspaces/{WS_ID}/items/{notebook_id}/jobs/instances?jobType=RunNotebook",
     headers=headers,
     json={
         "executionData": {
@@ -54,7 +55,6 @@ resp = requests.post(
         "displayName": "NB_My_Transform",
         "type": "Notebook",
         "definition": {
-            "format": "ipynb",
             "parts": [
                 {
                     "path": "notebook-content.py",
@@ -65,6 +65,66 @@ resp = requests.post(
         }
     }
 )
+```
+
+> **CRITICAL**: Do NOT include `"format": "ipynb"` in the definition. Including it causes Fabric to parse the `.py` content as JSON, resulting in `InvalidNotebookContent` error. Let Fabric infer the format from the `notebook-content.py` path.
+
+---
+
+## ⚠️ Fabric Notebook Format (`.py`, NOT `.ipynb`)
+
+Fabric notebooks use a **proprietary `.py` format** internally, NOT standard Jupyter `.ipynb` JSON.
+
+### Format Structure
+```python
+# Fabric notebook source
+
+
+# MARKDOWN ********************
+
+# # My Title
+# 
+# Description in markdown.
+
+# CELL ********************
+
+print("This is a code cell")
+x = 1 + 2
+
+# MARKDOWN ********************
+
+# ## Section Header
+
+# CELL ********************
+
+# Next code cell
+df = spark.read.format("csv").option("header", "true").load("Files/data.csv")
+```
+
+### Key Rules
+- **Header**: Must start with `# Fabric notebook source` followed by two blank lines
+- **Cell separators**: `# CELL ********************` (code) or `# MARKDOWN ********************` (markdown)
+- **Markdown lines**: Each line prefixed with `# ` (comment + space)
+- **Upload path**: Always `notebook-content.py` (NOT `.ipynb`)
+- **Base64 encode**: The entire `.py` content, then send via `updateDefinition` or `POST /items`
+- **No format field**: Omit `"format"` from the definition JSON
+
+### Update Existing Notebook
+```python
+body = {
+    "definition": {
+        "parts": [{
+            "path": "notebook-content.py",
+            "payload": base64_encoded_py_content,
+            "payloadType": "InlineBase64"
+        }]
+    }
+}
+resp = requests.post(
+    f"{API}/workspaces/{WS_ID}/notebooks/{nb_id}/updateDefinition",
+    headers=headers, json=body
+)
+# 202 → poll Location header
 ```
 
 ---
@@ -179,6 +239,71 @@ def quality_check(df, table_name: str):
     
     return total > 0  # passes if non-empty
 ```
+
+### Pattern 5: Automated CSV → Delta via Deploy Script
+
+Generate the notebook content in Python, upload to Fabric, and run it — all from a single deployment script. No manual portal step.
+
+```python
+import base64, time, requests
+
+def deploy_and_run_csv_to_delta(api, ws_id, lh_id, token, headers):
+    """Create/update a setup notebook, then run it to convert CSVs to Delta."""
+    
+    # 1. Generate notebook .py content with embedded IDs
+    nb_py = f'''# Fabric notebook source
+
+
+# CELL ********************
+
+from pyspark.sql.types import StructType, StructField, StringType, DoubleType, BooleanType
+BASE = "abfss://{ws_id}@onelake.dfs.fabric.microsoft.com/{lh_id}"
+
+schema = StructType([
+    StructField("id", StringType()),
+    StructField("name", StringType()),
+    StructField("value", DoubleType()),
+    StructField("active", BooleanType()),
+])
+df = spark.read.format("csv").option("header","true").schema(schema).load(f"{{BASE}}/Files/data.csv")
+df.write.format("delta").mode("overwrite").save(f"{{BASE}}/Tables/my_table")
+print(f"my_table: {{df.count()}} rows")
+'''
+    
+    # 2. Upload notebook
+    b64 = base64.b64encode(nb_py.encode("utf-8")).decode("utf-8")
+    body = {
+        "displayName": "NB_Setup",
+        "type": "Notebook",
+        "definition": {
+            "parts": [{"path": "notebook-content.py", "payload": b64, "payloadType": "InlineBase64"}]
+        }
+    }
+    resp = requests.post(f"{api}/workspaces/{ws_id}/items", headers=headers, json=body)
+    # ... handle 201/202, get nb_id ...
+    
+    # 3. Run notebook
+    resp = requests.post(
+        f"{api}/workspaces/{ws_id}/items/{nb_id}/jobs/instances?jobType=RunNotebook",
+        headers=headers
+    )
+    # 4. Poll Location header until status == "Completed"
+    location = resp.headers["Location"]
+    while True:
+        r = requests.get(location, headers=headers)
+        status = r.json().get("status", "?")
+        if status == "Completed":
+            break
+        if status in ("Failed", "Cancelled"):
+            raise RuntimeError(f"Notebook run {status}")
+        time.sleep(10)
+```
+
+**Key points:**
+- Use explicit `StructType` schemas instead of `inferSchema` for reliable type casting (booleans, dates, doubles)
+- Write to `abfss://{ws_id}@onelake.dfs.fabric.microsoft.com/{lh_id}/Tables/{table_name}`
+- The `{ws_id}` and `{lh_id}` are baked into the notebook content at generation time
+- Use `mode("overwrite")` for idempotent re-runs
 
 ---
 

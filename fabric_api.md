@@ -98,6 +98,24 @@ POST /v1/workspaces/{wsId}/items/{pipelineId}/jobs/instances?jobType=Pipeline
 Body: {"executionData":{}}
 ```
 
+### Run Notebook
+```
+POST /v1/workspaces/{wsId}/items/{notebookId}/jobs/instances?jobType=RunNotebook
+→ 202 → poll Location header until status == "Completed"
+```
+> **jobType is `RunNotebook`**, NOT `SparkJob`.
+
+### EventStream Operations
+```
+# Get EventStream topology (sources, streams, destinations)
+GET /v1/workspaces/{wsId}/eventstreams/{esId}/topology
+
+# Update EventStream definition
+POST /v1/workspaces/{wsId}/eventstreams/{esId}/updateDefinition
+Body: {"definition": {"parts": [...]}}
+```
+> Custom Endpoint connection string is NOT available via API — get from Fabric portal.
+
 ## Definition Parts Format
 
 Every Fabric item definition is an array of `parts`:

@@ -32,6 +32,16 @@ Comprehensive list of every issue encountered and resolved during this project.
 | DataAgent instructions via `updateDefinition` (PowerShell) | ❌ JSON encoding fails on markdown w/ special chars |
 | DataAgent data source binding via REST API | ❌ No public endpoint — must use portal |
 | DataAgent dataSources in `data_agent.json` definition | ❌ Ignored (schema only has `$schema`) |
+| Notebook creation with `"format": "ipynb"` in definition | ❌ `InvalidNotebookContent` — Fabric parses .py as JSON |
+| Notebook creation WITHOUT `format` field, path `notebook-content.py` | ✅ Works |
+| Notebook jobType `SparkJob` | ❌ Fails — wrong job type |
+| Notebook jobType `RunNotebook` | ✅ Works |
+| EventStream Custom Endpoint connection string via REST API | ❌ No public endpoint — must get from portal UI |
+| EventStream topology API (`GET .../eventstreams/{id}/topology`) | ✅ Returns sources, streams, destinations |
+| EventStream destination `itemId` = Eventhouse ID | ❌ Must be **KQL Database ID** |
+| EventStream destination `itemId` = KQL Database ID | ✅ Works |
+| EventStream ingestion via Event Hub SDK (`azure-eventhub`) | ✅ Works |
+| ReadOnly lock prevents capacity `/suspend` POST | ❌ ReadOnly only blocks PUT/DELETE/PATCH, not POST |
 
 ---
 
@@ -203,3 +213,73 @@ When debugging Fabric report issues, check in this order:
 - **Pattern**: Use `--from-file report.json` to deploy the local file instead of generating from code
 - **Use case**: After `add_pages.py` modifies report.json with new pages, deploy with `--from-file`
 - **Default**: Without `--from-file`, the script generates a single-page dashboard from `build_finance_dashboard()`
+
+---
+
+## EventStream Issues
+
+### 24. ⚠️ EventStream Custom Endpoint Connection String NOT Available via API
+- **Symptom**: No REST API endpoint returns the EventStream Custom Endpoint connection string
+- **Tried and failed**: `GET /eventstreams/{id}`, `getDefinition`, topology, various undocumented paths — all return 404 or omit the connection string
+- **Fix**: Get the connection string manually from the **Fabric portal** → EventStream → Custom Endpoint source → connection details
+- **Format**: `Endpoint=sb://{host}.servicebus.windows.net/;SharedAccessKeyName=...;SharedAccessKey=...;EntityPath=...`
+
+### 25. ⚠️ EventStream Destination `itemId` Must Be KQL Database ID
+- **Symptom**: EventStream destination fails to connect, data doesn't flow to KQL tables
+- **Cause**: Used the Eventhouse ID instead of the KQL Database ID as `itemId` in the destination configuration
+- **Fix**: Always use the **KQL Database ID** (found at `GET /workspaces/{wsId}/kqlDatabases`), NOT the Eventhouse ID
+
+### 26. EventStream Uses Event Hub Protocol
+- **Pattern**: Send data to EventStream Custom Endpoint using `azure-eventhub` SDK
+- **SDK**: `EventHubProducerClient.from_connection_string(conn_str)`
+- **Routing**: Add `_table` field to each JSON event for multi-table routing in EventStream topology
+- **Batch limits**: Event Hub max batch ~1 MB; send in sub-batches of ~100 events
+```python
+from azure.eventhub import EventHubProducerClient, EventData
+import json
+
+producer = EventHubProducerClient.from_connection_string(CONN_STR)
+batch = producer.create_batch()
+for record in records:
+    record["_table"] = "SensorReading"  # routing field
+    batch.add(EventData(json.dumps(record)))
+producer.send_batch(batch)
+```
+
+---
+
+## Notebook Issues
+
+### 27. ⚠️ Notebook Upload: Do NOT Include `"format": "ipynb"` in Definition
+- **THE biggest notebook issue**
+- **Symptom**: `InvalidNotebookContent` error: "Failed to cast json string to type: IPythonNotebook"
+- **Cause**: Including `"format": "ipynb"` makes Fabric try to parse the `.py` content as JSON
+- **Fix**: Omit the `format` field entirely from the definition body:
+```python
+# WRONG ❌
+body = {"definition": {"format": "ipynb", "parts": [{"path": "notebook-content.py", ...}]}}
+
+# CORRECT ✅
+body = {"definition": {"parts": [{"path": "notebook-content.py", ...}]}}
+```
+
+### 28. Notebook jobType Is `RunNotebook`, NOT `SparkJob`
+- **Symptom**: Job fails to start or returns error
+- **Fix**: Use `?jobType=RunNotebook` when triggering notebook execution:
+```python
+POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
+```
+
+### 29. Fabric Notebook Internal Format Is `.py` Not `.ipynb`
+- **Symptom**: Trying to upload a standard Jupyter `.ipynb` JSON file fails
+- **Fix**: Fabric uses a proprietary `.py` format with special cell markers. See `notebooks.md` for the full format specification.
+- **Markers**: `# Fabric notebook source` (header), `# CELL ********************` (code), `# MARKDOWN ********************` (markdown)
+
+---
+
+## Azure Capacity Issues
+
+### 30. ReadOnly Lock Does NOT Prevent Capacity Suspend
+- **Symptom**: Capacity gets paused despite having a ReadOnly lock
+- **Cause**: ReadOnly locks only block ARM write operations (PUT/DELETE/PATCH). POST actions like `/suspend` are NOT blocked.
+- **Fix**: Don't rely on ReadOnly locks to prevent capacity pause. Delete any automation (Azure Automation runbooks) that calls `/suspend`.

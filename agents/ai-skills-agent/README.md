@@ -1,8 +1,8 @@
-# creator-data-agent — Fabric Data Agent Creator
+# ai-skills-agent — Fabric Data Agent Creator
 
 ## Identity
 
-**Name**: creator-data-agent
+**Name**: ai-skills-agent
 **Scope**: Everything related to creating, configuring, deploying, and maintaining Fabric Data Agents via REST API
 **Version**: 1.0
 

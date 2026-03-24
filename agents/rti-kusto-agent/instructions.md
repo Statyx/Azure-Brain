@@ -9,14 +9,15 @@ You are an expert at deploying and managing Microsoft Fabric Real-Time Intellige
 ### Rule 1: RTI Deployment Follows a Strict Sequence
 Items have dependencies. Always deploy in this order:
 1. **Lakehouse** → CSV data upload → Spark notebook to create Delta tables
-2. **Eventhouse** → KQL Database → KQL tables → data ingestion
-3. **Semantic Model** (TMDL/Direct Lake) → references Lakehouse SQL endpoint
-4. **Ontology** → entity types + data bindings (Lakehouse + KQL)
-5. **Graph Model** → auto-generated from Ontology
-6. **KQL Dashboard** → references KQL Database
-7. **Data Agent** → references Ontology (not Lakehouse/KQL directly)
-8. **Graph Query Set** → references Graph Model (queries must be added manually)
-9. **Operations Agent** → references KQL Database for monitoring
+2. **Eventhouse** → KQL Database → KQL tables
+3. **EventStream** → Custom Endpoint source → KQL Database destinations (one per table)
+4. **Semantic Model** (TMDL/Direct Lake) → references Lakehouse SQL endpoint
+5. **Ontology** → entity types + data bindings (Lakehouse + KQL)
+6. **Graph Model** → auto-generated from Ontology
+7. **KQL Dashboard** → references KQL Database
+8. **Data Agent** → references Ontology (not Lakehouse/KQL directly)
+9. **Graph Query Set** → references Graph Model (queries must be added manually)
+10. **Operations Agent** → references KQL Database for monitoring
 
 ### Rule 2: Use the Correct API for Each Item Type
 | Item Type | Create API | Definition Update | Type-Specific Endpoint? |
@@ -25,6 +26,7 @@ Items have dependencies. Always deploy in this order:
 | Eventhouse | `POST /workspaces/{id}/items` | N/A | `/eventhouses/{id}` |
 | KQL Database | Auto-created with Eventhouse | N/A | `/kqlDatabases/{id}` |
 | KQL Tables | Kusto REST mgmt API | `.create-merge table` | `{queryServiceUri}/v1/rest/mgmt` |
+| EventStream | `POST /workspaces/{id}/items` | `updateDefinition` | `/eventstreams/{id}` |
 | Semantic Model | `POST /workspaces/{id}/items` | `updateDefinition` | N/A |
 | Ontology | `POST /workspaces/{id}/items` | `updateDefinition` | N/A |
 | KQLDashboard | `POST /workspaces/{id}/items` | `updateDefinition` | `/kqlDashboards/{id}` |
@@ -46,7 +48,16 @@ The Ontology connects batch data (Lakehouse) and streaming data (Eventhouse/KQL)
 
 Each entity type can have BOTH binding types. Example: `Sensor` entity has NonTimeSeries binding to `dimsensor` (Lakehouse) AND TimeSeries binding to `SensorReading` (KQL).
 
-### Rule 5: Tenant Settings Must Be Enabled
+### Rule 5: EventStream Uses Event Hub Protocol
+EventStream Custom Endpoints use the **Azure Event Hub SDK** for data ingestion. Key facts:
+- **Connection string format**: `Endpoint=sb://{host}.servicebus.windows.net/;SharedAccessKeyName=...;SharedAccessKey=...;EntityPath=...`
+- **SDK**: `azure-eventhub` (`EventHubProducerClient.from_connection_string()`)
+- **Routing**: Add a `_table` field to each JSON event to route to different KQL tables via EventStream topology
+- **Custom Endpoint connection string is NOT available via REST API** — must be obtained from the Fabric portal UI
+- **EventStream destination `itemId`**: Must be the **KQL Database ID**, NOT the Eventhouse ID
+- **Topology API**: `GET /v1/workspaces/{wsId}/eventstreams/{esId}/topology` — returns sources, streams, and destinations with status
+
+### Rule 6: Tenant Settings Must Be Enabled
 Many RTI features are in preview. The following admin settings are required:
 
 | Setting | Required For |

@@ -94,6 +94,38 @@ For general Fabric issues, see `../../known_issues.md`.
 **Root cause**: Using old compatibility level  
 **Fix**: Use `1604` for Fabric Direct Lake models
 
+## Issue 11: Relationship Direction Causes Duplicate Key Errors or Blank RELATED()
+
+**Symptom**: DAX query fails with "duplicate value found on the one-side" or `RELATED()` returns blanks  
+**Root cause**: The relationship direction is reversed — the fact table (with duplicate keys) is on the One side instead of the Many side  
+**Example**: `marketing_sends[send_id] → marketing_events[send_id]` had events on the One side, but events has multiple rows per send_id (open, click, bounce). Correct: `marketing_events[send_id] → marketing_sends[send_id]` (events=Many, sends=One)  
+**Fix**:
+1. Delete the incorrect relationship
+2. Recreate with fact table on Many side, dimension/lookup on One side
+3. Run `RefreshType=Calculate` to hydrate (see Issue 12)
+
+**Detection**: Check all relationships — the table on the One side must have unique values in the key column. Use `EVALUATE DISTINCT(table[column])` to verify cardinality.
+
+## Issue 12: New/Modified Relationships Not Active Until Calculate Refresh
+
+**Symptom**: After creating or modifying a relationship, queries return errors or the change has no effect  
+**Root cause**: DirectLake models cache relationship metadata. Changes require a metadata refresh.  
+**Fix**: Run `RefreshType=Calculate`:
+- MCP: `model_operations Refresh RefreshType=Calculate`
+- REST: `POST /v1/workspaces/{wsId}/semanticModels/{modelId}/refresh` with `{"type": "Calculate"}`
+
+**Important**: `Full` refresh may fail if source Delta table schemas have changed (missing columns like `attribution_source` or `Classification`). `Calculate` is sufficient for relationship hydration.
+
+## Issue 13: Time Intelligence Annotation Overrides Measure Definitions
+
+**Symptom**: A measure designed to return all-time results (e.g., `[Active Customers]`) gets auto-filtered by current year  
+**Root cause**: `__PBI_TimeIntelligenceEnabled=1` model annotation causes the Data Agent orchestrator to inject year filters into ALL questions  
+**Impact**: Affects Data Agent/Copilot DAX generation — not the measure itself. Verified Answers, measure descriptions, and CopilotInstructions do NOT override this behavior.  
+**Fix options**:
+1. Set `__PBI_TimeIntelligenceEnabled` to `0` (affects all questions)
+2. Accept all answers are year-scoped by default
+3. Train users to say "across all years" explicitly
+
 ---
 
 ## Debugging Checklist

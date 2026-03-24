@@ -163,14 +163,59 @@ Always follow this sequence — items depend on previous steps:
 
 ```
 1. Lakehouse (+ wait for SQL Endpoint)
-2. Data Ingestion (CSVs → Delta tables)
+2. Data Ingestion (CSVs → Delta tables via Spark notebook)
 3. Eventhouse (auto-creates KQL Database)
 4. KQL Tables (via Kusto REST mgmt API)
-5. KQL Data Ingestion (inline or streaming)
-6. Semantic Model (Direct Lake over Lakehouse)
-7. KQL Dashboard (tiles query KQL Database)
-8. Ontology (binds to both Lakehouse + KQL Database)
-9. Graph Query Set (manual queries in UI)
-10. Data Agent (source = Ontology)
-11. Operations Agent (+ manual Knowledge Source)
+5. EventStream (Custom Endpoint source → KQL Database destinations)
+6. Data Injection (Event Hub SDK → EventStream → KQL tables)
+7. Semantic Model (Direct Lake over Lakehouse)
+8. KQL Dashboard (tiles query KQL Database)
+9. Ontology (binds to both Lakehouse + KQL Database)
+10. Graph Query Set (manual queries in UI)
+11. Data Agent (source = Ontology)
+12. Operations Agent (+ manual Knowledge Source)
 ```
+
+---
+
+## EventStream Issues
+
+### 11. EventStream Custom Endpoint Connection String NOT Available via API
+- **Problem**: No REST API endpoint exposes the Custom Endpoint connection string.
+- **Tried**: `GET /eventstreams/{id}`, `getDefinition`, topology API, various undocumented paths — all 404 or omit it.
+- **Fix**: Get it manually from Fabric portal → EventStream → Custom Endpoint → connection details.
+
+### 12. EventStream Destination `itemId` Must Be KQL Database ID
+- **Problem**: Using Eventhouse ID as `itemId` in destination configuration fails silently.
+- **Fix**: Always use the **KQL Database ID** (`GET /workspaces/{wsId}/kqlDatabases`), NOT the Eventhouse ID.
+
+### 13. EventStream Topology API
+- **Endpoint**: `GET /v1/workspaces/{wsId}/eventstreams/{esId}/topology`
+- **Returns**: Sources, streams, and destinations with `"status": "Running"` or `"Error"`
+- **Use case**: Verify the entire EventStream pipeline is healthy after configuration.
+
+### 14. EventStream Event Routing via `_table` Field
+- **Pattern**: When one Custom Endpoint feeds multiple KQL tables, add a `_table` field to each JSON event.
+- **Example**: `{"_table": "SensorReading", "SensorId": "SN_001", ...}` routes to `SensorReading` table.
+- **The EventStream topology must be configured with separate destinations per target table.**
+
+### 15. EventStream Uses Event Hub Protocol
+- **SDK**: `azure-eventhub` (`pip install azure-eventhub`)
+- **Client**: `EventHubProducerClient.from_connection_string(conn_str)`
+- **Connection string format**: `Endpoint=sb://{host}.servicebus.windows.net/;SharedAccessKeyName=...;SharedAccessKey=...;EntityPath=...`
+- **Batch limit**: ~1 MB per batch. Send in sub-batches of ~100 events.
+
+---
+
+## CSV-to-Delta Automation
+
+### 16. Automated Lakehouse Setup Pattern
+Instead of manually running a notebook to convert CSVs to Delta tables, automate the full flow in the deployment script:
+
+1. **Upload CSVs** to OneLake `Files/` via DFS API
+2. **Generate a notebook** (`.py` format) with explicit schemas and `abfss://` paths baked in
+3. **Upload** the notebook to Fabric via `POST /workspaces/{wsId}/items`
+4. **Run** it via `POST .../jobs/instances?jobType=RunNotebook`
+5. **Poll** the Location header until `status == "Completed"`
+
+**Key**: Use explicit `StructType` schemas (not `inferSchema`) for reliable type casting of booleans, dates, and doubles.

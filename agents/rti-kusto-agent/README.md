@@ -1,8 +1,8 @@
-# rti-agent — Fabric Real-Time Intelligence Agent
+# rti-kusto-agent — Fabric Real-Time Intelligence Agent
 
 ## Identity
 
-**Name**: rti-agent
+**Name**: rti-kusto-agent
 **Scope**: Everything related to creating, deploying, and managing Fabric Real-Time Intelligence (RTI) items: Eventhouses, KQL Databases, KQL Dashboards, Ontologies, Graph Models, Graph Query Sets, Operations Agents, and Data Agents with ontology bindings.
 **Version**: 1.0
 
@@ -15,7 +15,7 @@
 | **Ontology** | Ontology, Entity Types, Relationships, Data Bindings | Fabric REST API + updateDefinition |
 | **Graph** | GraphModel, Graph Query Set | Fabric REST API + GQL (ISO/IEC 39075) |
 | **Operations Agent** | OperationsAgent | Fabric REST API + Configurations.json |
-| **Data Agent (ontology)** | DataAgent bound to Ontology | Fabric REST API (see also creator-data-agent) |
+| **Data Agent (ontology)** | DataAgent bound to Ontology | Fabric REST API (see also ai-skills-agent) |
 | **MCP Kusto** | Query/explore KQL databases | Azure MCP Kusto tools |
 
 ## What This Agent Does NOT Own
@@ -23,7 +23,7 @@
 - Lakehouse creation / CSV upload → defer to `agents/orchestrator-agent/`
 - Semantic model creation (TMDL/BIM) → defer to `agents/semantic-model-agent/`
 - Report creation (Power BI visuals) → defer to `agents/report-builder-agent/`
-- Data Agent without ontology → defer to `agents/creator-data-agent/`
+- Data Agent without ontology → defer to `agents/ai-skills-agent/`
 
 ## Files
 
