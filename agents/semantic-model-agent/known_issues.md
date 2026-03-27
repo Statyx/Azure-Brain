@@ -126,6 +126,28 @@ For general Fabric issues, see `../../known_issues.md`.
 2. Accept all answers are year-scoped by default
 3. Train users to say "across all years" explicitly
 
+## Issue 14: Hidden Columns Break Verified Answers Silently
+
+**Symptom**: A Verified Answer that references a hidden column returns empty results or is ignored entirely by the DAX tool  
+**Root cause**: Hidden columns (`isHidden: true`) are excluded from the NL2DAX schema context. If a Verified Answer references them, the DAX tool cannot resolve the column reference.  
+**Impact**: Silent failure — no error, just wrong results or fallback to auto-generated query  
+**Fix**: Ensure all columns referenced by Verified Answers are visible (`isHidden: false`). If the column must be hidden from reports, consider creating a measure that encapsulates the logic instead.
+
+## Issue 15: Description Coverage Directly Impacts NL2DAX Accuracy
+
+**Symptom**: Data Agent generates wrong column references or picks incorrect tables for queries  
+**Root cause**: Columns and measures without descriptions force the NL2DAX model to rely solely on `display_name` for disambiguation. Similar names (e.g., `Amount` in 3 different tables) cause misreferencing.  
+**Impact**: DAX accuracy degrades proportionally to missing descriptions. Models with <50% coverage show significantly more MEASURE_SELECTION and QUERY_ERROR root causes.  
+**Fix**: Add descriptions to ALL columns and measures via Prep for AI → AI Data Schema. Target 100% coverage. Use TMDL `///` doc comments for bulk description management.
+
+**Measuring coverage**:
+```python
+# From TMDL getDefinition output
+described = sum(1 for col in columns if col.get("description"))
+total = len(columns)
+coverage_pct = (described / total) * 100
+```
+
 ---
 
 ## Debugging Checklist

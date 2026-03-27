@@ -35,6 +35,12 @@ Comprehensive list of every issue encountered and resolved during this project.
 | DataAgent `aiInstructions` with measures list | ✅ Orchestrator reformulates questions using measure names |
 | DataAgent data source binding via REST API | ❌ No public endpoint — must use portal |
 | DataAgent dataSources in `data_agent.json` definition | ❌ Ignored (schema only has `$schema`) |
+| `requests.post()` with `allow_redirects=True` (default) | ❌ Location header redirect hangs on SSL read |
+| `requests.post()` with `allow_redirects=False` | ✅ Returns 202 properly, poll via `x-ms-operation-id` |
+| `RefreshType=Full` after relationship change on DirectLake | ❌ May fail if source schema changed |
+| `RefreshType=Calculate` after relationship change on DirectLake | ✅ Sufficient for relationship metadata hydration |
+| Hidden columns in Verified Answers | ❌ Silently ignored — DAX tool can't resolve hidden column references |
+| Descriptions via TMDL `///` doc comments | ✅ Extracted by NL2DAX for disambiguation |
 | Notebook creation with `"format": "ipynb"` in definition | ❌ `InvalidNotebookContent` — Fabric parses .py as JSON |
 | Notebook creation WITHOUT `format` field, path `notebook-content.py` | ✅ Works |
 | Notebook jobType `SparkJob` | ❌ Fails — wrong job type |

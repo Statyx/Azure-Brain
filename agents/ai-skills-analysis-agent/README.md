@@ -13,6 +13,9 @@
 |--------|-------|-----------|
 | **Diagnostic JSON Analysis** | Parse and audit the full diagnostic export from the Diagnostics button | JSON structure parsing |
 | **Programmatic Evaluation** | Run ground-truth evaluations against Data Agents with the Fabric SDK | `fabric-data-agent-sdk` |
+| **Automated Evaluation** | Run the AI Skill Analyzer for batch evaluation with BPA, RCA, grading | `The_AI_Skill_Analyzer` |
+| **DAX Quality Analysis** | Score generated DAX with 24 BPA rules and quality stars (0-3) | BPA framework |
+| **Root Cause Analysis** | Classify failures into 8 RCA categories, suggest 6 action types | RCA decision tree |
 | **Python Client Consumption** | Consume Data Agents from external apps via the Python client SDK | `fabric-data-agent-client` |
 | **Configuration Audit** | Evaluate instruction quality, schema completeness, relationship integrity | Diagnostic JSON sections |
 | **Conversation Replay** | Reconstruct user↔assistant exchanges with full tool call & DAX traces | Thread / run_steps analysis |
@@ -33,6 +36,8 @@
 | `instructions.md` | **LOAD FIRST** — System prompt, mandatory rules, decision trees, output format |
 | `diagnostic_schema.md` | Complete reference for the diagnostic JSON structure (schema v2.1.0) |
 | `semantic_model_best_practices.md` | **KEY FILE** — Prep for AI vs Data Agent instructions, AI Data Schema, Verified Answers, implementation workflow |
+| `dax_quality_analysis.md` | **NEW** — 24 BPA rules across 6 categories, quality stars (0-3), scoring framework |
+| `root_cause_analysis.md` | **NEW** — 8 RCA categories, 6 action suggestion types, grading system, run output format |
 | `evaluation_sdk.md` | Full guide for programmatic evaluation with `fabric-data-agent-sdk` |
 | `python_client_sdk.md` | Full guide for consuming Data Agents via `fabric-data-agent-client` |
 | `known_issues.md` | Common diagnostic patterns, SDK pitfalls, and edge cases |
@@ -41,9 +46,11 @@
 
 1. Read `instructions.md` — mandatory behavioral context, analysis workflow
 2. User provides a diagnostic JSON file → load `diagnostic_schema.md` for field reference
-3. For programmatic evaluation → load `evaluation_sdk.md`
-4. For Python client consumption → load `python_client_sdk.md`
-5. Reference `known_issues.md` when encountering unexpected patterns
+3. For DAX quality assessment → load `dax_quality_analysis.md`
+4. For failure investigation → load `root_cause_analysis.md`
+5. For programmatic evaluation → load `evaluation_sdk.md`
+6. For Python client consumption → load `python_client_sdk.md`
+7. Reference `known_issues.md` when encountering unexpected patterns
 
 ## Key Insights
 

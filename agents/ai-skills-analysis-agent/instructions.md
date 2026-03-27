@@ -217,7 +217,70 @@ Always produce structured analysis reports.
   → Yes → Run Diagnostic Analysis → Focus on §5 (Conversation Replay) and §6 (Findings)
   → No → Download diagnostics first (Diagnostics button in portal)
   → Alternative → Run programmatic evaluation with ground truth
+→ Assign root cause using RCA decision tree (root_cause_analysis.md)
+→ Generate action suggestions based on RCA-to-Action mapping
 ```
+
+### "I want to assess DAX quality"
+```
+→ Do you have DAX queries (from diagnostics or evaluation run)?
+  → Yes → Load dax_quality_analysis.md
+        → Run 24 BPA rules across 6 categories
+        → Assign quality stars (0-3)
+        → Report top violations and improvement suggestions
+  → No → First run an evaluation or get diagnostics
+```
+
+### "I want to run the AI Skill Analyzer"
+```
+→ Is a profile configured? (profiles/{name}/profile.yaml + questions.yaml)
+  → Yes → Run: python src/main.py --profile {name}
+        → Review batch_summary.json for pass/fail/RCA distribution
+        → Compare vs previous run (fixed/regressed)
+        → Focus on DAX quality stars and BPA violations
+  → No → Create profile:
+        → workspace_id, agent_id, semantic_model_id, stage
+        → Write questions.yaml with expected answers (minimum 15)
+```
+
+---
+
+## Rule 6 — DAX Quality Assessment (NEW)
+
+When analyzing generated DAX (from diagnostics or evaluation):
+
+```
+1. EXTRACT DAX from nl2code tool output (markdown fence ```dax ... ```)
+2. RUN 24 BPA rules (see dax_quality_analysis.md)
+   → 6 categories: Performance, Correctness, Time Intelligence, Readability, Measure Usage, Agent-Specific
+3. ASSIGN quality stars (0-3)
+4. FLAG top violations with IDs (e.g., PERF-004, CORR-001)
+5. SUGGEST improvements per violation
+```
+
+Key patterns to watch:
+- `FILTER(ALL(...))` → replace with `CALCULATE` + `REMOVEFILTERS`
+- `==` operator → DAX uses `=` only
+- Raw `SUM(column)` → use pre-defined measure
+- `__PBI_TimeIntelligenceEnabled` auto-filters → flag as TIME-001
+- Division without `DIVIDE()` → flag as PERF-004
+
+---
+
+## Rule 7 — Root Cause Analysis (NEW)
+
+When a question fails (wrong answer or no answer):
+
+```
+1. CLASSIFY using the RCA decision tree (root_cause_analysis.md)
+   → 8 categories: AGENT_ERROR, QUERY_ERROR, EMPTY_RESULT, FILTER_CONTEXT,
+     MEASURE_SELECTION, RELATIONSHIP, REFORMULATION, SYNTHESIS
+2. ASSIGN primary root cause
+3. MAP to action suggestions (DESCRIPTION, INSTRUCTION, FEWSHOT, EXPECTED, MEASURE, DATA)
+4. INCLUDE in report §6 Findings with severity
+```
+
+Priority fix order: INSTRUCTION > FEWSHOT > DESCRIPTION > MEASURE > DATA > EXPECTED
 
 ---
 
