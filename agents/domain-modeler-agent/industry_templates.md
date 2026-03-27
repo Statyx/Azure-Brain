@@ -237,3 +237,35 @@ When adapting a template:
 4. **Add calculated columns** where the client expects derived fields
 5. **Choose KQL tables** only for data with sub-second freshness requirements
 6. **Choose ontology entities** only for dimension tables that need graph-based relationship queries
+
+---
+
+## Enterprise-Scale Reference (EndToEndFabric Pattern)
+
+The templates above are **starter models** for quick demos. For full enterprise demos, scale them following this proven pattern:
+
+### Scale Matrix
+
+| Industry | CSVs | Dim Tables | Fact Tables | DAX Measures | Report Pages | Domains |
+|----------|:----:|:----------:|:-----------:|:------------:|:------------:|:-------:|
+| Energy & Utilities | 20 | 12 | 8 | 110+ | 12+5+3 | Generation, Grid, Billing, Sustainability, Field Ops |
+| HR & Corporate Finance | 22 | 14 | 8 | 130+ | 14+5+3 | Workforce, Compensation, Recruitment, Finance, Compliance |
+| Manufacturing | 25 | 15 | 10 | 120+ | 12+5+3 | Production, Quality, Supply Chain, Maintenance, EHS |
+| Publishing & Distribution | 17 | 10 | 7 | 96 | 10+5+3 | Finance, Operations, HR, Inventory |
+
+### Report Structure Pattern
+
+Each enterprise demo produces 3 reports:
+1. **Analytics Report** (10-14 pages) — Main dashboard, domain deep-dives, geographic analysis
+2. **Forecasting Report** (5 pages) — Time-series predictions per domain
+3. **HTAP Dashboard** (3 pages) — Real-time monitoring, event stream, alerts
+
+### Config-Driven Scaling
+
+For enterprise-scale models, define the domain model via JSON configs:
+- `industry.json` — Project identity, domains, workspace naming
+- `sample-data.json` — Table schemas, row counts, FK relationships
+- `semantic-model.json` — Tables, measures, relationships
+- `reports.json` — Report pages, visual types, KPI mappings
+
+See `agents/project-orchestrator-agent/config_templates.md` for the full config schema.

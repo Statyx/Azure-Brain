@@ -4,8 +4,8 @@
 
 Accumulated patterns, API references, known issues, and 16 specialized agents — auto-loaded at session start to avoid re-learning lessons and repeating mistakes.
 
-![Agents](https://img.shields.io/badge/agents-16-blue?logo=github)
-![Knowledge Files](https://img.shields.io/badge/knowledge_files-13-green)
+![Agents](https://img.shields.io/badge/agents-17-blue?logo=github)
+![Knowledge Files](https://img.shields.io/badge/knowledge_files-14-green)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?logo=microsoft)
 
 ---
@@ -33,8 +33,9 @@ graph TB
         Ops["Operations<br/>─────────────<br/>WORKFLOWS · TEMPLATES<br/>ERROR_RECOVERY"]
     end
 
-    subgraph Agents["16 Specialized Agents"]
+    subgraph Agents["17 Specialized Agents"]
         direction LR
+        Meta["Meta-Agent<br/>──────────<br/>project-orchestrator"]
         DataEng["Data Engineering<br/>──────────<br/>orchestrator · lakehouse<br/>dataflow · domain-modeler"]
         Analytics["Analytics<br/>──────────<br/>semantic-model · report-builder<br/>ai-skills · ai-skills-analysis"]
         Platform["Platform<br/>──────────<br/>workspace-admin · fabric-cli<br/>monitoring · extensibility"]
@@ -60,6 +61,7 @@ graph TB
 | [`known_issues.md`](known_issues.md) | All gotchas, workarounds, what works vs what doesn't |
 | [`environment.md`](environment.md) | Python, Azure CLI, PowerShell setup |
 | [`resource_ids.md`](resource_ids.md) | GUIDs, endpoints, connection strings |
+| [`shared_constraints.md`](shared_constraints.md) | **New** — 8 hard rules all agents must follow (config-driven, idempotent, async-first) |
 | [`WORKFLOWS.md`](WORKFLOWS.md) | 5 end-to-end cross-agent workflows |
 | [`TEMPLATES.md`](TEMPLATES.md) | 6 project templates with checklists and time budgets |
 | [`ERROR_RECOVERY.md`](ERROR_RECOVERY.md) | Error recovery playbook — decision trees, retry patterns |
@@ -67,6 +69,12 @@ graph TB
 ---
 
 ## Agent Directory
+
+### Project Orchestration
+
+| Agent | Scope | Docs |
+|-------|-------|------|
+| [project-orchestrator](agents/project-orchestrator-agent/) | End-to-End Project Builder, 12-Step Pipeline, Config-Driven | [README](agents/project-orchestrator-agent/README.md) |
 
 ### Data Engineering
 
@@ -105,6 +113,7 @@ graph TB
 | [migration-bo](agents/migration-bo-agent/) | Business Objects Migration to Fabric | [README](agents/migration-bo-agent/README.md) |
 
 > Each agent has its own `instructions.md` (system prompt) and domain-specific knowledge files. The agent's README contains the full reading order for its domain.
+> The **project-orchestrator** is a meta-agent that coordinates all others for end-to-end project creation.
 
 ---
 
@@ -123,11 +132,13 @@ Github_Brain/
 ├── known_issues.md              # Gotchas & workarounds
 ├── environment.md               # Dev environment setup
 ├── resource_ids.md              # GUIDs & endpoints
+├── shared_constraints.md        # 8 hard rules for all agents
 ├── WORKFLOWS.md                 # Cross-agent workflows
 ├── TEMPLATES.md                 # Project templates
 ├── ERROR_RECOVERY.md            # Error recovery playbook
 └── agents/
-    ├── orchestrator-agent/      # Pipelines & ingestion
+    ├── project-orchestrator-agent/ # Meta-agent: end-to-end pipeline
+    ├── orchestrator-agent/      # Pipelines & ingestion (data)
     ├── lakehouse-agent/         # OneLake & Delta
     ├── dataflow-agent/          # Dataflow Gen2 & M
     ├── domain-modeler-agent/    # Star schema & data gen

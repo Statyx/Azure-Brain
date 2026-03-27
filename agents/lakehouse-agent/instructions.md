@@ -108,6 +108,29 @@ Fabric notebooks use a proprietary `.py` format:
 
 ## Lakehouse Architecture
 
+### Medallion Pattern (Standard Project Layout)
+
+For full Fabric projects, use 3 Lakehouses with schema separation:
+
+| Lakehouse | Name | Purpose | Schemas |
+|-----------|------|---------|---------|
+| **Bronze** | `BronzeLH` | Raw landing zone — CSV/JSON/Parquet as-is | None (Files/ only) |
+| **Silver** | `SilverLH` | Cleaned, typed, deduplicated | Domain-based: `generation`, `billing`, `hr` |
+| **Gold** | `GoldLH` | Star schema, analytics-ready | `dim`, `fact`, `analytics` |
+
+### Standard Notebook Pipeline
+
+| Notebook | Name Pattern | Purpose |
+|:--------:|-------------|---------|
+| NB01 | `NB01_BronzeToSilver` | Cleansing, type casting, deduplication |
+| NB02 | `NB02_WebEnrichment` | Optional — API data augmentation |
+| NB03 | `NB03_SilverToGold` | Star schema transformation, aggregations |
+| NB04 | `NB04_Forecasting` | Time-series prediction (Holt-Winters, MLflow) |
+| NB05 | `NB05_TransactionalAnalytics` | HTAP: Eventhouse + KQL setup |
+| NB06 | `NB06_DiagnosticCheck` | Data quality validation |
+
+### Single Lakehouse Structure
+
 ```
 Lakehouse
 ├── Files/                          ← Raw file storage (OneLake DFS)

@@ -73,6 +73,30 @@ How many steps?
                  └─ Parallel?   → Pipeline with ForEach or parallel branches
 ```
 
+### Standard Pipeline Pattern
+
+For a full Fabric project, the standard orchestration pipeline follows this sequence:
+
+```
+PL_<CompanyName>_Orchestration
+  │
+  ├── DF_Domain1 ──┐
+  ├── DF_Domain2 ──┤ (parallel Dataflows)
+  ├── DF_DomainN ──┘
+  │         │
+  │    on success
+  │         ▼
+  ├── NB01_BronzeToSilver
+  ├── NB02_WebEnrichment (optional)
+  ├── NB03_SilverToGold
+  ├── NB04_Forecasting (optional)
+  └── NB05_TransactionalAnalytics (optional)
+```
+
+**Naming**: `PL_<CompanyName>_Orchestration` (e.g., `PL_ContosoEnergy_Orchestration`)
+
+See `../project-orchestrator-agent/project_pipeline.md` for the full 12-step project pipeline.
+
 ---
 
 ## API Quick Reference
