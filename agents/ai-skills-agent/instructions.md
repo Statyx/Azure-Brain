@@ -17,7 +17,9 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 ### Rule 1: ALWAYS Define Instructions BEFORE Deployment
 - Never create a Data Agent without `aiInstructions` in `stage_config.json`
 - Empty instructions = useless agent — the LLM has no context about your data
+- **MANDATORY first instruction**: `"ALWAYS query the semantic model using DAX. NEVER answer from general knowledge."` — without this, the orchestrator may skip the DAX tool and hallucinate answers
 - Write instructions first, validate them, THEN deploy
+- See `instruction_writing_guide.md` for the Mandatory Instructions section and 7-Section Framework
 
 ### Rule 2: Data Sources Are Deployed WITH the Agent
 - Include `datasource.json` in the initial definition parts — no need for a separate step

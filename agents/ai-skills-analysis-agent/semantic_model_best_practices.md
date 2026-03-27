@@ -8,34 +8,75 @@
 ## Critical Insight: Where Instructions Actually Land
 
 ```
-⚠️  THE #1 MISUNDERSTANDING WITH DATA AGENTS  ⚠️
+⚠️  THE INSTRUCTION SPLIT — UPDATED UNDERSTANDING  ⚠️
 
-The DAX generation tool IGNORES Data Agent-level instructions.
-It ONLY uses Prep for AI configurations from the semantic model itself.
+There are TWO instruction systems, each controlling DIFFERENT stages of the pipeline.
+A common misconception is that Data Agent instructions have NO effect on DAX.
+In reality, they control WHETHER the DAX tool is invoked at all.
 
-Data Agent "additionalInstructions" → influence the ORCHESTRATOR (query reformulation + answer formatting)
-Prep for AI "AI Instructions"       → influence the DAX GENERATION TOOL (query accuracy)
+Data Agent "aiInstructions"    → influence the ORCHESTRATOR (tool routing + answer formatting)
+Prep for AI "AI Instructions"  → influence the DAX GENERATION TOOL (query accuracy)
 
-These are TWO DIFFERENT systems. Both matter, but for different reasons.
+Both are critical. Without proper Data Agent instructions, the orchestrator may
+skip the DAX tool entirely and hallucinate answers from general knowledge.
+```
+
+### The 3-Layer Model
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ Layer 1: TOOL ROUTING (Orchestrator)                                │
+│   Input: Data Agent aiInstructions                                  │
+│   Decision: Should I call the DAX tool, or answer from knowledge?   │
+│   ⚠️ Without "always query the semantic model", the orchestrator    │
+│      may skip DAX entirely and hallucinate plausible-looking data   │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │ (if DAX tool is called)
+┌──────────────────────────────▼──────────────────────────────────────┐
+│ Layer 2: DAX GENERATION (DAX Tool / NL2SA)                          │
+│   Input: Prep for AI ONLY (AI Data Schema, Verified Answers,        │
+│          AI Instructions, synonyms, descriptions)                   │
+│   Decision: What DAX query to write                                 │
+│   ⚠️ Data Agent aiInstructions are NOT passed to this layer         │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │
+┌──────────────────────────────▼──────────────────────────────────────┐
+│ Layer 3: RESPONSE FORMATTING (Orchestrator)                         │
+│   Input: Data Agent aiInstructions + DAX results                    │
+│   Decision: How to present the results to the user                  │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ### What goes WHERE
 
 | Configuration | Set In | Used By | Controls |
 |---------------|--------|---------|----------|
-| **AI Instructions** | Prep for AI (semantic model) | DAX generation tool | Query accuracy, business terminology, metric preferences |
+| **Data Agent Instructions** | Data Agent config (`stage_config.json::aiInstructions`) | Orchestrator LLM | **Tool routing** (whether to call DAX tool), response formatting, cross-source routing, tone, disclaimers |
+| **AI Instructions** | Prep for AI (semantic model) | DAX generation tool | DAX query accuracy, business terminology, metric preferences |
 | **AI Data Schema** | Prep for AI (semantic model) | DAX generation tool | Which tables/columns/measures the AI can use |
 | **Verified Answers** | Prep for AI (semantic model) | DAX generation tool | Pre-approved responses to common questions |
-| **Data Agent Instructions** | Data Agent config | Orchestrator LLM | Response formatting, cross-source routing, tone, disclaimers |
+| **Few-shot examples** | Data Agent config (`fewshots.json`) | Orchestrator LLM | Example Q&A pairs guiding query patterns |
 | **Per-datasource instructions** | Data Agent datasource config | Orchestrator LLM | NOT supported for semantic models |
-| **Few-shot examples** | Data Agent config | Orchestrator LLM | Example Q&A pairs for the orchestrator |
+
+### Real-World Evidence (Marketing360 Agent, March 2026)
+
+**Q5: "Top 5 campaigns by revenue"**
+
+| Before instructions | After instructions |
+|--------------------|--------------------|
+| ☆☆☆ No DAX query — orchestrator answered from general knowledge with hallucinated campaign names and revenue figures | ★★☆ 39-line DAX query using SUMMARIZECOLUMNS + TOPN + [Total Revenue] measure with proper campaign join |
+
+**What changed**: Added `"ALWAYS query the semantic model using DAX. NEVER answer from general knowledge."` to Data Agent `aiInstructions`. This forced the orchestrator to route the question to the DAX tool instead of answering directly.
+
+**Key learning**: The instruction `"Always query the semantic model"` is the single most impactful Data Agent instruction. Without it, the orchestrator can bypass DAX entirely for questions it thinks it can answer from context.
 
 ### Diagnostic Evidence
 
 In a diagnostic JSON, you can see this split:
-- `runs[].instructions` → contains the Data Agent `additionalInstructions` (orchestrator-level)
+- `runs[].instructions` → contains the Data Agent `aiInstructions` (orchestrator-level)
 - `diagnostic_details.nl2sa_request` → the NL2SA request sent to the DAX tool does **NOT** contain those instructions
 - The DAX tool uses Prep for AI configs that are **not visible** in the diagnostic export
+- **If no `nl2sa_request` exists at all** → the orchestrator skipped the DAX tool (Layer 1 problem)
 
 ---
 
@@ -47,13 +88,17 @@ User Question
     ▼
 ┌─────────────────────────────────┐
 │ 1. QUESTION PARSING             │  Azure OpenAI, security, permissions
-│    (Orchestrator)               │  Uses: Data Agent instructions
+│    (Orchestrator)               │  Uses: Data Agent aiInstructions
 └──────────────┬──────────────────┘
                │
                ▼
 ┌─────────────────────────────────┐
-│ 2. DATA SOURCE SELECTION        │  Evaluates question vs available sources
-│    (Orchestrator)               │  Uses: schema info, AI instructions
+│ 2. TOOL ROUTING DECISION        │  ⚠️ THE CRITICAL GATE
+│    (Orchestrator)               │  Uses: Data Agent aiInstructions
+│                                 │  Decides: Call DAX tool? Or answer
+│                                 │  from general knowledge?
+│                                 │  Without "always query the model"
+│                                 │  instruction, may skip DAX entirely
 └──────────────┬──────────────────┘
                │
                ▼
@@ -61,17 +106,23 @@ User Question
 │ 3. DAX QUERY GENERATION         │  Generates DAX from natural language
 │    (DAX Generation Tool)        │  Uses: Prep for AI ONLY
 │                                 │  (schema, AI instructions, verified
-│                                 │   answers, synonyms, min/max values,
-│                                 │   report visual metadata)
-│                                 │  ⚠️ IGNORES Data Agent instructions
+│                                 │   answers, synonyms, descriptions)
+│                                 │  Data Agent instructions NOT passed
 └──────────────┬──────────────────┘
                │
                ▼
 ┌─────────────────────────────────┐
 │ 4. RESPONSE FORMATTING          │  Formats results into human text
-│    (Orchestrator)               │  Uses: Data Agent instructions
+│    (Orchestrator)               │  Uses: Data Agent aiInstructions
 └─────────────────────────────────┘
 ```
+
+> **Key insight**: If you see answers with NO DAX query (hallucinated data), the problem is at
+> Stage 2 — the orchestrator decided not to call the DAX tool. Fix this with Data Agent
+> instructions: `"ALWAYS query the semantic model using DAX. NEVER answer from general knowledge."`
+>
+> If you see answers with a DAX query but WRONG results, the problem is at Stage 3 — fix
+> the query accuracy via Prep for AI (AI Data Schema, Verified Answers, AI Instructions).
 
 ---
 
@@ -154,11 +205,11 @@ User Question
 | **2** | Define AI Data Schema | In Prep for AI → Simplify data schema. Select only relevant objects. |
 | **3** | Create Verified Answers | Identify common questions. Use complete trigger phrases (not partial). 5-7 triggers per answer. |
 | **4** | Add semantic model to Data Agent | Select same tables as AI Data Schema. |
-| **5** | Add AI Instructions | In Prep for AI → Add AI instructions. Business terminology, metric preferences, date defaults. |
-| **6** | Prepare report visuals | Descriptive titles. Visual metadata (title, columns, measures, filters) improves AI grounding. |
-| **7** | Verify and test DAX | Review generated DAX in each response. If wrong, trace back to which config needs adjustment. |
-| **8** | Configure Data Agent instructions | ONLY cross-source guidance: formatting, routing, tone, disclaimers. NOT semantic model-specific rules. |
-| **9** | Validate & iterate | Use `fabric-data-agent-sdk` for automated evaluation. Involve stakeholders. |
+| **5** | Add AI Instructions (Prep for AI) | In Prep for AI → Add AI instructions. Business terminology, metric preferences, date defaults. These control DAX generation accuracy. |
+| **6** | Write Data Agent instructions | In `stage_config.json::aiInstructions`. **MUST include**: "ALWAYS query the semantic model using DAX. NEVER answer from general knowledge." Also list available measures, set response format, add role/persona. These control orchestrator tool routing + formatting. |
+| **7** | Add few-shot examples | In `fewshots.json`. 5-15 examples covering query patterns (simple aggregation, ranking, comparison, time series). |
+| **8** | Prepare report visuals | Descriptive titles. Visual metadata (title, columns, measures, filters) improves AI grounding. |
+| **9** | Validate & iterate | Use The AI Skill Analyzer or `fabric-data-agent-sdk` for automated evaluation. Check: does every question produce a DAX query? Are results accurate? |
 | **10** | Source control & deployment | Git integration + deployment pipelines across dev/test/prod. |
 
 ---
@@ -177,7 +228,9 @@ User Question
 | **Conflicting instructions** | AI instructions vs verified answer configs → unpredictable behavior | Align all configurations |
 | **Skipping schema refinement** | Large models with overlapping fields → low accuracy | Focus AI Data Schema on relevant subset |
 | **Overly complex instructions** | LLM doesn't follow, adds latency | Keep instructions focused and specific |
-| **SM instructions in Data Agent** | DAX tool ignores them → no impact on query accuracy | Move to Prep for AI. Agent-level = cross-source only. |
+| **Missing "always query" instruction** | Orchestrator skips DAX tool, answers from general knowledge with hallucinated data | Add to aiInstructions: "ALWAYS query the semantic model using DAX. NEVER answer from general knowledge." |
+| **Measure-specific rules in Data Agent** | DAX tool doesn't see them → no impact on measure selection | Move DAX-specific measure rules to Prep for AI (AI Instructions / CopilotInstructions). Keep general rules like "use [Avg Churn Risk] measure" in both places — the orchestrator can reformulate the question to include the measure name. |
+| **No available measures list in instructions** | Agent writes raw aggregations instead of using measures | List all key measures in Data Agent aiInstructions so the orchestrator can reference them in question reformulation. |
 
 ---
 

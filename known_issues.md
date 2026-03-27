@@ -30,6 +30,9 @@ Comprehensive list of every issue encountered and resolved during this project.
 | DataAgent creation via REST API (`POST /items` type `DataAgent`) | ✅ Works |
 | DataAgent instructions via `updateDefinition` (Python `requests`) | ✅ Works |
 | DataAgent instructions via `updateDefinition` (PowerShell) | ❌ JSON encoding fails on markdown w/ special chars |
+| DataAgent without "always query" instruction | ❌ Orchestrator skips DAX, hallucinated answers |
+| DataAgent with "ALWAYS query the semantic model using DAX" instruction | ✅ Forces DAX tool invocation on every question |
+| DataAgent `aiInstructions` with measures list | ✅ Orchestrator reformulates questions using measure names |
 | DataAgent data source binding via REST API | ❌ No public endpoint — must use portal |
 | DataAgent dataSources in `data_agent.json` definition | ❌ Ignored (schema only has `$schema`) |
 | Notebook creation with `"format": "ipynb"` in definition | ❌ `InvalidNotebookContent` — Fabric parses .py as JSON |

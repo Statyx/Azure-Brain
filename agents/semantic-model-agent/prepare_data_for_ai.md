@@ -4,6 +4,21 @@
 
 A semantic model becomes AI-ready when it includes enough metadata for **Copilot**, **Data Agents**, and **Q&A** to understand business meaning, choose correct aggregations, and present results properly. All properties below live in `model.bim` (TMSL JSON) and can be deployed via the REST API `updateDefinition`.
 
+### Where AI-Readiness Fits in the Instruction Pipeline
+
+When a Data Agent uses a semantic model, there are **two separate instruction systems** that work at different layers:
+
+| Layer | System | Where to Configure | Controls |
+|-------|--------|-------------------|----------|
+| **Orchestrator** (tool routing + formatting) | Data Agent Instructions | `stage_config.json::aiInstructions` | Whether DAX tool is called, question reformulation, response formatting |
+| **DAX Generation** (query accuracy) | **Prep for AI** (this file) | Semantic model properties | Which queries are generated, business terminology, measure selection |
+
+**Key insight**: Prep for AI controls DAX **accuracy**, but without the Data Agent instruction `"ALWAYS query the semantic model using DAX"`, the orchestrator may skip DAX entirely and hallucinate answers.
+
+**Both systems must be configured for a working agent.**
+
+See `agents/ai-skills-analysis-agent/semantic_model_best_practices.md` for the full 3-Layer Model.
+
 ---
 
 ## Priority Checklist

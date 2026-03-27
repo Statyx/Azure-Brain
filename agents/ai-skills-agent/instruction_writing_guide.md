@@ -9,6 +9,40 @@ This is the **most important file** for Data Agent quality. The `aiInstructions`
 - A Data Agent without instructions is a general-purpose LLM pointing at your data — it has **no business context**
 - Good instructions = accurate answers, correct terminology, proper formatting
 - Bad instructions = hallucinated metrics, wrong joins, confused users
+- **Without the mandatory "always query" rule**, the orchestrator may skip the DAX tool entirely and answer questions from general knowledge with fabricated data
+
+---
+
+## Mandatory Instructions (Include in EVERY Agent)
+
+Before writing domain-specific content, every Data Agent instruction **MUST** include these rules:
+
+```markdown
+CRITICAL RULES:
+1. ALWAYS query the semantic model using DAX to answer questions. NEVER answer from general knowledge or generate fictional numbers.
+2. If you cannot find the data in the model, say so. Do not invent results.
+3. Use existing DAX measures whenever possible instead of raw column calculations.
+```
+
+**Why this is mandatory**: The orchestrator LLM decides whether to call the DAX tool or answer from its own knowledge. Without rule #1, questions like "top 5 campaigns by revenue" may be answered with hallucinated campaign names and figures that look plausible but are completely fabricated — with no DAX query executed at all.
+
+**Real-world evidence** (Marketing360 Agent, March 2026):
+| Without these rules | With these rules |
+|--------------------|--------------------|
+| Q5 "top 5 campaigns by revenue": No DAX query. Hallucinated 5 campaign names with fake revenue figures. | Q5: 39-line DAX using SUMMARIZECOLUMNS + TOPN + [Total Revenue] measure. Real data from model. |
+
+### Available Measures List
+
+After the critical rules, **list all key DAX measures** available in the model. This helps the orchestrator reference them when reformulating questions:
+
+```markdown
+AVAILABLE MEASURES (use these, do not recalculate):
+- Revenue: [Total Revenue], [Avg Order Value], [Revenue YTD]
+- Orders: [Total Orders], [Orders per Customer]
+- Customers: [Active Customers], [Churn Rate %]
+```
+
+The orchestrator reformulates user questions before sending them to the DAX tool. When it knows about `[Total Revenue]`, it can reformulate "what's our revenue?" into "Calculate [Total Revenue] for 2025" — which helps the DAX tool select the right measure.
 
 ---
 

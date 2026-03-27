@@ -264,21 +264,31 @@ reformulation introduces assumptions (like specific time periods), it may cause 
 
 ---
 
-### GP-004: Data Agent instructions have NO effect on DAX generation
+### GP-004: Data Agent instructions control tool routing, NOT DAX generation
 
-**Symptom**: You add detailed DAX instructions to `additionalInstructions` in the Data Agent
-config, but the generated DAX doesn't change.
+**Symptom**: You add detailed DAX-specific instructions (e.g., "use TREATAS for campaign joins")
+to `aiInstructions` in the Data Agent config, but the generated DAX doesn't change.
 
-**Cause**: The DAX generation tool **ignores** Data Agent-level instructions entirely.
-It ONLY reads **Prep for AI** configurations set on the semantic model itself:
+**Cause**: The DAX generation tool does **not read** Data Agent instructions. It ONLY reads
+**Prep for AI** configurations set on the semantic model itself:
 - **AI Data Schema** — descriptions on tables, columns, measures
 - **Verified Answers** — pre-built DAX queries triggered by keywords
 - **AI Instructions** — unstructured guidance for the DAX engine
 
-Data Agent `additionalInstructions` only control the **orchestrator** (reformulation, formatting, routing).
+**However**, Data Agent instructions DO control the **orchestrator**, which decides:
+1. **Whether to call the DAX tool at all** (tool routing)
+2. **How to reformulate the question** before sending to DAX
+3. **How to format the response** after DAX returns results
 
-**Fix**: Move DAX-related instructions into Prep for AI on the semantic model.
-See `semantic_model_best_practices.md` for the full 10-step workflow.
+**Real-world impact**: Without `"ALWAYS query the semantic model using DAX"` in `aiInstructions`,
+the orchestrator may skip the DAX tool entirely and answer from general knowledge, producing
+hallucinated data that looks plausible but is completely fabricated.
+
+**Fix**:
+- For DAX **accuracy** issues (wrong query, wrong measures): Fix Prep for AI on the semantic model
+- For **missing DAX queries** (no DAX at all, hallucinated answers): Add `"ALWAYS query the semantic model using DAX. NEVER answer from general knowledge."` to Data Agent aiInstructions
+- For **measure selection**: List available measures in Data Agent instructions so the orchestrator mentions them in the reformulated question
+- See `semantic_model_best_practices.md` for the 3-Layer Model and 10-step workflow
 
 ---
 

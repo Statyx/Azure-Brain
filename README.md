@@ -22,6 +22,7 @@ references it. Every new session starts with this context.
 | `environment.md` | Python, Azure CLI, PowerShell setup notes |
 | `resource_ids.md` | IDs, endpoints, connection strings (project-specific) |
 | `agent_principles.md` | **MANDATORY** — Agent operating principles, task management, quality standards |
+| `mcp_powerbi.md` | MCP Power BI Model — 21 tools for semantic model CRUD, DAX execution, Prep for AI, TMDL deploy |
 | `WORKFLOWS.md` | 5 end-to-end cross-agent workflows (Standard BI, RTI Dashboard, BO Migration, Data Agent, CI/CD) |
 | `TEMPLATES.md` | 6 project templates with step-by-step checklists, time budgets, success criteria |
 | `ERROR_RECOVERY.md` | Master error recovery playbook — decision trees by HTTP status, retry patterns, silent failures |
@@ -72,7 +73,8 @@ For a new session working on **semantic models / DAX**:
 4. `agents/semantic-model-agent/dax_queries.md` — Validation queries, debugging, performance
 5. `agents/semantic-model-agent/relationships.md` — Star schema, relationship rules, role-playing dims
 6. `agents/semantic-model-agent/dax_library.md` — Multi-domain DAX measure library (Retail, Manufacturing, Healthcare, Energy, Finance, HR)
-7. `agents/semantic-model-agent/known_issues.md` — Semantic-model-specific gotchas & fixes
+7. `mcp_powerbi.md` — MCP Power BI Model tools for direct semantic model manipulation & Prep for AI
+8. `agents/semantic-model-agent/known_issues.md` — Semantic-model-specific gotchas & fixes
 
 For a new session working on **Fabric Data Agents**:
 1. `agents/ai-skills-agent/instructions.md` — Agent system prompt, 5 mandatory rules, decision trees

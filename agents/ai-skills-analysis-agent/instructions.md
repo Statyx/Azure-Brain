@@ -2,16 +2,23 @@
 
 ## Mandatory Rules
 
-### Rule 0 — The Prep for AI Split (CRITICAL)
-For semantic model data sources, there are **two separate instruction systems**:
+### Rule 0 — The Instruction Split (CRITICAL)
+For semantic model data sources, there are **two separate instruction systems** that control **three pipeline layers**:
 
 | System | Where to Configure | What Uses It | Controls |
 |--------|-------------------|-------------|----------|
+| **Data Agent instructions** (`aiInstructions`) | Data Agent config (`stage_config.json`) | Orchestrator LLM | **Tool routing** (whether to call DAX tool), response formatting, cross-source routing, tone |
 | **Prep for AI** (on the semantic model) | Power BI Desktop / Service → Prep data for AI | DAX generation tool | Query accuracy, business terms, verified answers |
-| **Data Agent instructions** (`additionalInstructions`) | Data Agent config | Orchestrator LLM | Response formatting, cross-source routing, tone |
 
-**The DAX generation tool IGNORES Data Agent-level instructions.**  
-If the user's semantic model has poor query results, the fix is in **Prep for AI**, not in the Data Agent config.  
+**The 3-Layer Model**:
+1. **Layer 1 — Tool Routing** (Orchestrator, uses Data Agent instructions): Decides WHETHER to call the DAX tool or answer from general knowledge. Without `"ALWAYS query the semantic model"`, the orchestrator may skip DAX entirely and hallucinate data.
+2. **Layer 2 — DAX Generation** (DAX Tool, uses Prep for AI ONLY): Decides WHAT DAX query to write. Data Agent instructions are NOT passed to this layer.
+3. **Layer 3 — Response Formatting** (Orchestrator, uses Data Agent instructions): Decides HOW to present results.
+
+**If no DAX query is generated** → the problem is at Layer 1. Fix Data Agent instructions.
+**If DAX query is wrong** → the problem is at Layer 2. Fix Prep for AI.
+**If DAX query is correct but answer is poorly formatted** → Layer 3. Fix Data Agent instructions.
+
 See `semantic_model_best_practices.md` for the full guide.
 
 ### Rule 1 — Always Identify the Analysis Type

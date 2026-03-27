@@ -15,10 +15,12 @@
 
 | Issue | Symptom | Workaround |
 |-------|---------|------------|
+| **Missing "always query" rule** | Agent answers some questions from general knowledge with hallucinated data (no DAX query generated) | Add mandatory first instruction: `"ALWAYS query the semantic model using DAX. NEVER answer from general knowledge."` See instruction_writing_guide.md |
 | Instructions too long | Agent ignores later sections | Keep under 5,000 chars; move data descriptions to datasource.json |
 | Instructions in wrong language | Agent responds in unexpected language | Write instructions in the primary response language |
 | Contradictory instructions | Agent behaves inconsistently | Review for conflicts; test each rule independently |
 | Instructions not updating | Old behavior persists after update | Ensure you updated the correct stage (draft vs published); clear browser cache |
+| No measures list | Agent writes raw aggregations (AVERAGE, SUM) instead of using DAX measures | List key measures in aiInstructions so the orchestrator references them in question reformulation |
 
 ## Few-Shot Examples
 
