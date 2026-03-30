@@ -4,8 +4,8 @@
 
 Accumulated patterns, API references, known issues, and 16 specialized agents — auto-loaded at session start to avoid re-learning lessons and repeating mistakes.
 
-![Agents](https://img.shields.io/badge/agents-17-blue?logo=github)
-![Knowledge Files](https://img.shields.io/badge/knowledge_files-17-green)
+![Agents](https://img.shields.io/badge/agents-18-blue?logo=github)
+![Knowledge Files](https://img.shields.io/badge/knowledge_files-19-green)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?logo=microsoft)
 
 ---
@@ -33,10 +33,10 @@ graph TB
         Ops["Operations<br/>─────────────<br/>WORKFLOWS · TEMPLATES<br/>ERROR_RECOVERY"]
     end
 
-    subgraph Agents["17 Specialized Agents"]
+    subgraph Agents["18 Specialized Agents"]
         direction LR
         Meta["Meta-Agent<br/>──────────<br/>project-orchestrator"]
-        DataEng["Data Engineering<br/>──────────<br/>orchestrator · lakehouse<br/>dataflow · domain-modeler"]
+        DataEng["Data Engineering<br/>──────────<br/>orchestrator · lakehouse<br/>warehouse · dataflow<br/>domain-modeler"]
         Analytics["Analytics<br/>──────────<br/>semantic-model · report-builder<br/>ai-skills · ai-skills-analysis"]
         Platform["Platform<br/>──────────<br/>workspace-admin · fabric-cli<br/>monitoring · extensibility"]
         RTI["Real-Time & Graph<br/>──────────<br/>rti-eventstream · rti-kusto<br/>ontology · migration-bo"]
@@ -62,6 +62,7 @@ graph TB
 | [`item_definitions.md`](item_definitions.md) | Definition envelope spec for all 20+ Fabric item types |
 | [`warehouse_patterns.md`](warehouse_patterns.md) | SQL DW authoring — CTAS, COPY INTO, transactions, time travel |
 | [`spark_patterns.md`](spark_patterns.md) | Spark/Lakehouse authoring — enableSchemas, notebooks, pools |
+| [`mirrored_databases.md`](mirrored_databases.md) | Mirrored DB patterns — CDC sync, API, Lakehouse vs Mirror decision |
 | [`environment.md`](environment.md) | Python, Azure CLI, PowerShell setup |
 | [`resource_ids.md`](resource_ids.md) | GUIDs, endpoints, connection strings |
 | [`shared_constraints.md`](shared_constraints.md) | **New** — 8 hard rules all agents must follow (config-driven, idempotent, async-first) |
@@ -87,6 +88,7 @@ graph TB
 | [lakehouse](agents/lakehouse-agent/) | OneLake DFS, Delta Tables, Spark, Medallion | [README](agents/lakehouse-agent/README.md) |
 | [dataflow](agents/dataflow-agent/) | Dataflow Gen2, Power Query M, ETL | [README](agents/dataflow-agent/README.md) |
 | [domain-modeler](agents/domain-modeler-agent/) | Star Schema, Industry Templates, Data Gen | [README](agents/domain-modeler-agent/README.md) |
+| [warehouse](agents/warehouse-agent/) | Fabric Warehouse, T-SQL, CTAS, COPY INTO, Transactions | [README](agents/warehouse-agent/README.md) |
 
 ### Analytics & Reporting
 

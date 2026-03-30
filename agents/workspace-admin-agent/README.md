@@ -30,6 +30,7 @@ You are an expert at managing Microsoft Fabric **workspaces, capacities, RBAC, G
 | `capacity_management.md` | Capacity SKUs, assignment, monitoring, scaling |
 | `git_integration.md` | Git connection, branching, sync patterns, CI/CD |
 | `known_issues.md` | Common issues and workarounds |
+| `deployment_pipelines.md` | Deployment Pipelines API, multi-stage promotion, CI/CD |
 
 ## Quick Start
 

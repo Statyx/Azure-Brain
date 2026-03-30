@@ -31,6 +31,7 @@
 | `ingestion.md` | OneLake uploads, Copy Jobs, Shortcuts, external sources |
 | `notebooks.md` | Spark notebooks for CSV→Delta, transformations |
 | `monitoring.md` | Run tracking, error handling, retry patterns |
+| `pipeline_definitions.md` | Pipeline JSON schema, expression language, all activity type templates |
 | `templates/` | Ready-to-use code templates |
 
 ## Quick Start (for a new session)

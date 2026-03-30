@@ -36,6 +36,7 @@
 | `spark_notebooks.md` | Notebook format, CSV→Delta patterns, incremental loads, data quality, PySpark reference |
 | `delta_optimization.md` | Delta Lake: schema evolution, partitioning, Z-order, vacuum, merge/upsert, time travel |
 | `known_issues.md` | Lakehouse gotchas, SQL Endpoint delays, file format issues, capacity requirements |
+| `mssparkutils.md` | mssparkutils built-in utilities — fs, credentials, notebook orchestration, env |
 
 ## Quick Start (for a new session)
 
