@@ -216,6 +216,161 @@ resp = requests.post(
 )
 ```
 
+---
+
+## Extended Token Audience Matrix
+
+Full list of token audiences/scopes by API surface:
+
+| API Surface | Token Audience / Resource | `.default` Scope |
+|-------------|--------------------------|------------------|
+| Fabric REST API | `https://api.fabric.microsoft.com` | `https://api.fabric.microsoft.com/.default` |
+| OneLake DFS | `https://storage.azure.com` | `https://storage.azure.com/.default` |
+| Azure Resource Manager | `https://management.azure.com` | `https://management.azure.com/.default` |
+| Kusto / Eventhouse | `https://kusto.kusto.windows.net` | `https://kusto.kusto.windows.net/.default` |
+| Power BI REST API | `https://analysis.windows.net/powerbi/api` | `https://analysis.windows.net/powerbi/api/.default` |
+| SQL (TDS endpoint) | `https://database.windows.net` | `https://database.windows.net/.default` |
+| Microsoft Graph | `https://graph.microsoft.com` | `https://graph.microsoft.com/.default` |
+
+> **Fabric Eventhouse** also accepts `{QueryServiceUri}` as token resource (the cluster URI itself). Try cluster URI first, then `https://kusto.kusto.windows.net` as fallback.
+
+## Environment URLs
+
+| Service | URL Pattern |
+|---------|-------------|
+| Fabric REST API | `https://api.fabric.microsoft.com/v1` |
+| Power BI REST API | `https://api.powerbi.com/v1.0/myorg` |
+| OneLake DFS | `https://onelake.dfs.fabric.microsoft.com` |
+| OneLake Blob | `https://onelake.blob.fabric.microsoft.com` |
+| SQL Analytics Endpoint | `*.datawarehouse.fabric.microsoft.com` |
+| Kusto Query (Eventhouse) | `https://{guid}.{region}.kusto.fabric.microsoft.com` |
+| Semantic Link | `https://api.powerbi.com/v1.0/myorg/groups/{wsId}/datasets/{id}` |
+| XMLA Endpoint | `powerbi://api.powerbi.com/v1.0/myorg/{workspace_name}` |
+| ARM (Capacity Mgmt) | `https://management.azure.com/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Fabric/capacities/{cap}` |
+| MCP Power BI | `https://api.fabric.microsoft.com/v1/mcp/powerbi` |
+
+## Identity Types
+
+| Identity | Description | Use Case |
+|----------|-------------|----------|
+| **User** (delegated) | Interactive user login, `az login` | Development, ad-hoc operations |
+| **Service Principal** | Entra App Registration with secret/cert | CI/CD, automation, scheduled jobs |
+| **Managed Identity** | System/User-assigned MI for Azure resources | Azure Functions, VMs calling Fabric |
+| **Workspace Identity** | Fabric workspace-level identity | Cross-workspace, OneLake shortcuts |
+
+### Entra App Registration (for SPN)
+1. Portal → App registrations → New
+2. Add API permission: `Power BI Service` → `Tenant.ReadWrite.All` (or granular)
+3. Admin consent required for tenant-level scopes
+4. Authenticate:
+```python
+from azure.identity import ClientSecretCredential
+credential = ClientSecretCredential(tenant_id, client_id, client_secret)
+token = credential.get_token("https://api.fabric.microsoft.com/.default").token
+```
+
+## Pagination Pattern
+
+All list endpoints use `continuationToken` for pagination:
+
+```python
+def list_all_items(workspace_id, item_type, headers):
+    """Paginate through all items of a given type."""
+    items = []
+    url = f"{API}/workspaces/{workspace_id}/items?type={item_type}"
+    while url:
+        resp = requests.get(url, headers=headers).json()
+        items.extend(resp.get("value", []))
+        token = resp.get("continuationToken")
+        url = f"{API}/workspaces/{workspace_id}/items?type={item_type}&continuationToken={token}" if token else None
+    return items
+```
+
+> **Note**: Some endpoints (e.g., admin APIs) use `continuationUri` instead — check the response structure.
+
+## Rate Limiting
+
+- **HTTP 429** — Read the `Retry-After` header (seconds) and wait before retrying
+- **Batch operations** — Add 200-500ms delay between calls when creating/updating multiple items
+- **getDefinition / updateDefinition** — Rate-limited more aggressively; add 1-2s delay between sequential calls
+- **Admin APIs** — Separate rate limit pool; may return 429 independently
+
+## LRO Polling Helper (Reusable)
+
+```python
+def poll_operation(op_id, headers, timeout_seconds=300, fetch_result=True):
+    """Poll a Fabric LRO until completion. Returns result if fetch_result=True."""
+    import time
+    start = time.time()
+    while time.time() - start < timeout_seconds:
+        op = requests.get(f"{API}/operations/{op_id}", headers=headers).json()
+        status = op.get("status")
+        if status == "Succeeded":
+            if fetch_result:
+                return requests.get(f"{API}/operations/{op_id}/result", headers=headers).json()
+            return op
+        if status in ("Failed", "Cancelled"):
+            raise RuntimeError(f"Operation {op_id} {status}: {op.get('error', {})}")
+        time.sleep(3)
+    raise TimeoutError(f"Operation {op_id} did not complete in {timeout_seconds}s")
+```
+
+## CLI Templates (`az rest`)
+
+When using Azure CLI instead of Python, use `az rest` with `--resource` (NOT `--headers`):
+
+```bash
+# List workspace items
+az rest --method GET \
+  --url "https://api.fabric.microsoft.com/v1/workspaces/{wsId}/items?type=Lakehouse" \
+  --resource "https://api.fabric.microsoft.com"
+
+# Create item
+az rest --method POST \
+  --url "https://api.fabric.microsoft.com/v1/workspaces/{wsId}/items" \
+  --resource "https://api.fabric.microsoft.com" \
+  --body '{"displayName": "MyItem", "type": "Lakehouse"}'
+
+# OneLake listing
+az rest --method GET \
+  --url "https://onelake.dfs.fabric.microsoft.com/{wsId}?resource=filesystem&recursive=false" \
+  --resource "https://storage.azure.com"
+```
+
+> **CRITICAL**: Always use `--resource` to set the token audience. `--headers "Authorization=Bearer ..."` bypasses `az`'s token management and can cause auth issues.
+
+## Capacity Management API (ARM)
+
+```bash
+# Resume capacity
+az rest --method POST \
+  --url "https://management.azure.com/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Fabric/capacities/{cap}/resume?api-version=2023-11-01"
+
+# Suspend capacity
+az rest --method POST \
+  --url "https://management.azure.com/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Fabric/capacities/{cap}/suspend?api-version=2023-11-01"
+
+# Check capacity state
+az rest --method GET \
+  --url "https://management.azure.com/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Fabric/capacities/{cap}?api-version=2023-11-01" \
+  | jq '.properties.state'
+```
+
+## Job Execution Types
+
+| Item Type | jobType Parameter | Notes |
+|-----------|-------------------|-------|
+| Notebook | `RunNotebook` | NOT `SparkJob` |
+| Data Pipeline | `Pipeline` | Empty `executionData: {}` |
+| Spark Job Definition | `SparkJob` | Only for SparkJobDefinition items |
+| Semantic Model Refresh | `enhanced` | For import/DirectQuery refresh |
+
+```
+POST /v1/workspaces/{wsId}/items/{itemId}/jobs/instances?jobType={jobType}
+```
+
+---
+
 ## TMDL Definition Format
 
 Semantic models can be retrieved in TMDL format for schema parsing:

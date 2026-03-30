@@ -31,6 +31,8 @@
 |------|---------|
 | `instructions.md` | **LOAD FIRST** — RTI architecture overview, deployment sequence, decision trees |
 | `eventhouse_kql.md` | Eventhouse creation, KQL table schemas, Kusto mgmt API, data ingestion |
+| `eventhouse_authoring.md` | **NEW** — Policies, materialized views, update policies, external tables, ingestion patterns |
+| `eventhouse_consumption.md` | **NEW** — Performance best practices, string matching matrix, monitoring, consumption patterns |
 | `kql_language.md` | KQL query language reference — operators, functions, timeseries, renderoperators |
 | `kql_dashboard.md` | RTI Dashboard creation, tile definitions, RealTimeDashboard.json schema |
 | `ontology.md` | Ontology item: entity types, properties, relationships, data bindings, contextualizations |

@@ -41,6 +41,21 @@ Comprehensive list of every issue encountered and resolved during this project.
 | `RefreshType=Calculate` after relationship change on DirectLake | ✅ Sufficient for relationship metadata hydration |
 | Hidden columns in Verified Answers | ❌ Silently ignored — DAX tool can't resolve hidden column references |
 | Descriptions via TMDL `///` doc comments | ✅ Extracted by NL2DAX for disambiguation |
+| `.create-merge table` (idempotent KQL) | ✅ Creates if new, merges if exists |
+| `.create table` (non-idempotent KQL) | ❌ Fails if table already exists |
+| Lakehouse with `enableSchemas: true` | ✅ Multi-schema (bronze/silver/gold) |
+| Changing `enableSchemas` after creation | ❌ Cannot be changed — must recreate |
+| Warehouse `ALTER TABLE DROP COLUMN` | ❌ Not supported — use CTAS + RENAME |
+| Warehouse `MERGE` statement | ⚠️ Preview — use DELETE + INSERT pattern |
+| Warehouse write-write on same table | ❌ Conflicts at TABLE level (not row) |
+| CTAS for large table rebuilds | ✅ Parallel, avoids locks |
+| KQL `has` for text search | ✅ Uses term index — fast |
+| KQL `contains` for text search | ⚠️ Full scan — slow on large tables |
+| `az rest` without `--resource` flag | ❌ Wrong token audience → 401 |
+| `az rest` with `--resource` flag | ✅ Correct token for target API |
+| KQL pipes in `az rest` inline body | ❌ Shell interprets `\|` — use temp file |
+| OneLake shortcuts for cross-workspace | ✅ Requires Workspace Identity |
+| Descriptions via TMDL `///` doc comments | ✅ Extracted by NL2DAX for disambiguation |
 | Notebook creation with `"format": "ipynb"` in definition | ❌ `InvalidNotebookContent` — Fabric parses .py as JSON |
 | Notebook creation WITHOUT `format` field, path `notebook-content.py` | ✅ Works |
 | Notebook jobType `SparkJob` | ❌ Fails — wrong job type |
@@ -292,3 +307,82 @@ POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
 - **Symptom**: Capacity gets paused despite having a ReadOnly lock
 - **Cause**: ReadOnly locks only block ARM write operations (PUT/DELETE/PATCH). POST actions like `/suspend` are NOT blocked.
 - **Fix**: Don't rely on ReadOnly locks to prevent capacity pause. Delete any automation (Azure Automation runbooks) that calls `/suspend`.
+
+---
+
+## Warehouse & SQL Issues
+
+> Source: [microsoft/skills-for-fabric](https://github.com/microsoft/skills-for-fabric)
+
+### 31. ⚠️ Write-Write Conflicts at TABLE Level
+- **Symptom**: Concurrent UPDATE/INSERT on the same Warehouse table → one transaction fails
+- **Cause**: Fabric Warehouse snapshot isolation detects conflicts at the TABLE level (not row/page). Even if two transactions touch different rows, they conflict.
+- **Fix**: Serialize writes (pipeline sequencing), use CTAS + RENAME instead of UPDATE, or partition work across different tables.
+
+### 32. ALTER TABLE Cannot DROP or ALTER Columns
+- **Symptom**: `ALTER TABLE ... DROP COLUMN` or `ALTER COLUMN` fails
+- **Cause**: Fabric Warehouse does not support column drops or type changes via ALTER
+- **Fix**: Use CTAS to create a new table without the column, then `RENAME OBJECT`.
+
+### 33. No Cursors in Fabric Warehouse
+- **Symptom**: `DECLARE CURSOR` fails
+- **Fix**: Replace with set-based operations — CTEs, window functions, or staged temp tables.
+
+### 34. MERGE Statement Is in Preview
+- **Symptom**: `MERGE` may not be available or may behave unexpectedly
+- **Fix**: Use DELETE + INSERT pattern for upserts until MERGE is GA.
+
+### 35. No Temp Tables (#tables) in Warehouse
+- **Symptom**: `CREATE TABLE #temp` fails
+- **Fix**: Use CTEs or create permanent staging tables, then drop them after use.
+
+---
+
+## Spark & Lakehouse Issues
+
+### 36. ⚠️ `enableSchemas` Cannot Be Changed After Lakehouse Creation
+- **Symptom**: Need multi-schema (bronze/silver/gold) but Lakehouse was created without it
+- **Cause**: The `enableSchemas` flag in `lakehouse.metadata.json` is set-once at creation time
+- **Fix**: Delete and recreate the Lakehouse with `"enableSchemas": true` in the definition.
+
+### 37. Delta Table Names Are Lowercased
+- **Symptom**: `saveAsTable("MyTable")` creates table named `mytable`
+- **Fix**: Always use lowercase table names in code. Reference as lowercase in downstream models.
+
+### 38. Starter Pool OOM on Large Datasets
+- **Symptom**: Notebook fails with OutOfMemoryError on the Starter Pool
+- **Fix**: Configure a Workspace Pool with more memory, or use Custom Pool for specific notebooks.
+
+---
+
+## Eventhouse / KQL Issues
+
+### 39. `.create table` Fails If Table Already Exists
+- **Symptom**: Repeated deployment script fails on table creation
+- **Fix**: Always use `.create-merge table` (idempotent).
+
+### 40. Inline Ingestion Limit ~64 KB
+- **Symptom**: Large `.ingest inline` commands fail or are truncated
+- **Fix**: Use batch size of ~50 rows per inline command, or switch to storage ingestion for large datasets.
+
+### 41. `contains` Is Extremely Slow on Large Tables
+- **Symptom**: KQL query with `contains` takes minutes
+- **Fix**: Use `has` (term index, much faster) instead. Only use `contains` when you need substring matching.
+
+### 42. External Table Queries Are Slower Than Native
+- **Symptom**: `external_table('X')` queries lag compared to direct table queries
+- **Fix**: Use external tables for cross-engine joins and occasional lookups, not for dashboards or frequent queries.
+
+---
+
+## API / CLI Issues
+
+### 43. `az rest --resource` Required for Fabric
+- **Symptom**: `az rest` returns 401 Unauthorized
+- **Cause**: Without `--resource`, `az rest` uses wrong token audience
+- **Fix**: Always use `--resource "https://api.fabric.microsoft.com"` (or the correct audience for the target API).
+
+### 44. KQL Pipes Break `az rest` Inline Body
+- **Symptom**: `az rest --body '{"csl":"T | count"}'` fails or misparses
+- **Cause**: Shell interprets `|` as pipe operator
+- **Fix**: Write the JSON body to a temp file and use `--body @/tmp/q.json`.

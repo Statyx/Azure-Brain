@@ -1,5 +1,29 @@
 # OneLake DFS API — File Upload Protocol
 
+## URL Formats
+
+### DFS API (file operations)
+```
+https://onelake.dfs.fabric.microsoft.com/{workspace_id}/{item_id}/Files/{path}
+```
+
+### Blob API (alternative for some tools)
+```
+https://onelake.blob.fabric.microsoft.com/{workspace_id}/{item_id}
+```
+
+### ABFS URI (Spark / Notebooks)
+```
+abfss://{workspace_id}@onelake.dfs.fabric.microsoft.com/{item_id}/Files/{path}
+abfss://{workspace_id}@onelake.dfs.fabric.microsoft.com/{item_id}/Tables/{table_name}
+```
+
+> **ABFS format**: Used in Spark notebooks to access OneLake. Works the same as ADLS Gen2.
+
+### Tables vs Files
+- `Files/` — Unstructured storage (CSV, Parquet, images, etc.)
+- `Tables/` — Managed Delta Lake tables (created by notebooks/Spark)
+
 ## Endpoint
 ```
 https://onelake.dfs.fabric.microsoft.com/{workspace_id}/{item_id}/Files/{path}
@@ -137,3 +161,91 @@ LH_Finance/
 3. **Token scope is `storage.azure.com`** — not the Fabric API scope.
 4. **Folder creation is implicit** — uploading `raw/finance/file.csv` creates `raw/finance/` automatically.
 5. **Overwrite**: Re-uploading to the same path replaces the file. No special flag needed.
+
+---
+
+## Listing Files
+
+List files and directories in OneLake using the DFS API:
+
+```bash
+# List root of item
+az rest --method GET \
+  --url "https://onelake.dfs.fabric.microsoft.com/{wsId}/{itemId}?resource=filesystem&recursive=false" \
+  --resource "https://storage.azure.com"
+
+# List a subfolder
+az rest --method GET \
+  --url "https://onelake.dfs.fabric.microsoft.com/{wsId}/{itemId}?resource=filesystem&recursive=false&directory=Files/raw" \
+  --resource "https://storage.azure.com"
+```
+
+Python:
+```python
+resp = requests.get(
+    f"https://onelake.dfs.fabric.microsoft.com/{ws_id}/{item_id}?resource=filesystem&recursive=false&directory=Files/raw",
+    headers={"Authorization": f"Bearer {storage_token}"}
+)
+paths = resp.json().get("paths", [])
+for p in paths:
+    print(p["name"], p.get("contentLength", "dir"))
+```
+
+## OneLake Shortcuts
+
+Shortcuts are virtual pointers to data in other locations — no data copy.
+
+### Supported Shortcut Targets
+| Target | Description |
+|--------|-------------|
+| OneLake (internal) | Another Lakehouse/Warehouse in the same or different workspace |
+| ADLS Gen2 | Azure Data Lake Storage Gen2 account |
+| S3 | Amazon S3 bucket |
+| GCS | Google Cloud Storage bucket |
+| Dataverse | Microsoft Dataverse tables |
+
+### Create a Shortcut via REST API
+```python
+shortcut_body = {
+    "path": "Files/external_data",
+    "name": "my_shortcut",
+    "target": {
+        "oneLake": {
+            "workspaceId": "{source_workspace_id}",
+            "itemId": "{source_item_id}",
+            "path": "Tables/my_table"
+        }
+    }
+}
+resp = requests.post(
+    f"{API}/workspaces/{ws_id}/items/{lh_id}/shortcuts",
+    headers=headers, json=shortcut_body
+)
+```
+
+### ADLS Gen2 Shortcut
+```python
+shortcut_body = {
+    "path": "Files/adls_data",
+    "name": "adls_shortcut",
+    "target": {
+        "adlsGen2": {
+            "location": "https://{account}.dfs.core.windows.net",
+            "subpath": "/{container}/{folder}",
+            "connectionId": "{connection_id}"  # Fabric connection item
+        }
+    }
+}
+```
+
+### List Shortcuts
+```
+GET /v1/workspaces/{wsId}/items/{itemId}/shortcuts
+```
+
+### Delete Shortcut
+```
+DELETE /v1/workspaces/{wsId}/items/{itemId}/shortcuts/{shortcutPath}/{shortcutName}
+```
+
+> **Shortcuts require Workspace Identity** for cross-workspace OneLake shortcuts. Enable in workspace settings.

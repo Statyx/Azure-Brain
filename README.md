@@ -5,7 +5,7 @@
 Accumulated patterns, API references, known issues, and 16 specialized agents — auto-loaded at session start to avoid re-learning lessons and repeating mistakes.
 
 ![Agents](https://img.shields.io/badge/agents-17-blue?logo=github)
-![Knowledge Files](https://img.shields.io/badge/knowledge_files-14-green)
+![Knowledge Files](https://img.shields.io/badge/knowledge_files-17-green)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?logo=microsoft)
 
 ---
@@ -29,7 +29,7 @@ This brain is auto-loaded via `.github/copilot-instructions.md` in any project t
 graph TB
     subgraph Brain["Github Brain"]
         Core["Core Knowledge<br/>─────────────<br/>fabric_api · known_issues<br/>environment · resource_ids<br/>agent_principles"]
-        Ref["Reference Docs<br/>─────────────<br/>report_format · semantic_model<br/>visual_builders · onelake<br/>mcp_powerbi"]
+        Ref["Reference Docs<br/>─────────────<br/>report_format · semantic_model<br/>visual_builders · onelake<br/>mcp_powerbi · item_definitions<br/>warehouse_patterns · spark_patterns"]
         Ops["Operations<br/>─────────────<br/>WORKFLOWS · TEMPLATES<br/>ERROR_RECOVERY"]
     end
 
@@ -59,6 +59,9 @@ graph TB
 | [`onelake.md`](onelake.md) | DFS API 3-step upload protocol |
 | [`mcp_powerbi.md`](mcp_powerbi.md) | MCP Power BI — 21 tools for semantic model CRUD, DAX, Prep for AI |
 | [`known_issues.md`](known_issues.md) | All gotchas, workarounds, what works vs what doesn't |
+| [`item_definitions.md`](item_definitions.md) | Definition envelope spec for all 20+ Fabric item types |
+| [`warehouse_patterns.md`](warehouse_patterns.md) | SQL DW authoring — CTAS, COPY INTO, transactions, time travel |
+| [`spark_patterns.md`](spark_patterns.md) | Spark/Lakehouse authoring — enableSchemas, notebooks, pools |
 | [`environment.md`](environment.md) | Python, Azure CLI, PowerShell setup |
 | [`resource_ids.md`](resource_ids.md) | GUIDs, endpoints, connection strings |
 | [`shared_constraints.md`](shared_constraints.md) | **New** — 8 hard rules all agents must follow (config-driven, idempotent, async-first) |
@@ -130,6 +133,9 @@ Github_Brain/
 ├── onelake.md                   # DFS API upload protocol
 ├── mcp_powerbi.md               # MCP PBI 21-tool reference
 ├── known_issues.md              # Gotchas & workarounds
+├── item_definitions.md          # Definition envelope for all item types
+├── warehouse_patterns.md        # SQL DW authoring patterns
+├── spark_patterns.md            # Spark/Lakehouse authoring patterns
 ├── environment.md               # Dev environment setup
 ├── resource_ids.md              # GUIDs & endpoints
 ├── shared_constraints.md        # 8 hard rules for all agents
