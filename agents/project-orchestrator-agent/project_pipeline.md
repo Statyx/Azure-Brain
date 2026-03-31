@@ -192,6 +192,32 @@
 
 **Depends on**: Step 7 (semantic model must exist as data source)
 
+> **⚠️ Ontology option**: If the project uses RTI (Step 10) and needs entity graph queries, insert **Step 9b: Ontology & Graph** before or after the Data Agent. See below.
+
+---
+
+## Step 9b: Ontology & Graph (Conditional)
+
+**Agent**: `ontology-agent`  
+**Input**: Domain model (Step 1), Lakehouse dimension tables (Step 4), KQL streaming tables (Step 10)  
+**Output**: Ontology with entity types, bindings, relationships, Graph Query Set  
+
+**When to include**: Projects with RTI (Step 10) that need entity relationships, graph traversal, or an Operations Agent.
+
+**What happens**:
+- Define entity types matching domain model entities (deterministic GUIDs for idempotency)
+- Create NonTimeSeries bindings → Lakehouse dimension tables
+- Create TimeSeries bindings → KQL streaming tables (if RTI enabled)
+- Define relationships between entities (parent-child, assignment, action)
+- Create contextualizations linking relationships to data
+- Generate Graph Model + Graph Query Set for ad-hoc graph exploration
+
+**Strict deployment order**: Lakehouse tables + KQL tables must exist **before** creating bindings.
+
+**Naming**: Ontology = `ONT_{ProjectName}`, Graph Model = `GM_{ProjectName}`
+
+**Depends on**: Step 4 (Lakehouse dims) + Step 10 (KQL tables, if TimeSeries bindings needed)
+
 ---
 
 ## Step 10: Real-Time Intelligence (Optional)
@@ -251,15 +277,15 @@
 
 ---
 
-## Optional Steps
+## Optional / Conditional Steps
 
-| Step | When to Use | Agent |
-|------|-------------|-------|
-| Forecasting (NB04) | Time-series prediction needed | orchestrator-agent |
-| Ontology & Graph | Entity relationships for Operations Agent | rti-kusto-agent |
-| Operations Agent | AI agent over Eventhouse (RTI) | rti-kusto-agent |
-| CI/CD Setup | Automated deployment pipeline | fabric-cli-agent |
-| Monitoring | Ongoing health checks | monitoring-agent |
+| Step | When to Include | Agent | Depends On |
+|------|----------------|-------|------------|
+| **Step 9b: Ontology & Graph** | RTI projects needing entity graph queries | **ontology-agent** | Steps 4 + 10 |
+| Forecasting (NB04) | Time-series prediction needed | orchestrator-agent | Step 10 |
+| Operations Agent | AI agent over Eventhouse (RTI) | rti-kusto-agent | Step 10 + 9b |
+| CI/CD Setup | Automated deployment pipeline | fabric-cli-agent | Step 12 |
+| Monitoring | Ongoing health checks | monitoring-agent | Step 12 |
 
 ---
 
@@ -277,6 +303,6 @@ Step 1 ──▶ Step 2 ──▶ Step 5
             ├──▶ Step 9
             │
   Step 10 (independent, needs Step 3+4)
-            │
-       Step 11 ──▶ Step 12
+            │  Step 9b (ontology, needs Step 4 + Step 10)
+            |       Step 11 ──▶ Step 12
 ```

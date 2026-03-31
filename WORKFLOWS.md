@@ -292,3 +292,82 @@ Week 6:    Validation + UAT (monitoring-agent)
 1. Dev changes → Git commit → CI triggers deploy to Test
 2. Manual approval → deploy to Prod
 3. Monitor via monitoring-agent (job status, refresh failures)
+
+---
+
+## Workflow 6: Ontology & Graph Add-On
+
+**Use case**: Add entity graph capabilities to an existing project that has Lakehouse dimension tables and (optionally) KQL streaming tables.
+**Agents involved**: ontology-agent (+ domain-modeler for entity design review)
+**Prerequisite**: Lakehouse with populated dimension tables. KQL Database with streaming tables (for TimeSeries bindings).
+**Estimated effort**: 1–2 hours
+
+### Phase 1: Entity Design (domain-modeler-agent + ontology-agent)
+
+**Input**: Existing domain model, Lakehouse table list, KQL table list
+**Output**: Entity type definitions mapped to existing tables
+
+1. Review existing dimension tables → identify candidate entity types
+2. Review KQL streaming tables → identify time-series properties
+3. Design entity types with properties matching table columns
+4. Assign deterministic GUIDs (`[guid]::new()` or `uuid5` from entity name) for idempotency
+
+> **Gate**: Entity types list covers all key business entities; property types match column types
+
+### Phase 2: Ontology Deployment (ontology-agent)
+
+**Input**: Entity type definitions, Lakehouse ID, KQL Database ID
+**Output**: Ontology item created with entity types, bindings, relationships
+
+**Strict order** (violations cause silent failures):
+1. Create ontology item (`POST /ontologies`)
+2. Create entity types with properties
+3. Create **NonTimeSeries bindings** → Lakehouse dimension tables
+4. Create **TimeSeries bindings** → KQL streaming tables (if RTI)
+5. Define relationships between entity types (parent-child, assignment, action)
+6. Create contextualizations for each relationship
+
+> **Gate**: `GET /ontologies/{id}/entityTypes` returns all expected types with bindings
+
+### Phase 3: Graph Model & Queries (ontology-agent)
+
+**Input**: Ontology with bindings and relationships
+**Output**: Graph Model, Graph Query Set with sample queries
+
+1. Create Graph Model referencing the ontology
+2. Create Graph Query Set
+3. Write GQL queries:
+   - `MATCH (n) RETURN labels(n), count(*)` — verify all entity types populated
+   - `MATCH (n)-[r]->(m) RETURN n, r, m LIMIT 10` — verify relationships
+   - Domain-specific traversals (e.g., "all sensors in zone X")
+
+> **Gate**: Graph Query Set returns connected entities; relationship counts > 0
+
+### Phase 4: Integration (optional)
+
+**Decision**:
+```
+Q: Need an Operations Agent (AI over graph)?
+├── YES → Create Data Agent with ontology as source (portal step)
+└── NO  → Done — graph queries available via Graph Query Set UI
+
+Q: Need ontology data in Power BI reports?
+├── YES → Use cross-database query from Warehouse/Lakehouse to join graph results
+└── NO  → Graph stays in KQL/Ontology layer
+```
+
+### Decision Tree: What Bindings Do I Need?
+
+```
+Do I have Lakehouse dimension tables?
+  ├── YES → Create NonTimeSeries bindings (batch/static properties)
+  └── NO  → Create Lakehouse dims first (see Workflow 1, Phase 3)
+
+Do I have KQL streaming tables?
+  ├── YES → Create TimeSeries bindings (real-time sensor values)
+  └── NO  → NonTimeSeries only — ontology works without RTI
+
+Both?
+  └── YES → Dual binding pattern: same entity has NonTimeSeries (name, location)
+           + TimeSeries (temperature, pressure) properties
+```

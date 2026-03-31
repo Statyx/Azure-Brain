@@ -189,6 +189,54 @@ After Step 10:
 
 ---
 
+## Template 7: Ontology & Graph Add-On (1–2 Hours)
+
+**Prerequisite**: Existing Lakehouse with dimension tables populated. KQL Database with streaming tables (optional, for TimeSeries bindings).
+**Output**: Ontology + Graph Model + Graph Query Set with working graph traversals
+
+### Prerequisites Checklist
+
+- [ ] Lakehouse exists with populated dimension tables (`dim_*`)
+- [ ] (Optional) KQL Database exists with streaming tables for TimeSeries
+- [ ] Domain model reviewed — entity types identified from existing tables
+- [ ] Ontology-agent `instructions.md` loaded
+
+### Step-by-Step
+
+| # | Agent | Task | Time | Validation |
+|---|-------|------|------|------------|
+| 1 | domain-modeler | Map dimension tables → entity types | 15 min | Entity list reviewed |
+| 2 | ontology | Create ontology item | 5 min | Ontology ID returned |
+| 3 | ontology | Create entity types + properties | 15 min | All entity types exist |
+| 4 | ontology | Create NonTimeSeries bindings → Lakehouse | 10 min | Bindings resolve |
+| 5 | ontology | Create TimeSeries bindings → KQL (if RTI) | 10 min | Bindings resolve |
+| 6 | ontology | Define relationships + contextualizations | 10 min | Relationships created |
+| 7 | ontology | Create Graph Model + Graph Query Set | 10 min | Graph model listed |
+| 8 | ontology | Test GQL queries | 5 min | Entities + relationships returned |
+
+### Decision Points
+
+```
+After Step 6:
+  Q: Need an Operations Agent (AI over graph)?
+  ├── YES → Create Data Agent with ontology source (portal step)
+  └── NO  → Done — graph queries available via Graph Query Set
+
+Before Step 5:
+  Q: Do I have KQL streaming tables?
+  ├── YES → Create TimeSeries bindings (Step 5)
+  └── NO  → Skip Step 5 — NonTimeSeries only
+```
+
+### Success Criteria
+
+- [ ] `MATCH (n) RETURN labels(n), count(*)` returns all entity types with row counts
+- [ ] `MATCH (n)-[r]->(m) RETURN n, r, m LIMIT 10` returns connected entities
+- [ ] At least 2 relationship types traversable
+- [ ] Domain-specific query works (e.g., "all sensors in zone X" or "equipment in site Y")
+
+---
+
 ## Industry-Specific Starter Kits
 
 These combine Template 1 or 2 with pre-built domain models from `domain-modeler-agent/industry_templates.md`.
