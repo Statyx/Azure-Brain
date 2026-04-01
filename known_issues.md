@@ -2,6 +2,8 @@
 
 Comprehensive list of every issue encountered and resolved during this project.
 
+> For HTTP error recovery with decision trees and retry code, see [ERROR_RECOVERY.md](ERROR_RECOVERY.md).
+
 ---
 
 ## Quick Reference: What Works vs What Doesn't

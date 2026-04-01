@@ -1,179 +1,172 @@
 # Github Brain
 
-**Shared knowledge base for building Microsoft Fabric solutions with AI agents.**
+**18 AI agents + 19 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
 
-Accumulated patterns, API references, known issues, and 16 specialized agents — auto-loaded at session start to avoid re-learning lessons and repeating mistakes.
+![Agents](https://img.shields.io/badge/agents-18-blue?style=for-the-badge&logo=github)
+![Knowledge](https://img.shields.io/badge/knowledge_files-19-green?style=for-the-badge)
+![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
 
-![Agents](https://img.shields.io/badge/agents-18-blue?logo=github)
-![Knowledge Files](https://img.shields.io/badge/knowledge_files-19-green)
-![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?logo=microsoft)
+[Quick Start](#-quick-start) · [Pick Your Scenario](#-pick-your-scenario) · [Agents](#-agents-18) · [Knowledge Files](#-knowledge-files) · [Architecture](#-architecture) · [Docs](#-documentation)
 
 ---
 
-## Quick Start
+## ⚡ Quick Start
 
-This brain is auto-loaded via `.github/copilot-instructions.md` in any project that references it (`../Github_Brain/`). No manual setup required.
+Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 
-```
+```yaml
 # In your project's .github/copilot-instructions.md:
 # 1. Read ../Github_Brain/README.md
 # 2. Read the relevant agent instructions.md for your task
 # 3. Start working
 ```
 
----
-
-## Architecture
-
-```mermaid
-graph TB
-    subgraph Brain["Github Brain"]
-        Core["Core Knowledge<br/>─────────────<br/>fabric_api · known_issues<br/>environment · resource_ids<br/>agent_principles"]
-        Ref["Reference Docs<br/>─────────────<br/>report_format · semantic_model<br/>visual_builders · onelake<br/>mcp_powerbi · item_definitions<br/>warehouse_patterns · spark_patterns"]
-        Ops["Operations<br/>─────────────<br/>WORKFLOWS · TEMPLATES<br/>ERROR_RECOVERY"]
-    end
-
-    subgraph Agents["18 Specialized Agents"]
-        direction LR
-        Meta["Meta-Agent<br/>──────────<br/>project-orchestrator"]
-        DataEng["Data Engineering<br/>──────────<br/>orchestrator · lakehouse<br/>warehouse · dataflow<br/>domain-modeler"]
-        Analytics["Analytics<br/>──────────<br/>semantic-model · report-builder<br/>ai-skills · ai-skills-analysis"]
-        Platform["Platform<br/>──────────<br/>workspace-admin · fabric-cli<br/>monitoring · extensibility"]
-        RTI["Real-Time & Graph<br/>──────────<br/>rti-eventstream · rti-kusto<br/>ontology · migration-bo"]
-    end
-
-    Brain --> Agents
-```
+> **Key Rule** — The Fabric REST API accepts two report formats. Only one renders visuals.
+> Always use the **Legacy PBIX format** (`report.json` with `sections[].visualContainers[]`). Never PBIR.
 
 ---
 
-## Knowledge Files
+## 🎯 Pick Your Scenario
 
-| File | Purpose |
-|------|---------|
-| [`agent_principles.md`](agent_principles.md) | **Mandatory** — Operating principles, task management, quality standards |
-| [`fabric_api.md`](fabric_api.md) | REST API patterns, auth, async operations, LRO polling |
-| [`report_format.md`](report_format.md) | **Critical** — Legacy PBIX format specification (the only format that renders) |
-| [`visual_builders.md`](visual_builders.md) | Visual config structure, expression language, vcObjects |
-| [`semantic_model.md`](semantic_model.md) | model.bim deployment, Direct Lake, TMDL |
-| [`onelake.md`](onelake.md) | DFS API 3-step upload protocol |
-| [`mcp_powerbi.md`](mcp_powerbi.md) | MCP Power BI — 21 tools for semantic model CRUD, DAX, Prep for AI |
-| [`known_issues.md`](known_issues.md) | All gotchas, workarounds, what works vs what doesn't |
-| [`item_definitions.md`](item_definitions.md) | Definition envelope spec for all 20+ Fabric item types |
-| [`warehouse_patterns.md`](warehouse_patterns.md) | SQL DW authoring — CTAS, COPY INTO, transactions, time travel |
-| [`spark_patterns.md`](spark_patterns.md) | Spark/Lakehouse authoring — enableSchemas, notebooks, pools |
-| [`mirrored_databases.md`](mirrored_databases.md) | Mirrored DB patterns — CDC sync, API, Lakehouse vs Mirror decision |
-| [`environment.md`](environment.md) | Python, Azure CLI, PowerShell setup |
-| [`resource_ids.md`](resource_ids.md) | GUIDs, endpoints, connection strings |
-| [`shared_constraints.md`](shared_constraints.md) | **New** — 8 hard rules all agents must follow (config-driven, idempotent, async-first) |
-| [`WORKFLOWS.md`](WORKFLOWS.md) | 5 end-to-end cross-agent workflows |
-| [`TEMPLATES.md`](TEMPLATES.md) | 6 project templates with checklists and time budgets |
-| [`ERROR_RECOVERY.md`](ERROR_RECOVERY.md) | Error recovery playbook — decision trees, retry patterns |
+| I want to... | Template | Time | Start here |
+|---|---|---|---|
+| **Build a BI dashboard** (Lakehouse → Model → Report) | Standard BI Demo | 2–3h | [TEMPLATES.md](TEMPLATES.md#template-1) |
+| **Set up real-time analytics** (EventStream → Eventhouse → KQL) | Real-Time IoT | 3–4h | [TEMPLATES.md](TEMPLATES.md#template-2) |
+| **Build a full Smart Factory demo** (Batch + RT + Ontology + AI) | Smart Factory | 4–6h | [TEMPLATES.md](TEMPLATES.md#template-3) |
+| **Add AI Q&A to existing data** (Data Agent + Instructions) | Data Agent Add-On | 45min | [TEMPLATES.md](TEMPLATES.md#template-4) |
+| **Migrate from SAP BusinessObjects** (Assessment → Migration Waves) | BO Migration | 4–6w | [migration-bo-agent](agents/migration-bo-agent/README.md) |
 
 ---
 
-## Agent Directory
+## 🤖 Agents (18)
 
-### Project Orchestration
+### Meta
 
-| Agent | Scope | Docs |
-|-------|-------|------|
-| [project-orchestrator](agents/project-orchestrator-agent/) | End-to-End Project Builder, 12-Step Pipeline, Config-Driven | [README](agents/project-orchestrator-agent/README.md) |
+| Agent | What it does |
+|---|---|
+| [project-orchestrator](agents/project-orchestrator-agent/) | End-to-end project builder — 12-step config-driven pipeline coordinating all agents |
 
 ### Data Engineering
 
-| Agent | Scope | Docs |
-|-------|-------|------|
-| [orchestrator](agents/orchestrator-agent/) | Pipelines, Ingestion, Notebooks, Copy Jobs | [README](agents/orchestrator-agent/README.md) |
-| [lakehouse](agents/lakehouse-agent/) | OneLake DFS, Delta Tables, Spark, Medallion | [README](agents/lakehouse-agent/README.md) |
-| [dataflow](agents/dataflow-agent/) | Dataflow Gen2, Power Query M, ETL | [README](agents/dataflow-agent/README.md) |
-| [domain-modeler](agents/domain-modeler-agent/) | Star Schema, Industry Templates, Data Gen | [README](agents/domain-modeler-agent/README.md) |
-| [warehouse](agents/warehouse-agent/) | Fabric Warehouse, T-SQL, CTAS, COPY INTO, Transactions | [README](agents/warehouse-agent/README.md) |
+| Agent | What it does |
+|---|---|
+| [orchestrator](agents/orchestrator-agent/) | Pipelines, ingestion, notebooks, copy jobs |
+| [lakehouse](agents/lakehouse-agent/) | OneLake DFS, Delta tables, Spark, medallion architecture |
+| [dataflow](agents/dataflow-agent/) | Dataflow Gen2, Power Query M, ETL |
+| [domain-modeler](agents/domain-modeler-agent/) | Star schema design, industry templates, synthetic data gen |
+| [warehouse](agents/warehouse-agent/) | Fabric Warehouse, T-SQL, CTAS, COPY INTO |
 
 ### Analytics & Reporting
 
-| Agent | Scope | Docs |
-|-------|-------|------|
-| [semantic-model](agents/semantic-model-agent/) | DAX Measures, Relationships, model.bim, Direct Lake | [README](agents/semantic-model-agent/README.md) |
-| [report-builder](agents/report-builder-agent/) | Power BI Reports, Visuals, Themes, Legacy PBIX | [README](agents/report-builder-agent/README.md) |
-| [ai-skills](agents/ai-skills-agent/) | Fabric Data Agents, Instructions, Few-Shots | [README](agents/ai-skills-agent/README.md) |
-| [ai-skills-analysis](agents/ai-skills-analysis-agent/) | Data Agent Evaluation, DAX Quality Scoring | [README](agents/ai-skills-analysis-agent/README.md) |
+| Agent | What it does |
+|---|---|
+| [semantic-model](agents/semantic-model-agent/) | DAX measures, relationships, model.bim, Direct Lake |
+| [report-builder](agents/report-builder-agent/) | Power BI reports, visuals, themes (Legacy PBIX only) |
+| [ai-skills](agents/ai-skills-agent/) | Fabric Data Agents, AI instructions, few-shot examples |
+| [ai-skills-analysis](agents/ai-skills-analysis-agent/) | Data Agent evaluation, DAX quality scoring, RCA |
 
 ### Platform & Operations
 
-| Agent | Scope | Docs |
-|-------|-------|------|
-| [workspace-admin](agents/workspace-admin-agent/) | Workspace CRUD, Capacity, RBAC, Git Integration | [README](agents/workspace-admin-agent/README.md) |
-| [fabric-cli](agents/fabric-cli-agent/) | `fab` CLI, Item Management, CI/CD Deploy | [README](agents/fabric-cli-agent/README.md) |
-| [monitoring](agents/monitoring-agent/) | Admin APIs, Audit Events, KQL Dashboards | [README](agents/monitoring-agent/README.md) |
-| [extensibility-toolkit](agents/extensibility-toolkit-agent/) | Custom Workloads, iFrame SDK, Workload Hub | [README](agents/extensibility-toolkit-agent/README.md) |
+| Agent | What it does |
+|---|---|
+| [workspace-admin](agents/workspace-admin-agent/) | Workspace CRUD, capacity, RBAC, Git integration |
+| [fabric-cli](agents/fabric-cli-agent/) | `fab` CLI, item management, CI/CD deploy |
+| [monitoring](agents/monitoring-agent/) | Admin APIs, audit events, KQL dashboards |
+| [extensibility-toolkit](agents/extensibility-toolkit-agent/) | Custom workloads, iFrame SDK, Workload Hub |
 
 ### Real-Time Intelligence & Graph
 
-| Agent | Scope | Docs |
-|-------|-------|------|
-| [rti-eventstream](agents/rti-eventstream-agent/) | EventStreams, EventHub SDK, CDC Patterns | [README](agents/rti-eventstream-agent/README.md) |
-| [rti-kusto](agents/rti-kusto-agent/) | Eventhouse, KQL Database, Dashboards | [README](agents/rti-kusto-agent/README.md) |
-| [ontology](agents/ontology-agent/) | Entity Types, Graph Model, GQL Queries | [README](agents/ontology-agent/README.md) |
-| [migration-bo](agents/migration-bo-agent/) | Business Objects Migration to Fabric | [README](agents/migration-bo-agent/README.md) |
+| Agent | What it does |
+|---|---|
+| [rti-eventstream](agents/rti-eventstream-agent/) | EventStreams, EventHub SDK, CDC patterns |
+| [rti-kusto](agents/rti-kusto-agent/) | Eventhouse, KQL database, dashboards |
+| [ontology](agents/ontology-agent/) | Entity types, graph model, GQL queries |
+| [migration-bo](agents/migration-bo-agent/) | BusinessObjects migration to Fabric |
 
-> Each agent has its own `instructions.md` (system prompt) and domain-specific knowledge files. The agent's README contains the full reading order for its domain.
-> The **project-orchestrator** is a meta-agent that coordinates all others for end-to-end project creation.
-
----
-
-## Repository Structure
-
-```
-Github_Brain/
-├── README.md                    # This file
-├── agent_principles.md          # Mandatory operating principles
-├── fabric_api.md                # REST API patterns & auth
-├── report_format.md             # Legacy PBIX format spec
-├── visual_builders.md           # Visual config & expressions
-├── semantic_model.md            # model.bim & Direct Lake
-├── onelake.md                   # DFS API upload protocol
-├── mcp_powerbi.md               # MCP PBI 21-tool reference
-├── known_issues.md              # Gotchas & workarounds
-├── item_definitions.md          # Definition envelope for all item types
-├── warehouse_patterns.md        # SQL DW authoring patterns
-├── spark_patterns.md            # Spark/Lakehouse authoring patterns
-├── environment.md               # Dev environment setup
-├── resource_ids.md              # GUIDs & endpoints
-├── shared_constraints.md        # 8 hard rules for all agents
-├── WORKFLOWS.md                 # Cross-agent workflows
-├── TEMPLATES.md                 # Project templates
-├── ERROR_RECOVERY.md            # Error recovery playbook
-└── agents/
-    ├── project-orchestrator-agent/ # Meta-agent: end-to-end pipeline
-    ├── orchestrator-agent/      # Pipelines & ingestion (data)
-    ├── lakehouse-agent/         # OneLake & Delta
-    ├── dataflow-agent/          # Dataflow Gen2 & M
-    ├── domain-modeler-agent/    # Star schema & data gen
-    ├── semantic-model-agent/    # DAX & relationships
-    ├── report-builder-agent/    # Power BI reports
-    ├── ai-skills-agent/         # Fabric Data Agents
-    ├── ai-skills-analysis-agent/# Agent evaluation
-    ├── workspace-admin-agent/   # Workspace & capacity
-    ├── fabric-cli-agent/        # CLI & CI/CD
-    ├── monitoring-agent/        # Admin APIs & dashboards
-    ├── extensibility-toolkit-agent/ # Custom workloads
-    ├── rti-eventstream-agent/   # EventStreams & CDC
-    ├── rti-kusto-agent/         # Eventhouse & KQL
-    ├── ontology-agent/          # Graph & entities
-    └── migration-bo-agent/      # BO migration
-```
+> Every agent has `instructions.md` (system prompt) + domain-specific files. The agent README lists the reading order.
 
 ---
 
-## Key Rule
+## 📚 Knowledge Files
 
-> **The Fabric REST API accepts two report formats. Only one renders visuals.**
-> Always use the **Legacy PBIX format** (`report.json` with `sections[].visualContainers[]`).
-> Never use the PBIR folder format.
+<details>
+<summary><strong>Core — Read these first</strong></summary>
+
+| File | Purpose |
+|---|---|
+| [`agent_principles.md`](agent_principles.md) | **Mandatory** — Operating principles, task management, quality standards |
+| [`shared_constraints.md`](shared_constraints.md) | 8 hard rules all agents follow (config-driven, idempotent, async-first) |
+| [`fabric_api.md`](fabric_api.md) | REST API patterns, auth, async operations, LRO polling |
+| [`known_issues.md`](known_issues.md) | Gotchas & workarounds — what works vs what doesn't. See also [ERROR_RECOVERY.md](ERROR_RECOVERY.md) |
+| [`environment.md`](environment.md) | Python, Azure CLI, PowerShell setup |
+| [`resource_ids.md`](resource_ids.md) | GUIDs, endpoints, connection strings |
+
+</details>
+
+<details>
+<summary><strong>Reference — Domain-specific patterns</strong></summary>
+
+| File | Purpose |
+|---|---|
+| [`report_format.md`](report_format.md) | **Critical** — Legacy PBIX format spec (the only format that renders) |
+| [`visual_builders.md`](visual_builders.md) | Visual config, expression language, vcObjects |
+| [`semantic_model.md`](semantic_model.md) | model.bim deployment, Direct Lake, TMDL |
+| [`onelake.md`](onelake.md) | DFS API 3-step upload protocol |
+| [`mcp_powerbi.md`](mcp_powerbi.md) | MCP Power BI — 21 tools for semantic model CRUD, DAX, Prep for AI |
+| [`item_definitions.md`](item_definitions.md) | Definition envelope spec for all 20+ Fabric item types |
+| [`warehouse_patterns.md`](warehouse_patterns.md) | SQL DW authoring — CTAS, COPY INTO, transactions, time travel |
+| [`spark_patterns.md`](spark_patterns.md) | Spark/Lakehouse authoring — enableSchemas, notebooks, pools |
+| [`mirrored_databases.md`](mirrored_databases.md) | Mirrored DB patterns — CDC sync, Lakehouse vs Mirror decision |
+
+</details>
+
+<details>
+<summary><strong>Operations — Workflows, templates, error recovery</strong></summary>
+
+| File | Purpose |
+|---|---|
+| [`WORKFLOWS.md`](WORKFLOWS.md) | 5 end-to-end cross-agent workflows with phases & gates |
+| [`TEMPLATES.md`](TEMPLATES.md) | 5 project templates with checklists and time budgets |
+| [`ERROR_RECOVERY.md`](ERROR_RECOVERY.md) | Decision trees by HTTP status, retry patterns. See also [known_issues.md](known_issues.md) |
+
+</details>
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph LR
+    subgraph Brain["Knowledge Base (19 files)"]
+        direction TB
+        Core["Core\nagent_principles · fabric_api\nknown_issues · shared_constraints"]
+        Ref["Reference\nreport_format · semantic_model\nonelake · warehouse_patterns"]
+        Ops["Operations\nWORKFLOWS · TEMPLATES\nERROR_RECOVERY"]
+    end
+
+    Brain --> O["project-orchestrator"]
+
+    O --> DE["Data Engineering\norchestrator · lakehouse\nwarehouse · dataflow\ndomain-modeler"]
+    O --> AN["Analytics\nsemantic-model · report-builder\nai-skills · ai-skills-analysis"]
+    O --> PL["Platform\nworkspace-admin · fabric-cli\nmonitoring · extensibility"]
+    O --> RT["Real-Time\nrti-eventstream · rti-kusto\nontology · migration-bo"]
+```
+
+---
+
+## 📖 Documentation
+
+| Doc | What's inside |
+|---|---|
+| [TEMPLATES.md](TEMPLATES.md) | 5 project templates — pick one and follow the checklist |
+| [WORKFLOWS.md](WORKFLOWS.md) | Cross-agent sequencing — phases, gates, handoffs |
+| [ERROR_RECOVERY.md](ERROR_RECOVERY.md) | HTTP error decision trees + retry code examples |
+| [shared_constraints.md](shared_constraints.md) | 8 hard rules every agent follows |
 
 ---
 
 ## License
 
 MIT
+
+Built for Microsoft Fabric. Powered by 18 specialized agents.

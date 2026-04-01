@@ -3,6 +3,8 @@
 This file provides decision trees and recovery strategies for common failures across all Fabric agents.
 When an operation fails, consult this file before retrying blindly.
 
+> For preventive patterns (what works vs what doesn't), see [known_issues.md](known_issues.md).
+
 ---
 
 ## Master Decision Tree
