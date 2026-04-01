@@ -1,8 +1,8 @@
 # Github Brain
 
-**18 AI agents + 19 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
+**19 AI agents + 19 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
 
-![Agents](https://img.shields.io/badge/agents-18-blue?style=for-the-badge&logo=github)
+![Agents](https://img.shields.io/badge/agents-19-blue?style=for-the-badge&logo=github)
 ![Knowledge](https://img.shields.io/badge/knowledge_files-19-green?style=for-the-badge)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
 
@@ -38,7 +38,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 
 ---
 
-## 🤖 Agents (18)
+## 🤖 Agents (19)
 
 ### Meta
 
@@ -73,6 +73,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 | [fabric-cli](agents/fabric-cli-agent/) | `fab` CLI, item management, CI/CD deploy |
 | [monitoring](agents/monitoring-agent/) | Admin APIs, audit events, KQL dashboards |
 | [extensibility-toolkit](agents/extensibility-toolkit-agent/) | Custom workloads, iFrame SDK, Workload Hub |
+| [project-presentation](agents/project-presentation-agent/) | README best practices, repo structure, badges, visuals, community files |
 
 ### Real-Time Intelligence & Graph
 
