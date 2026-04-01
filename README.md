@@ -1,8 +1,8 @@
 # Github Brain
 
-**19 AI agents + 19 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
+**20 AI agents + 19 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
 
-![Agents](https://img.shields.io/badge/agents-19-blue?style=for-the-badge&logo=github)
+![Agents](https://img.shields.io/badge/agents-20-blue?style=for-the-badge&logo=github)
 ![Knowledge](https://img.shields.io/badge/knowledge_files-19-green?style=for-the-badge)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
 
@@ -38,7 +38,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 
 ---
 
-## 🤖 Agents (19)
+## 🤖 Agents (20)
 
 ### Meta
 
@@ -71,6 +71,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 |---|---|
 | [workspace-admin](agents/workspace-admin-agent/) | Workspace CRUD, capacity, RBAC, Git integration |
 | [fabric-cli](agents/fabric-cli-agent/) | `fab` CLI, item management, CI/CD deploy |
+| [cicd-fabric](agents/cicd-fabric-agent/) | Git integration, deployment pipelines, variable libraries, branching, environment promotion |
 | [monitoring](agents/monitoring-agent/) | Admin APIs, audit events, KQL dashboards |
 | [extensibility-toolkit](agents/extensibility-toolkit-agent/) | Custom workloads, iFrame SDK, Workload Hub |
 | [project-presentation](agents/project-presentation-agent/) | README best practices, repo structure, badges, visuals, community files |
@@ -149,7 +150,7 @@ graph LR
 
     O --> DE["Data Engineering\norchestrator · lakehouse\nwarehouse · dataflow\ndomain-modeler"]
     O --> AN["Analytics\nsemantic-model · report-builder\nai-skills · ai-skills-analysis"]
-    O --> PL["Platform\nworkspace-admin · fabric-cli\nmonitoring · extensibility"]
+    O --> PL["Platform\nworkspace-admin · fabric-cli\ncicd-fabric · monitoring\nextensibility"]
     O --> RT["Real-Time\nrti-eventstream · rti-kusto\nontology · migration-bo"]
 ```
 
@@ -170,4 +171,4 @@ graph LR
 
 MIT
 
-Built for Microsoft Fabric. Powered by 18 specialized agents.
+Built for Microsoft Fabric. Powered by 20 specialized agents.
