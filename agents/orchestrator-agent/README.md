@@ -22,17 +22,35 @@
 - Capacity management → defer to brain `environment.md`
 - RBAC / security → out of scope
 
+## When NOT to Use This Agent
+
+| If you need to… | Use instead |
+|-----------------|-------------|
+| Write M / Power Query transformations | `../dataflow-agent/` |
+| Route EventStream data (Kafka, custom endpoints) | `../rti-eventstream-agent/` |
+| Design star schemas or dimensional models | `../domain-modeler-agent/` |
+| Build KQL queries or real-time dashboards | `../rti-kusto-agent/` |
+| Create / manage workspaces or capacity | `../workspace-admin-agent/` |
+| Deploy items via CLI (`fab deploy`, `fab job run`) | `../fabric-cli-agent/` |
+| Build reports or visuals | `../report-builder-agent/` |
+| Configure AI Skill / Data Agent instructions | `../ai-skills-agent/` |
+
 ## Files
 
 | File | Purpose |
 |------|---------|
-| `instructions.md` | **LOAD FIRST** — System prompt, behavioral rules, decision trees |
+| `instructions.md` | **LOAD FIRST** — System prompt, behavioral rules, decision trees, CLI cross-ref |
 | `pipelines.md` | Pipeline creation, activities, definition format, execution |
 | `ingestion.md` | OneLake uploads, Copy Jobs, Shortcuts, external sources |
 | `notebooks.md` | Spark notebooks for CSV→Delta, transformations |
 | `monitoring.md` | Run tracking, error handling, retry patterns |
-| `pipeline_definitions.md` | Pipeline JSON schema, expression language, all activity type templates |
-| `templates/` | Ready-to-use code templates |
+| `pipeline_definitions.md` | Pipeline JSON schema, expression cookbook (15 real-world patterns), all activity types |
+| `known_issues.md` | 10 documented issues — includes Spark debugging walkthrough |
+| `templates/README.md` | **Template index** — what each template does, how to deploy, customization checklist |
+| `templates/pipeline_bronze_silver_gold.json` | Production 6-activity pipeline (ForEach → Bronze → Silver → Gold → Refresh + failure webhook) |
+| `templates/pipeline_ingest_transform.json` | Minimal 2-activity starter pipeline (Wait → Notebook) |
+| `templates/notebook_csv_to_delta.py` | Spark notebook: auto-discover CSV subfolders → write Delta tables |
+| `templates/orchestrate_ingestion.py` | End-to-end Python script: auth → upload → run → poll |
 
 ## Quick Start (for a new session)
 

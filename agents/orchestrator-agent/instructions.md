@@ -126,6 +126,25 @@ See `../project-orchestrator-agent/project_pipeline.md` for the full 12-step pro
 | Notebook run | `Item.ReadWrite.All` |
 | Workspace read | `Workspace.Read.All` |
 
+## CLI Alternative — fabric-cli-agent
+
+> Many orchestration tasks can also be done via the `fab` CLI.  
+> See `../fabric-cli-agent/instructions.md` for details.
+
+| This agent (REST API) | fabric-cli-agent (`fab`) |
+|----------------------|-------------------------|
+| `POST .../jobs/instances?jobType=Pipeline` | `fab job run pipeline.DataPipeline` |
+| `POST .../items` (create pipeline) | `fab create ws.Workspace/pl.DataPipeline` |
+| `GET .../operations/{opId}` (poll) | `fab job run --wait` (built-in polling) |
+| `POST .../getDefinition` (export) | `fab export ws/pl.DataPipeline -o /tmp` |
+| `POST .../updateDefinition` (import) | `fab import ws/pl.DataPipeline -i /tmp/pl` |
+| Deploy via Python script | `fab deploy --config config.yml` |
+
+**When to prefer `fab`**: interactive dev, quick one-off runs, CI/CD scripts.  
+**When to prefer REST API**: programmatic pipelines, complex error handling, embedded in Python apps.
+
+---
+
 ## Error Recovery
 
 | Error | Likely Cause | Fix |

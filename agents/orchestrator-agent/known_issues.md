@@ -51,13 +51,49 @@ def poll_with_fallback(op_id, ws_id, item_name, item_type, headers, timeout=120)
 
 **Root Cause**: Notebook code error (Python exception), but the error message is in the Spark logs, not in the Fabric API response.
 
-**Fix**:
-1. Open the notebook in Fabric portal → check Spark session logs
-2. Common causes:
-   - Missing pip packages (Fabric Spark has a preset environment)
-   - Wrong file paths (OneLake paths are case-sensitive)
-   - Credential issues in notebook code
-3. Test notebooks manually in portal before automating via API
+**Fix — Step-by-step Spark log retrieval**:
+
+1. **Open Monitoring Hub**  
+   Fabric portal → left nav → **Monitor** (or `https://app.fabric.microsoft.com/monitoringhub`)
+
+2. **Find the failed run**  
+   Filter by: Activity type = **Notebook** → Status = **Failed** → Time range covers the run.  
+   Click the notebook name to open the run details.
+
+3. **Open Spark session logs**  
+   In the run detail pane → click **View Logs** (top-right) → opens Apache Spark Session view.  
+   Alternatively: click the notebook name → **Recent Runs** tab → click the run ID.
+
+4. **Read stderr / driver logs**  
+   - **Diagnostics tab**: shows structured error category + message  
+   - **Logs tab → stderr**: the raw Python traceback (most useful)  
+   - **Logs tab → stdout**: your `print()` output  
+   Look for `Traceback (most recent call last):` — the last exception is the root cause.
+
+5. **Common root causes & fixes**:
+
+   | Error in stderr | Cause | Fix |
+   |-----------------|-------|-----|
+   | `ModuleNotFoundError: No module named 'xxx'` | Package not in Fabric Spark runtime | Add to Environment or use `%pip install xxx` in cell 1 |
+   | `AnalysisException: Path does not exist: /lakehouse/...` | Wrong OneLake path (case-sensitive!) | Verify exact path with `mssparkutils.fs.ls()` |
+   | `Py4JJavaError: ... java.lang.OutOfMemoryError` | Data too large for driver | Use `.repartition()`, increase Spark pool, or filter earlier |
+   | `PermissionError` or `403 Forbidden` | Missing workspace/lakehouse role | Verify notebook identity has Contributor on lakehouse |
+   | `DeltaTable ... already exists` | Re-run without `overwriteSchema` | Add `.option("overwriteSchema", "true")` or `.mode("overwrite")` |
+   | `IllegalArgumentException: requirement failed` | Schema mismatch on append | Use `mergeSchema` or fix source data |
+
+6. **Programmatic log retrieval** (for automation):
+   ```python
+   # List recent job instances for a notebook
+   resp = requests.get(
+       f"{API}/workspaces/{WS_ID}/items/{NB_ID}/jobs/instances?limit=5",
+       headers=headers
+   )
+   for run in resp.json()["value"]:
+       print(f"{run['id']}  {run['status']}  {run.get('failureReason', {}).get('message', 'n/a')}")
+   ```
+   > Note: `failureReason` is populated only for some error types. For full details, use the portal logs.
+
+7. **Prevention**: Always test notebooks manually in the portal before automating via REST API.
 
 ---
 

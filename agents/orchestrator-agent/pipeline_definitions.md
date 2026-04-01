@@ -68,6 +68,26 @@ Pipeline expressions use `@` prefix and support functions, variables, parameters
 }
 ```
 
+### Real-World Expression Cookbook
+
+| Scenario | Expression | Notes |
+|----------|-----------|-------|
+| **Date-partitioned folder** | `@concat('Files/raw/', formatDateTime(utcNow(), 'yyyy/MM/dd'))` | Builds `Files/raw/2026/04/01` |
+| **Yesterday's partition** | `@concat('Files/raw/', formatDateTime(addDays(utcNow(), -1), 'yyyy/MM/dd'))` | For daily incremental loads |
+| **Dynamic table name** | `@concat('stg_', replace(toLower(item().name), ' ', '_'))` | Inside ForEach — sanitizes table names |
+| **Conditional full vs incremental** | `@if(equals(pipeline().parameters.mode, 'full'), 'overwrite', 'append')` | Pass as notebook parameter for write mode |
+| **Row count check** | `@greater(activity('Copy_Raw').output.rowsCopied, 0)` | Use in IfCondition to skip empty loads |
+| **Semantic model refresh URL** | `@concat('https://api.fabric.microsoft.com/v1/workspaces/', pipeline().parameters.workspace_id, '/semanticModels/', pipeline().parameters.model_id, '/refresh')` | WebActivity URL for model refresh |
+| **Error message from upstream** | `@activity('Load_Bronze').error.message` | Use in Fail activity or Web notification |
+| **Pipeline duration (approx)** | `@concat('Duration: ', string(div(sub(ticks(utcNow()), ticks(variables('start_time'))), 10000000)), 's')` | Tick math for elapsed time |
+| **Build JSON body for notification** | `@json(concat('{"pipeline":"', pipeline().Pipeline, '","status":"', activity('Build_Gold').status, '","runId":"', pipeline().RunId, '"}'))` | Teams/Slack webhook body |
+| **Iterate config array** | `@json('[{"table":"dim_customers","mode":"full"},{"table":"fact_sales","mode":"incremental"}]')` | Hardcoded ForEach items when no Lookup |
+| **Extract filename from path** | `@last(split(item().name, '/'))` | Gets `sales.csv` from `raw/2026/sales.csv` |
+| **Skip weekends** | `@not(or(equals(dayOfWeek(utcNow()), 0), equals(dayOfWeek(utcNow()), 6)))` | Use in IfCondition for weekday-only runs |
+| **Parameterized retry count** | `@if(equals(pipeline().parameters.env, 'prod'), 3, 1)` | Higher retry in prod |
+| **Compose Lakehouse path** | `@concat('/workspaces/', pipeline().GroupId, '/lakehouses/', pipeline().parameters.lakehouse_id, '/files/')` | Dynamic OneLake path |
+| **Boolean from string** | `@bool(pipeline().parameters.is_incremental)` | Pipeline params are always strings — cast to bool |
+
 ---
 
 ## Complete Activity Type Reference

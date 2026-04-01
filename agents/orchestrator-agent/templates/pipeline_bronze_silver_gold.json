@@ -1,0 +1,189 @@
+{
+    "properties": {
+        "description": "Production pipeline: parallel domain ingestion → Bronze → Silver → Gold → Semantic Model refresh. Deploy via updateDefinition API or fab import.",
+        "parameters": {
+            "workspace_id": {
+                "type": "String",
+                "defaultValue": ""
+            },
+            "lakehouse_id": {
+                "type": "String",
+                "defaultValue": ""
+            },
+            "nb_bronze_id": {
+                "type": "String",
+                "defaultValue": ""
+            },
+            "nb_silver_id": {
+                "type": "String",
+                "defaultValue": ""
+            },
+            "nb_gold_id": {
+                "type": "String",
+                "defaultValue": ""
+            },
+            "model_id": {
+                "type": "String",
+                "defaultValue": ""
+            },
+            "mode": {
+                "type": "String",
+                "defaultValue": "full"
+            },
+            "tables": {
+                "type": "Array",
+                "defaultValue": [
+                    { "name": "dim_customers", "source": "raw/customers" },
+                    { "name": "dim_products",  "source": "raw/products" },
+                    { "name": "fact_sales",    "source": "raw/sales" }
+                ]
+            }
+        },
+        "variables": {
+            "start_time": { "type": "String", "defaultValue": "" },
+            "failed_tables": { "type": "Array", "defaultValue": [] }
+        },
+        "activities": [
+            {
+                "name": "Set_Start_Time",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "typeProperties": {
+                    "variableName": "start_time",
+                    "value": { "value": "@utcNow()", "type": "Expression" }
+                }
+            },
+            {
+                "name": "Load_Bronze_Tables",
+                "description": "Parallel CSV→Delta load for each table in the tables parameter.",
+                "type": "ForEach",
+                "dependsOn": [
+                    { "activity": "Set_Start_Time", "dependencyConditions": ["Succeeded"] }
+                ],
+                "typeProperties": {
+                    "isSequential": false,
+                    "batchCount": 5,
+                    "items": { "value": "@pipeline().parameters.tables", "type": "Expression" },
+                    "activities": [
+                        {
+                            "name": "Run_Bronze_Notebook",
+                            "type": "SparkNotebook",
+                            "policy": {
+                                "timeout": "0.01:00:00",
+                                "retry": 1,
+                                "retryIntervalInSeconds": 60
+                            },
+                            "typeProperties": {
+                                "notebookId": { "value": "@pipeline().parameters.nb_bronze_id", "type": "Expression" },
+                                "parameters": {
+                                    "table_name":   { "value": "@item().name",   "type": "Expression" },
+                                    "source_path":  { "value": "@item().source", "type": "Expression" },
+                                    "load_mode":    { "value": "@pipeline().parameters.mode", "type": "Expression" }
+                                },
+                                "sparkPool": ""
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Transform_Silver",
+                "description": "Clean, deduplicate, type-cast, join dimensions. Runs after all Bronze loads succeed.",
+                "type": "SparkNotebook",
+                "dependsOn": [
+                    { "activity": "Load_Bronze_Tables", "dependencyConditions": ["Succeeded"] }
+                ],
+                "policy": {
+                    "timeout": "0.02:00:00",
+                    "retry": 1,
+                    "retryIntervalInSeconds": 120
+                },
+                "typeProperties": {
+                    "notebookId": { "value": "@pipeline().parameters.nb_silver_id", "type": "Expression" },
+                    "parameters": {
+                        "load_mode": { "value": "@pipeline().parameters.mode", "type": "Expression" }
+                    },
+                    "sparkPool": ""
+                }
+            },
+            {
+                "name": "Build_Gold",
+                "description": "Aggregations, KPIs, star schema finalization.",
+                "type": "SparkNotebook",
+                "dependsOn": [
+                    { "activity": "Transform_Silver", "dependencyConditions": ["Succeeded"] }
+                ],
+                "policy": {
+                    "timeout": "0.02:00:00",
+                    "retry": 1,
+                    "retryIntervalInSeconds": 120
+                },
+                "typeProperties": {
+                    "notebookId": { "value": "@pipeline().parameters.nb_gold_id", "type": "Expression" },
+                    "parameters": {
+                        "load_mode": { "value": "@pipeline().parameters.mode", "type": "Expression" }
+                    },
+                    "sparkPool": ""
+                }
+            },
+            {
+                "name": "Check_Gold_Success",
+                "description": "Only refresh semantic model if Gold completed with data.",
+                "type": "IfCondition",
+                "dependsOn": [
+                    { "activity": "Build_Gold", "dependencyConditions": ["Succeeded"] }
+                ],
+                "typeProperties": {
+                    "expression": {
+                        "value": "@not(empty(pipeline().parameters.model_id))",
+                        "type": "Expression"
+                    },
+                    "ifTrueActivities": [
+                        {
+                            "name": "Refresh_Semantic_Model",
+                            "type": "WebActivity",
+                            "policy": {
+                                "timeout": "0.00:30:00",
+                                "retry": 2,
+                                "retryIntervalInSeconds": 60
+                            },
+                            "typeProperties": {
+                                "method": "POST",
+                                "url": {
+                                    "value": "@concat('https://api.fabric.microsoft.com/v1/workspaces/', pipeline().parameters.workspace_id, '/semanticModels/', pipeline().parameters.model_id, '/refresh')",
+                                    "type": "Expression"
+                                },
+                                "body": { "type": "Full" },
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity",
+                                    "resource": "https://api.fabric.microsoft.com"
+                                }
+                            }
+                        }
+                    ],
+                    "ifFalseActivities": []
+                }
+            },
+            {
+                "name": "On_Failure_Notify",
+                "description": "Catch-all: fires if Bronze, Silver, or Gold fails. Wire to Teams/Slack webhook.",
+                "type": "WebActivity",
+                "dependsOn": [
+                    { "activity": "Load_Bronze_Tables", "dependencyConditions": ["Failed"] },
+                    { "activity": "Transform_Silver",   "dependencyConditions": ["Failed"] },
+                    { "activity": "Build_Gold",         "dependencyConditions": ["Failed"] }
+                ],
+                "typeProperties": {
+                    "method": "POST",
+                    "url": "https://YOUR_WEBHOOK_URL_HERE",
+                    "headers": { "Content-Type": "application/json" },
+                    "body": {
+                        "value": "@json(concat('{\"pipeline\":\"', pipeline().Pipeline, '\",\"runId\":\"', pipeline().RunId, '\",\"status\":\"Failed\",\"timestamp\":\"', utcNow(), '\"}'))",
+                        "type": "Expression"
+                    }
+                }
+            }
+        ],
+        "annotations": ["orchestration", "bronze-silver-gold", "template"]
+    }
+}
