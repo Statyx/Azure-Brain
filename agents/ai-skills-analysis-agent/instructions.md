@@ -234,13 +234,28 @@ Always produce structured analysis reports.
 ### "I want to run the AI Skill Analyzer"
 ```
 → Is a profile configured? (profiles/{name}/profile.yaml + questions.yaml)
-  → Yes → Run: python src/main.py --profile {name}
+  → Yes → Run: python -m analyzer -p {name} run
         → Review batch_summary.json for pass/fail/RCA distribution
         → Compare vs previous run (fixed/regressed)
         → Focus on DAX quality stars and BPA violations
   → No → Create profile:
-        → workspace_id, agent_id, semantic_model_id, stage
-        → Write questions.yaml with expected answers (minimum 15)
+        → python -m analyzer init {name}
+        → Fill workspace_id, agent_id, semantic_model_id, stage in profile.yaml
+        → No questions yet?
+          → Run: python -m analyzer -p {name} generate --max 30
+          → Review generated questions.yaml and fill expected answers
+        → Need a schema snapshot?
+          → Run: python -m analyzer -p {name} snapshot
+```
+
+### "I want to validate my test suite"
+```
+→ Run non-regression tests: python -m pytest tests/ -v
+→ 81 tests covering:
+  → 8 match types (exact, contains, numeric, numeric_pct, regex, any_of, list_contains, ordered_list)
+  → 9 RCA categories (including UNKNOWN)
+  → Schema cross-referencing (case mismatch, unknown identifiers, hidden columns)
+  → Question auto-generation
 ```
 
 ---
@@ -273,14 +288,18 @@ When a question fails (wrong answer or no answer):
 
 ```
 1. CLASSIFY using the RCA decision tree (root_cause_analysis.md)
-   → 8 categories: AGENT_ERROR, QUERY_ERROR, EMPTY_RESULT, FILTER_CONTEXT,
-     MEASURE_SELECTION, RELATIONSHIP, REFORMULATION, SYNTHESIS
-2. ASSIGN primary root cause
-3. MAP to action suggestions (DESCRIPTION, INSTRUCTION, FEWSHOT, EXPECTED, MEASURE, DATA)
-4. INCLUDE in report §6 Findings with severity
+   → 9 categories: AGENT_ERROR, QUERY_ERROR, EMPTY_RESULT, FILTER_CONTEXT,
+     MEASURE_SELECTION, RELATIONSHIP, REFORMULATION, SYNTHESIS, UNKNOWN
+2. When schema is available, cross-reference generated DAX against known measures/columns
+   → Detect: measure case mismatches, unknown identifiers, hidden column references
+3. ASSIGN primary root cause
+4. MAP to action suggestions using 7 action types:
+   → PREP_FOR_AI, INSTRUCTION, FEWSHOT, DESCRIPTION, EXPECTED, MEASURE, DATA
+   → Each suggestion includes [Layer X — ...] context label
+5. INCLUDE in report §6 Findings with severity
 ```
 
-Priority fix order: INSTRUCTION > FEWSHOT > DESCRIPTION > MEASURE > DATA > EXPECTED
+Priority fix order: PREP_FOR_AI > INSTRUCTION > FEWSHOT > DESCRIPTION > MEASURE > DATA > EXPECTED
 
 ---
 

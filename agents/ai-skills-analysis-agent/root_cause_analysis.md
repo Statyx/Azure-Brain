@@ -120,6 +120,35 @@ When a Data Agent produces a wrong answer, the failure maps to one of 8 root cau
 
 ---
 
+### RCA-9: UNKNOWN
+
+**Signal**: Cannot determine root cause from available pipeline data.
+
+**Typical causes**:
+- Incomplete diagnostic data
+- New failure mode not yet categorized
+- Agent returned no answer and no error
+
+**Fix**: Start by adding Prep for AI descriptions to tables and columns involved. Add a Verified Answer for the question. If persistent, collect full diagnostic JSON for manual review.
+
+---
+
+## Schema Cross-Referencing (NEW)
+
+When a schema snapshot is available, RCA automatically cross-references generated DAX queries against the model's known measures, columns, and hidden columns:
+
+| Signal | Detection | RCA Category |
+|--------|-----------|-------------|
+| **Measure case mismatch** | Query uses `[total revenue]` but model defines `Total Revenue` | MEASURE_SELECTION |
+| **Unknown identifier** | Query references `[NonExistent]` — not in measures or columns | MEASURE_SELECTION |
+| **Hidden column reference** | Query uses `[Account_ID]` which is `is_hidden: true` | MEASURE_SELECTION |
+| **USERELATIONSHIP** | Explicit inactive relationship traversal | RELATIONSHIP |
+| **CROSSFILTER** | Cross-filter direction override | RELATIONSHIP |
+
+The schema is loaded from `snapshots/{profile}/schema.json` and passed to `grade_result(result, test_case, schema=schema)`.
+
+---
+
 ## Decision Tree: RCA Assignment
 
 ```
@@ -147,7 +176,12 @@ Were the correct tables/joins used?
 Does the data match expected values?
   YES → RCA-8: SYNTHESIS (data correct, answer wrong)
   NO → Re-check RCA-2 through RCA-6
+
+Nothing above matches?
+  → RCA-9: UNKNOWN
 ```
+
+**Priority ordering** (when multiple signals present): QUERY_ERROR > EMPTY_RESULT > FILTER_CONTEXT > MEASURE_SELECTION > RELATIONSHIP > REFORMULATION > SYNTHESIS > UNKNOWN
 
 ---
 
@@ -159,9 +193,14 @@ Does the data match expected values?
 |------|-------|---------|
 | `exact` | Normalized string equality (case-insensitive, whitespace-trimmed) | Expected: "42.5%" — Agent: "42.5%" |
 | `contains` | Expected value appears as substring in agent answer | Expected: "Paris" — Agent: "The top city is Paris" |
-| `numeric` | Numeric comparison with configurable tolerance (default ±5%) | Expected: "1000" — Agent: "1,023" (within 5%) |
+| `numeric` | Numeric comparison with tolerance; magnitude-aware (K/M/B/T) | Expected: "1695514236" — Agent: "1,695.5M" (within tolerance) |
+| `numeric_pct` | Like numeric but treats 0.57 and 57% as equivalent | Expected: 57 — Agent: "0.57" → pass |
 | `regex` | Regex pattern match against agent answer | Expected: `r"\d+\.\d+%"` — Agent: "12.3%" |
 | `any_of` | Any value from a list matches | Expected: ["Q1", "Q2"] — Agent: "Q1" |
+| `list_contains` | ALL items from expected list found in answer (order-irrelevant) | Expected: ["Alpha", "Beta"] — Agent: "Beta, Alpha" → pass |
+| `ordered_list` | Like list_contains but validates rank order in answer | Expected: ["Alpha", "Beta"] — Agent: "1. Beta 2. Alpha" → fail |
+
+**Magnitude-aware number extraction**: Handles `$1,234.56`, `23.5M`, `1.7B`, `500K`, `2.3BN`, `57%`, negative numbers.
 
 ### Verdicts
 
@@ -183,31 +222,50 @@ Verdict: PASS (contains "$1.2M" → found "$1,234,567" within tolerance)
 
 ---
 
-## Action Suggestions
+## Action Suggestions — 3-Layer Instruction Model
 
-When failures are detected, the framework suggests one of 6 action types:
+Every suggestion labels which layer to fix, matching the Analyzer's 3-layer model:
 
-| Action Type | When Suggested | What To Do |
-|-------------|----------------|------------|
-| `DESCRIPTION` | Missing or ambiguous column/table descriptions | Add descriptions in Prep for AI → AI Data Schema |
-| `INSTRUCTION` | Agent skips DAX, misroutes, or formats badly | Add/modify Data Agent `aiInstructions` (Layer 1 or 3) |
-| `FEWSHOT` | Agent doesn't understand question pattern | Add few-shot Q&A example to Data Agent definition |
-| `EXPECTED` | Expected answer may be wrong or outdated | Review and update expected value in test suite |
-| `MEASURE` | Agent writes inline calc for a common metric | Create a dedicated DAX measure in the semantic model |
-| `DATA` | Query correct but data doesn't match expectations | Verify source data, refresh schedules, permissions |
+| Layer | System | What it Controls | Where to Fix |
+|-------|--------|-----------------|---------------|
+| **Layer 1** | Agent Instructions | WHETHER to call DAX tool | Data Agent `aiInstructions` |
+| **Layer 2** | Prep for AI | WHAT DAX to generate | Power BI → Prep for AI (AI Data Schema, AI Instructions, Verified Answers) |
+| **Layer 3** | Agent Instructions | HOW to present results | Data Agent `aiInstructions` (formatting section) |
+
+When failures are detected, the framework suggests one of 7 action types:
+
+| Action Type | Layer | When Suggested | What To Do |
+|-------------|-------|----------------|------------|
+| `PREP_FOR_AI` | 2 | DAX query wrong, missing filters, wrong measure | Open Prep for AI: fix AI Data Schema visibility, add AI Instructions, add Verified Answers |
+| `INSTRUCTION` | 1 or 3 | Agent skips DAX, misroutes, or formats badly | Add/modify Data Agent `aiInstructions` |
+| `FEWSHOT` | 2 | Agent doesn't understand question pattern | Add Verified Answer in Prep for AI |
+| `DESCRIPTION` | 2 | Missing or ambiguous column/table descriptions | Add descriptions in Prep for AI → AI Data Schema |
+| `EXPECTED` | — | Expected answer may be wrong or outdated | Review and update expected value in test suite |
+| `MEASURE` | — | Agent writes inline calc for a common metric | Create a dedicated DAX measure in the semantic model |
+| `DATA` | — | Query correct but data doesn't match expectations | Verify source data, refresh schedules, permissions |
+
+### Context-Specific Suggestions per RCA
+
+Each RCA category now generates artifact-aware suggestions. For example:
+- **QUERY_ERROR** + filter values in query → "[Layer 2 — Prep for AI] Query filtered on ['Active', 'Q1'] — add column descriptions with valid enum values"
+- **EMPTY_RESULT** + time filter → "[Layer 2 — Prep for AI → AI Instructions] Add: 'Default time period is FY2025'"
+- **MEASURE_SELECTION** + hidden column → "[Layer 2 — Prep for AI] Unhide column or create a visible measure wrapper"
+- **REFORMULATION** + no DAX → "[Layer 1 — Agent Instructions] Add: 'ALWAYS query the semantic model using DAX'"
+- **SYNTHESIS** + numeric mismatch → "[Expected] Agent returned ~1,695,514. Update expected if correct"
 
 ### Action-to-RCA Mapping
 
 | RCA Category | Primary Actions | Secondary Actions |
 |-------------|-----------------|-------------------|
-| AGENT_ERROR | — (retry/infra) | — |
-| QUERY_ERROR | `DESCRIPTION`, `MEASURE` | `FEWSHOT` |
-| EMPTY_RESULT | `FEWSHOT`, `DATA` | `DESCRIPTION` |
-| FILTER_CONTEXT | `INSTRUCTION`, `FEWSHOT` | `DESCRIPTION` |
-| MEASURE_SELECTION | `DESCRIPTION`, `FEWSHOT` | `MEASURE` |
-| RELATIONSHIP | `MEASURE` | `DESCRIPTION` |
-| REFORMULATION | `FEWSHOT`, `INSTRUCTION` | `DESCRIPTION` |
-| SYNTHESIS | `INSTRUCTION` | `FEWSHOT` |
+| AGENT_ERROR | `DATA` (retry/infra) | `INSTRUCTION` |
+| QUERY_ERROR | `PREP_FOR_AI`, `FEWSHOT` | `INSTRUCTION` |
+| EMPTY_RESULT | `PREP_FOR_AI`, `FEWSHOT` | `DATA` |
+| FILTER_CONTEXT | `PREP_FOR_AI`, `FEWSHOT` | — |
+| MEASURE_SELECTION | `PREP_FOR_AI`, `INSTRUCTION` | `MEASURE` |
+| RELATIONSHIP | `PREP_FOR_AI`, `FEWSHOT` | — |
+| REFORMULATION | `INSTRUCTION`, `FEWSHOT` | — |
+| SYNTHESIS | `EXPECTED`, `INSTRUCTION` | `FEWSHOT` |
+| UNKNOWN | `PREP_FOR_AI`, `FEWSHOT` | `INSTRUCTION` |
 
 ---
 
