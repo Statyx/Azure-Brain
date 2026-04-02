@@ -1,9 +1,9 @@
 # Github Brain
 
-**20 AI agents + 19 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
+**20 AI agents + 20 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
 
 ![Agents](https://img.shields.io/badge/agents-20-blue?style=for-the-badge&logo=github)
-![Knowledge](https://img.shields.io/badge/knowledge_files-19-green?style=for-the-badge)
+![Knowledge](https://img.shields.io/badge/knowledge_files-20-green?style=for-the-badge)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
 
 [Quick Start](#-quick-start) · [Pick Your Scenario](#-pick-your-scenario) · [Agents](#-agents-18) · [Knowledge Files](#-knowledge-files) · [Architecture](#-architecture) · [Docs](#-documentation)
@@ -115,6 +115,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 | [`semantic_model.md`](semantic_model.md) | model.bim deployment, Direct Lake, TMDL |
 | [`onelake.md`](onelake.md) | DFS API 3-step upload protocol |
 | [`mcp_powerbi.md`](mcp_powerbi.md) | MCP Power BI — 21 tools for semantic model CRUD, DAX, Prep for AI |
+| [`mcp_registry.md`](mcp_registry.md) | **MCP Server Registry** — central catalog of all 7 MCP servers (Azure, Fabric, Power BI, Kusto, Engine, GitKraken, Pylance) |
 | [`item_definitions.md`](item_definitions.md) | Definition envelope spec for all 20+ Fabric item types |
 | [`warehouse_patterns.md`](warehouse_patterns.md) | SQL DW authoring — CTAS, COPY INTO, transactions, time travel |
 | [`spark_patterns.md`](spark_patterns.md) | Spark/Lakehouse authoring — enableSchemas, notebooks, pools |
@@ -139,7 +140,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 
 ```mermaid
 graph LR
-    subgraph Brain["Knowledge Base (19 files)"]
+    subgraph Brain["Knowledge Base (20 files)"]
         direction TB
         Core["Core\nagent_principles · fabric_api\nknown_issues · shared_constraints"]
         Ref["Reference\nreport_format · semantic_model\nonelake · warehouse_patterns"]
@@ -171,4 +172,4 @@ graph LR
 
 MIT
 
-Built for Microsoft Fabric. Powered by 20 specialized agents.
+Built for Microsoft Fabric. Powered by 20 specialized agents and 20 knowledge files.
