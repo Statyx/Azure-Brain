@@ -349,6 +349,76 @@ df.write.format("delta").mode("overwrite").saveAsTable("dim_customers")
 
 ---
 
+## ⚠️ Critical Traps (Learned from Production)
+
+### Trap 1: `%pip install` Crashes in Scheduled Mode
+
+**Symptom**: Notebook job fails in ~38 seconds with "Job instance failed without detail error".
+
+**Root Cause**: `%pip install` magic is **blocked** when notebooks are run via the Jobs API (scheduled mode). It works fine in interactive mode (portal), making it hard to diagnose.
+
+**Fix**: Replace `%pip install` with `subprocess.check_call`:
+```python
+# ❌ BREAKS in scheduled mode (Jobs API)
+%pip install azure-eventhub --quiet
+
+# ✅ WORKS in both interactive and scheduled mode
+import subprocess as _sp
+_sp.check_call(["pip", "install", "azure-eventhub", "--quiet"])
+```
+
+> **Rule**: NEVER use `%pip` or `%conda` in notebooks that will be run via REST API, pipelines, or schedules. Always use `subprocess.check_call`.
+
+### Trap 2: `.ipynb` Format Causes Silent Job Failures
+
+**Symptom**: Notebook pushed with `"format": "ipynb"` and path `"artifact.content.ipynb"` appears to have content in the portal, but every Jobs API run fails in ~30-40 seconds with no error detail.
+
+**Root Cause**: Fabric internally uses `.py` format. The `.ipynb` format is accepted by the API but the execution engine cannot parse it reliably in scheduled mode.
+
+**Fix**: Always use `.py` format:
+```python
+# ❌ BREAKS execution
+body = {
+    "definition": {
+        "format": "ipynb",  # DO NOT USE
+        "parts": [{"path": "artifact.content.ipynb", ...}]
+    }
+}
+
+# ✅ WORKS
+body = {
+    "definition": {
+        "parts": [{"path": "notebook-content.py", ...}]  # No "format" key
+    }
+}
+```
+
+### Trap 3: Missing Blank Lines After Section Headers
+
+**Symptom**: Notebook pushed in `.py` format appears **empty** in the Fabric portal (no cells visible), but the content is actually in the definition.
+
+**Root Cause**: Fabric's parser requires a blank line after each section header (`# CELL ********************`, `# MARKDOWN ********************`, `# METADATA ********************`).
+
+**Fix**:
+```python
+# ❌ Missing blank line — cells won't render
+# CELL ********************
+print("hello")
+
+# ✅ Blank line after header — works
+# CELL ********************
+
+print("hello")
+```
+
+### Trap 4: `.platform` File in updateDefinition
+
+**Symptom**: Including a `.platform` JSON file in the `updateDefinition` parts array causes instant job failures, even if the notebook content is correct.
+
+**Fix**: Do NOT include `.platform` in updateDefinition calls. Only include `notebook-content.py`. The `.platform` file is managed by Fabric internally.
+
+---
+
 ## Cold Start Warning
 
 On F16 capacity, first notebook run after idle triggers Spark cluster allocation:

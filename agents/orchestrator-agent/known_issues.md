@@ -232,3 +232,50 @@ resp = requests.get(f"{API}/workspaces", headers={"Authorization": f"Bearer {tok
 # ❌ WRONG — will hang
 subprocess.run('az rest --method GET --url "https://api.fabric.microsoft.com/v1/workspaces"', shell=True)
 ```
+
+---
+
+## Issue #11: `%pip install` Crashes Notebooks in Scheduled Mode
+
+**Symptom**: Notebook works perfectly in interactive mode (portal) but fails in ~38 seconds with "Job instance failed without detail error" when run via Jobs API or pipeline.
+
+**Root Cause**: `%pip install` magic is **blocked** in scheduled/Jobs API execution mode. The Spark session terminates immediately when encountering `%pip`.
+
+**Diagnostic pattern**: The job always fails in exactly 30-45 seconds regardless of notebook complexity, and there's no useful error in `failureReason`.
+
+**Fix**: Replace `%pip install` with `subprocess.check_call`:
+```python
+# ❌ CRASHES in scheduled mode
+%pip install azure-eventhub --quiet
+
+# ✅ Works in both interactive AND scheduled mode
+import subprocess as _sp
+_sp.check_call(["pip", "install", "azure-eventhub", "--quiet"])
+```
+
+> **Rule**: NEVER use `%pip` or `%conda` magic in notebooks intended for Jobs API, pipeline, or schedule execution. Use `subprocess.check_call` instead.
+
+---
+
+## Issue #12: Notebook Appears Empty After `.py` Format Push
+
+**Symptom**: Notebook pushed via updateDefinition with `.py` format shows up in the portal with 0 cells visible, even though the definition contains valid content.
+
+**Root Cause**: Missing blank line after section headers. Fabric's `.py` parser requires:
+```
+# CELL ********************
+<blank line here>
+code
+```
+
+Without the blank line, the parser ignores the cell entirely.
+
+**Fix**: Always include a blank line after `# CELL ********************`, `# MARKDOWN ********************`, and `# METADATA ********************` headers.
+
+```python
+# ❌ No blank line — cell won't render
+"# CELL ********************\nprint('hello')\n"
+
+# ✅ Blank line after header — works
+"# CELL ********************\n\nprint('hello')\n"
+```
