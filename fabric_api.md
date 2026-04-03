@@ -195,26 +195,92 @@ payload = base64.b64encode(json.dumps(obj).encode("utf-8")).decode("ascii")
 - Item names must be unique within a workspace (by type)
 - Always use `allow_redirects=False` on all requests (prevents SSL hangs)
 
-## Data Agent Chat Endpoint
+## Data Agent Chat Endpoint (Assistants API)
 
-Query a Data Agent programmatically (sandbox or production):
+Data Agents use an **OpenAI Assistants-compatible thread API**, NOT a simple chat endpoint.
 
+Base URL:
 ```
-POST https://api.fabric.microsoft.com/v1/workspaces/{wsId}/aiskills/{agentId}/aiassistant/openai?stage={stage}
+https://api.fabric.microsoft.com/v1/workspaces/{wsId}/dataAgents/{agentId}/aiassistant/openai
 ```
 
-- `stage`: `sandbox` (draft) or `production` (published)
-- Auth: Same Fabric token (`https://api.fabric.microsoft.com/.default`)
-- Body: OpenAI-compatible chat format
+> **Also works**: `/aiskills/{agentId}/aiassistant/openai` (legacy alias)
+
+Required params on ALL calls: `stage=sandbox` (or `production`) + `api-version=2024-02-15-preview`
+
+### Full Conversation Flow
 
 ```python
-resp = requests.post(
-    f"{API}/workspaces/{ws_id}/aiskills/{agent_id}/aiassistant/openai?stage=sandbox",
-    headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-    json={"messages": [{"role": "user", "content": "What is Q1 revenue?"}]},
-    allow_redirects=False
-)
+import requests, time
+
+base = f"https://api.fabric.microsoft.com/v1/workspaces/{ws_id}/dataAgents/{agent_id}/aiassistant/openai"
+params = {"stage": "sandbox", "api-version": "2024-02-15-preview"}
+h = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+# 1. Create thread (Fabric returns same thread per agent/user — IMPORTANT)
+thread = requests.post(f"{base}/threads", headers=h, params=params, json={}, timeout=30).json()
+thread_id = thread["id"]
+
+# 2. CRITICAL: Delete thread to prevent context overflow (see Thread Management below)
+requests.delete(f"{base}/threads/{thread_id}", headers=h, 
+                params={"api-version": "2024-02-15-preview"}, timeout=15)  # NO stage param!
+thread = requests.post(f"{base}/threads", headers=h, params=params, json={}, timeout=30).json()
+thread_id = thread["id"]
+
+# 3. Send message
+requests.post(f"{base}/threads/{thread_id}/messages", headers=h, params=params,
+              json={"role": "user", "content": "What is Q1 revenue?"}, timeout=30)
+
+# 4. Create assistant + run
+asst = requests.post(f"{base}/assistants", headers=h, params=params,
+                     json={"model": "irrelevant"}, timeout=30).json()
+run = requests.post(f"{base}/threads/{thread_id}/runs", headers=h, params=params,
+                    json={"assistant_id": asst["id"]}, timeout=30).json()
+run_id = run["id"]
+
+# 5. Poll until completed
+while True:
+    time.sleep(2)
+    status = requests.get(f"{base}/threads/{thread_id}/runs/{run_id}",
+                          headers=h, params=params, timeout=30).json()["status"]
+    if status in ("completed", "failed"): break
+
+# 6. Get messages (filter by run_id)
+msgs = requests.get(f"{base}/threads/{thread_id}/messages",
+                    headers=h, params={**params, "limit": 10, "order": "desc"}, timeout=30).json()
+answer_msgs = [m for m in msgs["data"] if m.get("run_id") == run_id and m["role"] == "assistant"]
+
+# 7. Get run steps (pipeline trace: fewshots → nl2code → execute → answer)
+steps = requests.get(f"{base}/threads/{thread_id}/runs/{run_id}/steps",
+                     headers=h, params={**params, "limit": 100}, timeout=30).json()
 ```
+
+### Thread Management — CRITICAL
+
+**Fabric reuses the same thread per agent/user.** Messages accumulate across runs. After ~50 messages, the thread causes `BadRequest` errors and the agent skips DAX generation entirely (falls back to cached answers).
+
+**Fix**: Delete + recreate the thread before each question:
+```python
+# DELETE does NOT accept 'stage' param — only api-version
+requests.delete(f"{base}/threads/{thread_id}", headers=h,
+                params={"api-version": "2024-02-15-preview"}, timeout=15)
+# Then POST /threads to get a fresh one
+```
+
+### Pipeline Steps (run_steps)
+
+A healthy run produces 6 steps (in reverse chronological order):
+
+| Step | Tool Name | Purpose |
+|------|-----------|---------|
+| 1 | `analyze.database.fewshots.loading` | Loads few-shot examples |
+| 2 | `analyze.database.fewshots.matching` | Matches question to examples |
+| 3 | `analyze.database.nl2code` | Generates DAX query |
+| 4 | `trace.analyze_semantic_model` | Executes query against model |
+| 5 | `analyze.database.execute` | Returns query results |
+| 6 | `generate.filename` | Names the output file |
+
+**If only step 1 appears** → thread pollution or agent error. Delete thread and retry.
 
 ---
 

@@ -292,3 +292,34 @@ The agent MUST:
 - After semantic model changes (new measures, renamed columns)
 - Monthly scheduled review
 - After user reports incorrect answers
+
+---
+
+## AI Skill Analyzer (Automated Testing Tool)
+
+For automated batch testing with DAX quality analysis, pipeline tracing, and BPA scoring, use **The AI Skill Analyzer** (`python -m analyzer`).
+
+### Key Features
+- **Profile-based**: Each agent has a profile (`profile.yaml` + `questions.yaml` + optional `fewshots.json`)
+- **Thread-safe**: SDK deletes/recreates threads before each question (prevents context overflow)
+- **Pipeline trace**: Captures all 6 run_steps and extracts generated DAX from `nl2code` output
+- **DAX BPA scoring**: 0–5 scale analyzing measure refs, `==` vs `=`, DIVIDE usage, VAR/RETURN, query length
+- **Answer grading**: Numeric, contains, regex, ordered_list match types with tolerance
+- **Root cause analysis**: Identifies QUERY_ERROR, EMPTY_RESULT, FILTER_CONTEXT, MEASURE_SELECTION issues
+- **Action plan**: Generates fix recommendations targeting instructions, fewshots, or measures
+
+### Quick Usage
+```bash
+# Run a full test (15 questions, serial mode)
+python -m analyzer -p sensor_analytics run --serial
+
+# Analyze a previous run
+python -m analyzer analyze 20260403_073635 --html
+```
+
+### SDK Architecture
+- **SDK location**: `%TEMP%\fabric_data_agent_client\fabric_data_agent_client.py`
+- Uses raw `requests` library (OpenAI SDK hangs with Fabric API)
+- Thread delete+recreate per question (prevents `BadRequest` from accumulated messages)
+- Message filtering by `run_id` (thread reuse means messages from all runs coexist)
+- Retry loop with 3 attempts on transient errors (429, timeout, connection reset)

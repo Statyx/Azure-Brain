@@ -45,6 +45,9 @@
 
 | Issue | Symptom | Workaround |
 |-------|---------|------------|
+| **Thread pollution (context overflow)** | After ~50 accumulated messages, runs fail with `BadRequest: OpenAI request to 'openai/threads/{id}/runs' failed`. Agent only returns `fewshots.loading` step, skips DAX entirely, answers from stale cached context | **DELETE the thread before each question** using `DELETE /threads/{id}` with `api-version` param only (no `stage`). Then `POST /threads` to get a fresh one. See `../../fabric_api.md` Thread Management section |
+| **Thread DELETE rejects `stage` param** | `400 BAD_REQUEST: Query parameter 'stage=sandbox' is not supported` | Use only `api-version=2024-02-15-preview` on DELETE calls. All other endpoints require `stage` |
+| **Run shows `completed` but no DAX** | Agent answers correctly-sounding but stale data (e.g., 112 rows when model has 104K) | Thread pollution — agent uses prior Q&A context instead of querying the model. Verify by checking run_steps: if only 1 step (`fewshots.loading`) instead of 6, the thread is polluted |
 | 202 with no body | Seems like nothing happened | This is normal — poll `x-ms-operation-id` until Succeeded |
 | `/operations/{id}/result` endpoint hangs | SSL read timeout on `api.fabric.microsoft.com` | Use the `Location` header redirect URL instead (e.g., `wabi-west-us3-a-primary-redirect.analysis.windows.net`). For `updateDefinition`, skip result fetch entirely — just poll status |
 | Location header URL also hangs for updates | SSL timeout on result fetch | For `updateDefinition` operations, don't fetch the result — just confirm status is "Succeeded" |
@@ -84,11 +87,31 @@
 
 When a Data Agent doesn't work as expected:
 
-1. **Check data source**: Is the correct semantic model/lakehouse attached?
-2. **Check instructions**: Are they in the right stage (draft vs published)?
-3. **Check few-shots**: Do all queries execute correctly in DAX query view?
-4. **Check names**: Do measure/column names match the model exactly (case-sensitive)?
-5. **Check permissions**: Does the agent's identity have read access to the data source?
-6. **Check capacity**: Is the workspace on a Fabric capacity that supports Data Agents?
-7. **Try in portal**: Open the agent in Fabric portal and test interactively
-8. **getDefinition round-trip**: Retrieve the definition and verify all parts are present
+1. **Check thread pollution**: Are run_steps showing only 1 step (`fewshots.loading`)? → Delete the thread and retry
+2. **Check data source**: Is the correct semantic model/lakehouse attached?
+3. **Check instructions**: Are they in the right stage (draft vs published)?
+4. **Check few-shots**: Do all queries execute correctly in DAX query view?
+5. **Check names**: Do measure/column names match the model exactly (case-sensitive)?
+6. **Check permissions**: Does the agent's identity have read access to the data source?
+7. **Check capacity**: Is the workspace on a Fabric capacity that supports Data Agents?
+8. **Try in portal**: Open the agent in Fabric portal and test interactively
+9. **getDefinition round-trip**: Retrieve the definition and verify all parts are present
+
+## Pipeline Trace (run_steps) — What a Healthy Run Looks Like
+
+A healthy Data Agent run produces **6 tool_calls steps**:
+
+```
+1. analyze.database.fewshots.loading   → Loads few-shot examples
+2. analyze.database.fewshots.matching  → Matches question to examples  
+3. analyze.database.nl2code            → Generates DAX query (output: ```dax ... ```)
+4. trace.analyze_semantic_model        → Executes query against model
+5. analyze.database.execute            → Returns query results (markdown table)
+6. generate.filename                   → Names output file
+```
+
+**Red flags:**
+- Only 1 step (`fewshots.loading`) → Thread pollution or agent error
+- `nl2code` output empty → Question too ambiguous or no matching fewshots
+- `execute` output has error → DAX syntax error (check `==` vs `=`, measure names)
+- Run status `failed` with `server_error` → Thread has too many messages

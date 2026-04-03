@@ -37,6 +37,13 @@ Comprehensive list of every issue encountered and resolved during this project.
 | DataAgent `aiInstructions` with measures list | ✅ Orchestrator reformulates questions using measure names |
 | DataAgent data source binding via REST API | ❌ No public endpoint — must use portal |
 | DataAgent dataSources in `data_agent.json` definition | ❌ Ignored (schema only has `$schema`) |
+| DataAgent thread reuse (messages accumulate) | ❌ After ~50 msgs: `BadRequest`, agent skips DAX, returns stale data |
+| DataAgent thread DELETE with `stage` param | ❌ `400 BAD_REQUEST: 'stage=sandbox' not supported`. Use `api-version` only |
+| DataAgent thread DELETE + recreate before each question | ✅ Fresh thread = full DAX pipeline (6 steps) |
+| DataAgent run_steps returns only 1 step (fewshots.loading) | ❌ Thread pollution — agent didn't run DAX |
+| DataAgent run_steps returns 6 steps (fewshots→nl2code→execute) | ✅ Full pipeline, proper DAX generation |
+| DAX executeQueries via `/semanticModels/{id}/executeQueries` | ❌ 404 EntityNotFound (Fabric API) |
+| DAX executeQueries via Power BI API `/datasets/{id}/executeQueries` | ✅ Works |
 | `requests.post()` with `allow_redirects=True` (default) | ❌ Location header redirect hangs on SSL read |
 | `requests.post()` with `allow_redirects=False` | ✅ Returns 202 properly, poll via `x-ms-operation-id` |
 | `RefreshType=Full` after relationship change on DirectLake | ❌ May fail if source schema changed |

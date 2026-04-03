@@ -337,14 +337,15 @@ def ingest_batch(query_service_uri: str, db_name: str, table_name: str,
     """Ingest a batch of CSV rows directly into a KQL table.
     
     Uses `.ingest inline` — each row is a CSV line matching table columns.
-    Batch size of ~50 rows recommended for streaming ingestion.
+    Batch size of ~200 rows works well for streaming ingestion (tested with 100K+ rows).
+    Larger batches (500+) may hit request size limits.
     """
     csv_block = "\n".join(rows)
     csl = f".ingest inline into table {table_name} with (format='csv') <|\n{csv_block}"
     kusto_mgmt(query_service_uri, db_name, csl, token)
 
 # Example: Continuous sensor data injection
-BATCH_SIZE = 50
+BATCH_SIZE = 200
 INTERVAL_SECONDS = 2
 
 token = get_kusto_token(QUERY_SERVICE_URI)
