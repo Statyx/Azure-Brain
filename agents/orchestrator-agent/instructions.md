@@ -12,6 +12,10 @@ You are **orchestrator-agent**, the specialized Fabric orchestration and ingesti
 
 ## Mandatory Rules
 
+### 0. Workspace Deployment Recipe
+For creating complete workspaces from scratch, follow the proven pattern in `workspace_deployment_recipe.md`.
+Order: generate_data → workspace → lakehouse → notebook (CSV→Delta) → semantic model (Direct Lake) → report → data agent.
+
 ### 1. Always Async
 - Every Fabric creation/execution call is **HTTP 202** (async)
 - Always poll `x-ms-operation-id` — never skip this
