@@ -265,6 +265,21 @@ Always verify measure names against `model.bim` or via DAX `EVALUATE` queries.
 
 ---
 
+## Design Quality Checklist (pre-deploy)
+
+Before deploying any report, verify:
+
+1. **Chart labels**: Every axis/category uses a **human-readable** column (e.g., `description`, `name`),
+   NEVER raw ID/code columns (e.g., `level1`, `id`, `code`). Codes render as meaningless numbers.
+2. **Scatter plots**: Check for outliers that compress the rest of the data into a narrow band.
+   Use description labels so outliers are identifiable.
+3. **Slicers**: Each slicer has a visible title (e.g., "Pays", "Discipline") set in `vcObjects`.
+4. **Card values**: `calloutValue` font not too large (max 27D to avoid clipping).
+5. **prototypeQuery**: Every data visual has one (no error, just blank without it).
+6. **Overlap check**: No visuals overlap each other (compare x/y/w/h coordinates).
+
+---
+
 ## Multi-Page Reports
 
 ### Adding Pages

@@ -303,6 +303,71 @@ Priority fix order: PREP_FOR_AI > INSTRUCTION > FEWSHOT > DESCRIPTION > MEASURE 
 
 ---
 
+## Rule 8 — Optimization Playbook (Proven 0% → 100% Pattern)
+
+Based on validated optimization cycles that brought agents from 0% to 100% accuracy:
+
+### Phase 1 — Baseline & Measurement (0% → 35%)
+```
+1. CREATE test suite with 15-20 questions covering:
+   → KPI counts, averages, totals (5 questions)
+   → Dimension grouping/filtering (5 questions)
+   → Ranking/Top-N (3 questions)
+   → Cross-dimension (3 questions)
+   → Norms/escalation lookups (4 questions)
+2. RUN first baseline → expect 0-30% (most failures = missing measures, wrong columns)
+3. FIX critical issues: ensure "ALWAYS query semantic model using DAX" in instructions
+```
+
+### Phase 2 — Instruction Engineering (35% → 70%)
+```
+Key instructions that reliably improve accuracy:
+1. "TOUJOURS inclure les valeurs numériques en chiffres" → prevents spelling out numbers
+2. "Présenter le chiffre exact tel que retourné par la requête DAX" → stops rounding
+3. "Utiliser les mesures DAX existantes. Ne jamais recalculer manuellement" → forces measure reuse
+4. "Pour les calculs complexes, utiliser VAR / RETURN" → readability + performance
+5. "Utiliser DIVIDE(numérateur, dénominateur, 0)" → prevents division by zero
+6. "DAX utilise = simple pour l'égalité. Ne jamais utiliser ==" → syntax correctness
+7. List ALL measure names with their purpose → anchors measure selection
+```
+
+### Phase 3 — Fewshot Saturation (70% → 90%)
+```
+1. ADD 15-20 fewshots covering every question category
+2. Each fewshot should demonstrate:
+   → Correct measure usage (not raw aggregations)
+   → CALCULATETABLE/SUMMARIZECOLUMNS for filtered groupings
+   → TOPN for rankings
+   → ROW() for single-value answers
+3. Key patterns that consistently help:
+   → "Montre X pour Y" → CALCULATETABLE(SUMMARIZECOLUMNS(...), dim[col] = "Y")
+   → "Compare X et Y" → CALCULATETABLE(..., dim[col] IN {"X", "Y"})
+   → "Quels sont les N meilleurs" → TOPN(N, ADDCOLUMNS(...))
+   → "Quel est l'écart-type" → ROW("Label", [Measure])
+```
+
+### Phase 4 — Expected Value Calibration (90% → 100%)
+```
+1. REMAINING failures are often expected value mismatches, not agent errors
+2. For each failure, verify: is the agent's answer actually correct?
+   → Check the DAX query in the diagnostic — if it's valid, update expected
+3. Common mismatches:
+   → Agent counts ALL rows, expected counted only leaf rows
+   → Agent uses [Rate Std Dev] on normalized_rate_eur, expected used raw unit_rate
+   → Number formatting: "34.84" vs "34,84" (locale mismatch)
+4. Run 3+ times to confirm stability (LLM non-determinism, see GP-011)
+```
+
+### Key Metrics by Phase
+| Phase | Score | Main Fix Type |
+|-------|-------|---------------|
+| Baseline | 0-35% | INSTRUCTION + MEASURE |
+| Instructions | 35-70% | INSTRUCTION (5-7 rules) |
+| Fewshots | 70-90% | FEWSHOT (15-20 examples) |
+| Calibration | 90-100% | EXPECTED value updates |
+
+---
+
 ## Tool Call Function Reference (from diagnostics)
 
 These are the internal functions that appear in `thread.run_steps[].step_details.tool_calls`:

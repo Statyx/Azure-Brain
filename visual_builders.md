@@ -245,6 +245,55 @@ def make_multi_chart(x, y, z, w, h, vis_type, title,
 - `legend.show` should be `true` to distinguish measures
 - Works with: `clusteredColumnChart`, `lineChart`, `clusteredBarChart`, `stackedColumnChart`
 
+## Report Design Best Practices — Common Mistakes
+
+### NEVER use raw ID/code columns for chart labels
+When dimension tables have both a code/ID column (e.g., `level1`, `country_code`, `discipline_id`)
+and a human-readable description column (e.g., `description`, `country_name`, `discipline_name`),
+**ALWAYS use the description column** for chart axes and scatter categories.
+
+**Bad** (renders as meaningless numbers):
+```python
+_bar("b1", ..., "dim_wbs", "level1", ...)         # Shows "10", "20", "30"...
+_scatter("sc1", ..., "dim_wbs", "level1", ...)     # Dots labeled "60", "80"...
+```
+
+**Good** (renders as readable text):
+```python
+_bar("b1", ..., "dim_wbs", "description", ...)     # Shows "Site Preparation", "Civil Works"...
+_scatter("sc1", ..., "dim_wbs", "description", ...) # Dots labeled "Electrical Systems"...
+```
+
+**Rule**: Before building any chart, check the dimension table columns.
+Pick the column with the highest semantic value for the end user.
+Codes belong in tooltips or detail tables, not in axes or legends.
+
+### Scatter plot outlier awareness
+When a scatter chart has one point far from the cluster, it compresses all other
+data points into a narrow band, making the chart hard to read.
+Mitigations:
+- Use `description` labels so the outlier is identifiable at a glance
+- Consider logarithmic scales if variance is extreme
+- Add a visual-level TopN filter to exclude outliers if needed
+
+### Slicer display names
+Slicer dropdown mode shows the raw column `NativeReferenceName` as a header inside the slicer.
+To avoid showing `country_name` or `discipline_name` to the user:
+- Set `vcObjects.title` with a friendly label ("Pays", "Discipline")
+- **Hide the inner header** via `objects.header = [{"properties": {"show": false}}]`
+- This removes the redundant raw column name while keeping the clean title
+
+```python
+"objects": {
+    "data":   [{"properties": {"mode": _lit("'Dropdown'")}}],
+    "header": [{"properties": {"show": _lit("false")}}],  # hide raw column name
+},
+"vcObjects": {"title": [{"properties": {
+    "show": _lit("true"),
+    "text": _lit("'Pays'"),  # clean user-facing label
+}}]},
+```
+
 ## Sidebar Navigation Pattern (Dark Theme)
 
 The MF_Finance report uses a dark sidebar (140px) with navigation labels:

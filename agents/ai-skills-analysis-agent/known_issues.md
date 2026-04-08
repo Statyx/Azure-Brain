@@ -393,3 +393,66 @@ The time intelligence annotation takes priority over all Prep for AI configurati
 - Add explicit Verified Answers for questions where reformulation is harmful
 - Use CopilotInstructions to anchor metric definitions
 - Note that neither fully overrides the reformulation when time intelligence is enabled
+
+---
+
+### GP-011: LLM non-determinism causes score variance between runs
+
+**Symptom**: Same test suite, same agent config — score fluctuates between runs (e.g., 90% → 100% → 95%).
+
+**Cause**: The underlying LLM is non-deterministic. Identical questions may generate different DAX queries, use different measures, or interpret ambiguous column names differently between invocations.
+
+**Examples observed**:
+- Q8 "distinct WBS codes": Agent counts only leaf-level WBS (55) in one run but all WBS (96) in the next
+- Q17 "standard deviation": Agent uses raw `unit_rate` column (15239) in one run but `[Rate Std Dev]` measure on `normalized_rate_eur` (3785) in another
+
+**Fix**:
+1. **Increase fewshot coverage**: Add explicit few-shots for ambiguous questions. The more specific the demonstrated DAX, the more consistent the output
+2. **Use existing measures**: Instruct the agent to always use pre-defined measures rather than computing raw aggregations. Measures have fixed semantics
+3. **Run multiple times**: When evaluating, run 3+ times and take the modal score to smooth variance
+4. **Anchor with `INSTRUCTIONS`**: Include explicit measure names and column semantics in instructions (e.g., "For standard deviation, always use `[Rate Std Dev]`")
+
+---
+
+### GP-012: `==` operator in generated DAX causes silent correctness issues
+
+**Symptom**: DAX query uses `==` but returns correct results in some contexts. BPA flags it.
+
+**Cause**: DAX supports `==` as strict equality (exact match, case-sensitive, no BLANK coercion). Most users expect `=` (standard equality with BLANK handling). The model (GPT-4.1) trained on Python/JS tends to generate `==` by default.
+
+**Impact**: `==` may fail on BLANK comparisons or produce unexpected results with text columns. BPA rule `CORR-004` flags it.
+
+**Fix**: Add to Data Agent instructions: `"DAX uses single = for equality. Never use ==."` This consistently eliminates the issue.
+
+---
+
+### GP-013: Agent uses raw aggregations instead of pre-defined measures
+
+**Symptom**: Generated DAX computes `AVERAGE(fact_table[column])` instead of using `[Avg Measure]`. Works correctly but is verbose, harder to maintain, and inconsistent with model semantics.
+
+**Cause**: The DAX generation layer doesn't always detect pre-defined measures, especially when:
+- The measure name doesn't closely match the question
+- The question is phrased differently from fewshot examples
+- Multiple measures could apply
+
+**Fix**:
+1. List key measures explicitly in Data Agent instructions with their purpose
+2. Add instruction: `"Always reference existing measures inside CALCULATE instead of wrapping raw SUM/AVERAGE/COUNT"`
+3. Add fewshots demonstrating measure usage for each key metric
+4. In the semantic model, add descriptions to measures that match natural language patterns
+
+---
+
+### GP-014: Fabric API intermittent failures (404, 400, DNS resolution)
+
+**Symptom**: Data Agent API calls fail with 404 on threads/messages, 400 Bad Request, or DNS resolution failures (`Failed to resolve 'api.fabric.microsoft.com'`).
+
+**Cause**: Fabric API has intermittent server-side issues. These are transient and not related to agent configuration.
+
+**Impact**: Automated test suites may score lower due to skipped/errored questions.
+
+**Fix**:
+1. Implement retry logic with exponential backoff (3 retries, 2s/4s/8s delays)
+2. Add `process_timeout=30` to `AzureCliCredential` to avoid token acquisition hangs
+3. Use `timeout=120` on `requests.post` calls to the Fabric API
+4. When evaluating, discard runs with >10% error rate and re-run
