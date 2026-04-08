@@ -212,60 +212,113 @@ Required params on ALL calls: `stage=sandbox` (or `production`) + `api-version=2
 
 ```python
 import requests, time
+from concurrent.futures import ThreadPoolExecutor
 
 base = f"https://api.fabric.microsoft.com/v1/workspaces/{ws_id}/dataAgents/{agent_id}/aiassistant/openai"
 params = {"stage": "sandbox", "api-version": "2024-02-15-preview"}
 h = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+http = requests.Session()  # Connection pooling — reuse TCP/TLS connections
+http.headers.update({"Content-Type": "application/json"})
 
-# 1. Create thread (Fabric returns same thread per agent/user — IMPORTANT)
-thread = requests.post(f"{base}/threads", headers=h, params=params, json={}, timeout=30).json()
-thread_id = thread["id"]
+# Helper: retry on 404 (eventual consistency after thread create)
+def _req(method, url, hdrs, prms, body=None, retries=2):
+    for attempt in range(retries + 1):
+        r = http.post(url, headers=hdrs, json=body, params=prms, timeout=30) if method == "POST" \
+            else http.get(url, headers=hdrs, params=prms, timeout=30)
+        if r.status_code == 404 and attempt < retries:
+            time.sleep(1.5 * (attempt + 1))
+            continue
+        r.raise_for_status()
+        return r
 
-# 2. CRITICAL: Delete thread to prevent context overflow (see Thread Management below)
-requests.delete(f"{base}/threads/{thread_id}", headers=h, 
-                params={"api-version": "2024-02-15-preview"}, timeout=15)  # NO stage param!
-thread = requests.post(f"{base}/threads", headers=h, params=params, json={}, timeout=30).json()
-thread_id = thread["id"]
+# 1. Fresh thread: Create → Delete → Recreate (MUST do each question)
+thread_id = http.post(f"{base}/threads", headers=h, params=params, json={}, timeout=30).json()["id"]
+http.delete(f"{base}/threads/{thread_id}", headers=h,
+            params={"api-version": "2024-02-15-preview"}, timeout=15)  # NO stage param on DELETE!
+time.sleep(0.5)  # Eventual consistency window
+thread_id = http.post(f"{base}/threads", headers=h, params=params, json={}, timeout=30).json()["id"]
 
-# 3. Send message
-requests.post(f"{base}/threads/{thread_id}/messages", headers=h, params=params,
-              json={"role": "user", "content": "What is Q1 revenue?"}, timeout=30)
+# 2. Send message (with 404 retry)
+_req("POST", f"{base}/threads/{thread_id}/messages", h, params,
+     body={"role": "user", "content": "What is Q1 revenue?"})
 
-# 4. Create assistant + run
-asst = requests.post(f"{base}/assistants", headers=h, params=params,
-                     json={"model": "irrelevant"}, timeout=30).json()
-run = requests.post(f"{base}/threads/{thread_id}/runs", headers=h, params=params,
-                    json={"assistant_id": asst["id"]}, timeout=30).json()
+# 3. Create assistant + run
+asst = http.post(f"{base}/assistants", headers=h, json={"model": "irrelevant"}, params=params, timeout=30).json()
+run = _req("POST", f"{base}/threads/{thread_id}/runs", h, params,
+           body={"assistant_id": asst["id"]}).json()
 run_id = run["id"]
 
-# 5. Poll until completed
-while True:
-    time.sleep(2)
-    status = requests.get(f"{base}/threads/{thread_id}/runs/{run_id}",
-                          headers=h, params=params, timeout=30).json()["status"]
-    if status in ("completed", "failed"): break
+# 4. Adaptive polling: 0.5, 0.5, 1, 1, 2, 2, 3, 3, 3...
+poll_intervals = [0.5, 0.5, 1, 1, 2, 2] + [3] * 50
+for i, delay in enumerate(poll_intervals):
+    time.sleep(delay)
+    status = http.get(f"{base}/threads/{thread_id}/runs/{run_id}",
+                      headers=h, params=params, timeout=30).json()["status"]
+    if status in ("completed", "failed", "cancelled", "expired"):
+        break
 
-# 6. Get messages (filter by run_id)
-msgs = requests.get(f"{base}/threads/{thread_id}/messages",
-                    headers=h, params={**params, "limit": 10, "order": "desc"}, timeout=30).json()
+# 5. Parallel message + steps retrieval (with 404 retry)
+with ThreadPoolExecutor(max_workers=2) as pool:
+    msgs_f = pool.submit(_req, "GET", f"{base}/threads/{thread_id}/messages",
+                         h, {**params, "limit": 10, "order": "desc"})
+    steps_f = pool.submit(_req, "GET", f"{base}/threads/{thread_id}/runs/{run_id}/steps",
+                          h, {**params, "limit": 100})
+    msgs = msgs_f.result().json()
+    steps = steps_f.result().json()
+
+# 6. Filter messages by run_id
 answer_msgs = [m for m in msgs["data"] if m.get("run_id") == run_id and m["role"] == "assistant"]
-
-# 7. Get run steps (pipeline trace: fewshots → nl2code → execute → answer)
-steps = requests.get(f"{base}/threads/{thread_id}/runs/{run_id}/steps",
-                     headers=h, params={**params, "limit": 100}, timeout=30).json()
 ```
 
 ### Thread Management — CRITICAL
 
 **Fabric reuses the same thread per agent/user.** Messages accumulate across runs. After ~50 messages, the thread causes `BadRequest` errors and the agent skips DAX generation entirely (falls back to cached answers).
 
-**Fix**: Delete + recreate the thread before each question:
+**Fix**: Delete + recreate the thread **before each question**:
 ```python
 # DELETE does NOT accept 'stage' param — only api-version
 requests.delete(f"{base}/threads/{thread_id}", headers=h,
                 params={"api-version": "2024-02-15-preview"}, timeout=15)
+time.sleep(0.5)  # Wait for eventual consistency
 # Then POST /threads to get a fresh one
 ```
+
+**WARNING — Thread Reuse/Recycling DOES NOT WORK**: Attempting to reuse a thread for N questions (e.g., DELETE every 8th question) causes cascading failures:
+- Q1-Q2 succeed but accumulate messages
+- Q3 may hang at "queued" status (never starts processing)
+- Q4+ get 404 on message/run endpoints due to eventual consistency after forced reset
+- Measured: 67% error rate (4/6 questions) with recycling vs 0% with per-question DELETE
+
+**Eventual Consistency on 404**: After DELETE + recreate, subsequent POST/GET may return 404 for ~1-3s. Always retry 404 with backoff on **all** endpoints (not just POST):
+```python
+# Retry pattern for both POST and GET
+for attempt in range(3):
+    r = http.request(method, url, ...)
+    if r.status_code == 404 and attempt < 2:
+        time.sleep(1.5 * (attempt + 1))
+        continue
+    r.raise_for_status()
+    return r
+```
+
+### Performance Optimizations (Batch Mode)
+
+For batch question runs, these optimizations reduce per-question time by ~47%:
+
+| Optimization | Impact | Details |
+|-------------|--------|---------|
+| `requests.Session` | -2-3s/q | TCP/TLS connection reuse across 8-12 HTTP calls per question |
+| Adaptive polling | -2-5s/q | Start 0.5s, ramp to 3s: `[0.5, 0.5, 1, 1, 2, 2] + [3]*50` |
+| Parallel GET | -0.5-1s/q | Fetch messages + steps concurrently via ThreadPoolExecutor |
+| 404 retry on all | 0% errors | Covers POST and GET (previous POST-only left GETs unprotected) |
+| Thread sleep 0.5s | -0.5s/q | Reduced from 1s — 0.5s is sufficient for consistency |
+
+**Measured results** (6 questions):
+- Before: 251.9s, 67% error rate
+- After: 117.5s, 0% error rate
+- Per-question: 35s → 19s average
+
+**CANNOT parallelize questions**: Fabric returns the same thread_id for every POST /threads from the same user+agent. Multiple concurrent runs corrupt each other. With single identity, questions MUST be serial.
 
 ### Pipeline Steps (run_steps)
 

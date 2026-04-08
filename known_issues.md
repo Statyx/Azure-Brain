@@ -40,6 +40,15 @@ Comprehensive list of every issue encountered and resolved during this project.
 | DataAgent thread reuse (messages accumulate) | ❌ After ~50 msgs: `BadRequest`, agent skips DAX, returns stale data |
 | DataAgent thread DELETE with `stage` param | ❌ `400 BAD_REQUEST: 'stage=sandbox' not supported`. Use `api-version` only |
 | DataAgent thread DELETE + recreate before each question | ✅ Fresh thread = full DAX pipeline (6 steps) |
+| DataAgent thread recycling (reuse N, then DELETE) | ❌ Cascading 404 errors + "queued" hangs after Q2-Q3 (67% error rate) |
+| DataAgent thread DELETE + POST immediate GET | ❌ 404 eventual consistency (1-3s propagation delay) |
+| DataAgent 404 retry on POST only | ❌ Misses 404 on GET /messages and /steps — causes errors Q4+ |
+| DataAgent 404 retry on ALL endpoints (POST + GET) | ✅ Eliminates all 404 errors (0% error rate) |
+| DataAgent `requests.Session()` connection pooling | ✅ Reduces per-question overhead by ~2-3s (TCP/TLS reuse) |
+| DataAgent adaptive polling (0.5s→3s ramp) | ✅ Saves 2-5s/question vs fixed 2s interval |
+| DataAgent parallel GET messages + steps | ✅ Saves 0.5-1s/question via ThreadPoolExecutor(2) |
+| DataAgent parallel questions (single identity) | ❌ Same thread returned for all POST /threads — runs corrupt each other |
+| DataAgent parallel questions (N service principals) | ✅ Each SP gets own thread — true parallelism |
 | DataAgent run_steps returns only 1 step (fewshots.loading) | ❌ Thread pollution — agent didn't run DAX |
 | DataAgent run_steps returns 6 steps (fewshots→nl2code→execute) | ✅ Full pipeline, proper DAX generation |
 | DAX executeQueries via `/semanticModels/{id}/executeQueries` | ❌ 404 EntityNotFound (Fabric API) |

@@ -4,7 +4,7 @@
 
 **Name**: ai-skills-analysis-agent  
 **Scope**: Analyzing diagnostic exports, programmatic evaluation with the SDK, and consuming Data Agents via the Python client SDK  
-**Version**: 2.0  
+**Version**: 2.1  
 **Complements**: `ai-skills-agent` (which handles creation/deployment)
 
 ## What This Agent Owns
@@ -17,6 +17,7 @@
 | **DAX Quality Analysis** | Score generated DAX with 24 BPA rules and quality stars (0-3) | BPA framework |
 | **Root Cause Analysis** | Classify failures into 9 RCA categories with schema cross-referencing, suggest 7 action types | RCA decision tree |
 | **Python Client Consumption** | Consume Data Agents from external apps via the Python client SDK | `fabric-data-agent-client` |
+| **SDK Performance Tuning** | Connection pooling, adaptive polling, 404 retry, thread management for batch runs | `requests.Session`, ThreadPoolExecutor |
 | **Configuration Audit** | Evaluate instruction quality, schema completeness, relationship integrity | Diagnostic JSON sections |
 | **Conversation Replay** | Reconstruct user↔assistant exchanges with full tool call & DAX traces | Thread / run_steps analysis |
 | **Quality Scoring** | Score agent configuration and evaluation results with rubrics | Playbook checklists |

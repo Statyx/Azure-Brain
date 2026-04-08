@@ -371,3 +371,42 @@ Both?
   └── YES → Dual binding pattern: same entity has NonTimeSeries (name, location)
            + TimeSeries (temperature, pressure) properties
 ```
+
+---
+
+## Workflow 7: Task Flow Visualization
+
+**Use case**: Create a visual task flow representing the project's data pipeline in the workspace.
+**Agents involved**: taskflow-agent (standalone — runs after any workflow above)
+**Prerequisite**: Deployed workspace with items (Lakehouse, Notebooks, Models, Reports, etc.)
+**Estimated effort**: 15–30 minutes
+
+### Phase 1: Generate Task Flow JSON (taskflow-agent)
+
+**Input**: Project architecture (deployed items list, pipeline stages)
+**Output**: `.json` task flow file
+
+1. Map each deployed item to the correct task type (see `task_types.md`)
+2. Choose a template from `templates.md` or build from scratch
+3. Arrange tasks left-to-right by data flow stage
+4. Connect tasks with logical connectors
+5. Write JSON with meaningful names and descriptions
+
+> **Gate**: JSON validates (valid task types, all `startTaskId`/`endTaskId` reference existing tasks)
+
+### Phase 2: Import & Assign (portal — manual)
+
+1. Open workspace → List view → **Import a task flow**
+2. Select the `.json` file
+3. Assign items to tasks (click clip icon on each task)
+4. Verify layout and adjust positions if needed
+
+> **Gate**: Task flow visible in workspace, all tasks have assigned items
+
+### When to Use
+
+Add this workflow as a **final step** to any other workflow:
+- After Workflow 1 (BI Demo) → shows Ingest → Store → Transform → Model → Report
+- After Workflow 2 (RTI) → shows Stream → Store → Analyze → Dashboard
+- After Workflow 4 (Data Agent) → adds AI Agent task to existing flow
+- After Workflow 6 (Ontology) → adds Graph/Ontology tasks to existing flow
