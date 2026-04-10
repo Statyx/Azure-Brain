@@ -114,11 +114,9 @@ This controls the visual's frame: title, background, border, shadow.
 ```python
 "dropShadow": [{"properties": {
     "show":          _lit("true"),
-    "color":         _color("#A6ADC6"),
+    "color":         _color("#cccccc"),     # Fluent 2: light gray shadow
     "preset":        _lit("'Custom'"),
-    "shadowSpread":  _lit("0L"),
     "shadowBlur":    _lit("5L"),
-    "angle":         _lit("90L"),
     "shadowDistance": _lit("4L"),
     "transparency":  _lit("85L"),
 }}]
@@ -137,9 +135,8 @@ This controls the visual's frame: title, background, border, shadow.
 ```python
 "border": [{"properties": {
     "show":   _lit("true"),
-    "color":  _color("#E0E0E0"),
-    "radius": _lit("4L"),          # corner radius in px
-    "width":  _lit("1L"),          # optional border width
+    "color":  _color("#c7c8ce"),    # Fluent 2: cool gray border
+    "radius": _lit("8L"),          # corner radius in px (8px for modern look)
 }}]
 ```
 
@@ -157,11 +154,9 @@ def make_vc_objects(title_text=None, shadow=True, background=True, border=True):
     if shadow:
         vc["dropShadow"] = [{"properties": {
             "show":          _lit("true"),
-            "color":         _color("#A6ADC6"),
+            "color":         _color("#cccccc"),
             "preset":        _lit("'Custom'"),
-            "shadowSpread":  _lit("0L"),
             "shadowBlur":    _lit("5L"),
-            "angle":         _lit("90L"),
             "shadowDistance": _lit("4L"),
             "transparency":  _lit("85L"),
         }}]
@@ -172,8 +167,8 @@ def make_vc_objects(title_text=None, shadow=True, background=True, border=True):
     if border:
         vc["border"] = [{"properties": {
             "show":   _lit("true"),
-            "color":  _color("#E0E0E0"),
-            "radius": _lit("4L"),
+            "color":  _color("#c7c8ce"),
+            "radius": _lit("8L"),
         }}]
     
     return vc
@@ -307,22 +302,41 @@ for part in result["definition"]["parts"]:
 
 ---
 
-## Color Palette — Finance Dashboard
+## Color Palette — Microsoft Fluent 2 (Active Standard)
 
-Recommended colors for finance visuals:
+This is Microsoft's default modern palette used by Power BI. Use this palette for all new reports.
 
-| Purpose | Color | Hex |
+### Theme Data Colors (8 series, auto-assigned by PBI)
+
+| Index | Name | Hex | Usage |
+|:---:|-------|-----|-------|
+| 1 | Blue | `#118DFF` | Primary series, accent, action |
+| 2 | Navy | `#12239E` | Secondary series |
+| 3 | Orange | `#E66C37` | Tertiary series |
+| 4 | Purple | `#6B007B` | Fourth series |
+| 5 | Pink | `#E044A7` | Fifth series |
+| 6 | Violet | `#744EC2` | Sixth series |
+| 7 | Gold | `#D9B300` | Seventh series |
+| 8 | Red | `#D64550` | Eighth series, negative variance |
+
+### Structural Colors (applied in vcObjects / objects)
+
+| Element | Color | Hex |
 |---------|-------|-----|
-| Primary (Revenue) | Blue | `#4472C4` |
-| Secondary (Expenses) | Red | `#ED7D31` |
-| Positive (Profit) | Green | `#70AD47` |
-| Warning (Budget Over) | Orange | `#FFC000` |
-| Negative (Loss) | Dark Red | `#C00000` |
-| Neutral | Gray | `#A5A5A5` |
-| Background | White | `#FFFFFF` |
-| Border | Light Gray | `#E0E0E0` |
-| Shadow | Blue Gray | `#A6ADC6` |
-| Text | Dark Gray | `#333333` |
+| Primary text | Dark charcoal | `#252423` |
+| Visual title / labels | Medium gray | `#616161` |
+| Border | Cool gray | `#c7c8ce` |
+| Shadow | Light gray | `#cccccc` |
+| Accent bar | Fluent Blue | `#118DFF` |
+| Background panel | Near-white | `#F6F6F6` |
+| Page background | White | `#FFFFFF` |
+| Separator line | Cool gray | `#c7c8ce` |
+| Positive | Green | `#70AD47` |
+| Warning | Amber | `#FFC000` |
+| Negative | Red | `#D64550` |
+
+### Migration Note: Previous Palettes
+Earlier iterations used Fashion colors (deep teal/coral), then Competitive Marketing (#01B8AA teal). The Fluent 2 palette above is the current standard as of 2026-04. Always use it for new reports.
 
 ---
 
@@ -356,3 +370,75 @@ def build_aliases(tables: list[str]) -> tuple[dict, list]:
 | `dim_accounts` | `e` or `d` |
 | `fact_budget` | `g` or `e` |
 | `fact_ar_invoices` | `h` or `f` |
+
+---
+
+## Decorative Elements — Accent Bar, Separator, Background Panel
+
+These `basicShape` visuals add professional polish that differentiates API-built reports from default ones.
+
+### Accent Bar (top-of-page brand stripe)
+A 5px-tall colored bar across the full 1280px width at y=0. Sets the brand tone.
+
+```python
+def _accent_bar(name, y=0, color="#118DFF"):
+    """Thin colored accent bar across top of page."""
+    return {
+        "x": 0, "y": y, "z": 0, "width": 1280, "height": 5,
+        "config": json.dumps({
+            "name": name,
+            "layouts": [{"id": 0, "position": {"x": 0, "y": y, "z": 0, "width": 1280, "height": 5}}],
+            "singleVisual": {"visualType": "basicShape", "objects": {
+                "line": [{"properties": {"show": _lit("false")}}],
+                "fill": [{"properties": {
+                    "fillColor": _color(color),
+                    "transparency": _lit("0L"),
+                }}],
+            }},
+        }), "filters": "[]",
+    }
+```
+
+### Separator (section divider)
+A 2px-tall line at 30px margin, 1220px wide. Use between visual groups to create sections.
+
+```python
+def _separator(name, y):
+    return {
+        "x": 30, "y": y, "z": 0, "width": 1220, "height": 2,
+        "config": json.dumps({
+            "name": name,
+            "layouts": [{"id": 0, "position": {"x": 30, "y": y, "z": 0, "width": 1220, "height": 2}}],
+            "singleVisual": {"visualType": "basicShape", "objects": {
+                "line": [{"properties": {"show": _lit("false")}}],
+                "fill": [{"properties": {
+                    "fillColor": _color("#c7c8ce"),
+                    "transparency": _lit("0L"),
+                }}],
+            }},
+        }), "filters": "[]",
+    }
+```
+
+### Background Panel (visual grouping)
+A subtle #F6F6F6 rectangle placed BEHIND a group of visuals (z=0). Groups related KPIs visually.
+
+```python
+def _bg_panel(name, x, y, w, h, color="#F6F6F6"):
+    return {
+        "x": x, "y": y, "z": 0, "width": w, "height": h,
+        "config": json.dumps({
+            "name": name,
+            "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": 0, "width": w, "height": h}}],
+            "singleVisual": {"visualType": "basicShape", "objects": {
+                "line": [{"properties": {"show": _lit("false")}}],
+                "fill": [{"properties": {
+                    "fillColor": _color(color),
+                    "transparency": _lit("0L"),
+                }}],
+            }},
+        }), "filters": "[]",
+    }
+```
+
+**Important**: Decorative elements use `z: 0` so they sit behind data visuals (z ≥ 1). The `line` property is hidden so only the fill shows.

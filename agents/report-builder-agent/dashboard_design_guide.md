@@ -153,36 +153,53 @@ Use a consistent type scale based on functional roles:
 
 ## 4. Color System
 
-### Semantic Color Palette (Finance)
+### Microsoft Fluent 2 Palette (Active Standard)
 
-| Role | Color | Hex | Usage |
-|------|-------|-----|-------|
-| Primary | Blue | `#4472C4` | Revenue, primary series |
-| Secondary | Orange | `#ED7D31` | Expenses, secondary series |
-| Positive | Green | `#70AD47` | Profit, favorable variance |
-| Warning | Amber | `#FFC000` | Budget caution, approaching limit |
-| Negative | Red | `#C00000` | Loss, unfavorable variance |
-| Neutral | Gray | `#A5A5A5` | Prior year, benchmark |
+This is the standard palette for all new reports. PBI assigns these colors automatically to data series in charts.
+
+| Index | Name | Hex | Auto-assigned to |
+|:---:|-------|-----|-------|
+| 1 | Blue | `#118DFF` | 1st series |
+| 2 | Navy | `#12239E` | 2nd series |
+| 3 | Orange | `#E66C37` | 3rd series |
+| 4 | Purple | `#6B007B` | 4th series |
+| 5 | Pink | `#E044A7` | 5th series |
+| 6 | Violet | `#744EC2` | 6th series |
+| 7 | Gold | `#D9B300` | 7th series |
+| 8 | Red | `#D64550` | 8th series |
 
 ### Structural Colors
 
 | Element | Color | Hex |
 |---------|-------|-----|
-| Page background | Near-white | `#F5F5F5` or `#FFFFFF` |
+| Primary text | Dark charcoal | `#252423` |
+| Visual titles / labels | Medium gray | `#616161` |
+| Page background | White | `#FFFFFF` |
 | Card background | White | `#FFFFFF` |
-| Primary text | Dark gray | `#333333` |
-| Secondary text | Medium gray | `#666666` |
-| Border | Light gray | `#E0E0E0` |
-| Shadow | Blue-gray | `#A6ADC6` |
-| Divider lines | Extra-light gray | `#D9D9D9` |
+| Background panel | Near-white | `#F6F6F6` |
+| Border | Cool gray | `#c7c8ce` |
+| Shadow | Light gray | `#cccccc` |
+| Accent bar | Fluent Blue | `#118DFF` |
+| Separator line | Cool gray | `#c7c8ce` |
+| Positive | Green | `#70AD47` |
+| Warning | Amber | `#FFC000` |
+| Negative | Red | `#D64550` |
 
 ### Color Rules
 1. **Maximum 6 colors** in any single chart — beyond 6, use "Other" bucket
-2. **Consistent meaning** — Blue always = Revenue across all pages
+2. **Consistent meaning** — same color = same semantic throughout all pages
 3. **Sufficient contrast** — WCAG AA minimum (4.5:1 for text, 3:1 for graphics)
-4. **No pure black text** — Use `#333333` (softer on eyes, still high contrast)
+4. **No pure black text** — Use `#252423` (softer on eyes, still high contrast)
 5. **Color is not the only indicator** — Pair with icons, labels, or patterns for accessibility
 6. **Avoid red/green only** — ~8% of men have color vision deficiency; add shapes or labels
+
+### Multi-Color Bar/Scatter Charts (CRITICAL)
+To get a different color per category in bar charts (instead of all bars being the same blue):
+- Add the **same category column** to the `Series` projection bucket alongside `Category`
+- This forces PBI to treat each category value as a separate series → different Fluent 2 colors
+- Hide the legend (it duplicates the axis labels): `"legend": [{"properties": {"show": _lit("false")}}]`
+- **Do NOT use** `dataPoint.colorByCategory: true` — this does not work when deploying via API
+- See `known_issues.md` Issue #13 for details
 
 ### Conditional Formatting Colors
 For variance/performance indicators:
@@ -190,9 +207,9 @@ For variance/performance indicators:
 # Positive variance (green)
 _color("#70AD47")
 # Negative variance (red)  
-_color("#C00000")
+_color("#D64550")
 # Neutral / on target
-_color("#A5A5A5")
+_color("#616161")
 ```
 
 ---

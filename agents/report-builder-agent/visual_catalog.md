@@ -59,6 +59,27 @@ Projections tell the visual which measures/columns to display.
   ]
 }
 ```
+> **Single-color problem**: Without `Series`, all bars use the same Fluent 2 blue.
+> To get multi-colored bars, add the category column to `Series` too — see below.
+
+### Colored Bar Charts (Multi-Color per Category)
+```json
+"projections": {
+  "Category": [{"queryRef": "dim_cost_centers.region"}],
+  "Y": [{"queryRef": "fact_general_ledger.Total Revenue"}],
+  "Series": [{"queryRef": "dim_cost_centers.region"}]
+}
+```
+**Why**: Adding the same column to both `Category` and `Series` makes PBI assign a different Fluent 2 theme color to each bar. Without this, a single-measure bar chart renders all bars in the first theme color (#118DFF blue).
+
+**Important**: When using this pattern, hide the legend (it duplicates axis labels):
+```json
+"objects": {
+  "legend": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}]
+}
+```
+
+> `dataPoint.colorByCategory: true` does NOT work when deploying via API. See `known_issues.md` Issue #13.
 
 ### Stacked Charts (with Series)
 ```json
@@ -205,19 +226,32 @@ Without `prototypeQuery`, visuals render as empty containers. No error message.
     "drillFilterOtherVisuals": true,
     "objects": {
       "outline": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}],
-      "calloutValue": [{"properties": {"fontSize": {"expr": {"Literal": {"Value": "27D"}}}}}],
+      "calloutValue": [{"properties": {
+        "fontSize": {"expr": {"Literal": {"Value": "27D"}}},
+        "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#252423'"}}}}}
+      }}],
       "categoryLabel": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}]
     },
     "vcObjects": {
       "title": [{"properties": {
         "show": {"expr": {"Literal": {"Value": "true"}}},
-        "text": {"expr": {"Literal": {"Value": "'Total Revenue'"}}}
+        "text": {"expr": {"Literal": {"Value": "'Total Revenue'"}}},
+        "fontSize": {"expr": {"Literal": {"Value": "11D"}}},
+        "fontColor": {"solid": {"color": {"expr": {"Literal": {"Value": "'#616161'"}}}}}
       }}],
       "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}}}],
       "border": [{"properties": {
         "show": {"expr": {"Literal": {"Value": "true"}}},
-        "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#E0E0E0'"}}}}},
-        "radius": {"expr": {"Literal": {"Value": "4L"}}}
+        "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#c7c8ce'"}}}}},
+        "radius": {"expr": {"Literal": {"Value": "8L"}}}
+      }}],
+      "dropShadow": [{"properties": {
+        "show": {"expr": {"Literal": {"Value": "true"}}},
+        "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#cccccc'"}}}}},
+        "preset": {"expr": {"Literal": {"Value": "'Custom'"}}},
+        "shadowBlur": {"expr": {"Literal": {"Value": "5L"}}},
+        "shadowDistance": {"expr": {"Literal": {"Value": "4L"}}},
+        "transparency": {"expr": {"Literal": {"Value": "85L"}}}
       }}]
     }
   },
@@ -225,7 +259,7 @@ Without `prototypeQuery`, visuals render as empty containers. No error message.
 }
 ```
 
-### Example 2: Clustered Bar Chart — Revenue by Region
+### Example 2: Clustered Bar Chart — Revenue by Region (Multi-Colored)
 
 ```json
 {
@@ -235,7 +269,8 @@ Without `prototypeQuery`, visuals render as empty containers. No error message.
     "visualType": "clusteredBarChart",
     "projections": {
       "Category": [{"queryRef": "dim_cost_centers.region"}],
-      "Y": [{"queryRef": "fact_general_ledger.Total Revenue"}]
+      "Y": [{"queryRef": "fact_general_ledger.Total Revenue"}],
+      "Series": [{"queryRef": "dim_cost_centers.region"}]
     },
     "prototypeQuery": {
       "Version": 2,
@@ -273,19 +308,38 @@ Without `prototypeQuery`, visuals render as empty containers. No error message.
     },
     "drillFilterOtherVisuals": true,
     "objects": {
-      "categoryAxis": [{"properties": {"showAxisTitle": {"expr": {"Literal": {"Value": "true"}}}}}],
-      "valueAxis": [{"properties": {"showAxisTitle": {"expr": {"Literal": {"Value": "true"}}}}}]
+      "categoryAxis": [{"properties": {"fontSize": {"expr": {"Literal": {"Value": "10D"}}}}}],
+      "valueAxis": [{"properties": {"fontSize": {"expr": {"Literal": {"Value": "10D"}}}}}],
+      "legend": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}]
     },
     "vcObjects": {
       "title": [{"properties": {
         "show": {"expr": {"Literal": {"Value": "true"}}},
-        "text": {"expr": {"Literal": {"Value": "'Revenue by Region'"}}}
+        "text": {"expr": {"Literal": {"Value": "'Revenue by Region'"}}},
+        "fontSize": {"expr": {"Literal": {"Value": "11D"}}},
+        "fontColor": {"solid": {"color": {"expr": {"Literal": {"Value": "'#252423'"}}}}}
+      }}],
+      "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}}}],
+      "border": [{"properties": {
+        "show": {"expr": {"Literal": {"Value": "true"}}},
+        "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#c7c8ce'"}}}}},
+        "radius": {"expr": {"Literal": {"Value": "8L"}}}
+      }}],
+      "dropShadow": [{"properties": {
+        "show": {"expr": {"Literal": {"Value": "true"}}},
+        "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#cccccc'"}}}}},
+        "preset": {"expr": {"Literal": {"Value": "'Custom'"}}},
+        "shadowBlur": {"expr": {"Literal": {"Value": "5L"}}},
+        "shadowDistance": {"expr": {"Literal": {"Value": "4L"}}},
+        "transparency": {"expr": {"Literal": {"Value": "85L"}}}
       }}]
     }
   },
   "howCreated": "Copilot"
 }
 ```
+
+> **Key patterns**: `Series` added for multi-color, legend hidden, Fluent 2 structural colors (#252423 title, #c7c8ce border, #cccccc shadow, 8L radius).
 
 ### Example 3: Line Chart — Revenue Trend by Month
 

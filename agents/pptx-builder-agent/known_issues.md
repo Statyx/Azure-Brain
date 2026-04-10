@@ -1,0 +1,67 @@
+# Known Issues — PPTX Builder Agent
+
+## Windows-Specific
+
+### SVG Rendering Libraries
+| Library | Issue | Fix |
+|---------|-------|-----|
+| cairosvg | Missing `libcairo-2.dll` — no Windows binary | Use Playwright instead |
+| cairocffi | Same DLL issue, also conflicts with rlPyCairo | `pip uninstall cairocffi` if rlPyCairo is needed |
+| svglib + reportlab | Works but loses SVG gradients → flat colors | Only for simple non-gradient SVGs |
+| Edge headless | `msedge --headless --screenshot` hangs indefinitely | Use Playwright Chromium |
+
+### PowerPoint File Locking
+- `prs.save()` fails if the PPTX is open in PowerPoint
+- **Fix**: Always run `Stop-Process -Name POWERPNT -ErrorAction SilentlyContinue` before regenerating
+- Alternatively: save to a temp filename and rename
+
+### Playwright Installation
+- First run requires: `python -m playwright install chromium`
+- Downloads ~130MB Chromium browser
+- Subsequent runs reuse the cached browser
+
+## Text Overflow
+
+### Problem
+Component card text overflows when names or descriptions are too long. No error — text just wraps and overlaps neighboring elements.
+
+### Prevention Rules
+1. **Icon size**: Always `0.32"` — larger icons steal text space
+2. **Name**: Max ~15 chars at 8pt. Use prefixes: `PL_`, `NB_`, `LH_`, `SM_`, `RPT_`
+3. **Description**: Max ~25 chars at 6pt. One line only — never two
+4. **User roles**: Single words only — "Controllers", "Engineers", "Managers" (not "Cost Controllers" or "Site Engineers")
+5. **Badge labels**: Max ~15 chars at 6.5pt
+
+### If Text Still Overflows
+- Shrink icon to `0.28"`, adjust text offset to `0.38"`
+- Reduce name font to `7pt`
+- Abbreviate more aggressively
+- Widen the column (adjust `SRC_W`, `USR_W`, or `GAP`)
+
+## Layout Gotchas
+
+### Zone Width Calculation
+- Zone width is computed: `(FAB_W - padding - arrows) / N_ZONES`
+- Adding a 5th zone makes all zones narrower — may need to reduce card padding
+- Removing a zone does NOT auto-expand others — recalculate manually
+
+### Detail Pills (Tables/Measures)
+- Always guard with: `if y + Inches(0.18) > Z_T + Z_H - Inches(0.1): break`
+- More than ~7 pills won't fit — truncate with "... +N more" text
+
+### Rounded Rectangle Corners
+- `MSO_SHAPE.ROUNDED_RECTANGLE` corner radius set via `sh.adjustments[0] = 0.06`
+- Guard with `hasattr(sh, 'adjustments') and len(sh.adjustments) > 0`
+- Fabric zone uses smaller radius: `0.02`
+
+### Shadow Removal
+- All shapes: `sh.shadow.inherit = False` to prevent default Office shadow
+- Without this, icons and cards get unwanted drop shadows
+
+## python-pptx Limitations
+
+- **No SVG support** — must convert to PNG before inserting
+- **No gradient fills on shapes** — only solid fills (use 50/200/700 color triads instead)
+- **No custom fonts embedding** — relies on fonts installed on the viewing machine
+- **Segoe UI**: requires Windows or manual font install on macOS/Linux
+- **Blank layout** = `prs.slide_layouts[6]` — always use this for custom diagrams

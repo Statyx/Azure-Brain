@@ -20,6 +20,8 @@ All report-related gotchas discovered during this project, with fixes.
 | 10 | Base theme missing = ugly default | LOW | Include CY26SU02.json in StaticResources part |
 | 11 | `updateDefinition` is full replace | MEDIUM | Re-send ALL parts, not just changed ones |
 | 12 | `getDefinition` is always async | MEDIUM | Even for small reports, returns 202 → poll |
+| 13 | `colorByCategory` not working via API | **HIGH** | Use Series projection instead (see below) |
+| 14 | All bars same color (Fluent blue) | **HIGH** | Add category to both `Category` AND `Series` projections |
 
 ---
 
@@ -113,6 +115,31 @@ All report-related gotchas discovered during this project, with fixes.
 - **Symptom**: Expecting 200 with body, getting 202 with no body
 - **Fix**: Always poll `x-ms-operation-id` from 202 response headers, then `GET /operations/{id}/result`
 
+### 13. colorByCategory Does NOT Work via API
+
+- **Symptom**: Setting `"dataPoint": [{"properties": {"colorByCategory": _lit("true")}}]` in `objects` has no effect — all bars/dots stay the same first-theme color
+- **Cause**: `dataPoint.colorByCategory` is ignored when deploying report definitions via API (Fabric REST). It only works when set interactively in the portal
+- **Fix**: Add the **same category column** to the `Series` projection bucket:
+  ```json
+  "projections": {
+    "Category": [{"queryRef": "dim_disciplines.discipline_name"}],
+    "Y": [{"queryRef": "fact_benchmarks.Total Benchmark Lines"}],
+    "Series": [{"queryRef": "dim_disciplines.discipline_name"}]
+  }
+  ```
+  This forces PBI to assign a different Fluent 2 theme color per category value.
+- **Side effect**: A redundant legend appears (duplicates axis labels). Hide it:
+  ```json
+  "legend": [{"properties": {"show": _lit("false")}}]
+  ```
+- **Applies to**: `clusteredBarChart`, `clusteredColumnChart`, `scatterChart`, `donutChart`, and other chart types with a single data series
+
+### 14. All Bars Same Color (Single-Series Problem)
+
+- **Symptom**: Every bar in a bar chart is the same blue (#118DFF), no matter how many categories
+- **Cause**: When a bar chart has only one measure in `Y` and no `Series`, PBI treats it as a single data series — all bars get the first theme color
+- **Fix**: Same as Issue #13 — add category column to `Series` projection
+
 ---
 
 ## Debugging Checklist
@@ -134,4 +161,8 @@ When a report isn't rendering correctly:
 □ 12. Is card height ≥ 120px?
 □ 13. Is base theme included in definition parts?
 □ 14. Do position values match between container level and layouts[0].position?
+□ 15. Are bar/scatter charts multi-colored? (Category col in Series projection)
+□ 16. Are Fluent 2 structural colors applied? (#252423 text, #c7c8ce border, #cccccc shadow)
+□ 17. Does each page have an accent bar at y=0?
+□ 18. Are background panels behind KPI card groups?
 ```
