@@ -123,9 +123,25 @@ Right-side column listing personas with what they consume:
 
 ---
 
-## Pattern 5: Measure Pills (in Semantic Model card)
+## Pattern 5: Summary Counts (preferred over pills/chips)
 
-Show key DAX measures as small pills:
+**IMPORTANT**: Do NOT list individual table names or measure names in architecture diagrams. Use summary counts instead — the detail belongs in documentation, not in the visual.
+
+**Good** (clean, professional):
+```
+Lakehouse: "10 Delta tables · ~8 000 rows · 7 dims + 3 facts"
+Semantic Model: "55 DAX measures · 11 relationships · star schema"
+```
+
+**Avoid** (clutters the diagram):
+```
+[dim_wbs] [dim_countries] [fact_benchmarks] ...
+[Confidence Score] [Anomaly Rate] [Total Cost EUR] ...
+```
+
+If needed for documentation purposes, measure pills and table chips can still be used:
+
+### Measure Pills (documentation only)
 
 ```html
 <div class="pills">
@@ -144,9 +160,7 @@ Show key DAX measures as small pills:
 
 ---
 
-## Pattern 6: Table Chips (in Source or Lakehouse card)
-
-Show table names as colored chips (dim=blue, fact=yellow):
+### Table Chips (documentation only)
 
 ```html
 <div class="chips">

@@ -50,7 +50,8 @@ Each phase produces a deliverable. Each has a gate. Never proceed to the next ph
 ### Rule 3: Multi-slide deck structure
 - Slide: `13.333” × 7.5”` widescreen (16:9)
 - Use `new_slide()` function to manage a global `slide` reference — all helpers (`rect`, `text`, `pic`, etc.) use this global
-- **Recommended slide order**: Title → Use Case → Solution → Architecture
+- **Recommended slide order**: Title → Use Case(s) → Solution → Architecture
+- For multi-use-case projects: Title → Use Case 1 → Use Case 2 → … → Solution → Architecture
 - **Title slide**: Full-bleed dark background (`DARK`), no `slide_header()`/`slide_footer()`, hero text + author info
 - **Content slides**: `slide_header()` + `slide_footer()` + custom content (info_cards, multitext, etc.)
 - **Architecture slide**: Zone-based layout — Sources (dashed) → Fabric zone (teal border) → Users (dashed)
@@ -73,7 +74,8 @@ All colors are defined as 50/200/700 triads (background/border/text):
 ### Rule 5: Always close PowerPoint before regenerating
 - `prs.save()` fails silently or throws permission error if the file is open
 - Run `Stop-Process -Name POWERPNT -ErrorAction SilentlyContinue` before each build
-- Output path convention: `{project_dir}/architecture_diagram.pptx`
+- Output filename MUST match the presentation title (e.g. `Use Case Presentation - Architecture Vision.pptx`)
+- Do NOT use generic names like `architecture_diagram.pptx` — match the hero text
 
 ### Rule 6: Follow the 5-phase pipeline — never skip phases
 - **Discover** before designing — read config.yaml, deploy scripts, data schemas first
@@ -87,6 +89,20 @@ All colors are defined as 50/200/700 triads (background/border/text):
 - Icon conversion is separate from PPTX generation — never inline SVG rendering
 - The outline is the contract between synthesis and design — if the outline is wrong, the PPTX will be wrong
 - QA is NOT optional — every PPTX gets the checklist, even "quick fixes"
+
+### Rule 8: Summary counts over detail lists in architecture slides
+- **NEVER** list individual table names or measure names as pills/chips in architecture diagrams
+- Use summary text instead: `"10 tables · ~8 000 rows · 7 dims + 3 facts"`
+- Same for measures: `"55 DAX measures · 11 relationships · star schema"`
+- Detail belongs in documentation or solution slides — not in the visual architecture diagram
+- This keeps the diagram clean, professional, and readable at presentation distance
+
+### Rule 9: Multi-use-case decks — one slide per use case
+- When a project has multiple use cases, give each its own slide (not crammed into one)
+- **Slide order**: Title → Use Case 1 → Use Case 2 → … → Solution → Architecture
+- Each use case slide follows the same template: pain points (left), personas + criteria (right), I/O cards (center-left)
+- The Solution slide and Architecture slide must reference ALL use cases together
+- Title slide bullet list summarizes all use cases: `"① CCE Validation — …"`, `"② Cashflow Simulation — …"`
 
 ---
 

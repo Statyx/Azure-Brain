@@ -21,7 +21,54 @@ def new_slide():
 | 2 | Solution | `slide_header()` + `slide_footer()` | White (default) |
 | 3 | Architecture | `slide_header()` + `slide_footer()` | White (default) |
 
-## Title Slide (Dark Background)
+## Title Slide (Image Background — Preferred)
+
+The approved pattern uses a full-bleed background image with dark overlay, NOT solid color.
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ ═══ accent bar (0.05") ═══                                   │
+│                                                              │
+│ [Background IMAGE: dark tech/data visual]                    │
+│ [Semi-transparent overlay: #0A0E1A @ 45% opacity]            │
+│                                                              │
+│    Contextual Title (38pt bold white Segoe UI Semibold)      │
+│    e.g. "Validation des Estimations\n                        │
+│          de Coûts de Construction"                           │
+│                                                              │
+│    Subtitle · Describes what it does (14pt light blue)       │
+│    ───── accent bar (3.0" × 0.04") ─────                    │
+│                                                              │
+│    Clément Droinat (14pt bold white)                         │
+│    Solution Engineer, Data & Analytics (11pt gray)           │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Rules
+- Title must be CONTEXTUAL — describe the project/analysis, NOT generic slogans
+- NO project name/complex name, NO country, NO submission date on title
+- Background: `assets/title_bg.jpg` + dark overlay at 45% opacity
+- Fallback if no image: navy `#1B1F3B` (NOT black)
+- Overlay transparency via XML: `a:srgbClr > a:alpha val="45000"`
+
+```python
+# Image background + overlay
+slide.shapes.add_picture(str(bg_path), 0, 0, prs.slide_width, prs.slide_height)
+overlay = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
+overlay.fill.solid()
+overlay.fill.fore_color.rgb = RGBColor(0x0A, 0x0E, 0x1A)
+# Set 45% opacity via XML
+sp_pr = overlay._element.find(qn('p:spPr'))
+solid_fill = sp_pr.find(qn('a:solidFill'))
+srgb = solid_fill.find(qn('a:srgbClr'))
+alpha = etree.SubElement(srgb, qn('a:alpha'))
+alpha.set('val', '45000')
+overlay.line.fill.background()
+```
+
+## Title Slide (Dark Background — Legacy)
+
+Use when no background image available. Navy `#0F172A`, NOT black.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐

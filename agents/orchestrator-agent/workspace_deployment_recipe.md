@@ -19,14 +19,47 @@ Each step is a separate `deploy_*.py` script. All idempotent via `state.json`.
 5. deploy_semantic_model.py  → Deploy Direct Lake model (AFTER Delta tables exist)
 6. deploy_report.py          → Deploy Power BI report (legacy PBIX format)
 7. deploy_data_agent.py      → Deploy Data Agent with instructions + fewshots
-8. (optional) deploy_eventhouse.py     → For RTI/streaming scenarios
-9. (optional) deploy_kql_dashboard.py  → KQL Dashboard for real-time data
+8. export_pptx.py            → Generate PPTX report (dated: {Name}_{YYYYMMDD}.pptx)
+9. export_xlsx.py            → Generate Excel report (dated: {Name}_{YYYYMMDD}.xlsx)
+10. (optional) deploy_eventhouse.py     → For RTI/streaming scenarios
+11. (optional) deploy_kql_dashboard.py  → KQL Dashboard for real-time data
 ```
 
 **CRITICAL ORDER**: Step 4 (notebook → Delta tables) MUST complete before step 5 (semantic model).
 Direct Lake mode requires Delta tables to exist. Deploying the model before the notebook runs
 causes: `"Direct Lake mode requires a Direct Lake data source"`. The notebook converts CSVs to
 Delta tables and must fully execute (Spark cold start ~60-90s) before the model can bind.
+
+## Export Reports (Steps 8-9)
+
+Every project should include offline export capability for stakeholders without Fabric access.
+
+### File Structure
+```
+project/
+├── exports/                    ← Dated output files
+│   ├── CCE_Validation_Report_20260412.pptx
+│   └── CCE_Validation_Report_20260412.xlsx
+├── assets/
+│   └── title_bg.jpg            ← Background image for title slide
+└── src/
+    ├── export_pptx.py          ← PPTX generator (python-pptx)
+    └── export_xlsx.py          ← XLSX generator (openpyxl)
+```
+
+### PPTX Export Pattern
+- Shared `compute_validation()` function returns results list used by both exporters
+- Slide order: Title (image bg) → Executive Summary (KPIs) → Analysis → Details → Cashflow
+- Title slide: contextual title, image background + 45% dark overlay, author info
+- All positions calculated dynamically (Y-budget), never hardcoded
+- Output: `exports/{Name}_{YYYYMMDD}.pptx`
+
+### XLSX Export Pattern
+- Sheet 1 "Résumé": Project-level KPIs and summary stats
+- Sheet 2 "Détail Lignes": All data rows with conditional formatting
+- Sheet 3 "Anomalies": Flagged rows only, sorted by severity
+- Conditional formatting on scores: green (>80), amber (50-80), red (<50)
+- Output: `exports/{Name}_{YYYYMMDD}.xlsx`
 
 ## Shared Infrastructure
 
@@ -118,6 +151,8 @@ partition = {
 ```
 project/
 ├── data/raw/              ← Generated CSV files
+├── assets/                ← Background images for PPTX title slides
+├── exports/               ← Dated PPTX + XLSX output files
 ├── notebooks/             ← .ipynb source files
 └── src/
     ├── config.yaml        ← All configuration
@@ -131,7 +166,9 @@ project/
     ├── deploy_setup_notebook.py
     ├── deploy_semantic_model.py
     ├── deploy_report.py
-    └── deploy_data_agent.py
+    ├── deploy_data_agent.py
+    ├── export_xlsx.py     ← Excel export (openpyxl)
+    └── export_pptx.py     ← PPTX export (python-pptx)
 ```
 
 ## Known Issues & Workarounds
