@@ -1,5 +1,41 @@
 # Known Issues — PPTX Builder Agent
 
+## Critical Layout Rule: Always Calculate Y Budget
+
+**Every slide must have a Y-axis budget before coding.** The most common bug is elements overlapping or cut off.
+
+### Y-Budget Template (13.333" × 7.5" widescreen)
+```
+Available:  7.50" total
+- Header:   0.95" (accent bar + title + subtitle + separator)
+- Footer:   0.35" (credits bar)
+- Usable:   6.20" for content
+Budget: sum(all_section_heights + gaps) ≤ 6.20"
+```
+
+### Dynamic Positioning (GOOD)
+```python
+cards_bottom = y_cards + n_rows * (card_h + gap_y)
+table_y = cards_bottom + Inches(0.12)
+table_h = Inches(0.24) * (n_data_rows + 1)
+insight_y = table_y + box_h + Inches(0.08)
+# Safety clamp against footer
+insight_y = min(insight_y, prs.slide_height - Inches(0.80))
+```
+
+### Hardcoded Positions (BAD — causes overlap)
+```python
+ms_y = Inches(3.1)   # breaks if cards height changes
+ins_y = Inches(5.8)  # overlaps table if more rows
+```
+
+## Table & Card Sizing Rules
+- Table rows: `0.24"` height (not 0.28"). Font: 7pt data, 8pt header.
+- 4 scenario cards: **2×2 grid** at `6.05" × 0.95"`, not 4-in-a-row (unreadable at 8pt).
+- Card KPIs: 2-column layout. Name: 12pt bold. Values: 9pt. Secondary: 7.5pt gray.
+
+---
+
 ## Windows-Specific
 
 ### SVG Rendering Libraries
