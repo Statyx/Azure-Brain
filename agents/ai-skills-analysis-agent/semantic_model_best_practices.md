@@ -254,7 +254,7 @@ When analyzing a diagnostic JSON, check these indicators:
 | Check | What to Look For | Red Flag |
 |-------|------------------|----------|
 | **Description coverage** | `elements[].children[].description` | All `null` → model has no descriptions |
-| **Measure names** | `display_name` on measures | Cryptic names or typos (e.g., `Churn Rate pourcentage`) |
+| **Measure names** | `display_name` on measures | Cryptic names or typos (e.g., `Churn Rate percentage`) |
 | **Schema size** | Count tables × columns | >200 elements without schema refinement |
 | **is_selected** | Any `is_selected: false` elements | Excluded elements reduce scope but may be needed |
 | **Relationship integrity** | `csdl_relationships` | Orphan tables, inactive relationships |

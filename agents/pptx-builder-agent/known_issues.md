@@ -62,6 +62,8 @@ Component card text overflows when names or descriptions are too long. No error 
 
 - **No SVG support** — must convert to PNG before inserting
 - **No gradient fills on shapes** — only solid fills (use 50/200/700 color triads instead)
+- **Gradient background workaround** — for title slides, use solid dark fill (`DARK = #0F172A`) + teal accent bar to simulate gradient feel
+- **Multi-slide global state** — `new_slide()` must update a global `slide` variable; all helpers (`rect`, `text`, `pic`) use this global. Define `M` (margin) before first `new_slide()` call since layout constants depend on it
 - **No custom fonts embedding** — relies on fonts installed on the viewing machine
 - **Segoe UI**: requires Windows or manual font install on macOS/Linux
 - **Blank layout** = `prs.slide_layouts[6]` — always use this for custom diagrams

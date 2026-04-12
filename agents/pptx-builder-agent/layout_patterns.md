@@ -1,6 +1,48 @@
 # Layout Patterns — Reusable PPTX Components
 
-## Slide Structure (13.333" × 7.5" Widescreen)
+## Multi-Slide Architecture
+
+Use `new_slide()` to create slides in order. Each call updates the global `slide` reference.
+
+```python
+# Pattern: global slide reference
+slide = None
+def new_slide():
+    global slide
+    slide = prs.slides.add_slide(prs.slide_layouts[6])  # blank layout
+    return slide
+```
+
+### Recommended Slide Order
+| # | Type | Header/Footer | Background |
+|---|------|--------------|------------|
+| 0 | Title | None | Dark (`DARK`) + teal accent bar |
+| 1 | Use Case | `slide_header()` + `slide_footer()` | White (default) |
+| 2 | Solution | `slide_header()` + `slide_footer()` | White (default) |
+| 3 | Architecture | `slide_header()` + `slide_footer()` | White (default) |
+
+## Title Slide (Dark Background)
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ ═══ teal accent bar (0.05") ═══                             │
+│                                          DARK (#0F172A)     │
+│ [Fabric icon]  Microsoft Fabric (16pt bold white)           │
+│                                                              │
+│                                                              │
+│    Bring your data into the era of AI (40pt white)          │
+│                                                              │
+│    Project Name — Subtitle (18pt teal)                      │
+│    ───── teal bar (2.5" × 0.04") ─────                     │
+│                                                              │
+│    Clément Droinat (14pt bold white)                        │
+│    Solution Engineer, Data & Analytics (11pt gray)          │
+└──────────────────────────────────────────────────────────────┘
+```
+
+Key: No `slide_header()`/`slide_footer()`. Full-bleed `rect(0, 0, W, H, DARK)`.
+
+## Content Slide Structure (13.333" × 7.5" Widescreen)
 
 ```
 ┌──────────────────────────────────────────────────────────────┐

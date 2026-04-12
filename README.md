@@ -1,8 +1,8 @@
 # Github Brain
 
-**22 AI agents + 20 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
+**23 AI agents + 20 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
 
-![Agents](https://img.shields.io/badge/agents-22-blue?style=for-the-badge&logo=github)
+![Agents](https://img.shields.io/badge/agents-23-blue?style=for-the-badge&logo=github)
 ![Knowledge](https://img.shields.io/badge/knowledge_files-20-green?style=for-the-badge)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
 
@@ -38,7 +38,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 
 ---
 
-## 🤖 Agents (22)
+## 🤖 Agents (23)
 
 ### Meta
 
@@ -64,7 +64,8 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 | [report-builder](agents/report-builder-agent/) | Power BI reports, visuals, themes (Legacy PBIX only) |
 | [ai-skills](agents/ai-skills-agent/) | Fabric Data Agents, AI instructions, few-shot examples |
 | [ai-skills-analysis](agents/ai-skills-analysis-agent/) | Data Agent evaluation, DAX quality scoring, RCA |
-| [pptx-builder](agents/pptx-builder-agent/) | PowerPoint architecture diagrams, FabricToolset icons, python-pptx |
+| [pptx-builder](agents/pptx-builder-agent/) | PowerPoint architecture diagrams — 5-phase pipeline (Discover→Synthesize→Icons→Design→QA) |
+| [architecture-design](agents/architecture-design-agent/) | HTML architecture diagrams with base64 FabricToolset SVG icons |
 
 ### Platform & Operations
 

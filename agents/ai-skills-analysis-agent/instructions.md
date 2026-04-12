@@ -322,12 +322,12 @@ Based on validated optimization cycles that brought agents from 0% to 100% accur
 ### Phase 2 — Instruction Engineering (35% → 70%)
 ```
 Key instructions that reliably improve accuracy:
-1. "TOUJOURS inclure les valeurs numériques en chiffres" → prevents spelling out numbers
-2. "Présenter le chiffre exact tel que retourné par la requête DAX" → stops rounding
-3. "Utiliser les mesures DAX existantes. Ne jamais recalculer manuellement" → forces measure reuse
-4. "Pour les calculs complexes, utiliser VAR / RETURN" → readability + performance
-5. "Utiliser DIVIDE(numérateur, dénominateur, 0)" → prevents division by zero
-6. "DAX utilise = simple pour l'égalité. Ne jamais utiliser ==" → syntax correctness
+1. "ALWAYS include numeric values as digits" → prevents spelling out numbers
+2. "Present the exact figure as returned by the DAX query" → stops rounding
+3. "Use existing DAX measures. Never recalculate manually" → forces measure reuse
+4. "For complex calculations, use VAR / RETURN" → readability + performance
+5. "Use DIVIDE(numerator, denominator, 0)" → prevents division by zero
+6. "DAX uses single = for equality. Never use ==" → syntax correctness
 7. List ALL measure names with their purpose → anchors measure selection
 ```
 
@@ -340,10 +340,10 @@ Key instructions that reliably improve accuracy:
    → TOPN for rankings
    → ROW() for single-value answers
 3. Key patterns that consistently help:
-   → "Montre X pour Y" → CALCULATETABLE(SUMMARIZECOLUMNS(...), dim[col] = "Y")
-   → "Compare X et Y" → CALCULATETABLE(..., dim[col] IN {"X", "Y"})
-   → "Quels sont les N meilleurs" → TOPN(N, ADDCOLUMNS(...))
-   → "Quel est l'écart-type" → ROW("Label", [Measure])
+   → "Show X for Y" → CALCULATETABLE(SUMMARIZECOLUMNS(...), dim[col] = "Y")
+   → "Compare X and Y" → CALCULATETABLE(..., dim[col] IN {"X", "Y"})
+   → "What are the top N" → TOPN(N, ADDCOLUMNS(...))
+   → "What is the standard deviation" → ROW("Label", [Measure])
 ```
 
 ### Phase 4 — Expected Value Calibration (90% → 100%)
