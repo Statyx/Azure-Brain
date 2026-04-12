@@ -88,6 +88,37 @@ Component card text overflows when names or descriptions are too long. No error 
 ### Rounded Rectangle Corners
 - `MSO_SHAPE.ROUNDED_RECTANGLE` corner radius set via `sh.adjustments[0] = 0.06`
 - Guard with `hasattr(sh, 'adjustments') and len(sh.adjustments) > 0`
+
+---
+
+## File Naming & Output Path
+
+### Output filename must match presentation title
+- **WRONG**: `architecture_diagram.pptx` (generic, doesn't reflect content)
+- **RIGHT**: `Use Case Presentation - Architecture Vision.pptx` (matches hero text)
+- Update `OUT` path at the top of `_build_pptx.py` when changing the presentation title
+- PowerPoint and Windows Explorer display the filename — it should be professional
+
+### OneDrive Sync Delays
+- Files on OneDrive paths may have a sync delay before they're accessible
+- After `prs.save()`, the file may briefly show as locked by OneDrive sync process
+- If saving fails, wait a few seconds and retry — do NOT silently overwrite
+- Renaming files in OneDrive folders sometimes requires closing the folder in Explorer
+
+---
+
+## Multi-Slide Deck Issues
+
+### Slide Count in Automated Checks
+- The QA check `assert len(prs.slides) == 1` is ONLY valid for single-slide diagrams
+- For multi-slide decks (Title + Use Cases + Solution + Architecture), update to: `assert len(prs.slides) >= 4`
+- Shape count checks should be per-slide, not per-deck
+
+### Detail Pills Are Deprecated in Architecture Slides
+- **DO NOT** use loops to add individual table name pills or measure name pills
+- They clutter the architecture diagram and are unreadable at presentation distance
+- Use summary text instead: `"10 tables · ~8 000 rows"`, `"55 DAX measures · 11 relationships"`
+- If pills were in an earlier version, remove them when updating the deck
 - Fabric zone uses smaller radius: `0.02`
 
 ### Shadow Removal

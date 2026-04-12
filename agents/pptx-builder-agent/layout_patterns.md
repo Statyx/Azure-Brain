@@ -208,3 +208,114 @@ rect(left, top, width, height, SLATE_50, SLATE_200, Pt(1), dash=True)
 - `dash=True` sets `line.dash_style = 2` (dashed border)
 - Interior: component cards stacked vertically with 0.8" spacing
 - Bottom: summary text (row counts, descriptions) in `GRAY_400, 7pt`
+
+---
+
+## Title Slide — Contextual Naming Rules
+
+The title must describe the **project or analysis** — NEVER use generic slogans.
+
+```
+GOOD:  "Use case presentation"  +  "Architecture vision"
+GOOD:  "Validation des Estimations de Coûts de Construction"
+BAD:   "Bring your data into the era of AI"
+BAD:   "CDR Financial Platform — CCE Validation" (internal codename)
+```
+
+### Pattern: Hero text with subtitle
+```python
+text(..., "Use case presentation", sz=44, bold=True, color=WHITE)       # hero
+text(..., "Architecture vision", sz=26, bold=False, color=TEAL_500)     # subtitle
+```
+
+### Pattern: Use case bullets on title slide
+When there are multiple use cases, list them below the separator bar:
+```python
+multitext(..., [
+    ("① CCE Validation — Cost estimate benchmarking & anomaly detection", 12, False, GRAY_400),
+    ("② Cashflow Simulation — S-curve analysis & scenario comparison", 12, False, GRAY_400),
+], align=PP_ALIGN.LEFT)
+```
+
+---
+
+## Use Case Slide Template
+
+Each use case gets its own slide with a consistent 2-column layout:
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ [header: slide_header()]                                     │
+│                                                              │
+│ ┌──── Left (5.9") ────┐   ┌──── Right (6.2") ────┐         │
+│ │ ⚠ PAIN POINTS       │   │ 👤 PERSONAS & SCOPE  │         │
+│ │ • pain 1             │   │ Name (10pt bold)     │         │
+│ │ • pain 2             │   │ desc (8pt gray)      │         │
+│ │                      │   │                      │         │
+│ │ ┌─ Inputs ─┐ ┌─ Out │   │ 🔍 CRITERIA/CAPS    │         │
+│ │ │ info_card│ │ info_ │   │ • criterion 1       │         │
+│ │ │          │ │ card  │   │ • criterion 2       │         │
+│ │ └──────────┘ └──────┘│   │                      │         │
+│ └──────────────────────┘   │ ✅ SUCCESS CRITERIA  │         │
+│                            │ • KPI 1              │         │
+│                            └──────────────────────┘         │
+│ [footer: slide_footer()]                                     │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Section Headers
+- Pain points: `RED_50` bg + `RED_200` border → `RED_700` text
+- Personas: `TEAL_500` bg (solid, no border) → `WHITE` text
+- Criteria/Capabilities: `AMBER_50` bg + `AMBER_200` border → `AMBER_700` text
+- Success: `GREEN_50` bg + `GREEN_200` border → `GREEN_700` text
+
+### I/O Cards
+- Two `info_card()` side by side, width `2.8"`, height `1.7"`
+- Input card: `BLUE_50/200/700` with source icon (e.g., "Excel")
+- Output card: `GREEN_50/200/700` with output icon (e.g., "Report")
+
+---
+
+## Solution Slide Template
+
+Three-column layout showing the full stack + benefits row:
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ [header]                                                     │
+│                                                              │
+│ ┌── Data Platform ──┐  ┌── Semantic Layer ──┐  ┌── AI ───┐  │
+│ │ info_card (3.9")  │  │ info_card (3.9")   │  │ (3.9")  │  │
+│ │ card_h = 2.5"     │  │                    │  │         │  │
+│ └───────────────────┘  └────────────────────┘  └─────────┘  │
+│                                                              │
+│ ═══ WHY FABRIC + DATA AGENTS? ═══ (teal bar)                │
+│                                                              │
+│ ┌─ Benefit 1 ─┐ ┌─ Benefit 2 ─┐ ┌─ Benefit 3 ─┐ ┌─ 4 ──┐  │
+│ │ 2.9" × 2.2" │ │             │ │             │ │      │  │
+│ └─────────────┘ └─────────────┘ └─────────────┘ └──────┘  │
+│ [footer]                                                     │
+└──────────────────────────────────────────────────────────────┘
+```
+
+Key: Use `info_card()` for both top row and bottom row. Color-code each card using zone triads.
+
+---
+
+## Summary Counts in Architecture Zones (preferred)
+
+**NEVER list individual table or measure names.** Use summary text instead:
+
+```python
+# In Store zone — below the Lakehouse component
+text(z2_l + Inches(0.1), Z_T + Inches(1.25), Z_W - Inches(0.2), Inches(0.4),
+     "10 tables  ·  ~8 000 rows\n7 dims + 3 facts",
+     sz=7, color=GREEN_700, align=PP_ALIGN.CENTER)
+
+# In Serve zone — below the Semantic Model component
+text(z3_l + Inches(0.1), Z_T + Inches(1.25), Z_W - Inches(0.2), Inches(0.4),
+     "55 DAX measures\n11 relationships  ·  star schema",
+     sz=7, color=AMBER_700, align=PP_ALIGN.CENTER)
+```
+
+**Detail pills are DEPRECATED for architecture slides.** The pill/chip pattern in the section above is kept only for reference in documentation-focused slides.

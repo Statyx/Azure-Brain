@@ -34,7 +34,7 @@ Run these programmatically after `prs.save()`:
 from pptx import Presentation
 from pathlib import Path
 
-pptx_path = Path("architecture_diagram.pptx")
+pptx_path = Path("Use Case Presentation - Architecture Vision.pptx")
 
 # File checks
 assert pptx_path.exists(), "PPTX file was not created"
@@ -43,16 +43,25 @@ assert pptx_path.stat().st_size < 5_000_000, f"File too large ({pptx_path.stat()
 
 # Structure checks
 prs = Presentation(str(pptx_path))
-assert len(prs.slides) == 1, f"Expected 1 slide, got {len(prs.slides)}"
+n_slides = len(prs.slides)
+assert n_slides >= 1, "No slides found"
 assert prs.slide_width == 12192000, "Slide width is not 13.333 inches (widescreen)"
 
-# Shape count check (a healthy diagram has 40-80 shapes)
-shapes = prs.slides[0].shapes
-n = len(shapes)
-assert n >= 30, f"Only {n} shapes — likely missing zones or components"
-assert n <= 150, f"{n} shapes — possible duplicate rendering"
+# Multi-slide deck: expect Title + Use Case(s) + Solution + Architecture
+# Adjust expected count based on project (single use case = 4, dual = 5, etc.)
+expected_min_slides = 4
+assert n_slides >= expected_min_slides, f"Expected at least {expected_min_slides} slides, got {n_slides}"
 
-print(f"✅ Automated checks passed: {pptx_path.name}, {pptx_path.stat().st_size:,} bytes, {n} shapes")
+# Per-slide shape count check
+for i, s in enumerate(prs.slides):
+    n = len(s.shapes)
+    if i == 0:  # Title slide — fewer shapes expected
+        assert n >= 5, f"Slide {i}: only {n} shapes — title slide seems empty"
+    else:
+        assert n >= 15, f"Slide {i}: only {n} shapes — likely missing content"
+        assert n <= 200, f"Slide {i}: {n} shapes — possible duplicate rendering"
+
+print(f"✅ Automated checks passed: {pptx_path.name}, {pptx_path.stat().st_size:,} bytes, {n_slides} slides")
 ```
 
 ---
@@ -114,10 +123,23 @@ Cross-reference against the project outline:
 ```
 □ Every data source from outline appears in Sources column
 □ Every Fabric item appears in correct zone
-□ All Delta tables listed as pills in Store zone (up to 7)
-□ Key measures listed as pills in Serve zone (up to 5)
+□ Summary counts match reality (table count, measure count, relationship count)
+□ NO individual table names or measure names as pills in architecture slide
 □ All user roles appear in Users column
 □ Step numbers match deployment order
+```
+
+### Multi-Slide Completeness (for multi-use-case decks)
+```
+□ Title slide lists ALL use cases as numbered bullets
+□ Each use case has its OWN dedicated slide
+□ Each use case slide has: pain points, I/O cards, personas, criteria, success measures
+□ Solution slide references ALL use cases with combined counts
+□ Architecture slide shows unified platform (not per-use-case diagrams)
+□ Consume zone shows ALL agents (one per use case)
+□ Footer text is consistent across ALL slides
+□ Output filename matches the presentation title
+```
 □ Arrow labels accurately describe the data flow
 □ Summary text in Sources box matches actual data volume
 □ Workspace name in Fabric zone header is correct

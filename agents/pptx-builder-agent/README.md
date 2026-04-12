@@ -25,9 +25,11 @@ Each phase has a **quality gate** — never skip to the next phase until the gat
 | Domain | Artifacts | Key Patterns |
 |--------|-----------|--------------|
 | Pipeline orchestration | 5-phase workflow with quality gates | Discover → Synthesize → Icons → Design → QA |
-| Content synthesis | Project analysis → zone clustering → narrative outline | Theme clustering, YAML outline, narrative arc |
-| PPTX generation | `_build_pptx.py`, `architecture_diagram.pptx` | python-pptx, widescreen layout, multi-slide decks |
+| Content synthesis | Project analysis → zone clustering → narrative outline | Theme clustering, YAML outline, narrative arc, multi-use-case |
+| PPTX generation | `_build_pptx.py`, output `.pptx` | python-pptx, widescreen layout, multi-slide decks |
+| Helper functions | `rect`, `text`, `multitext`, `component`, `info_card`, etc. | See `helper_reference.md` for full catalog |
 | Icon pipeline | `_convert_icons.py`, `_icon_pngs/` | Playwright SVG→PNG, FabricToolset, auto-crop |
+| Color system | Tailwind-inspired 50/200/700 triads | 8 color families + special colors |
 | Quality assurance | Automated checks, visual checklist, QA report | Severity triage (🔴🟠🟡), completeness validation |
 | Layout system | Component cards, badges, pills, arrows | Tailwind colors, Segoe UI, step circles |
 

@@ -249,3 +249,47 @@ with open("architecture_diagram.html", "w", encoding="utf-8") as f:
 | Chip text | 8px | 500 | (chip color) |
 | Pill text | 7.5px | 400 | `#9d174d` mono |
 | Credit | 8px | 400 | `#94a3b8` |
+
+---
+
+## Pattern 6: Multi-Use-Case Architecture
+
+When a project supports multiple use cases on a shared Fabric platform:
+
+### Architecture Diagram Rules
+1. **One unified diagram** — do NOT create separate diagrams per use case
+2. **Shared infrastructure** (Lakehouse, Pipeline, Notebook) appears once with combined counts
+3. **Consume zone** shows separate components per use case (e.g., distinct Data Agents)
+4. **Summary counts** (not lists): `"10 tables · ~8 000 rows · 7 dims + 3 facts"`
+5. **Business Users** may overlap across use cases — list each persona once
+
+### Consume Zone Example (multi-agent)
+```html
+<div class="inner-zone consume" style="flex:1;">
+  <div class="iz-label">Consume</div>
+  <div class="comp"><!-- RPT_CCE: 7-page report --></div>
+  <div class="comp"><!-- CCE_Advisor: Validation agent --></div>
+  <div class="comp"><!-- CCE_Cashflow: Simulation agent --></div>
+</div>
+```
+
+### Title & Header
+- Title should be contextual: `"Use case presentation — Architecture vision"`
+- Subtitle should list all use cases: `"CCE Validation + Cashflow Simulation · Microsoft Fabric"`
+
+---
+
+## Cross-Format Consistency (HTML ↔ PPTX)
+
+Both HTML and PPTX architecture diagrams must use the **same visual language**:
+
+| Element | HTML (CSS) | PPTX (python-pptx) |
+|---------|-----------|-------------------|
+| Zone colors | CSS class + inline style | Tailwind 50/200/700 RGBColor constants |
+| Step circles | `.step` circle + number | `step_circle()` helper |
+| Component cards | `.comp` flexbox | `component()` helper |
+| Summary text | `<div>` paragraph | `text()` helper |
+| Icons | `data:image/svg+xml;base64,...` | Pre-rendered PNG via Playwright |
+| Layout | Flexbox horizontal | Calculated `Inches()` positions |
+
+When updating one format, verify the other format still matches.

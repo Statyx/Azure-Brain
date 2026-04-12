@@ -84,8 +84,8 @@ Closing: "Who benefits?"
 - **Step circles** (①②③④) tell the deployment/data flow ORDER
 - **Arrow labels** explain the HOW between zones ("DFS API Upload", "writes Delta", "Direct Lake", "Report + AI")
 - **Badges** classify items by Fabric workload ("Data Factory", "Data Engineering", "Power BI")
-- **Detail pills** show technical depth (table names in Store, measure names in Serve)
-- **Summary text** adds context ("7 tables · ~6,000 rows · 24 projects · 8 countries")
+- **Summary text** adds context, e.g. `"10 tables · ~8 000 rows · 7 dims + 3 facts"` or `"55 DAX measures · 11 relationships"`
+- **DEPRECATED**: Detail pills (individual table names, measure names) — keep diagrams clean; detail goes in documentation
 
 ---
 
@@ -209,3 +209,46 @@ Use 2-row layout or split Fabric zone into top/bottom halves
 - Top row: batch pipeline (Lakehouse path)
 - Bottom row: streaming pipeline (Eventhouse path)
 - Shared Consume zone on the right
+
+### Multi-Use-Case Projects
+When a project supports multiple use cases sharing the same Fabric platform:
+
+**Discovery phase**: Catalog use cases separately.
+```yaml
+use_cases:
+  - id: 1
+    name: "CCE Validation"
+    short: "Cost estimate benchmarking & anomaly detection"
+    tables: [dim_countries, dim_norms, dim_wbs, dim_disciplines, dim_escalation, fact_benchmarks, fact_cce]
+    measures: 42
+    agent: CCE_Advisor
+    personas: [Cost Controllers, Estimators, Bid Managers]
+  - id: 2
+    name: "Cashflow Simulation"
+    short: "S-curve analysis & scenario comparison"
+    tables: [dim_milestones, fact_cashflow_scenarios, fact_cashflow_actuals]
+    measures: 12
+    agent: CCE_Cashflow
+    personas: [Project Finance, Project Managers, Bid Managers]
+```
+
+**Clustering rules for multi-use-case**:
+1. **Shared infrastructure** (Lakehouse, Pipeline, Notebook) → one instance in the architecture, with combined counts
+2. **Use-case-specific agents** → separate components in Consume zone
+3. **One Semantic Model** spanning both use cases → combined measure count in Serve zone
+4. **Personas may overlap** (e.g., Bid Managers in both) — list each persona once with combined access description
+
+**Slide structure for multi-use-case**:
+```
+Slide 0: Title → bullets listing all use cases
+Slide 1: Use Case 1 (own slide — pain points, I/O, personas, criteria)
+Slide 2: Use Case 2 (own slide — same template)
+Slide 3: Solution (references both use cases — combined counts)
+Slide 4: Architecture (unified diagram — all use cases share infrastructure)
+```
+
+**Narrative enrichment**:
+- Title slide hero text should NOT mention specific use cases — use contextual project title
+- Each use case bullet uses numbered prefix: `"① CCE Validation — …"`, `"② Cashflow Simulation — …"`
+- Solution slide combines totals: `"10 tables: 7 CCE + 3 Cashflow"`, `"55 DAX measures (42 + 12)"`
+- Architecture diagram shows one unified platform, NOT separate diagrams per use case
