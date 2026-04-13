@@ -122,6 +122,48 @@ partition = {
 ```
 **CRITICAL**: Direct Lake REQUIRES Delta tables. CSVs alone fail with "Direct Lake mode requires a Direct Lake data source". Must run a Spark notebook to convert CSVs → Delta BEFORE deploying the model.
 
+### 3. Prep for AI — MANDATORY for Every Semantic Model
+
+Every model must pass this checklist before deployment:
+
+```
+✅ All tables have descriptions
+✅ All columns have descriptions  
+✅ All measures have descriptions
+✅ __PBI_CopilotInstructions annotation (domain context + measure catalog)
+✅ __PBI_LinguisticSchema annotation (synonyms in user's language)
+```
+
+```python
+# In model.bim → model → annotations[]
+annotations = [
+    {
+        "name": "__PBI_CopilotInstructions",
+        "value": "Domain context. List ALL measures with descriptions. DAX rules."
+    },
+    {
+        "name": "__PBI_LinguisticSchema",
+        "value": json.dumps({
+            "Version": "1.0.0",
+            "Language": "fr-FR",  # match user language
+            "DynamicImprovement": "HighConfidence",
+            "Entities": {
+                "table_name": {
+                    "Definition": {"Binding": {"ConceptualEntity": "table_name"}},
+                    "State": "Generated",
+                    "Terms": [["synonym1"], ["synonym2"]]
+                }
+            }
+        })
+    }
+]
+```
+
+Without Prep for AI:
+- Data Agent generates wrong DAX (picks wrong columns, ignores measures)
+- Copilot asks for clarification instead of querying
+- Description coverage <50% → significantly worse DAX accuracy
+
 ### 3. Notebook Deployment + Execution
 ```python
 # Format: always .py (never ipynb)
