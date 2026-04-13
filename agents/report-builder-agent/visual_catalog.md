@@ -30,6 +30,7 @@
 | Scatter | `scatterChart` | `X` + `Y` + `Size` + `Details` | YES | |
 | Map | `map` | `Category` + `Size` | YES | |
 | Filled Map | `filledMap` | `Location` + `Values` | YES | |
+| Smart Narrative | `smartNarrativeVisual` | none | **NO** | Auto-generates text from page visuals. **⚠ Only works in editor — blank when deployed via API** |
 
 **CRITICAL PITFALL**: `card` (old) vs `cardVisual` (new). Always use `cardVisual` with `Data` bucket.
 
@@ -120,6 +121,9 @@ Projections tell the visual which measures/columns to display.
 ```
 
 ### Slicer
+
+**Minimum dimensions**: width 200px (with title), height **75px** (with title) or 50px (no title)
+
 ```json
 "projections": {
   "Values": [
@@ -127,6 +131,53 @@ Projections tell the visual which measures/columns to display.
   ]
 }
 ```
+
+**objects (visual-type-specific):**
+```json
+"objects": {
+  "data": [{"properties": {
+    "mode": {"expr": {"Literal": {"Value": "'Dropdown'"}}},
+    "isInvertedSelectionMode": {"expr": {"Literal": {"Value": "false"}}}
+  }}],
+  "header": [{"properties": {
+    "show": {"expr": {"Literal": {"Value": "false"}}}
+  }}],
+  "selection": [{"properties": {
+    "selectAllCheckboxEnabled": {"expr": {"Literal": {"Value": "false"}}},
+    "singleSelect": {"expr": {"Literal": {"Value": "false"}}}
+  }}]
+}
+```
+
+**vcObjects (container styling — MANDATORY for visual consistency):**
+```json
+"vcObjects": {
+  "title": [{"properties": {
+    "show": {"expr": {"Literal": {"Value": "true"}}},
+    "text": {"expr": {"Literal": {"Value": "'Pays'"}}},
+    "fontSize": {"expr": {"Literal": {"Value": "10D"}}},
+    "fontColor": {"solid": {"color": {"expr": {"Literal": {"Value": "'#616161'"}}}}}
+  }}],
+  "visualHeader": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}],
+  "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}}}],
+  "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}],
+  "dropShadow": [{"properties": {
+    "show": {"expr": {"Literal": {"Value": "true"}}},
+    "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#cccccc'"}}}}},
+    "preset": {"expr": {"Literal": {"Value": "'Custom'"}}},
+    "shadowBlur": {"expr": {"Literal": {"Value": "5L"}}},
+    "shadowDistance": {"expr": {"Literal": {"Value": "4L"}}},
+    "transparency": {"expr": {"Literal": {"Value": "85L"}}}
+  }}]
+}
+```
+
+**CRITICAL slicer rules:**
+1. **Height 75px** when `vcObjects.title.show: true` — title takes ~22px inside the visual, leaving ~53px for dropdown
+2. **Height 55px = BROKEN** with title — only 33px left for dropdown, visually crushed
+3. **Hide the PBI header** (`header.show: false`) — use `vcObjects.title` instead for consistent styling
+4. **vcObjects must match card styling** — background, shadow, no border — otherwise slicers look disconnected
+5. **Position**: title bar area, right-aligned (x≥760, y=8) beside page title textbox
 
 ---
 
@@ -450,6 +501,76 @@ For the complete list with DAX code, see `agents/semantic-model-agent/dax_measur
 **AR / DSO (7)**: Total Invoiced, Total Collected, Outstanding AR, DSO, Overdue Amount, Overdue %, Average Collection Days
 
 **Payments (3)**: Total Payments, On-Time Payment Rate, Average Payment Delay Days
+
+---
+
+## Smart Narrative Visual
+
+Auto-generates text insights from other visuals on the page. **No projections or prototypeQuery needed.**
+
+> **⚠ API Deployment Limitation**: Smart Narrative visuals deployed via Fabric API
+> appear blank ("Select or drag fields to populate this visual"). The auto-generation
+> only triggers when the visual is added interactively in the Power BI editor.
+> **For API-deployed reports, use static textbox insight tiles instead.**
+
+### Key Properties
+- `visualType`: `smartNarrativeVisual`
+- No data binding — reads from sibling visuals on the same page
+- Responds to cross-filtering (updates when slicers change)
+- Limit: up to 16 summaries per page, 4 per visual
+
+### JSON Structure
+```json
+{
+  "name": "sn1",
+  "layouts": [{"id": 0, "position": {"x": 30, "y": 652, "z": 2, "width": 1220, "height": 65}}],
+  "singleVisual": {
+    "visualType": "smartNarrativeVisual",
+    "objects": {},
+    "vcObjects": {
+      "title": [{"properties": {
+        "show": {"expr": {"Literal": {"Value": "true"}}},
+        "text": {"expr": {"Literal": {"Value": "'Résumé Intelligent'"}}}
+      }}],
+      "background": [{"properties": {
+        "show": {"expr": {"Literal": {"Value": "true"}}},
+        "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#F8F8F8'"}}}}}
+      }}],
+      "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}],
+      "visualHeader": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}]
+    }
+  }
+}
+```
+
+### Python Helper
+```python
+def _smart_narrative(name, x, y, w, h, z=2):
+    return {
+        "x": x, "y": y, "z": z, "width": w, "height": h,
+        "config": json.dumps({
+            "name": name,
+            "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": w, "height": h}}],
+            "singleVisual": {
+                "visualType": "smartNarrativeVisual",
+                "objects": {},
+                "vcObjects": {
+                    "background": [{"properties": {
+                        "show": {"expr": {"Literal": {"Value": "true"}}},
+                        "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#F8F8F8'"}}}}},
+                    }}],
+                    "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}],
+                },
+            },
+        }), "filters": "[]",
+    }
+```
+
+### Limitations
+- Not supported with: R/Python/custom visuals, multi-row cards with 3+ categorical fields
+- Cannot be pinned to dashboards
+- No Publish to Web support
+- Does not work with live connection to on-prem SSAS or calculation groups
 
 ---
 

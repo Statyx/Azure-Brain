@@ -1,0 +1,94 @@
+# Agent Catalog — Github Brain
+# 25 agents organized into 7 domains
+# Last updated: 2026-04-13
+
+domains:
+
+  01-platform:
+    description: Workspace lifecycle, capacity, CI/CD, CLI, monitoring
+    agents:
+      - name: workspace-admin-agent
+        purpose: Workspace CRUD, capacity assignment, RBAC, Git integration
+      - name: cicd-fabric-agent
+        purpose: Git integration, deployment pipelines, variable libraries, branching, environment promotion
+      - name: fabric-cli-agent
+        purpose: fab CLI, item management, OneLake file ops, CI/CD deploy, job execution
+      - name: monitoring-agent
+        purpose: Admin APIs, audit events, capacity monitoring, KQL operational dashboards
+      - name: taskflow-agent
+        purpose: Task Flow visual templates, task-to-item mapping, JSON import/export
+      - name: extensibility-toolkit-agent
+        purpose: Custom workloads, iFrame SDK, React components, Workload Hub publishing
+
+  02-data-engineering:
+    description: Lakehouse, pipelines, dataflows, warehouse, dimensional modeling
+    agents:
+      - name: orchestrator-agent
+        purpose: Data Pipelines, scheduling, OneLake uploads, Copy Jobs, Spark notebooks
+      - name: lakehouse-agent
+        purpose: OneLake DFS, Delta tables, Spark, SQL Endpoint, Shortcuts, medallion architecture
+      - name: dataflow-agent
+        purpose: Dataflow Gen2, Power Query M, 100+ data sources, incremental refresh
+      - name: warehouse-agent
+        purpose: T-SQL Warehouse, COPY INTO, stored procedures, transactions, time travel
+      - name: domain-modeler-agent
+        purpose: Star schema design, KQL schemas, industry templates, synthetic data generation
+
+  03-visualization:
+    description: Semantic models and Power BI reports
+    agents:
+      - name: semantic-model-agent
+        purpose: model.bim (TMSL), DAX measures, relationships, Direct Lake, Prep for AI
+      - name: report-builder-agent
+        purpose: Power BI reports, visuals, themes, pages (Legacy PBIX format only)
+
+  04-fabric-agent:
+    description: Fabric Data Agents — creation, instructions, evaluation, grading
+    agents:
+      - name: ai-skills-agent
+        purpose: Data Agent creation, REST API, instructions, data bindings, few-shot examples
+      - name: ai-skills-analysis-agent
+        purpose: Data Agent evaluation, DAX quality scoring (24 BPA rules), RCA classification
+
+  05-real-time-intelligence:
+    description: EventStreams, Eventhouse, KQL dashboards
+    agents:
+      - name: rti-kusto-agent
+        purpose: Eventhouse, KQL databases, KQL dashboards, Operations Agent
+      - name: rti-eventstream-agent
+        purpose: EventStreams, real-time ingestion, CDC patterns, source routing
+
+  06-iq:
+    description: Intelligence — Ontology, Graph models, GQL, entity reasoning
+    agents:
+      - name: ontology-agent
+        purpose: Entity types, graph models, GQL queries, data bindings, contextualizations
+
+  07-quality:
+    description: Testing infrastructure, report validation, quality gates
+    agents:
+      - name: testing-agent
+        purpose: 3-tier test taxonomy (smoke/integration/regression), visual validator, pytest scaffolding
+      - name: pixel-design-agent
+        purpose: Pre-deployment report validation — layout bounds, overlaps, font sizing
+
+  08-meta:
+    description: Project orchestration, architecture diagrams, presentations, migration
+    agents:
+      - name: project-orchestrator-agent
+        purpose: End-to-end 12-step project builder, industry configs, agent coordination
+      - name: architecture-design-agent
+        purpose: HTML architecture diagrams with base64 FabricToolset SVG icons (303 icons)
+      - name: pptx-builder-agent
+        purpose: PowerPoint diagram generator — 5-phase pipeline, helper functions, quality gates
+      - name: project-presentation-agent
+        purpose: GitHub repo best practices — README authoring, badges, repo structure
+      - name: migration-bo-agent
+        purpose: BusinessObjects → Fabric migration — 5-stage framework, 119 BO→DAX mappings
+
+# Boundary clarifications:
+# - cicd-fabric vs fabric-cli: cicd owns Git+pipelines+stages; cli owns fab commands+job execution
+# - cicd-fabric vs workspace-admin: admin creates pipelines (REST POST); cicd manages pipeline stages
+# - ontology vs rti-kusto: ontology owns entity types+GQL; rti-kusto owns KQL DB+dashboards
+# - orchestrator vs lakehouse: orchestrator owns scheduling+pipelines; lakehouse owns table ops+optimization
+# - testing vs pixel-design: testing owns pytest framework; pixel owns visual-specific layout rules

@@ -243,39 +243,48 @@ Key decisions:
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│ [Title + Slicers]                     y=10, h=50     │
+│ [Title (580×40)] [Slicer1 (245×75)] [Slicer2 (245×75)] │  y=8–83
+│ [─── Separator ───]                                  │  y=85
 ├──────────┬──────────┬──────────┬─────────────────────┤
-│ KPI 1    │ KPI 2    │ KPI 3    │     y=70, h=100     │
+│ KPI 1    │ KPI 2    │ KPI 3    │ KPI 4  y=93, h=120  │
+│ [─── Separator ───]                                  │  y=221
 ├──────────────────────────────────────────────────────┤
-│ [Primary Chart — Full Width]          y=180, h=250   │
-├──────────────────┬───────────────────────────────────┤
-│ Secondary Chart  │ Secondary Chart    y=445, h=200   │
-└──────────────────┴───────────────────────────────────┘
+│ [Chart 1 (595×200)]  [Chart 2 (595×200)]            │  y=229–429
+│ [─── Separator ───]                                  │  y=437
+├─────────────────┬────────────────────────────────────┤
+│ [Full-width chart/scatter (1220×267)]              │  y=445–712
+└─────────────────┴────────────────────────────────────┘
 ```
 
 Key decisions:
-- Slicers in title row to save vertical space
-- 3 KPIs (shorter at 100px — no calloutValue, just card)
-- One dominant chart to anchor the analysis
-- Two supporting charts at bottom
+- Slicers in title row at **h=75px** (title + dropdown needs 70px+)
+- KPIs at **h=120px** (same as non-slicer pages — NEVER reduce to 100px)
+- Charts at 200px minimum height
+- Separators with 8px gap below cards
+- **Vertical chain**: slicer(83) → 10px gap → card(93–213) → 8px gap → sep(221) → chart(229)
 
 ### Template: Table-Centric
 **Purpose**: Line-item detail, drill-down data, export-friendly.
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│ [Title]                               y=10, h=40     │
+│ [Title (700×40)] [Slicer1 (245×75)] [Slicer2 (245×75)]  │  y=8–83
+│ [─── Separator ───]                                  │  y=85
 ├──────────┬──────────┬──────────┬──────┬──────────────┤
-│ KPI 1    │ KPI 2    │ KPI 3    │ KPI 4│ y=60, h=100  │
-├──────────────────────────────────────────────────────┤
-│ [Slicer Row]                          y=170, h=50    │
+│ KPI 1    │ KPI 2    │ KPI 3    │KPI 4│ y=93, h=120  │
+│ [─── Separator ───]                                  │  y=221
 ├──────────────────────────────────────────────────────┤
 │                                                      │
 │             Table / Matrix                           │
-│             (Full Width)              y=230, h=480   │
+│             (Full Width)              y=229, h=483   │
 │                                                      │
 └──────────────────────────────────────────────────────┘
 ```
+
+**CRITICAL for table pages with slicers:**
+- Slicers: h=75px (not 50px — title needs space)
+- Cards: h=120px (same as ALL other pages)
+- Table starts at y=229 (after sep at 221), height=483px (fits to y=712)
 
 ---
 
@@ -310,8 +319,13 @@ When creating a **new dashboard from scratch**, follow this checklist:
 - [ ] `prototypeQuery` with `Version: 2`, `From`, `Select` — **MANDATORY**
 - [ ] `config` is `json.dumps(...)` (stringified, not embedded)
 - [ ] Correct measure/column names (exact match to model, case-sensitive)
-- [ ] Card `calloutValue.fontSize: 27D` (never leave default)
-- [ ] Card height ≥ 120px
+- [ ] Card `calloutValue.fontSize: 14D` or `27D` (never leave default)
+- [ ] Card height ≥ **120px** (on ALL pages, including slicer pages)
+- [ ] Slicer height ≥ **75px** when using `vcObjects.title`
+- [ ] Slicer has `vcObjects`: background, dropShadow, border=false (matches cards)
+- [ ] Slicer uses `header.show: false` + `vcObjects.title` (not PBI native header)
+- [ ] Card heights CONSISTENT across all pages (120px everywhere)
+- [ ] Separator gap ≥ 8px below card row bottom
 
 ### Deployment
 - [ ] Build `definition.pbir` using V2 schema with XMLA connection string

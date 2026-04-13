@@ -11,7 +11,7 @@ All report-related gotchas discovered during this project, with fixes.
 | 1 | PBIR folder format renders blank | **CRITICAL** | Use Legacy PBIX format exclusively |
 | 2 | Missing prototypeQuery = empty visuals | **HIGH** | Add prototypeQuery with Version 2, From, Select |
 | 3 | `card` vs `cardVisual` confusion | HIGH | Always use `cardVisual` with `Data` bucket |
-| 4 | Card values clipped/overflow | MEDIUM | Set `calloutValue.fontSize: 27D`, height ≥ 120px |
+| 4 | Card values clipped/overflow | MEDIUM | Set `calloutValue.fontSize: 14D` or `27D`, height ≥ **120px** |
 | 5 | Measure name mismatch = silent blank | **HIGH** | Exact match: case + whitespace sensitive |
 | 6 | Missing `layoutOptimization` | HIGH | Add `"layoutOptimization": 0` (integer) to report.json |
 | 7 | V1 definition.pbir schema fails | HIGH | Use V2 schema (2.0.0) with full XMLA connectionString |
@@ -22,6 +22,10 @@ All report-related gotchas discovered during this project, with fixes.
 | 12 | `getDefinition` is always async | MEDIUM | Even for small reports, returns 202 → poll |
 | 13 | `colorByCategory` not working via API | **HIGH** | Use Series projection instead (see below) |
 | 14 | All bars same color (Fluent blue) | **HIGH** | Add category to both `Category` AND `Series` projections |
+| 15 | Slicer height too small with title | **HIGH** | Height must be ≥75px with vcObjects.title enabled |
+| 16 | Card height inconsistent across pages | **HIGH** | ALL cards must be 120px — even on slicer pages |
+| 17 | Separator overlaps card bottom | MEDIUM | Gap formula: `separator_y = card_y + card_h + 8` |
+| 18 | Slicer missing styling (no shadow) | MEDIUM | Add vcObjects: background, dropShadow, border=false |
 
 ---
 
@@ -140,6 +144,57 @@ All report-related gotchas discovered during this project, with fixes.
 - **Cause**: When a bar chart has only one measure in `Y` and no `Series`, PBI treats it as a single data series — all bars get the first theme color
 - **Fix**: Same as Issue #13 — add category column to `Series` projection
 
+### 15. Slicer Height Too Small With Title
+
+- **Symptom**: Slicer dropdown appears crushed, barely clickable, or title overlaps the dropdown control
+- **Cause**: When `vcObjects.title.show: true`, the title renders INSIDE the visual height. At 55px, the title takes ~22px, leaving only ~33px for the dropdown — unusable.
+- **Fix**: Set slicer height to **75px** minimum when using `vcObjects.title`. Without title, 50px is OK.
+- **Height budget**:
+  ```
+  title zone     = 22px (font 10D + padding)
+  dropdown zone  = 40px (control + internal padding)  
+  container pad  = 8px
+  total          = 70px minimum, 75px recommended
+  ```
+- **Detection**: Any `_slicer()` call with `h < 70` and `vcObjects.title.show: true`
+
+### 16. Card Height Inconsistent Across Pages
+
+- **Symptom**: Category label text (e.g., "Anomaly Count", "Composite Score") is cut off at the bottom on some pages but not others
+- **Cause**: Pages with slicers were given 100px card heights to save space, while non-slicer pages used 120px. The 100px is technically enough (formula = 99px), but with ZERO margin the categoryLabel clips.
+- **Fix**: **ALL cards MUST be 120px** regardless of page type. If vertical space is tight on slicer pages, shrink the charts below instead.
+- **Rule**: When adding slicers to a page, cascade +20px to cards/charts below but KEEP card height at 120px.
+- **Vertical chain for slicer pages**:
+  ```
+  slicers:    y=8,   h=75  → bottom=83
+  cards:      y=93,  h=120 → bottom=213
+  separator:  y=221
+  charts:     y=229
+  ```
+
+### 17. Separator Overlaps Card Bottom
+
+- **Symptom**: A thin line appears to cut through the bottom of card visuals
+- **Cause**: Separator `y` value is less than `card_y + card_h`. Common when cascading layout changes (e.g., increasing card height without adjusting separator).
+- **Fix**: Formula: `separator_y = max(card_y + card_h for all cards in row) + 8`
+- **Self-test**: Run `_audit_layout.py` which checks `gap >= 4px` between card bottoms and next separator
+
+### 18. Slicer Missing Container Styling
+
+- **Symptom**: Slicers look like plain floating dropdowns, disconnected from the card/chart grid. No background, no shadow.
+- **Cause**: The `_slicer()` function had no `vcObjects` for background, border, or dropShadow — only a bare title.
+- **Fix**: Add full vcObjects to `_slicer()` matching card/chart styling:
+  ```json
+  "vcObjects": {
+    "title": [{...fontSize: "10D", fontColor: "#616161"...}],
+    "visualHeader": [{"show": false}],
+    "background": [{"show": true}],
+    "border": [{"show": false}],
+    "dropShadow": [{...same as cards...}]
+  }
+  ```
+- **Visual impact**: Dramatic — slicers now look like integrated dashboard elements instead of floating orphans
+
 ---
 
 ## Debugging Checklist
@@ -164,5 +219,9 @@ When a report isn't rendering correctly:
 □ 15. Are bar/scatter charts multi-colored? (Category col in Series projection)
 □ 16. Are Fluent 2 structural colors applied? (#252423 text, #c7c8ce border, #cccccc shadow)
 □ 17. Does each page have an accent bar at y=0?
-□ 18. Are background panels behind KPI card groups?
+□ 18. Are card heights CONSISTENT (120px) across ALL pages? (slicer pages too)
+□ 19. Are slicer heights ≥75px when using vcObjects.title?
+□ 20. Do slicers have background + dropShadow vcObjects? (matching cards)
+□ 21. Is separator_y > max(card_bottom) with ≥4px gap?
+□ 22. Run _audit_layout.py — 0 errors, 0 warnings?
 ```

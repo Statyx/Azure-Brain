@@ -72,14 +72,16 @@ x: 30, width: 1220
 | Element | Height | Notes |
 |---------|--------|-------|
 | Title bar (textbox) | 40 px | Dashboard heading |
-| KPI Card | 120 px | Minimum for readable calloutValue |
-| Small Chart | 185 px | |
+| KPI Card | 120 px | **Minimum for readable calloutValue + category label** |
+| Small Chart | 200 px | Minimum for axis visibility |
 | Medium Chart | 250 px | More detail / labels |
 | Large Chart | 350 px | Complex charts, tables |
-| Slicer | 40–60 px | Dropdown style |
-| Table / Matrix | 200–350 px | Depends on row count |
+| Slicer (no title) | 50 px | Dropdown only |
+| Slicer (with title) | **75 px** | Title (22px) + dropdown (53px) — NEVER less than 70px |
+| Table / Matrix | 200–500 px | Depends on row count |
 
-**CRITICAL**: Card height must be ≥ 120px when `calloutValue.fontSize: 27D`, otherwise values clip.
+**CRITICAL**: Card height must be ≥ 120px for `calloutValue.fontSize: 14D` and ≥ 130px for `27D`.
+**CRITICAL**: Slicer at 55px with vcObjects.title = BROKEN (title eats 22px, only 33px left for dropdown).
 
 ---
 
@@ -137,6 +139,45 @@ y=60    [ KPI 1 (295×120) ] [ KPI 2 (295×120) ] [ KPI 3 (295×120) ] [ KPI 4 (
 
 y=195   [──────────── Table or Matrix (1220×510) ────────────]
 ```
+
+### Template D: Slicer Page (KPIs + Charts with Filters)
+
+**The standard layout for any page with slicers.** Slicers go in the title bar area.
+
+```
+y=0     [━━━━━━━ Accent Bar (1280×5) ━━━━━━━━]          y=0–5
+y=8     [ Title (580×40) ]     [Slicer1 (245×75)] [Slicer2 (245×75)]  y=8–83
+y=85    [────── Separator ──────]                               y=85
+y=93    [ KPI 1 (290×120) ][ KPI 2 (290×120) ][ KPI 3 (290×120) ][ KPI 4 (295×120) ]  y=93–213
+y=221   [────── Separator ──────]                               y=221
+y=229   [ Chart 1 (595×200) ]    [ Chart 2 (595×200) ]          y=229–429
+y=437   [────── Separator ──────]                               y=437
+y=445   [──── Chart 3 or Table (1220×267) ────]           y=445–712
+```
+
+Visual coordinates:
+| Visual | x | y | width | height | Notes |
+|--------|---|---|-------|--------|-------|
+| Accent bar | 0 | 0 | 1280 | 5 | Page accent color |
+| Title | 30 | 10 | 580–700 | 40 | Shorter to leave room for slicers |
+| Slicer 1 | 760 | 8 | 245 | **75** | Dropdown + title |
+| Slicer 2 | 1020 | 8 | 245 | **75** | Dropdown + title |
+| Sep 1 | 30 | 85 | 1220 | 2 | Below slicers |
+| KPI 1–4 | 30/335/640/945 | 93 | 290–295 | **120** | Same height as non-slicer pages |
+| Sep 2 | 30 | 221 | 1220 | 2 | Below cards |
+| Chart 1 | 30 | 229 | 595 | 200 | 2-col chart |
+| Chart 2 | 655 | 229 | 595 | 200 | 2-col chart |
+| Sep 3 | 30 | 437 | 1220 | 2 | Optional |
+| Full-width | 30 | 445 | 1220 | 267 | Table/scatter/chart |
+
+**Key spacing rules:**
+- Slicer bottom (83) → card top (93) = **10px gap** ✔️
+- Card bottom (213) → separator (221) = **8px gap** ✔️  
+- Separator (221+2) → chart top (229) = **6px gap** ✔️
+- Last visual bottom (712) < canvas (720) = **8px margin** ✔️
+
+**CRITICAL**: Cards MUST be 120px on slicer pages too. Do NOT shrink to 100px to save vertical space.
+The trade-off is to shrink the chart heights or remove the bottom separator instead.
 
 4-column for KPI row:
 ```
@@ -238,8 +279,8 @@ Grid: x=40 (left col), x=645 (right col), w=595 each
 |---------|---|---|---|-----|-------|
 | Header shape | 0 | 0 | 1 | 1280×80 | fill=off, outline=off, dropShadow=on |
 | Page title | 40 | 20 | 2 | 620×40 | Segoe UI 14pt bold |
-| Slicer 1 | 840 | 0 | 2 | 212×72 | Dropdown mode |
-| Slicer 2 | 1068 | 0 | 2 | 212×72 | Dropdown mode |
+| Slicer 1 | 840 | 0 | 2 | 212×**75** | Dropdown mode + title |
+| Slicer 2 | 1068 | 0 | 2 | 212×**75** | Dropdown mode + title |
 | Card left | 40 | 100 | 1 | 595×112 | cardVisual with accentBar |
 | Card right | 645 | 100 | 1 | 595×112 | cardVisual with accentBar |
 | Chart TL | 40 | 222 | 1 | 595×224 | Any axis chart |
@@ -268,15 +309,33 @@ Grid: x=40 (left col), x=645 (right col), w=595 each
 }
 ```
 
-### Slicer objects (standard)
+### Slicer objects (standard — with full vcObjects styling)
 
 ```json
 "objects": {
   "data": [{"properties": {"mode": "Dropdown"}}],
-  "header": [{"properties": {"show": "true", "fontFamily": "Segoe UI", "textSize": "9L"}}],
-  "selection": [{"properties": {"selectAllCheckboxEnabled": "true"}}]
+  "header": [{"properties": {"show": "false"}}],
+  "selection": [{"properties": {"selectAllCheckboxEnabled": "false", "singleSelect": "false"}}]
 }
 ```
+
+**vcObjects (MANDATORY — must match card/chart styling):**
+```json
+"vcObjects": {
+  "title": [{"properties": {"show": "true", "text": "'Filter Name'", "fontSize": "10D", "fontColor": "#616161"}}],
+  "visualHeader": [{"properties": {"show": "false"}}],
+  "background": [{"properties": {"show": "true"}}],
+  "border": [{"properties": {"show": "false"}}],
+  "dropShadow": [{"properties": {"show": "true", "color": "#cccccc", "preset": "Custom", "shadowBlur": "5L", "shadowDistance": "4L", "transparency": "85L"}}]
+}
+```
+
+**Key learnings:**
+- Use `header.show: false` to hide the PBI native header — it's ugly and inconsistent
+- Use `vcObjects.title` instead for the label — same font system as cards
+- Title font: **10D** with color **#616161** (lighter than card title at 11D)
+- The vcObjects title renders INSIDE the visual height — budget 22px for it
+- Without background + shadow, slicers look disconnected from the rest of the dashboard
 
 ### Page 1: Financial Performance Overview (10 visuals)
 | Slicers | period_month, fiscal_year |

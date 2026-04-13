@@ -1,8 +1,9 @@
 # Github Brain
 
-**23 AI agents + 20 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
+**25 AI agents + 20 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
 
-![Agents](https://img.shields.io/badge/agents-23-blue?style=for-the-badge&logo=github)
+![Agents](https://img.shields.io/badge/agents-25-blue?style=for-the-badge&logo=github)
+![Domains](https://img.shields.io/badge/domains-8-orange?style=for-the-badge)
 ![Knowledge](https://img.shields.io/badge/knowledge_files-20-green?style=for-the-badge)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
 
@@ -38,54 +39,73 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 
 ---
 
-## 🤖 Agents (23)
+## 🤖 Agents (25) — 7 Domains
 
-### Meta
+> Full catalog with boundary clarifications: [`agents/_catalog.yaml`](agents/_catalog.yaml)
+
+### 🔧 Platform & Operations (6)
 
 | Agent | What it does |
 |---|---|
-| [project-orchestrator](agents/project-orchestrator-agent/) | End-to-end project builder — 12-step config-driven pipeline coordinating all agents |
+| [workspace-admin](agents/workspace-admin-agent/) | Workspace CRUD, capacity, RBAC, Git integration |
+| [cicd-fabric](agents/cicd-fabric-agent/) | Git integration, deployment pipelines, variable libraries, branching, environment promotion |
+| [fabric-cli](agents/fabric-cli-agent/) | `fab` CLI, item management, CI/CD deploy |
+| [monitoring](agents/monitoring-agent/) | Admin APIs, audit events, KQL dashboards |
+| [taskflow](agents/taskflow-agent/) | Task Flow design, templates, JSON import/export |
+| [extensibility-toolkit](agents/extensibility-toolkit-agent/) | Custom workloads, iFrame SDK, Workload Hub |
 
-### Data Engineering
+### 🗄️ Data Engineering (5)
 
 | Agent | What it does |
 |---|---|
 | [orchestrator](agents/orchestrator-agent/) | Pipelines, ingestion, notebooks, copy jobs |
 | [lakehouse](agents/lakehouse-agent/) | OneLake DFS, Delta tables, Spark, medallion architecture |
 | [dataflow](agents/dataflow-agent/) | Dataflow Gen2, Power Query M, ETL |
-| [domain-modeler](agents/domain-modeler-agent/) | Star schema design, industry templates, synthetic data gen |
 | [warehouse](agents/warehouse-agent/) | Fabric Warehouse, T-SQL, CTAS, COPY INTO |
+| [domain-modeler](agents/domain-modeler-agent/) | Star schema design, industry templates, synthetic data gen |
 
-### Analytics & Reporting
+### 📊 Visualization (2)
 
 | Agent | What it does |
 |---|---|
 | [semantic-model](agents/semantic-model-agent/) | DAX measures, relationships, model.bim, Direct Lake |
 | [report-builder](agents/report-builder-agent/) | Power BI reports, visuals, themes (Legacy PBIX only) |
-| [ai-skills](agents/ai-skills-agent/) | Fabric Data Agents, AI instructions, few-shot examples |
+
+### 🤖 Fabric Agent (2)
+
+| Agent | What it does |
+|---|---|
+| [ai-skills](agents/ai-skills-agent/) | Fabric Data Agents — creation, instructions, few-shot examples |
 | [ai-skills-analysis](agents/ai-skills-analysis-agent/) | Data Agent evaluation, DAX quality scoring, RCA |
-| [pptx-builder](agents/pptx-builder-agent/) | PowerPoint architecture diagrams — 5-phase pipeline (Discover→Synthesize→Icons→Design→QA) |
-| [architecture-design](agents/architecture-design-agent/) | HTML architecture diagrams with base64 FabricToolset SVG icons |
 
-### Platform & Operations
+### ⚡ Real-Time Intelligence (2)
 
 | Agent | What it does |
 |---|---|
-| [workspace-admin](agents/workspace-admin-agent/) | Workspace CRUD, capacity, RBAC, Git integration |
-| [fabric-cli](agents/fabric-cli-agent/) | `fab` CLI, item management, CI/CD deploy |
-| [cicd-fabric](agents/cicd-fabric-agent/) | Git integration, deployment pipelines, variable libraries, branching, environment promotion |
-| [monitoring](agents/monitoring-agent/) | Admin APIs, audit events, KQL dashboards |
-| [taskflow](agents/taskflow-agent/) | Task Flow design, templates, JSON import/export |
-| [extensibility-toolkit](agents/extensibility-toolkit-agent/) | Custom workloads, iFrame SDK, Workload Hub |
-| [project-presentation](agents/project-presentation-agent/) | README best practices, repo structure, badges, visuals, community files |
-
-### Real-Time Intelligence & Graph
-
-| Agent | What it does |
-|---|---|
-| [rti-eventstream](agents/rti-eventstream-agent/) | EventStreams, EventHub SDK, CDC patterns |
 | [rti-kusto](agents/rti-kusto-agent/) | Eventhouse, KQL database, dashboards |
-| [ontology](agents/ontology-agent/) | Entity types, graph model, GQL queries |
+| [rti-eventstream](agents/rti-eventstream-agent/) | EventStreams, EventHub SDK, CDC patterns |
+
+### 🧠 IQ — Intelligence (1)
+
+| Agent | What it does |
+|---|---|
+| [ontology](agents/ontology-agent/) | Entity types, graph model, GQL queries, contextualizations |
+
+### ✅ Quality (2)
+
+| Agent | What it does |
+|---|---|
+| [testing](agents/testing-agent/) | 3-tier test taxonomy, visual validator, pytest scaffolding |
+| [pixel-design](agents/pixel-design-agent/) | Pre-deployment report validation — layout, overlaps, fonts |
+
+### 🏗️ Meta (5)
+
+| Agent | What it does |
+|---|---|
+| [project-orchestrator](agents/project-orchestrator-agent/) | End-to-end project builder — 12-step config-driven pipeline coordinating all agents |
+| [architecture-design](agents/architecture-design-agent/) | HTML architecture diagrams with base64 FabricToolset SVG icons |
+| [pptx-builder](agents/pptx-builder-agent/) | PowerPoint architecture diagrams — 5-phase pipeline |
+| [project-presentation](agents/project-presentation-agent/) | README best practices, repo structure, badges, visuals, community files |
 | [migration-bo](agents/migration-bo-agent/) | BusinessObjects migration to Fabric |
 
 > Every agent has `instructions.md` (system prompt) + domain-specific files. The agent README lists the reading order.
@@ -150,12 +170,15 @@ graph LR
         Ops["Operations\nWORKFLOWS · TEMPLATES\nERROR_RECOVERY"]
     end
 
-    Brain --> O["project-orchestrator"]
+    Brain --> META["🏗️ Meta (5)\nproject-orchestrator\narchitecture-design\npptx-builder\nproject-presentation\nmigration-bo"]
 
-    O --> DE["Data Engineering\norchestrator · lakehouse\nwarehouse · dataflow\ndomain-modeler"]
-    O --> AN["Analytics\nsemantic-model · report-builder\nai-skills · ai-skills-analysis"]
-    O --> PL["Platform\nworkspace-admin · fabric-cli\ncicd-fabric · monitoring\ntaskflow · extensibility"]
-    O --> RT["Real-Time\nrti-eventstream · rti-kusto\nontology · migration-bo"]
+    META --> PL["🔧 Platform (6)\nworkspace-admin · fabric-cli\ncicd-fabric · monitoring\ntaskflow · extensibility"]
+    META --> DE["🗄️ Data Engineering (5)\norchestrator · lakehouse\nwarehouse · dataflow\ndomain-modeler"]
+    META --> VIZ["📊 Visualization (2)\nsemantic-model\nreport-builder"]
+    META --> FA["🤖 Fabric Agent (2)\nai-skills · ai-skills-analysis"]
+    META --> RT["⚡ Real-Time (2)\nrti-eventstream · rti-kusto"]
+    META --> IQ["🧠 IQ (1)\nontology"]
+    META --> QA["✅ Quality (2)\ntesting · pixel-design"]
 ```
 
 ---
@@ -175,4 +198,4 @@ graph LR
 
 MIT
 
-Built for Microsoft Fabric. Powered by 20 specialized agents and 20 knowledge files.
+Built for Microsoft Fabric. Powered by 25 specialized agents across 8 domains and 20 knowledge files.

@@ -184,15 +184,62 @@ def make_vc_objects(title_text=None, shadow=True, background=True, border=True):
 ```python
 "objects": {
     "outline":       [{"properties": {"show": _lit("false")}}],
-    "calloutValue":  [{"properties": {"fontSize": _lit("27D")}}],
-    "categoryLabel": [{"properties": {"show": _lit("false")}}],
+    "calloutValue":  [{"properties": {
+        "fontSize": _lit("14D"),
+        "color":    _color("#252423"),
+    }}],
+    "categoryLabel": [{"properties": {"show": _lit("true")}}],
 }
 ```
 
-**CRITICAL**: Default `calloutValue` font size is enormous. Always set to `27D` (27pt).
-Card height must be ≥ 120px to avoid clipping.
+**CRITICAL**: Card height must be ≥ **120px** for `14D` and ≥ 130px for `27D`.
+Category label clips at 100px with 14D — the title (22px) + value (25px) + categoryLabel (18px) + padding = 99px with zero margin.
 
-### Chart Axes
+### Slicer (dropdown mode)
+```python
+"objects": {
+    "data": [{"properties": {
+        "mode":                    _lit("'Dropdown'"),
+        "isInvertedSelectionMode": _lit("false"),
+    }}],
+    "header": [{"properties": {"show": _lit("false")}}],
+    "selection": [{"properties": {
+        "selectAllCheckboxEnabled": _lit("false"),
+        "singleSelect":            _lit("false"),
+    }}],
+}
+```
+
+**vcObjects for slicers (MANDATORY — must match card/chart styling):**
+```python
+"vcObjects": {
+    "title": [{"properties": {
+        "show":      _lit("true"),
+        "text":      _lit("'Filter Label'"),
+        "fontSize":  _lit("10D"),           # slightly smaller than card title (11D)
+        "fontColor": _color("#616161"),      # subtle gray
+    }}],
+    "visualHeader":        [{"properties": {"show": _lit("false")}}],
+    "visualHeaderTooltip": [{"properties": {"show": _lit("false")}}],
+    "background":          [{"properties": {"show": _lit("true")}}],
+    "border":              [{"properties": {"show": _lit("false")}}],
+    "dropShadow": [{"properties": {
+        "show":          _lit("true"),
+        "color":         _color("#cccccc"),
+        "preset":        _lit("'Custom'"),
+        "shadowBlur":    _lit("5L"),
+        "shadowDistance": _lit("4L"),
+        "transparency":  _lit("85L"),
+    }}],
+}
+```
+
+**Key slicer styling rules:**
+1. **Hide PBI header** (`objects.header.show: false`) — use vcObjects.title instead
+2. **Title font 10D** (not 11D like cards) — slicers are secondary UI, slightly smaller
+3. **Title color #616161** — lighter gray, not the dark #252423 used for chart titles
+4. **Height must be 75px** with title — title takes 22px inside the visual
+5. **Background + shadow** — without them, slicers look like floating orphans
 ```python
 "objects": {
     "categoryAxis": [{"properties": {

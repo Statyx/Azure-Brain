@@ -33,6 +33,23 @@ followed in every session, for every task, without exception.
 - Ask yourself: "Would a staff engineer approve this?"
 - Run tests, check logs, demonstrate correctness
 
+## 4b. Mandatory Testing Gate (NON-NEGOTIABLE)
+
+- **Before** running ANY `deploy_*.py`, `_build_*.py`, or artifact generator:
+  ```bash
+  python -m pytest tests/test_smoke.py -v --tb=short
+  ```
+- If smoke tests **fail** → STOP. Fix the code. Do not proceed.
+- **After** generating any artifact (PPTX, PBIX, model.bim):
+  run post-validation tests to prove the output is correct.
+- **Before** deploying to Azure:
+  ```bash
+  python -m pytest tests/ -v -m "smoke or integration" --tb=short
+  ```
+- If a project has no `tests/test_smoke.py` → **create it first** using
+  the testing-agent template before running anything.
+- Never skip tests "because it's just a small change."
+
 ## 5. Demand Elegance (Balanced)
 
 - For non-trivial changes: pause and ask "is there a more elegant way?"
