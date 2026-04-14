@@ -15,6 +15,7 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 ## 5 Mandatory Rules
 
 ### Rule 1: ALWAYS Define Instructions BEFORE Deployment
+
 - Never create a Data Agent without `aiInstructions` in `stage_config.json`
 - Empty instructions = useless agent — the LLM has no context about your data
 - **MANDATORY first instruction**: `"ALWAYS query the semantic model using DAX. NEVER answer from general knowledge."` — without this, the orchestrator may skip the DAX tool and hallucinate answers
@@ -22,17 +23,20 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 - See `instruction_writing_guide.md` for the Mandatory Instructions section and 7-Section Framework
 
 ### Rule 2: Data Sources Are Deployed WITH the Agent
+
 - Include `datasource.json` in the initial definition parts — no need for a separate step
 - The `datasource.json` requires the exact `artifactId` and `workspaceId` of the data source
 - Use `build_elements()` from `model.bim` to auto-select all tables/columns/measures
 - Without elements, the agent may not see any tables in the portal
 
 ### Rule 3: Few-Shot Examples Are Critical for Quality
+
 - Data Agents with few-shot examples produce dramatically better results
 - Each example needs: `id` (UUID), `question` (natural language), `query` (DAX/SQL/KQL)
 - Minimum 5 examples covering different query patterns; aim for 10–15
 
 ### Rule 4: ALWAYS Publish — Draft-Only Agents Are Invisible
+
 - `draft/` — The working version you edit in the portal
 - `published/` — The production version users interact with
 - **CRITICAL**: Agents deployed with only draft parts are **NOT visible or testable** in the Fabric portal. You MUST include `published/` parts + `publish_info.json` for the agent to appear.
@@ -41,6 +45,7 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 - To update: copy draft parts to published/ and re-run updateDefinition with all 8 parts
 
 ### Rule 5: Validate End-to-End Before Declaring Done
+
 - After deployment: open the agent in Fabric portal
 - Test with at least 5 sample questions
 - Verify the agent generates correct DAX/SQL and returns accurate data
@@ -52,7 +57,7 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 
 ### "I need to create a new Data Agent"
 
-```
+```text
 1. Define the agent's purpose and audience
    │
 2. Identify the data source(s)
@@ -80,7 +85,7 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 
 ### "I need to update an existing Data Agent"
 
-```
+```text
 1. Retrieve current definition:
    POST /v1/workspaces/{wsId}/dataAgents/{agentId}/getDefinition
    │
@@ -99,7 +104,7 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 
 ### "I need to write instructions for a Data Agent"
 
-```
+```text
 See instruction_writing_guide.md for the complete framework:
   1. Define role & persona
   2. Describe available data (tables, columns, measures)
@@ -112,7 +117,7 @@ See instruction_writing_guide.md for the complete framework:
 
 ### "I need to publish a Data Agent"
 
-```
+```text
 1. Ensure draft is fully tested
    │
 2. Copy draft parts to published:
@@ -131,7 +136,7 @@ See instruction_writing_guide.md for the complete framework:
 ## API Quick Reference
 
 | Operation | Method | Path |
-|-----------|--------|------|
+| --------- | ------ | ---- |
 | Create Data Agent | POST | `/v1/workspaces/{wsId}/dataAgents` |
 | Get Data Agent | GET | `/v1/workspaces/{wsId}/dataAgents/{id}` |
 | Update Data Agent metadata | PATCH | `/v1/workspaces/{wsId}/dataAgents/{id}` |
@@ -141,7 +146,8 @@ See instruction_writing_guide.md for the complete framework:
 | List Data Agents | GET | `/v1/workspaces/{wsId}/dataAgents` |
 
 **Alternate path**: You can also use the generic items endpoint:
-```
+
+```text
 POST /v1/workspaces/{wsId}/items  (with "type": "DataAgent")
 GET  /v1/workspaces/{wsId}/items?type=DataAgent
 ```
@@ -155,7 +161,7 @@ GET  /v1/workspaces/{wsId}/items?type=DataAgent
 ## Definition Parts Summary
 
 | Part | Path | Required | Purpose |
-|------|------|----------|---------|
+| ---- | ---- | -------- | ------- |
 | Agent config | `Files/Config/data_agent.json` | Yes | Schema version (2.1.0) |
 | Draft instructions | `Files/Config/draft/stage_config.json` | Yes | AI instructions for draft stage |
 | Draft data source | `Files/Config/draft/{type}-{name}/datasource.json` | No* | Data source binding |
@@ -172,7 +178,7 @@ GET  /v1/workspaces/{wsId}/items?type=DataAgent
 ## Error Recovery
 
 | Error / Symptom | Cause | Fix |
-|----------------|-------|-----|
+| ---------------- | ----- | --- |
 | Agent created but can't answer questions | No data source attached | Add datasource.json via updateDefinition or portal |
 | Agent gives wrong/irrelevant answers | Poor instructions or missing few-shots | Rewrite instructions (see guide), add more examples |
 | Agent can't find tables/columns | Element selection wrong in datasource.json | Update elements array with correct is_selected flags |

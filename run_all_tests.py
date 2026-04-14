@@ -14,6 +14,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_DIR = SCRIPT_DIR.parent  # parent of Github_Brain
 
 PROJECTS = [
+    {"name": "Github_Brain",         "path": SCRIPT_DIR,                          "expected": 156},
     {"name": "Financial_Platform",    "path": BASE_DIR / "Financial_Platform",    "expected": 125},
     {"name": "Fabric RTI Demo",       "path": BASE_DIR / "Fabric RTI Demo",       "expected": 30},
     {"name": "The_AI_Skill_Analyzer", "path": BASE_DIR / "The_AI_Skill_Analyzer", "expected": 81},

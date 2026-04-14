@@ -2,7 +2,7 @@
 Template: Full orchestration script — Upload CSVs, create pipeline, run and monitor.
 
 Usage:
-    1. Set PATH: $env:PATH = "C:\Users\<USER>\AppData\Local\Programs\Python\Python312;..."
+    1. Set PATH: $env:PATH = "C:\\Users\\<user>\\AppData\\Local\\Programs\\Python\\Python312;..."
     2. Ensure az login is done
     3. Run: python orchestrate_ingestion.py
 

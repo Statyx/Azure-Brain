@@ -27,8 +27,9 @@ CRITICAL RULES:
 **Why this is mandatory**: The orchestrator LLM decides whether to call the DAX tool or answer from its own knowledge. Without rule #1, questions like "top 5 campaigns by revenue" may be answered with hallucinated campaign names and figures that look plausible but are completely fabricated — with no DAX query executed at all.
 
 **Real-world evidence** (Marketing360 Agent, March 2026):
+
 | Without these rules | With these rules |
-|--------------------|--------------------|
+| ------------------- | ---------------- |
 | Q5 "top 5 campaigns by revenue": No DAX query. Hallucinated 5 campaign names with fake revenue figures. | Q5: 39-line DAX using SUMMARIZECOLUMNS + TOPN + [Total Revenue] measure. Real data from model. |
 
 ### Available Measures List
@@ -62,6 +63,7 @@ cash flow monitoring, and performance drivers identification.
 ```
 
 **Best Practices:**
+
 - Be specific: "Finance Controller" > "data analyst" > "helpful assistant"
 - State the audience: "assistant to the CFO" sets the expertise level
 - List the domains: helps the LLM scope its answers
@@ -87,6 +89,7 @@ Describe the tables, their purpose, and approximate scale. The agent can discove
 ```
 
 **Best Practices:**
+
 - Include row counts — helps the LLM understand data scale
 - Group tables by domain — makes it easier to find the right source
 - Describe relationships implicitly: "Invoice headers" and "Invoice line items" suggests a parent-child join
@@ -115,6 +118,7 @@ This is **critical**. Define how to calculate every important metric. Without th
 ```
 
 **Best Practices:**
+
 - Use exact column/measure names from the semantic model
 - Specify direction: "Favorable = Actual < Budget **for expenses**" (revenue is opposite)
 - Include the formula, not just the name
@@ -146,6 +150,7 @@ Top 3 [element] by [criterion]:
 ```
 
 **Best Practices:**
+
 - Define templates for each answer type (KPI, comparison, ranking, trend)
 - Specify currency format (€, $, M/K suffixes)
 - Specify percentage precision (1 decimal: 71.5%, not 71.4832%)
@@ -169,6 +174,7 @@ Use these terms consistently:
 ```
 
 **Best Practices:**
+
 - Define the canonical term for each concept
 - List what NOT to use (eliminates ambiguity)
 - Match the terminology to the audience (CFO-level = finance jargon OK)
@@ -194,6 +200,7 @@ Always provide:
 ```
 
 **Best Practices:**
+
 - Define the drill-down dimensions relevant to your domain
 - Specify the depth of analysis expected
 - Tell the agent to quantify contributions (not just "marketing increased")
@@ -224,12 +231,13 @@ When actual > budget by > 15%:
 ## Instruction Length Guidelines
 
 | Agent Complexity | Target Length | Sections |
-|-----------------|--------------|----------|
+| --------------- | ------------ | -------- |
 | Simple (1 data source, basic queries) | 500–1,000 chars | 1, 2, 3, 4 |
 | Medium (multiple tables, calculations) | 1,500–3,000 chars | 1–6 |
 | Complex (multi-domain, scenarios) | 3,000–6,000 chars | All 7 |
 
 **Warning**: Instructions beyond ~8,000 characters may be truncated or lose effectiveness. If you need more, focus on:
+
 - Move table schemas to the `datasource.json` descriptions instead
 - Move Q&A examples to `fewshots.json` instead
 - Keep instructions about BEHAVIOR, not DATA STRUCTURE
@@ -239,7 +247,7 @@ When actual > budget by > 15%:
 ## Anti-Patterns (What NOT to Do)
 
 | Don't | Why | Do Instead |
-|-------|-----|------------|
+| ----- | --- | ---------- |
 | Copy-paste the entire schema | Too long, dilutes behavioral instructions | Describe tables briefly, let discovery handle columns |
 | Use vague roles ("you are helpful") | LLM defaults to generic behavior | Be specific: "Finance Controller, CFO assistant" |
 | Omit calculation definitions | Agent will guess formulas | Define every metric explicitly |
