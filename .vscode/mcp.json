@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "workiq": {
+      "type": "stdio",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\<USER>\\AppData\\Roaming\\npm\\node_modules\\@microsoft\\workiq\\bin\\workiq.js",
+        "mcp"
+      ]
+    }
+  }
+}

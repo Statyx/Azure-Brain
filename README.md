@@ -7,7 +7,7 @@
 ![Knowledge](https://img.shields.io/badge/knowledge_files-20-green?style=for-the-badge)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
 
-[Quick Start](#-quick-start) · [Pick Your Scenario](#-pick-your-scenario) · [Agents](#-agents-18) · [Knowledge Files](#-knowledge-files) · [Architecture](#-architecture) · [Docs](#-documentation)
+[Quick Start](#-quick-start) · [Pick Your Scenario](#-pick-your-scenario) · [Agents](#-agents-25--7-domains) · [Knowledge Files](#-knowledge-files) · [Architecture](#️-architecture) · [Docs](#-documentation)
 
 ---
 
@@ -30,7 +30,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 ## 🎯 Pick Your Scenario
 
 | I want to... | Template | Time | Start here |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Build a BI dashboard** (Lakehouse → Model → Report) | Standard BI Demo | 2–3h | [TEMPLATES.md](TEMPLATES.md#template-1) |
 | **Set up real-time analytics** (EventStream → Eventhouse → KQL) | Real-Time IoT | 3–4h | [TEMPLATES.md](TEMPLATES.md#template-2) |
 | **Build a full Smart Factory demo** (Batch + RT + Ontology + AI) | Smart Factory | 4–6h | [TEMPLATES.md](TEMPLATES.md#template-3) |
@@ -46,7 +46,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 ### 🔧 Platform & Operations (6)
 
 | Agent | What it does |
-|---|---|
+| --- | --- |
 | [workspace-admin](agents/workspace-admin-agent/) | Workspace CRUD, capacity, RBAC, Git integration |
 | [cicd-fabric](agents/cicd-fabric-agent/) | Git integration, deployment pipelines, variable libraries, branching, environment promotion |
 | [fabric-cli](agents/fabric-cli-agent/) | `fab` CLI, item management, CI/CD deploy |
@@ -57,7 +57,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 ### 🗄️ Data Engineering (5)
 
 | Agent | What it does |
-|---|---|
+| --- | --- |
 | [orchestrator](agents/orchestrator-agent/) | Pipelines, ingestion, notebooks, copy jobs |
 | [lakehouse](agents/lakehouse-agent/) | OneLake DFS, Delta tables, Spark, medallion architecture |
 | [dataflow](agents/dataflow-agent/) | Dataflow Gen2, Power Query M, ETL |
@@ -67,41 +67,41 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 ### 📊 Visualization (2)
 
 | Agent | What it does |
-|---|---|
+| --- | --- |
 | [semantic-model](agents/semantic-model-agent/) | DAX measures, relationships, model.bim, Direct Lake |
 | [report-builder](agents/report-builder-agent/) | Power BI reports, visuals, themes (Legacy PBIX only) |
 
 ### 🤖 Fabric Agent (2)
 
 | Agent | What it does |
-|---|---|
+| --- | --- |
 | [ai-skills](agents/ai-skills-agent/) | Fabric Data Agents — creation, instructions, few-shot examples |
 | [ai-skills-analysis](agents/ai-skills-analysis-agent/) | Data Agent evaluation, DAX quality scoring, RCA |
 
 ### ⚡ Real-Time Intelligence (2)
 
 | Agent | What it does |
-|---|---|
+| --- | --- |
 | [rti-kusto](agents/rti-kusto-agent/) | Eventhouse, KQL database, dashboards |
 | [rti-eventstream](agents/rti-eventstream-agent/) | EventStreams, EventHub SDK, CDC patterns |
 
 ### 🧠 IQ — Intelligence (1)
 
 | Agent | What it does |
-|---|---|
+| --- | --- |
 | [ontology](agents/ontology-agent/) | Entity types, graph model, GQL queries, contextualizations |
 
 ### ✅ Quality (2)
 
 | Agent | What it does |
-|---|---|
+| --- | --- |
 | [testing](agents/testing-agent/) | 3-tier test taxonomy, visual validator, pytest scaffolding |
 | [pixel-design](agents/pixel-design-agent/) | Pre-deployment report validation — layout, overlaps, fonts |
 
 ### 🏗️ Meta (5)
 
 | Agent | What it does |
-|---|---|
+| --- | --- |
 | [project-orchestrator](agents/project-orchestrator-agent/) | End-to-end project builder — 12-step config-driven pipeline coordinating all agents |
 | [architecture-design](agents/architecture-design-agent/) | HTML architecture diagrams with base64 FabricToolset SVG icons |
 | [pptx-builder](agents/pptx-builder-agent/) | PowerPoint architecture diagrams — 5-phase pipeline |
@@ -118,7 +118,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 <summary><strong>Core — Read these first</strong></summary>
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | [`agent_principles.md`](agent_principles.md) | **Mandatory** — Operating principles, task management, quality standards |
 | [`shared_constraints.md`](shared_constraints.md) | 8 hard rules all agents follow (config-driven, idempotent, async-first) |
 | [`fabric_api.md`](fabric_api.md) | REST API patterns, auth, async operations, LRO polling |
@@ -132,7 +132,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 <summary><strong>Reference — Domain-specific patterns</strong></summary>
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | [`report_format.md`](report_format.md) | **Critical** — Legacy PBIX format spec (the only format that renders) |
 | [`visual_builders.md`](visual_builders.md) | Visual config, expression language, vcObjects |
 | [`semantic_model.md`](semantic_model.md) | model.bim deployment, Direct Lake, TMDL |
@@ -150,7 +150,7 @@ Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
 <summary><strong>Operations — Workflows, templates, error recovery</strong></summary>
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | [`WORKFLOWS.md`](WORKFLOWS.md) | 5 end-to-end cross-agent workflows with phases & gates |
 | [`TEMPLATES.md`](TEMPLATES.md) | 5 project templates with checklists and time budgets |
 | [`ERROR_RECOVERY.md`](ERROR_RECOVERY.md) | Decision trees by HTTP status, retry patterns. See also [known_issues.md](known_issues.md) |
@@ -186,7 +186,7 @@ graph LR
 ## 📖 Documentation
 
 | Doc | What's inside |
-|---|---|
+| --- | --- |
 | [TEMPLATES.md](TEMPLATES.md) | 5 project templates — pick one and follow the checklist |
 | [WORKFLOWS.md](WORKFLOWS.md) | Cross-agent sequencing — phases, gates, handoffs |
 | [ERROR_RECOVERY.md](ERROR_RECOVERY.md) | HTTP error decision trees + retry code examples |
