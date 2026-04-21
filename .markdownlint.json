@@ -1,5 +1,9 @@
 {
   "MD013": false,
+  "MD022": false,
+  "MD032": false,
   "MD033": false,
-  "MD060": { "table_column_count": false }
+  "MD040": false,
+  "MD058": false,
+  "MD060": false
 }
