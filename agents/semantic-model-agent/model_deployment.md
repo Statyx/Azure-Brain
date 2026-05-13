@@ -235,7 +235,7 @@ Format: `Sql.Database("<sql_endpoint>", "<lakehouse_name>")`
 import base64, json, requests, time
 
 API = "https://api.fabric.microsoft.com/v1"
-WS_ID = "133c6c70-2e26-4d97-aac1-8ed423dbbf34"
+WS_ID = "<YOUR_WORKSPACE_ID>"  # from resource_ids.md
 
 def deploy_semantic_model(model_bim: dict, display_name: str, headers: dict) -> str:
     """Deploy a semantic model and return the item ID."""
@@ -359,10 +359,10 @@ def delete_semantic_model(model_id: str, headers: dict):
 | Property | Value |
 |----------|-------|
 | Name | `SM_Finance` |
-| ID | `236080b8-3bea-4c14-86df-d1f9a14ac7a8` |
+| ID | `<YOUR_MODEL_ID>` |
 | Mode | Direct Lake |
 | Tables | 11 |
 | Relationships | 11 |
 | DAX Measures | 26 |
-| Lakehouse | `LH_Finance` (`f2c42d3b-d402-43e7-b8fb-a9aa395c14e1`) |
-| SQL Endpoint | `eenhbexk3uueboufjqpzd6vyqe-obwdyezgf2lu3kwbr3kchw57gq.datawarehouse.fabric.microsoft.com` |
+| Lakehouse | `LH_Finance` (`<YOUR_LAKEHOUSE_ID>`) |
+| SQL Endpoint | `<YOUR_SQL_ENDPOINT>` |

@@ -14,12 +14,13 @@ Actions:
 import base64, json, requests, time, subprocess, sys, os
 
 # ── CONFIG ─────────────────────────────────────────────────────
-WS_ID       = "133c6c70-2e26-4d97-aac1-8ed423dbbf34"
-WS_NAME     = "CDR - Demo Finance Fabric"
-MODEL_NAME  = "SM_Finance"
-MODEL_ID    = "236080b8-3bea-4c14-86df-d1f9a14ac7a8"
+# Fill these from resource_ids.md
+WS_ID       = "<YOUR_WORKSPACE_ID>"
+WS_NAME     = "<YOUR_WORKSPACE_NAME>"
+MODEL_NAME  = "<YOUR_MODEL_NAME>"
+MODEL_ID    = "<YOUR_MODEL_ID>"
 REPORT_ID   = None  # Set to existing report ID to update, or None to create
-REPORT_NAME = "RPT_Finance_Dashboard"
+REPORT_NAME = "<YOUR_REPORT_NAME>"
 API         = "https://api.fabric.microsoft.com/v1"
 
 # Paths

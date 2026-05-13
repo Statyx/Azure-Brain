@@ -53,7 +53,7 @@ A working report needs these parts in the API payload:
   "version": "4.0",
   "datasetReference": {
     "byConnection": {
-      "connectionString": "Data Source=\"powerbi://api.powerbi.com/v1.0/myorg/CDR - Demo Finance Fabric\";initial catalog=SM_Finance;integrated security=ClaimsToken;semanticmodelid=236080b8-3bea-4c14-86df-d1f9a14ac7a8"
+      "connectionString": "Data Source=\"powerbi://api.powerbi.com/v1.0/myorg/<YOUR_WORKSPACE_NAME>\";initial catalog=SM_Finance;integrated security=ClaimsToken;semanticmodelid=<YOUR_MODEL_ID>"
     }
   }
 }
@@ -66,7 +66,7 @@ Data Source="powerbi://api.powerbi.com/v1.0/myorg/{WORKSPACE_NAME}";initial cata
 
 ### Shorthand Alternative
 ```json
-"connectionString": "semanticmodelid=236080b8-3bea-4c14-86df-d1f9a14ac7a8"
+"connectionString": "semanticmodelid=<YOUR_MODEL_ID>"
 ```
 Works but the full XMLA string is preferred (matches Fabric Copilot's own output).
 
@@ -265,7 +265,7 @@ def make_section(name, display_name, visual_containers):
 import requests, base64, json
 
 API = "https://api.fabric.microsoft.com/v1"
-WS_ID = "133c6c70-2e26-4d97-aac1-8ed423dbbf34"
+WS_ID = "<YOUR_WORKSPACE_ID>"  # from resource_ids.md
 
 body = {
     "displayName": "RPT_Finance_Dashboard",

@@ -67,8 +67,8 @@ Files/Config/draft/semantic-model-SM_Finance/fewshots.json
 ```json
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/dataAgent/definition/dataSource/1.0.0/schema.json",
-  "artifactId": "236080b8-3bea-4c14-86df-d1f9a14ac7a8",
-  "workspaceId": "133c6c70-2e26-4d97-aac1-8ed423dbbf34",
+  "artifactId": "<YOUR_MODEL_ID>",
+  "workspaceId": "<YOUR_WORKSPACE_ID>",
   "displayName": "SM_Finance",
   "type": "semantic_model",
   "userDescription": "Finance semantic model — 11 tables, 26 DAX measures covering P&L, budgets, cash flow",
@@ -163,7 +163,7 @@ This ensures the agent sees ALL tables and measures. Without elements, the agent
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/dataAgent/definition/dataSource/1.0.0/schema.json",
   "artifactId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  "workspaceId": "133c6c70-2e26-4d97-aac1-8ed423dbbf34",
+  "workspaceId": "<YOUR_WORKSPACE_ID>",
   "displayName": "LH_Finance",
   "type": "lakehouse-tables",
   "userDescription": "Finance lakehouse with Delta tables for GL, invoices, budgets",
@@ -200,7 +200,7 @@ This ensures the agent sees ALL tables and measures. Without elements, the agent
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/dataAgent/definition/dataSource/1.0.0/schema.json",
   "artifactId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  "workspaceId": "133c6c70-2e26-4d97-aac1-8ed423dbbf34",
+  "workspaceId": "<YOUR_WORKSPACE_ID>",
   "displayName": "WH_Finance",
   "type": "data_warehouse",
   "userDescription": "Finance data warehouse — star schema with fact and dimension tables",
@@ -269,5 +269,5 @@ resp = requests.get(
 
 Or from `resource_ids.md`:
 ```
-SM_Finance: 236080b8-3bea-4c14-86df-d1f9a14ac7a8
+SM_Finance: <YOUR_MODEL_ID>
 ```

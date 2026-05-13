@@ -2,25 +2,33 @@
 
 ## Role
 
-This repository is the shared knowledge base for all Fabric demo projects.
-It contains agent definitions, testing infrastructure, and documentation.
+This repository is a knowledge base for building Microsoft Fabric solutions with GitHub Copilot.
+It contains 25 agent definitions, knowledge files, and deployment templates.
 
-## Mandatory Testing
+## How to Use
 
-When modifying any agent instructions, visual_validator.py, or shared patterns:
-run the tests in ALL downstream projects to verify nothing breaks:
+1. Read `resource_ids.md` for your workspace and item IDs
+2. Read the relevant `agents/*/instructions.md` for your task
+3. Follow the agent's rules — they exist because of real failures
+
+## Key Rules
+
+- **Always use Legacy PBIX format** for reports (`report.json` with `sections[].visualContainers[]`). Never PBIR.
+- **Read `resource_ids.md`** before any deployment — it has all your workspace/item IDs
+- **Read `known_issues.md`** before debugging — most errors are already documented
+- **Follow `agent_principles.md`** — config-driven, idempotent, async-first
+
+## Setup for New Users
+
+If `resource_ids.md` doesn't exist:
+1. Copy `resource_ids.example.md` → `resource_ids.md`
+2. Copy `environment.example.md` → `environment.md`
+3. Fill in your Azure subscription, Fabric workspace, and item IDs
+4. See `GETTING_STARTED.md` for the full setup guide
+
+## Testing
+
+When modifying agent instructions or shared patterns:
 ```bash
-python run_all_tests.py
+python -m pytest tests/ -v --tb=short
 ```
-
-## Shared Test Infrastructure
-
-- `agents/testing-agent/instructions.md` — Test patterns and taxonomy
-- `agents/testing-agent/visual_validator.py` — Reusable report visual validator
-- `run_all_tests.py` — Cross-project test runner
-
-## Downstream Projects
-
-- `Financial_Platform/` — 125 tests (smoke + dryrun + model + report visuals)
-- `Fabric RTI Demo/` — 30 tests (smoke + report visuals)
-- `The_AI_Skill_Analyzer/` — 81 tests (grading + generation)

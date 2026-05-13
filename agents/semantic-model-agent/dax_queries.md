@@ -267,7 +267,7 @@ Currently, Fabric REST API does not have a direct "execute DAX query" endpoint
 for semantic models like XMLA does. Options:
 
 ### Option 1: DAX Studio (Desktop)
-Connect to: `powerbi://api.powerbi.com/v1.0/myorg/CDR - Demo Finance Fabric`  
+Connect to: `powerbi://api.powerbi.com/v1.0/myorg/<YOUR_WORKSPACE_NAME>`  
 Database: `SM_Finance`
 
 ### Option 2: XMLA Endpoint (Programmatic)

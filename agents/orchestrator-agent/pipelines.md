@@ -19,7 +19,7 @@ and execute them sequentially or in parallel.
 import requests, json, base64, time
 
 API = "https://api.fabric.microsoft.com/v1"
-WS_ID = "133c6c70-2e26-4d97-aac1-8ed423dbbf34"
+WS_ID = "<YOUR_WORKSPACE_ID>"  # from resource_ids.md
 headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 ```
 

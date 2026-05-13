@@ -11,10 +11,11 @@ Customize the CONFIG section for your use case.
 import requests, json, base64, time, os, subprocess, sys
 
 # ── CONFIG ─────────────────────────────────────────────────────
-WS_ID      = "133c6c70-2e26-4d97-aac1-8ed423dbbf34"
-LH_ID      = "f2c42d3b-d402-43e7-b8fb-a9aa395c14e1"
-NB_ID      = "86729c39-33a4-454a-8170-0ac363ee809c"
-PL_ID      = "7fdd5622-9313-4a5f-a769-dccef65a5015"  # Existing pipeline, or None to create
+# Fill these from resource_ids.md
+WS_ID      = "<YOUR_WORKSPACE_ID>"
+LH_ID      = "<YOUR_LAKEHOUSE_ID>"
+NB_ID      = "<YOUR_NOTEBOOK_ID>"
+PL_ID      = None  # Existing pipeline ID, or None to create
 API        = "https://api.fabric.microsoft.com/v1"
 ONELAKE    = f"https://onelake.dfs.fabric.microsoft.com/{WS_ID}/{LH_ID}/Files"
 LOCAL_DATA = "data/raw"  # Local folder with CSV subfolders

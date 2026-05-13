@@ -14,9 +14,10 @@ Actions:
 import base64, json, requests, time, subprocess, sys
 
 # ── CONFIG ─────────────────────────────────────────────────────
-WS_ID    = "133c6c70-2e26-4d97-aac1-8ed423dbbf34"
+# Fill these from resource_ids.md
+WS_ID    = "<YOUR_WORKSPACE_ID>"
 MODEL_ID = None  # Set to existing model ID to update, or None to create
-MODEL_NAME = "SM_Finance"
+MODEL_NAME = "<YOUR_MODEL_NAME>"
 API      = "https://api.fabric.microsoft.com/v1"
 
 # Load model.bim from file or define inline

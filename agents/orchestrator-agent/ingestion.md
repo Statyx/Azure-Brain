@@ -34,8 +34,8 @@ OneLake uses ADLS Gen2 protocol. Files must be uploaded in exactly 3 steps.
 import requests
 
 STORAGE_TOKEN = "..."  # from az account get-access-token --resource https://storage.azure.com
-WS_ID = "133c6c70-2e26-4d97-aac1-8ed423dbbf34"
-LH_ID = "f2c42d3b-d402-43e7-b8fb-a9aa395c14e1"
+WS_ID = "<YOUR_WORKSPACE_ID>"  # from resource_ids.md
+LH_ID = "<YOUR_LAKEHOUSE_ID>"  # from resource_ids.md
 BASE = f"https://onelake.dfs.fabric.microsoft.com/{WS_ID}/{LH_ID}/Files"
 
 headers = {"Authorization": f"Bearer {STORAGE_TOKEN}"}
@@ -68,8 +68,8 @@ def upload_file(local_path: str, remote_path: str):
 #### PowerShell
 ```powershell
 $storageToken = az account get-access-token --resource "https://storage.azure.com" --query accessToken -o tsv
-$wsId = "133c6c70-2e26-4d97-aac1-8ed423dbbf34"
-$lhId = "f2c42d3b-d402-43e7-b8fb-a9aa395c14e1"
+$wsId = "<YOUR_WORKSPACE_ID>"  # from resource_ids.md
+$lhId = "<YOUR_LAKEHOUSE_ID>"  # from resource_ids.md
 $base = "https://onelake.dfs.fabric.microsoft.com/$wsId/$lhId/Files"
 
 function Upload-ToOneLake {

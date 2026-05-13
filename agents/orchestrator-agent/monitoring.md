@@ -107,9 +107,9 @@ NotStarted → InProgress → Succeeded
 
 **Resume capacity:**
 ```powershell
-$sub = "9b51a6b4-ec1a-4101-a3af-266c89e87a52"
-$rg = "rg-fabric-demo"
-$cap = "cdrfabricdemo"
+$sub = "<YOUR_SUBSCRIPTION_ID>"  # from resource_ids.md
+$rg = "<YOUR_RESOURCE_GROUP>"  # from resource_ids.md
+$cap = "<YOUR_CAPACITY_NAME>"  # from resource_ids.md
 az rest --method POST --url "https://management.azure.com/subscriptions/$sub/resourceGroups/$rg/providers/Microsoft.Fabric/capacities/$cap/resume?api-version=2023-11-01"
 ```
 

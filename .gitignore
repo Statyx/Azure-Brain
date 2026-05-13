@@ -2,4 +2,11 @@
 *.pyc
 .venv/
 *.pptx
+.pytest_cache/
+*.bak
+_sdk_out.txt
+
+# Personal config (copy .example files to get started)
+resource_ids.md
+environment.md
 

@@ -13,13 +13,18 @@
 
 ## ⚡ Quick Start
 
-Auto-loaded via `.github/copilot-instructions.md` — no manual setup.
+**New here?** → [GETTING_STARTED.md](GETTING_STARTED.md) (15 min setup)
 
-```yaml
-# In your project's .github/copilot-instructions.md:
-# 1. Read ../Github_Brain/README.md
-# 2. Read the relevant agent instructions.md for your task
-# 3. Start working
+```bash
+# 1. Clone and configure
+cp resource_ids.example.md resource_ids.md    # Fill with your Fabric IDs
+cp environment.example.md environment.md      # Fill with your env paths
+
+# 2. Open in VS Code with Copilot
+# Agents auto-load via .github/copilot-instructions.md
+
+# 3. Pick a template and start building
+# See TEMPLATES.md for step-by-step checklists
 ```
 
 > **Key Rule** — The Fabric REST API accepts two report formats. Only one renders visuals.
@@ -187,10 +192,13 @@ graph LR
 
 | Doc | What's inside |
 | --- | --- |
+| [GETTING_STARTED.md](GETTING_STARTED.md) | **Start here** — 15 min setup guide for new users |
 | [TEMPLATES.md](TEMPLATES.md) | 5 project templates — pick one and follow the checklist |
 | [WORKFLOWS.md](WORKFLOWS.md) | Cross-agent sequencing — phases, gates, handoffs |
 | [ERROR_RECOVERY.md](ERROR_RECOVERY.md) | HTTP error decision trees + retry code examples |
 | [shared_constraints.md](shared_constraints.md) | 8 hard rules every agent follows |
+| [resource_ids.example.md](resource_ids.example.md) | Template for your workspace/item IDs |
+| [environment.example.md](environment.example.md) | Template for your environment setup |
 
 ---
 

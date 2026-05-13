@@ -105,8 +105,8 @@ Binds a Fabric item (semantic model, lakehouse, warehouse, etc.) to the agent.
 ```json
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/dataAgent/definition/dataSource/1.0.0/schema.json",
-  "artifactId": "236080b8-3bea-4c14-86df-d1f9a14ac7a8",
-  "workspaceId": "133c6c70-2e26-4d97-aac1-8ed423dbbf34",
+  "artifactId": "<YOUR_MODEL_ID>",
+  "workspaceId": "<YOUR_WORKSPACE_ID>",
   "displayName": "SM_Finance",
   "type": "semantic_model",
   "userDescription": "Finance semantic model with 11 tables covering GL, budgets, invoices, products, customers",
