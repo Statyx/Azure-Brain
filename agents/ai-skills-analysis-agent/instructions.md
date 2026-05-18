@@ -54,7 +54,15 @@ When analyzing a diagnostic JSON file, follow this exact sequence:
    → thread.runs[] — model used, status, tools available
    → thread.run_steps[] — tool call chain with function names, arguments, outputs
 
-5. PRODUCE the report (see Rule 5 for format)
+5. MEASURE latency (load latency_analysis.md if depth needed)
+   → latency.tool_calls[] — true per-tool durations (prefer over wall-clock)
+   → Build {step_id: duration_seconds} map; attach to steps
+   → orchestrator_overhead_s = run_total - sum(tool durations)
+   → Flag: tool ≥10s, turn ≥30s, orchestrator ≥30%, retry loops (3+ identical),
+           schema re-discovery (getschema/EVALUATE TOPN ≥2×), thread ≥50 msgs
+   → Detect cached responses (no run_id OR no tool_calls + total <3s)
+
+6. PRODUCE the report (see Rule 5 for format)
 ```
 
 ### Rule 3 — Evaluation Workflow

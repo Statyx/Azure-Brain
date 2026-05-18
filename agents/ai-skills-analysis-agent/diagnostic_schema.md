@@ -19,6 +19,7 @@ of the agent's configuration, schema, conversation thread, and execution trace.
   "config": { ... },
   "datasources": { ... },
   "files": { ... },
+  "latency": { ... },
   "thread": { ... }
 }
 ```
@@ -33,6 +34,7 @@ of the agent's configuration, schema, conversation thread, and execution trace.
 | `config` | object | Agent configuration (instructions, data sources, schema version) |
 | `datasources` | object | Full schema of all bound data sources |
 | `files` | object | Attached files (usually empty for Data Agents) |
+| `latency` | object | True per-tool-call durations (see Latency section below). **Always prefer this over wall-clock** from `run_steps`. |
 | `thread` | object | OpenAI-compatible conversation thread with messages, runs, and run_steps |
 
 ---
@@ -355,4 +357,36 @@ Detailed execution trace for each run. This is the most valuable section for deb
 □ Runs: check status, model, latency (completed_at - started_at)
 □ Steps: walk tool_calls, extract generated code and results
 □ Diagnostic details: parse nl2sa_request/response for deep trace
+□ Latency: join latency.tool_calls[].step_id → true per-tool execution time
+□ Orchestrator overhead: run_total_s - sum(latency.tool_calls.duration_seconds)
 ```
+
+---
+
+## Section: `latency` (top-level)
+
+True, runtime-measured durations for each tool call. **More accurate than wall-clock** because
+it excludes scheduling/queue time. Some exports nest this section under `thread.latency`.
+
+```json
+{
+  "latency": {
+    "tool_calls": [
+      { "step_id": "step_fab_abc...", "duration_seconds": 12.47 },
+      { "step_id": "step_fab_def...", "duration_seconds": 0.32 }
+    ]
+  }
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `tool_calls[].step_id` | Foreign key to `thread.run_steps[].id` |
+| `tool_calls[].duration_seconds` | True execution time of that tool call (float, seconds) |
+
+**Usage pattern**: build `{step_id: duration_seconds}` map, attach to parsed steps. Use this
+for any latency analysis; fall back to `completed_at - created_at` only when missing.
+Derive **orchestrator overhead** as `run_total_s - sum(tool_call_durations)` — this is time
+spent in queue / LLM planning / serialization, not in actual data tools.
+
+Full treatment in [`latency_analysis.md`](./latency_analysis.md).

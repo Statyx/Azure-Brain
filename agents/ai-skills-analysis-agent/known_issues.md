@@ -4,6 +4,20 @@
 
 ## Diagnostic JSON Issues
 
+### DI-000: Description fields are truncated past **200 chars**
+
+**Symptom**: Long table / column / measure descriptions appear cut off in the agent's
+context window even though the source description is much longer.
+
+**Cause**: Fabric Data Agent silently truncates description fields beyond ~200 characters
+when feeding the schema to the orchestrator and to the DAX/SQL/KQL generation tools.
+
+**Fix**: Keep descriptions ≤ 200 chars. Move long-form business context to:
+- `additionalInstructions` (Data Agent system prompt)
+- Verified Answers (Prep for AI) for example-based guidance
+
+---
+
 ### DI-001: `csdl_relationships` is a JSON string inside JSON
 
 **Symptom**: Trying to access relationships directly returns a raw string, not an array.

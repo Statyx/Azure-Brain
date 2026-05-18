@@ -36,6 +36,7 @@
 |------|---------|
 | `instructions.md` | **LOAD FIRST** — System prompt, mandatory rules, decision trees, output format |
 | `diagnostic_schema.md` | Complete reference for the diagnostic JSON structure (schema v2.1.0) |
+| `latency_analysis.md` | **Latency & performance** — `latency.tool_calls[]` true durations, orchestrator overhead, cached response detection, thresholds, recommendations |
 | `semantic_model_best_practices.md` | **KEY FILE** — Prep for AI vs Data Agent instructions, AI Data Schema, Verified Answers, implementation workflow |
 | `dax_quality_analysis.md` | **NEW** — 24 BPA rules across 6 categories, quality stars (0-3), scoring framework |
 | `root_cause_analysis.md` | **UPDATED** — 9 RCA categories, schema cross-referencing, 7 action types (incl. PREP_FOR_AI), 8 match types, 3-layer instruction model |
@@ -49,9 +50,10 @@
 2. User provides a diagnostic JSON file → load `diagnostic_schema.md` for field reference
 3. For DAX quality assessment → load `dax_quality_analysis.md`
 4. For failure investigation → load `root_cause_analysis.md`
-5. For programmatic evaluation → load `evaluation_sdk.md`
-6. For Python client consumption → load `python_client_sdk.md`
-7. Reference `known_issues.md` when encountering unexpected patterns
+5. For latency / performance issues → load `latency_analysis.md`
+6. For programmatic evaluation → load `evaluation_sdk.md`
+7. For Python client consumption → load `python_client_sdk.md`
+8. Reference `known_issues.md` when encountering unexpected patterns
 
 ## Key Insights
 
