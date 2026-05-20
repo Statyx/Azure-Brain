@@ -102,7 +102,7 @@ Fabric REST APIs have rate limits. Monitor and respect them:
 | OneLake DFS | ~1000 req/min | Retry on 503 |
 
 ### Rule 6: Token Acquisition — Never Use `az rest` from Python
-> **Critical lesson** from `Github_Brain/known_issues.md`: `az rest` from Python subprocess **hangs indefinitely**. Always use `az account get-access-token` instead.
+> **Critical lesson** from `Azure-Brain/known_issues.md`: `az rest` from Python subprocess **hangs indefinitely**. Always use `az account get-access-token` instead.
 
 **Three token scopes in Fabric**:
 

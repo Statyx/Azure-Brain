@@ -70,19 +70,28 @@ Copilot reads the relevant agent instructions and guides you.
 ## How the Repo Works
 
 ```
-Github_Brain/
-├── agents/                 25 AI agents (one per Fabric capability)
-│   ├── _catalog.yaml       Master index with descriptions
-│   └── {agent-name}/
-│       ├── instructions.md Agent system prompt (read by Copilot)
-│       └── *.md            Domain knowledge files
+Azure-Brain/                       Umbrella repo
+├── Fabric-Brain/                  20 Fabric-specific agents + 14 knowledge files
+│   ├── agents/
+│   │   ├── _catalog.yaml
+│   │   └── {agent-name}/
+│   │       ├── instructions.md   Agent system prompt (read by Copilot)
+│   │       └── *.md              Domain knowledge files
+│   ├── resource_ids.md            YOUR workspace/item IDs (gitignored, private)
+│   ├── environment.md             YOUR environment setup (gitignored, private)
+│   └── *.md                       Fabric API, OneLake, report_format, semantic_model, etc.
 │
-├── *.md                    20 knowledge files (API patterns, known issues, etc.)
-├── resource_ids.md         YOUR workspace/item IDs (gitignored, private)
-├── environment.md          YOUR environment setup (gitignored, private)
-├── TEMPLATES.md            5 project templates with checklists
-├── WORKFLOWS.md            Cross-agent orchestration sequences
-└── ERROR_RECOVERY.md       HTTP error decision trees
+├── Meta-Brain/                    5 cross-cutting agents + shared infrastructure
+│   ├── agents/                    testing, pptx-builder, architecture-design, etc.
+│   ├── tests/                     Cross-brain validation (171 tests)
+│   ├── TEMPLATES.md               5 project templates with checklists
+│   ├── WORKFLOWS.md               Cross-agent orchestration sequences
+│   └── mcp_registry.md            MCP server registry
+│
+├── agent_principles.md            Operating principles (umbrella)
+├── known_issues.md                Cross-cutting gotchas
+├── shared_constraints.md          8 hard rules every agent follows
+└── ERROR_RECOVERY.md              HTTP error decision trees
 ```
 
 **Key insight**: The agents don't execute code themselves. They are **instruction files** that GitHub Copilot reads to understand how to help you build Fabric solutions. The knowledge files capture patterns, gotchas, and workarounds from real deployments.

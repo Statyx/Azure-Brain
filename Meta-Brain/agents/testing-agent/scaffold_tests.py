@@ -112,7 +112,25 @@ def scaffold(project_path: Path):
                 from pathlib import Path
 
                 SRC = Path(__file__).resolve().parent.parent / "src"
-                BRAIN = Path(__file__).resolve().parent.parent.parent / "Github_Brain"
+
+                # Locate Meta-Brain (testing-agent + visual_validator.py)
+                # Search multiple candidates so the test works from any project location.
+                _PROJECT_ROOT = Path(__file__).resolve().parent.parent
+                _META_CANDIDATES = [
+                    _PROJECT_ROOT.parent / "Github_Brain",  # legacy sibling
+                    _PROJECT_ROOT.parent.parent / "-- 001 - Azure-Brain" / "Azure-Brain" / "Meta-Brain",
+                    _PROJECT_ROOT.parent.parent.parent / "-- 001 - Azure-Brain" / "Azure-Brain" / "Meta-Brain",
+                ]
+                BRAIN = next(
+                    (c for c in _META_CANDIDATES if (c / "agents" / "testing-agent" / "visual_validator.py").exists()),
+                    None,
+                )
+                if BRAIN is None:
+                    raise RuntimeError(
+                        "Cannot locate visual_validator.py. Searched: "
+                        + ", ".join(str(c) for c in _META_CANDIDATES)
+                    )
+
                 sys.path.insert(0, str(SRC))
                 sys.path.insert(0, str(BRAIN / "agents" / "testing-agent"))
 

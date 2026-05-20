@@ -438,7 +438,7 @@ DAX006 VAR without RETURN, etc.
 
 ### Pattern F — Report Visual Feedback Loop (MANDATORY)
 **This is the #1 source of bugs** — blank visuals, overlaps, out-of-bounds.
-Use `visual_validator.py` (in `Github_Brain/agents/testing-agent/`) to validate
+Use `visual_validator.py` (in `Azure-Brain/Meta-Brain/agents/testing-agent/`) to validate
 `build_report()` output BEFORE deployment.
 
 The validator catches these recurring pitfalls:
@@ -515,7 +515,7 @@ If tests fail → commit is blocked.
 
 To install in a new project:
 ```bash
-python Github_Brain/agents/testing-agent/install_precommit.py <project_path>
+python Azure-Brain/Meta-Brain/agents/testing-agent/install_precommit.py <project_path>
 ```
 
 ### Level 3: GitHub Actions CI (`.github/workflows/tests.yml`)
@@ -523,7 +523,7 @@ Every repo has a CI workflow that runs on push/PR to main/master.
 Includes `pytest-cov` for coverage reporting.
 Failed tests → PR blocked (if branch protection enabled).
 
-### Level 4: Cross-Project Runner (`Github_Brain/run_all_tests.py`)
+### Level 4: Cross-Project Runner (`Azure-Brain/Meta-Brain/run_all_tests.py`)
 Runs all tests across all downstream projects in one command.
 ```bash
 python run_all_tests.py          # all tests
@@ -534,7 +534,7 @@ python run_all_tests.py --cov    # with coverage
 ### Scaffolding New Projects
 For any new Fabric demo project:
 ```bash
-python Github_Brain/agents/testing-agent/scaffold_tests.py <project_path>
+python Azure-Brain/Meta-Brain/agents/testing-agent/scaffold_tests.py <project_path>
 ```
 Generates: `pytest.ini`, `conftest.py`, `test_smoke.py`,
 and `test_report_visuals.py` (if `deploy_report.py` exists).
