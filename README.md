@@ -1,13 +1,35 @@
-# Github Brain
+# Azure-Brain
 
-**25 AI agents + 20 knowledge files for building Microsoft Fabric solutions — zero re-learning, zero repeated mistakes.**
+**A modular knowledge base for building cloud data & AI solutions with GitHub Copilot — organized into specialized "brains" per technology, plus cross-cutting meta-tooling.**
 
-![Agents](https://img.shields.io/badge/agents-25-blue?style=for-the-badge&logo=github)
-![Domains](https://img.shields.io/badge/domains-8-orange?style=for-the-badge)
-![Knowledge](https://img.shields.io/badge/knowledge_files-20-green?style=for-the-badge)
-![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
+![Brains](https://img.shields.io/badge/brains-2-blue?style=for-the-badge)
+![Agents](https://img.shields.io/badge/agents-25-orange?style=for-the-badge)
+![Knowledge](https://img.shields.io/badge/knowledge_files-20+-green?style=for-the-badge)
 
-[Quick Start](#-quick-start) · [Pick Your Scenario](#-pick-your-scenario) · [Agents](#-agents-25--7-domains) · [Knowledge Files](#-knowledge-files) · [Architecture](#️-architecture) · [Docs](#-documentation)
+---
+
+## Vision
+
+Azure-Brain is a **multi-brain knowledge architecture**. Each brain is a self-contained body of agents + docs for one technology domain. Cross-cutting agents (testing, presentation, orchestration) live in `Meta-Brain` so they can be reused as we add brains over time.
+
+```
+Azure-Brain/                  ← umbrella (this repo)
+├── Fabric-Brain/             ← Microsoft Fabric (20 agents, 8 domains)
+├── Meta-Brain/               ← cross-cutting (5 agents — testing, PPTX, etc.)
+└── (future brains)           ← Synapse-Brain, Databricks-Brain, Foundry-Brain, ...
+```
+
+---
+
+## 🧠 Brains
+
+| Brain | Scope | Agents | Status |
+| --- | --- | --- | --- |
+| [**Fabric-Brain**](Fabric-Brain/README.md) | Microsoft Fabric — Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology | 20 | ✅ Active |
+| [**Meta-Brain**](Meta-Brain/README.md) | Cross-cutting — testing, PowerPoint, HTML diagrams, README authoring, project orchestration | 5 | ✅ Active |
+| _Synapse-Brain_ | Azure Synapse legacy | — | 📋 Planned |
+| _Databricks-Brain_ | Databricks on Azure | — | 📋 Planned |
+| _Foundry-Brain_ | Microsoft AI Foundry (multi-agent orchestration) | — | 📋 Planned |
 
 ---
 
@@ -16,194 +38,57 @@
 **New here?** → [GETTING_STARTED.md](GETTING_STARTED.md) (15 min setup)
 
 ```bash
-# 1. Clone and configure
-cp resource_ids.example.md resource_ids.md    # Fill with your Fabric IDs
-cp environment.example.md environment.md      # Fill with your env paths
+# 1. Clone Azure-Brain
+git clone https://github.com/Statyx/Azure-Brain.git
+cd Azure-Brain
 
-# 2. Open in VS Code with Copilot
-# Agents auto-load via .github/copilot-instructions.md
+# 2. Configure your local credentials (per-brain)
+cp Fabric-Brain/resource_ids.example.md Fabric-Brain/resource_ids.md
+cp Fabric-Brain/environment.example.md  Fabric-Brain/environment.md
 
-# 3. Pick a template and start building
-# See TEMPLATES.md for step-by-step checklists
-```
-
-> **Key Rule** — The Fabric REST API accepts two report formats. Only one renders visuals.
-> Always use the **Legacy PBIX format** (`report.json` with `sections[].visualContainers[]`). Never PBIR.
-
----
-
-## 🎯 Pick Your Scenario
-
-| I want to... | Template | Time | Start here |
-| --- | --- | --- | --- |
-| **Build a BI dashboard** (Lakehouse → Model → Report) | Standard BI Demo | 2–3h | [TEMPLATES.md](TEMPLATES.md#template-1) |
-| **Set up real-time analytics** (EventStream → Eventhouse → KQL) | Real-Time IoT | 3–4h | [TEMPLATES.md](TEMPLATES.md#template-2) |
-| **Build a full Smart Factory demo** (Batch + RT + Ontology + AI) | Smart Factory | 4–6h | [TEMPLATES.md](TEMPLATES.md#template-3) |
-| **Add AI Q&A to existing data** (Data Agent + Instructions) | Data Agent Add-On | 45min | [TEMPLATES.md](TEMPLATES.md#template-4) |
-| **Migrate from SAP BusinessObjects** (Assessment → Migration Waves) | BO Migration | 4–6w | [migration-bo-agent](agents/migration-bo-agent/README.md) |
-
----
-
-## 🤖 Agents (25) — 7 Domains
-
-> Full catalog with boundary clarifications: [`agents/_catalog.yaml`](agents/_catalog.yaml)
-
-### 🔧 Platform & Operations (6)
-
-| Agent | What it does |
-| --- | --- |
-| [workspace-admin](agents/workspace-admin-agent/) | Workspace CRUD, capacity, RBAC, Git integration |
-| [cicd-fabric](agents/cicd-fabric-agent/) | Git integration, deployment pipelines, variable libraries, branching, environment promotion |
-| [fabric-cli](agents/fabric-cli-agent/) | `fab` CLI, item management, CI/CD deploy |
-| [monitoring](agents/monitoring-agent/) | Admin APIs, audit events, KQL dashboards |
-| [taskflow](agents/taskflow-agent/) | Task Flow design, templates, JSON import/export |
-| [extensibility-toolkit](agents/extensibility-toolkit-agent/) | Custom workloads, iFrame SDK, Workload Hub |
-
-### 🗄️ Data Engineering (5)
-
-| Agent | What it does |
-| --- | --- |
-| [orchestrator](agents/orchestrator-agent/) | Pipelines, ingestion, notebooks, copy jobs |
-| [lakehouse](agents/lakehouse-agent/) | OneLake DFS, Delta tables, Spark, medallion architecture |
-| [dataflow](agents/dataflow-agent/) | Dataflow Gen2, Power Query M, ETL |
-| [warehouse](agents/warehouse-agent/) | Fabric Warehouse, T-SQL, CTAS, COPY INTO |
-| [domain-modeler](agents/domain-modeler-agent/) | Star schema design, industry templates, synthetic data gen |
-
-### 📊 Visualization (2)
-
-| Agent | What it does |
-| --- | --- |
-| [semantic-model](agents/semantic-model-agent/) | DAX measures, relationships, model.bim, Direct Lake |
-| [report-builder](agents/report-builder-agent/) | Power BI reports, visuals, themes (Legacy PBIX only) |
-
-### 🤖 Fabric Agent (2)
-
-| Agent | What it does |
-| --- | --- |
-| [ai-skills](agents/ai-skills-agent/) | Fabric Data Agents — creation, instructions, few-shot examples |
-| [ai-skills-analysis](agents/ai-skills-analysis-agent/) | Data Agent evaluation, DAX quality scoring, RCA |
-
-### ⚡ Real-Time Intelligence (2)
-
-| Agent | What it does |
-| --- | --- |
-| [rti-kusto](agents/rti-kusto-agent/) | Eventhouse, KQL database, dashboards |
-| [rti-eventstream](agents/rti-eventstream-agent/) | EventStreams, EventHub SDK, CDC patterns |
-
-### 🧠 IQ — Intelligence (1)
-
-| Agent | What it does |
-| --- | --- |
-| [ontology](agents/ontology-agent/) | Entity types, graph model, GQL queries, contextualizations |
-
-### ✅ Quality (2)
-
-| Agent | What it does |
-| --- | --- |
-| [testing](agents/testing-agent/) | 3-tier test taxonomy, visual validator, pytest scaffolding |
-| [pixel-design](agents/pixel-design-agent/) | Pre-deployment report validation — layout, overlaps, fonts |
-
-### 🏗️ Meta (5)
-
-| Agent | What it does |
-| --- | --- |
-| [project-orchestrator](agents/project-orchestrator-agent/) | End-to-end project builder — 12-step config-driven pipeline coordinating all agents |
-| [architecture-design](agents/architecture-design-agent/) | HTML architecture diagrams with base64 FabricToolset SVG icons |
-| [pptx-builder](agents/pptx-builder-agent/) | PowerPoint architecture diagrams — 5-phase pipeline |
-| [project-presentation](agents/project-presentation-agent/) | README best practices, repo structure, badges, visuals, community files |
-| [migration-bo](agents/migration-bo-agent/) | BusinessObjects migration to Fabric |
-
-> Every agent has `instructions.md` (system prompt) + domain-specific files. The agent README lists the reading order.
-
----
-
-## 📚 Knowledge Files
-
-<details>
-<summary><strong>Core — Read these first</strong></summary>
-
-| File | Purpose |
-| --- | --- |
-| [`agent_principles.md`](agent_principles.md) | **Mandatory** — Operating principles, task management, quality standards |
-| [`shared_constraints.md`](shared_constraints.md) | 8 hard rules all agents follow (config-driven, idempotent, async-first) |
-| [`fabric_api.md`](fabric_api.md) | REST API patterns, auth, async operations, LRO polling |
-| [`known_issues.md`](known_issues.md) | Gotchas & workarounds — what works vs what doesn't. See also [ERROR_RECOVERY.md](ERROR_RECOVERY.md) |
-| [`environment.md`](environment.md) | Python, Azure CLI, PowerShell setup |
-| [`resource_ids.md`](resource_ids.md) | GUIDs, endpoints, connection strings |
-
-</details>
-
-<details>
-<summary><strong>Reference — Domain-specific patterns</strong></summary>
-
-| File | Purpose |
-| --- | --- |
-| [`report_format.md`](report_format.md) | **Critical** — Legacy PBIX format spec (the only format that renders) |
-| [`visual_builders.md`](visual_builders.md) | Visual config, expression language, vcObjects |
-| [`semantic_model.md`](semantic_model.md) | model.bim deployment, Direct Lake, TMDL |
-| [`onelake.md`](onelake.md) | DFS API 3-step upload protocol |
-| [`mcp_powerbi.md`](mcp_powerbi.md) | MCP Power BI — 21 tools for semantic model CRUD, DAX, Prep for AI |
-| [`mcp_registry.md`](mcp_registry.md) | **MCP Server Registry** — central catalog of all 7 MCP servers (Azure, Fabric, Power BI, Kusto, Engine, GitKraken, Pylance) |
-| [`item_definitions.md`](item_definitions.md) | Definition envelope spec for all 20+ Fabric item types |
-| [`warehouse_patterns.md`](warehouse_patterns.md) | SQL DW authoring — CTAS, COPY INTO, transactions, time travel |
-| [`spark_patterns.md`](spark_patterns.md) | Spark/Lakehouse authoring — enableSchemas, notebooks, pools |
-| [`mirrored_databases.md`](mirrored_databases.md) | Mirrored DB patterns — CDC sync, Lakehouse vs Mirror decision |
-
-</details>
-
-<details>
-<summary><strong>Operations — Workflows, templates, error recovery</strong></summary>
-
-| File | Purpose |
-| --- | --- |
-| [`WORKFLOWS.md`](WORKFLOWS.md) | 5 end-to-end cross-agent workflows with phases & gates |
-| [`TEMPLATES.md`](TEMPLATES.md) | 5 project templates with checklists and time budgets |
-| [`ERROR_RECOVERY.md`](ERROR_RECOVERY.md) | Decision trees by HTTP status, retry patterns. See also [known_issues.md](known_issues.md) |
-
-</details>
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-graph LR
-    subgraph Brain["Knowledge Base (20 files)"]
-        direction TB
-        Core["Core\nagent_principles · fabric_api\nknown_issues · shared_constraints"]
-        Ref["Reference\nreport_format · semantic_model\nonelake · warehouse_patterns"]
-        Ops["Operations\nWORKFLOWS · TEMPLATES\nERROR_RECOVERY"]
-    end
-
-    Brain --> META["🏗️ Meta (5)\nproject-orchestrator\narchitecture-design\npptx-builder\nproject-presentation\nmigration-bo"]
-
-    META --> PL["🔧 Platform (6)\nworkspace-admin · fabric-cli\ncicd-fabric · monitoring\ntaskflow · extensibility"]
-    META --> DE["🗄️ Data Engineering (5)\norchestrator · lakehouse\nwarehouse · dataflow\ndomain-modeler"]
-    META --> VIZ["📊 Visualization (2)\nsemantic-model\nreport-builder"]
-    META --> FA["🤖 Fabric Agent (2)\nai-skills · ai-skills-analysis"]
-    META --> RT["⚡ Real-Time (2)\nrti-eventstream · rti-kusto"]
-    META --> IQ["🧠 IQ (1)\nontology"]
-    META --> QA["✅ Quality (2)\ntesting · pixel-design"]
+# 3. Open in VS Code with Copilot — .github/copilot-instructions.md auto-loads
+# Agents and knowledge files are discovered automatically.
 ```
 
 ---
 
-## 📖 Documentation
+## 📚 Umbrella Knowledge
 
-| Doc | What's inside |
+Cross-brain principles and references that apply to **every** brain:
+
+| File | Purpose |
 | --- | --- |
+| [agent_principles.md](agent_principles.md) | **Mandatory** — Operating principles, task management, quality standards every agent follows |
+| [shared_constraints.md](shared_constraints.md) | 8 hard rules across all brains (config-driven, idempotent, async-first) |
+| [known_issues.md](known_issues.md) | Cross-cutting gotchas & workarounds |
+| [ERROR_RECOVERY.md](ERROR_RECOVERY.md) | Decision trees by HTTP status, retry patterns |
 | [GETTING_STARTED.md](GETTING_STARTED.md) | **Start here** — 15 min setup guide for new users |
-| [TEMPLATES.md](TEMPLATES.md) | 5 project templates — pick one and follow the checklist |
-| [WORKFLOWS.md](WORKFLOWS.md) | Cross-agent sequencing — phases, gates, handoffs |
-| [ERROR_RECOVERY.md](ERROR_RECOVERY.md) | HTTP error decision trees + retry code examples |
-| [shared_constraints.md](shared_constraints.md) | 8 hard rules every agent follows |
-| [resource_ids.example.md](resource_ids.example.md) | Template for your workspace/item IDs |
-| [environment.example.md](environment.example.md) | Template for your environment setup |
+
+---
+
+## 🧪 Testing
+
+Cross-brain validation lives in Meta-Brain:
+
+```bash
+cd Meta-Brain
+python -m pytest tests/ -v --tb=short
+```
+
+Validates: catalogs match disk in both brains, every agent has `instructions.md`, internal markdown links resolve, Python compiles, JSON parses.
+
+---
+
+## 🤝 Adding a New Brain
+
+1. Create a new top-level folder (e.g. `Databricks-Brain/`)
+2. Add `Databricks-Brain/README.md`, `agents/`, `agents/_catalog.yaml`
+3. Update `Meta-Brain/tests/test_smoke.py` `BRAINS = [...]` to include the new brain
+4. Update this README's brain table
+5. Re-run umbrella tests to confirm nothing broke
 
 ---
 
 ## License
 
 MIT
-
-Built for Microsoft Fabric. Powered by 25 specialized agents across 8 domains and 20 knowledge files.

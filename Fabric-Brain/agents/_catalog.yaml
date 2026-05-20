@@ -1,6 +1,7 @@
-# Agent Catalog — Github Brain
-# 25 agents organized into 7 domains
-# Last updated: 2026-04-13
+# Agent Catalog — Fabric-Brain
+# 20 agents organized into 7 domains
+# Part of Azure-Brain umbrella (see ../../README.md)
+# Last updated: 2026-05-20
 
 domains:
 
@@ -64,25 +65,15 @@ domains:
       - name: ontology-agent
         purpose: Entity types, graph models, GQL queries, data bindings, contextualizations
 
-  07-quality:
-    description: Testing infrastructure, report validation, quality gates
+  07-fabric-quality:
+    description: Fabric-specific report validation
     agents:
-      - name: testing-agent
-        purpose: 3-tier test taxonomy (smoke/integration/regression), visual validator, pytest scaffolding
       - name: pixel-design-agent
         purpose: Pre-deployment report validation — layout bounds, overlaps, font sizing
 
-  08-meta:
-    description: Project orchestration, architecture diagrams, presentations, migration
+  08-migration:
+    description: BI platform migration to Fabric
     agents:
-      - name: project-orchestrator-agent
-        purpose: End-to-end 12-step project builder, industry configs, agent coordination
-      - name: architecture-design-agent
-        purpose: HTML architecture diagrams with base64 FabricToolset SVG icons (303 icons)
-      - name: pptx-builder-agent
-        purpose: PowerPoint diagram generator — 5-phase pipeline, helper functions, quality gates
-      - name: project-presentation-agent
-        purpose: GitHub repo best practices — README authoring, badges, repo structure
       - name: migration-bo-agent
         purpose: BusinessObjects → Fabric migration — 5-stage framework, 119 BO→DAX mappings
 
@@ -91,4 +82,4 @@ domains:
 # - cicd-fabric vs workspace-admin: admin creates pipelines (REST POST); cicd manages pipeline stages
 # - ontology vs rti-kusto: ontology owns entity types+GQL; rti-kusto owns KQL DB+dashboards
 # - orchestrator vs lakehouse: orchestrator owns scheduling+pipelines; lakehouse owns table ops+optimization
-# - testing vs pixel-design: testing owns pytest framework; pixel owns visual-specific layout rules
+# - pixel-design (Fabric-Brain) vs testing-agent (Meta-Brain): pixel owns visual-specific layout rules for Fabric reports; testing owns generic pytest framework

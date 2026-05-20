@@ -1,0 +1,32 @@
+# Agent Catalog — Meta-Brain
+# 5 cross-cutting agents (testing, presentation, orchestration, diagrams)
+# Part of Azure-Brain umbrella (see ../../README.md)
+# Last updated: 2026-05-20
+
+domains:
+
+  meta-quality:
+    description: Generic testing infrastructure usable across any Python project
+    agents:
+      - name: testing-agent
+        purpose: 3-tier test taxonomy (smoke/integration/regression), visual validator, pytest scaffolding
+
+  meta-presentation:
+    description: PowerPoint generation, architecture diagrams, repo READMEs
+    agents:
+      - name: pptx-builder-agent
+        purpose: PowerPoint diagram generator — 5-phase pipeline, helper functions, quality gates
+      - name: architecture-design-agent
+        purpose: HTML architecture diagrams with base64 SVG icons (303 icons — Fabric + Azure)
+      - name: project-presentation-agent
+        purpose: GitHub repo best practices — README authoring, badges, repo structure
+
+  meta-orchestration:
+    description: End-to-end project orchestration across multiple agents
+    agents:
+      - name: project-orchestrator-agent
+        purpose: End-to-end 12-step project builder, industry configs, agent coordination
+
+# Boundary clarifications:
+# - testing-agent (Meta-Brain) vs pixel-design-agent (Fabric-Brain): testing owns generic pytest framework; pixel owns Fabric-report-specific layout rules
+# - architecture-design-agent vs Fabric-Brain agents: architecture-design generates HTML diagrams (cross-domain); Fabric-Brain agents generate Fabric items

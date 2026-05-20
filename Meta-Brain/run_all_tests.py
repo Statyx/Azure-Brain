@@ -10,11 +10,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-BASE_DIR = SCRIPT_DIR.parent  # parent of Github_Brain
+SCRIPT_DIR = Path(__file__).resolve().parent          # .../Azure-Brain/Meta-Brain
+AZURE_BRAIN = SCRIPT_DIR.parent                        # .../Azure-Brain
+BASE_DIR = AZURE_BRAIN.parent                          # parent of Azure-Brain (sibling projects)
 
 PROJECTS = [
-    {"name": "Github_Brain",         "path": SCRIPT_DIR,                          "expected": 156},
+    {"name": "Azure-Brain (Meta)",    "path": SCRIPT_DIR,                          "expected": 156},
     {"name": "Financial_Platform",    "path": BASE_DIR / "Financial_Platform",    "expected": 125},
     {"name": "Fabric RTI Demo",       "path": BASE_DIR / "Fabric RTI Demo",       "expected": 30},
     {"name": "The_AI_Skill_Analyzer", "path": BASE_DIR / "The_AI_Skill_Analyzer", "expected": 81},
