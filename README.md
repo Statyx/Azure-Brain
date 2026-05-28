@@ -15,6 +15,7 @@ Azure-Brain is a **multi-brain knowledge architecture**. Each brain is a self-co
 ```
 Azure-Brain/                  ← umbrella (this repo)
 ├── Fabric-Brain/             ← Microsoft Fabric (20 agents, 8 domains)
+├── Database-Brain/           ← Azure databases (Azure SQL, PostgreSQL, Cosmos DB, migrations)
 ├── Meta-Brain/               ← cross-cutting (5 agents — testing, PPTX, etc.)
 └── (future brains)           ← Synapse-Brain, Databricks-Brain, Foundry-Brain, ...
 ```
@@ -27,6 +28,7 @@ Azure-Brain/                  ← umbrella (this repo)
 | --- | --- | --- | --- |
 | [**Fabric-Brain**](Fabric-Brain/README.md) | Microsoft Fabric — Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology | 20 | ✅ Active |
 | [**Meta-Brain**](Meta-Brain/README.md) | Cross-cutting — testing, PowerPoint, HTML diagrams, README authoring, project orchestration | 5 | ✅ Active |
+| [**Database-Brain**](Database-Brain/README.md) | Azure databases — Azure SQL, PostgreSQL, Cosmos DB, MySQL, cross-engine migration (Oracle → PG, SQL Server → Azure SQL, Mongo → Cosmos DB) | 4 active / 18 total (Oracle→PG track live, CLI + Copilot paths) | 🟢 Active |
 | _Synapse-Brain_ | Azure Synapse legacy | — | 📋 Planned |
 | _Databricks-Brain_ | Databricks on Azure | — | 📋 Planned |
 | _Foundry-Brain_ | Microsoft AI Foundry (multi-agent orchestration) | — | 📋 Planned |

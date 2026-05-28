@@ -10,3 +10,7 @@ _sdk_out.txt
 resource_ids.md
 environment.md
 
+# External reference repos — cloned locally for learning, NEVER commit
+# (may be private repos belonging to third parties)
+reference/
+

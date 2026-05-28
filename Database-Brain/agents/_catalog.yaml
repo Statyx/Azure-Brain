@@ -1,0 +1,97 @@
+# Agent Catalog — Database-Brain
+# Azure database agents — relational, NoSQL, migration, ops
+# Part of Azure-Brain umbrella (see ../../README.md)
+# Status: bootstrap — agents declared as planned, implemented on demand
+# Last updated: 2026-05-28
+
+domains:
+
+  01-azuresql:
+    description: Azure SQL Database, Managed Instance, SQL Server on Azure VM
+    agents:
+      - name: azuresql-deploy-agent
+        purpose: Azure SQL DB / MI deployment, networking, Entra auth, HA/DR, private endpoints
+        status: planned
+      - name: azuresql-tuning-agent
+        purpose: Query Store, missing indexes, intelligent performance, automatic tuning, Hyperscale sizing
+        status: planned
+      - name: azuresql-migration-agent
+        purpose: SSMA / DMS / DMA, SQL Server to Azure SQL DB or MI, schema conversion, cutover playbook
+        status: planned
+
+  02-postgres:
+    description: Azure Database for PostgreSQL — Flexible Server
+    agents:
+      - name: postgres-deploy-agent
+        purpose: Flexible Server deployment, networking (VNet / private link), HA zones, extensions allow-list
+        status: active
+      - name: postgres-tuning-agent
+        purpose: pg_stat_statements, autovacuum, EXPLAIN ANALYZE, partitioning, connection pooling (PgBouncer)
+        status: planned
+      - name: postgres-pgvector-agent
+        purpose: pgvector / DiskANN for AI workloads, embedding pipelines, hybrid search patterns
+        status: planned
+
+  03-oracle-to-postgres:
+    description: Oracle source on Azure VM, migration tooling, cutover to Azure DB for PostgreSQL
+    agents:
+      - name: oracle-source-vm-agent
+        purpose: Deploy Oracle 21c XE on Azure VM (Oracle Linux 8), load sample schemas (HR / SH / OE), expose listener 1521 for Ora2Pg / DMS sources
+        status: active
+      - name: oracle-to-postgres-migration-agent
+        purpose: End-to-end Oracle → PostgreSQL migration with Ora2Pg (assessment + schema conversion + data export) and Azure DMS (online replication + cutover) — consolidates the 3 planned ora2pg-* agents
+        status: active
+      - name: oracle-to-postgres-copilot-modernization-agent
+        purpose: GUI / Copilot-driven Oracle → PG full-stack modernization — PostgreSQL VS Code extension (schema + coding_notes.md) + GitHub Copilot App Modernization for Java (SQL conversion + Managed Identity refactor). Official Microsoft 2026 toolchain. Sibling of oracle-to-postgres-migration-agent (Ora2Pg CLI path).
+        status: active
+      - name: ora2pg-assessment-agent
+        purpose: (superseded by oracle-to-postgres-migration-agent — kept as anchor for future deep-dive)
+        status: deprecated
+      - name: ora2pg-schema-agent
+        purpose: (superseded by oracle-to-postgres-migration-agent)
+        status: deprecated
+      - name: ora2pg-cutover-agent
+        purpose: (superseded by oracle-to-postgres-migration-agent)
+        status: deprecated
+
+  04-cosmos:
+    description: Azure Cosmos DB — multi-API, multi-region NoSQL
+    agents:
+      - name: cosmos-design-agent
+        purpose: Partition key design, RU/s sizing, consistency model, indexing policy, TTL
+        status: planned
+      - name: cosmos-multi-api-agent
+        purpose: NoSQL vs Mongo vs Cassandra vs Gremlin vs Table — choice and per-API idioms
+        status: planned
+      - name: cosmos-vector-agent
+        purpose: Vector search (DiskANN), AI agent state store, change feed for downstream processing
+        status: planned
+      - name: cosmos-cost-agent
+        purpose: Autoscale vs provisioned vs serverless, RU optimization, multi-region cost trade-offs
+        status: planned
+
+  05-mysql:
+    description: Azure Database for MySQL — Flexible Server
+    agents:
+      - name: mysql-deploy-agent
+        purpose: Flexible Server deployment, HA, read replicas, networking
+        status: planned
+      - name: mysql-migration-agent
+        purpose: On-prem MySQL or AWS RDS migration to Azure DB for MySQL via DMS
+        status: planned
+
+  06-cross-engine:
+    description: Cross-engine orchestration, security, monitoring, BCDR
+    agents:
+      - name: database-migration-orchestrator-agent
+        purpose: Picks the right tool (DMS, SSMA, Ora2Pg, MongoShake), runs the wave plan, tracks cutovers
+        status: planned
+      - name: database-security-agent
+        purpose: Entra-only auth, private endpoints, TDE, customer-managed keys, audit, Defender for SQL/PG
+        status: planned
+      - name: database-monitoring-agent
+        purpose: Azure Monitor, Query Performance Insight, log analytics workbooks, alerting baselines
+        status: planned
+      - name: database-backup-dr-agent
+        purpose: PITR, geo-redundant backup, failover groups, BCDR runbook, RPO/RTO design
+        status: planned

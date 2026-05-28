@@ -1,0 +1,152 @@
+#cloud-config
+# =========================================================================
+# cloud-init for Oracle Linux 8 — installs Oracle Database 21c Express Edition
+# Placeholders __KV_NAME__ and __LOAD_SAMPLES__ are replaced at deploy time
+# by the Bicep template.
+# =========================================================================
+
+package_update: true
+
+packages:
+  - wget
+  - unzip
+  - git
+  - jq
+  - curl
+
+write_files:
+  - path: /opt/oracle/install-oracle-xe.sh
+    permissions: '0755'
+    owner: root:root
+    content: |
+      #!/usr/bin/env bash
+      set -euo pipefail
+      exec > >(tee -a /var/log/oracle-install.log) 2>&1
+      echo "==> [$(date)] Oracle XE install start"
+
+      KV_NAME="__KV_NAME__"
+      LOAD_SAMPLES="__LOAD_SAMPLES__"
+
+      # ---- swap (XE installer needs >= 2GB) ----
+      if [ ! -f /swapfile ]; then
+        echo "==> Creating 4GB swapfile"
+        dd if=/dev/zero of=/swapfile bs=1M count=4096
+        chmod 600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+        echo "/swapfile none swap sw 0 0" >> /etc/fstab
+      fi
+
+      # ---- mount data disk on /u02 ----
+      if [ ! -d /u02 ]; then
+        echo "==> Formatting and mounting data disk on /u02"
+        DATA_DISK=$(lsblk -dn -o NAME,SIZE | awk '$2 ~ /G/ && $1 ~ /sd[a-z]/ {print $1}' | grep -v sda | head -1)
+        mkfs.xfs -f /dev/${DATA_DISK}
+        mkdir -p /u02
+        echo "/dev/${DATA_DISK} /u02 xfs defaults,nofail 0 2" >> /etc/fstab
+        mount /u02
+      fi
+
+      # ---- Oracle preinstall RPM (kernel params + oracle user) ----
+      echo "==> Installing oracle-database-preinstall-21c"
+      dnf install -y oracle-database-preinstall-21c
+
+      # ---- Oracle XE 21c RPM ----
+      if ! rpm -q oracle-database-xe-21c >/dev/null 2>&1; then
+        echo "==> Downloading Oracle XE 21c RPM"
+        cd /tmp
+        wget -q https://download.oracle.com/otn-pub/otn_software/db-express/oracle-database-xe-21c-1.0-1.ol8.x86_64.rpm
+        echo "==> Installing Oracle XE 21c"
+        dnf install -y ./oracle-database-xe-21c-1.0-1.ol8.x86_64.rpm
+      fi
+
+      # ---- Fetch SYS password from Key Vault via managed identity ----
+      echo "==> Fetching SYS password from Key Vault $KV_NAME"
+      TOKEN=$(curl -s -H 'Metadata:true' \
+        'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' \
+        | jq -r '.access_token')
+      ORACLE_PWD=$(curl -s -H "Authorization: Bearer $TOKEN" \
+        "https://${KV_NAME}.vault.azure.net/secrets/oracle-sys-password?api-version=7.4" \
+        | jq -r '.value')
+
+      if [ -z "$ORACLE_PWD" ] || [ "$ORACLE_PWD" = "null" ]; then
+        echo "ERROR: failed to fetch oracle-sys-password from KV"
+        exit 1
+      fi
+
+      # ---- Configure XE (creates CDB=XE + PDB=XEPDB1) ----
+      if [ ! -f /etc/oratab ] || ! grep -q "^XE:" /etc/oratab; then
+        echo "==> Running /etc/init.d/oracle-xe-21c configure"
+        (echo "$ORACLE_PWD"; echo "$ORACLE_PWD") | /etc/init.d/oracle-xe-21c configure
+      fi
+
+      # ---- Bind listener on 0.0.0.0:1521 (default binds localhost only) ----
+      LISTENER_ORA=/opt/oracle/product/21c/dbhomeXE/network/admin/listener.ora
+      if ! grep -q "0.0.0.0" "$LISTENER_ORA"; then
+        echo "==> Rewriting listener.ora to bind 0.0.0.0:1521"
+        cat > "$LISTENER_ORA" <<EOF
+      LISTENER =
+        (DESCRIPTION_LIST =
+          (DESCRIPTION =
+            (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = 1521))
+            (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
+          )
+        )
+      EOF
+        chown oracle:oinstall "$LISTENER_ORA"
+        su - oracle -c '. oraenv <<< XE && lsnrctl reload'
+      fi
+
+      # ---- Enable service on boot ----
+      systemctl enable oracle-xe-21c
+      systemctl start oracle-xe-21c
+
+      # ---- Open firewalld ----
+      firewall-cmd --permanent --add-port=1521/tcp || true
+      firewall-cmd --reload || true
+
+      # ---- Sample schemas ----
+      if [ "$LOAD_SAMPLES" = "true" ]; then
+        /opt/oracle/load-sample-schemas.sh "$ORACLE_PWD"
+      fi
+
+      echo "==> [$(date)] Oracle XE install COMPLETE"
+      touch /var/log/oracle-install.done
+
+  - path: /opt/oracle/load-sample-schemas.sh
+    permissions: '0755'
+    owner: root:root
+    content: |
+      #!/usr/bin/env bash
+      # Load Oracle official sample schemas (HR, SH, OE) into XEPDB1.
+      set -euo pipefail
+      ORACLE_PWD="$1"
+      cd /opt/oracle
+      if [ ! -d db-sample-schemas ]; then
+        git clone --depth 1 https://github.com/oracle-samples/db-sample-schemas.git
+      fi
+      chown -R oracle:oinstall /opt/oracle/db-sample-schemas
+
+      su - oracle -c "
+        . oraenv <<< XE
+        cd /opt/oracle/db-sample-schemas
+        # HR schema
+        sqlplus -s sys/${ORACLE_PWD}@localhost:1521/XEPDB1 as sysdba <<SQL
+        @human_resources/hr_main.sql ${ORACLE_PWD} USERS TEMP ${ORACLE_PWD} /tmp/
+        exit
+SQL
+        # SH (sales history)
+        sqlplus -s sys/${ORACLE_PWD}@localhost:1521/XEPDB1 as sysdba <<SQL
+        @sales_history/sh_main.sql ${ORACLE_PWD} USERS TEMP ${ORACLE_PWD} /tmp/ v3
+        exit
+SQL
+        # OE (order entry)
+        sqlplus -s sys/${ORACLE_PWD}@localhost:1521/XEPDB1 as sysdba <<SQL
+        @order_entry/oe_main.sql ${ORACLE_PWD} USERS TEMP ${ORACLE_PWD} /tmp/ ${ORACLE_PWD} v3
+        exit
+SQL
+      "
+      echo "==> Sample schemas HR, SH, OE loaded into XEPDB1"
+
+runcmd:
+  - [ /bin/bash, -c, '/opt/oracle/install-oracle-xe.sh' ]

@@ -1,0 +1,68 @@
+{
+  "// purpose": "Recommended workspace settings for the Oracle->PG Copilot modernization demo. Copy to .vscode/settings.json in your Java app folder.",
+
+  "// --- Java ---": "",
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.format.settings.profile": "GoogleStyle",
+
+  "// --- PostgreSQL extension ---": "",
+  "pgsql.connectionGroups": ["Azure", "Local"],
+  "pgsql.format.keywordCase": "uppercase",
+  "pgsql.intelliSense.enableSuggestions": true,
+  "pgsql.intelliSense.enableQuickInfo": true,
+  "pgsql.queryHistory.enabled": true,
+  "pgsql.copilot.enableChatParticipant": true,
+
+  "// --- GitHub Copilot ---": "",
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "markdown": true,
+    "sql": true,
+    "java": true
+  },
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "text": "When migrating Oracle SQL to PostgreSQL, ALWAYS prefer Managed Identity over password-based authentication. Use DefaultAzureCredential. Set spring.datasource.azure.passwordless-enabled=true. Never leave a hardcoded password in application.properties."
+    },
+    {
+      "text": "Reference .github/postgre-migrations/*/results/application_guidance/coding_notes.md when refactoring SQL queries — it contains schema-specific mappings."
+    },
+    {
+      "text": "Replace Oracle's SYSDATE with PostgreSQL's CURRENT_TIMESTAMP. Replace ROWNUM <= N with LIMIT N. Replace DUAL with empty FROM (PostgreSQL allows SELECT without FROM). Replace SEQUENCE.NEXTVAL with nextval('sequence_name')."
+    }
+  ],
+
+  "// --- Files associations ---": "",
+  "files.associations": {
+    "*.sql": "sql",
+    "coding_notes.md": "markdown"
+  },
+
+  "// --- Search exclusions (skip large folders) ---": "",
+  "search.exclude": {
+    "target/": true,
+    ".github/postgre-migrations/*/results/raw/": true
+  },
+
+  "// --- Editor ---": "",
+  "editor.formatOnSave": true,
+  "editor.rulers": [120],
+  "editor.tabSize": 4,
+  "[java]": {
+    "editor.tabSize": 4
+  },
+  "[sql]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": false
+  },
+  "[markdown]": {
+    "editor.wordWrap": "on"
+  },
+
+  "// --- Azure ---": "",
+  "azure.tenant": "",
+  "azureResourceGroups.groupBy": "resourceType"
+}
