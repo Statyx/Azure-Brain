@@ -14,3 +14,22 @@ environment.md
 # (may be private repos belonging to third parties)
 reference/
 
+# Secrets
+.oracle-syspw.txt
+*.syspw.txt
+**/.azure-credentials*
+
+# VS Code Migration extension generated artifacts (regenerable, huge)
+.github/postgres-migrations/
+
+# Run Command outputs (transient)
+**/*.out.json
+**/*.sh.out
+**/diag-out.json
+**/diag.txt
+
+# Scratch/debug scripts at repo root
+/_tmp_*
+/_tmp_*.ps1
+/_tmp_*.out
+

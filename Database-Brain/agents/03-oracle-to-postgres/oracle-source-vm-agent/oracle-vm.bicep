@@ -159,7 +159,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
       imageReference: {
         publisher: 'Oracle'
         offer: 'Oracle-Linux'
-        sku: 'ol88-lvm-gen2'
+        sku: 'ol810-lvm-gen2'
         version: 'latest'
       }
       osDisk: {
