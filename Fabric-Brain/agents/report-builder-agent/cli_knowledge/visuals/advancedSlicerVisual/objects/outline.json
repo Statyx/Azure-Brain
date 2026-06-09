@@ -1,0 +1,30 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default",
+      "hover",
+      "press",
+      "selected",
+      "mixed"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "lineColor": {
+      "type": "fill",
+      "displayName": "Outline color",
+      "description": "Color of the outline"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Set transparency for line color"
+    },
+    "weight": {
+      "type": "numeric",
+      "displayName": "Outline weight",
+      "description": "Thickness of the outline in pixels"
+    }
+  }
+}

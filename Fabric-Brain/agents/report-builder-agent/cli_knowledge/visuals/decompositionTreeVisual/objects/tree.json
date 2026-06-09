@@ -1,0 +1,55 @@
+﻿{
+  "data": {
+    "density": {
+      "type": "enum",
+      "values": [
+        "dense",
+        "default",
+        "sparse"
+      ],
+      "displayName": "Density",
+      "description": "Choose how tightly to cluster the data bars"
+    },
+    "accentColor": {
+      "type": "fill",
+      "displayName": "Selected line",
+      "description": "Primary accent color of the analysis visual"
+    },
+    "connectorDefaultColor": {
+      "type": "fill",
+      "displayName": "Unselected line",
+      "description": "Color for the deselected lines"
+    },
+    "connectorType": {
+      "type": "enum",
+      "values": [
+        "curve",
+        "round"
+      ],
+      "displayName": "Style",
+      "description": "Shape of the lines connecting the data bars"
+    },
+    "responsiveLayout": {
+      "type": "bool",
+      "displayName": "Responsive",
+      "description": "The visual will adapt to size changes"
+    },
+    "effectiveBarsPerLevel": {
+      "type": "integer"
+    },
+    "barsPerLevel": {
+      "type": "integer",
+      "displayName": "Max bars shown",
+      "description": "Maximum number of data bars shown per level before scrolling"
+    },
+    "defaultClickAction": {
+      "type": "enum",
+      "values": [
+        "select",
+        "toggle"
+      ],
+      "displayName": "Default action",
+      "description": "Choose whether clicking on an intermediate node in the selected path results in filtering or collapsing the tree"
+    }
+  }
+}

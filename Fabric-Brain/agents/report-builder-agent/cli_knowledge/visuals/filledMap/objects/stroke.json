@@ -1,0 +1,16 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "strokeColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "strokeWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    }
+  }
+}

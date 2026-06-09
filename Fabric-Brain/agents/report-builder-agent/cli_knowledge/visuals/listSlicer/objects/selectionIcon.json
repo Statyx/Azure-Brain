@@ -1,0 +1,58 @@
+﻿{
+  "data": {
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "overlayPosition": {
+      "type": "enum",
+      "values": [
+        "topLeft",
+        "topCenter",
+        "topRight",
+        "middleLeft",
+        "middleRight",
+        "bottomLeft",
+        "bottomCenter",
+        "bottomRight"
+      ],
+      "displayName": "Position"
+    },
+    "overlayToggle": {
+      "type": "bool",
+      "displayName": "Overlay"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Left",
+        "Right"
+      ],
+      "displayName": "Position"
+    },
+    "size": {
+      "type": "integer",
+      "displayName": "Size"
+    },
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "showIconByState": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "spacing": {
+      "type": "integer",
+      "displayName": "Horizontal gap"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "verticalAlignment": {
+      "type": "formatting",
+      "displayName": "Vertical alignment"
+    }
+  }
+}

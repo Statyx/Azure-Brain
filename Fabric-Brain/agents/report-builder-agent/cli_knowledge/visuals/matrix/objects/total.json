@@ -1,0 +1,32 @@
+﻿{
+  "data": {
+    "outline": {
+      "type": "enum",
+      "values": [
+        "None",
+        "BottomOnly",
+        "TopOnly",
+        "LeftOnly",
+        "RightOnly",
+        "TopBottom",
+        "LeftRight",
+        "Frame"
+      ],
+      "displayName": "Outline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color",
+      "description": "Font color of the cells"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "applyToHeaders": {
+      "type": "bool",
+      "displayName": "Apply to labels"
+    }
+  }
+}

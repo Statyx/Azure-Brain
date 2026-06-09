@@ -1,0 +1,55 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "accessibility",
+                                 "annotationTemplate",
+                                 "blankRows",
+                                 "columnFormatting",
+                                 "columnHeaders",
+                                 "columnTotal",
+                                 "columnWidth",
+                                 "general",
+                                 "grid",
+                                 "rowHeaders",
+                                 "rowTotal",
+                                 "sparklines",
+                                 "subTotals (selector: Row|Column)",
+                                 "total",
+                                 "values"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "accessibility",
+                                     "annotationTemplate",
+                                     "blankRows",
+                                     "columnFormatting",
+                                     "columnHeaders",
+                                     "columnTotal",
+                                     "columnWidth",
+                                     "general",
+                                     "grid",
+                                     "rowHeaders",
+                                     "rowTotal",
+                                     "sparklines",
+                                     "subTotals",
+                                     "total",
+                                     "values"
+                                 ]
+             }
+}

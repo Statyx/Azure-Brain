@@ -1,0 +1,41 @@
+﻿{
+  "data": {
+    "defaultColor": {
+      "type": "fill",
+      "displayName": "Default color"
+    },
+    "fill": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "fillRule": {
+      "type": "unknown",
+      "displayName": "Color saturation"
+    },
+    "fillTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderShow": {
+      "type": "bool",
+      "displayName": "Border"
+    },
+    "borderSize": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "borderColorMatchFill": {
+      "type": "bool",
+      "displayName": "Match fill color",
+      "description": "Match the border color to the main shape color."
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "borderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    }
+  }
+}

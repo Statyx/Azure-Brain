@@ -1,0 +1,71 @@
+﻿{
+  "data": {
+    "visualType": "heatMap",
+    "capabilityKey": "heatMap",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "Location",
+        "description": "The locations to plot"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "GroupingOrMeasure",
+        "displayName": "Latitude",
+        "description": "Use to override the latitude of locations"
+      },
+      "X": {
+        "name": "X",
+        "kind": "GroupingOrMeasure",
+        "displayName": "Longitude",
+        "description": "Use to override the longitude of locations"
+      },
+      "Size": {
+        "name": "Size",
+        "kind": "Measure",
+        "displayName": "Bubble size",
+        "description": "The measure to use for relative bubble sizing"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [],
+    "optionalRoles": [
+      "Category",
+      "Series",
+      "Y",
+      "X",
+      "Size",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Series": 1,
+      "Y": 1,
+      "X": 1,
+      "Size": 1
+    },
+    "formattingObjects": [
+      "bubbles",
+      "categoryLabels",
+      "dataPoint",
+      "general",
+      "heatMap",
+      "legend",
+      "mapControls",
+      "mapStyles"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

@@ -1,0 +1,32 @@
+﻿{
+  "data": {
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Left",
+        "Right"
+      ],
+      "displayName": "Position"
+    },
+    "size": {
+      "type": "integer",
+      "displayName": "Size"
+    },
+    "spacing": {
+      "type": "integer",
+      "displayName": "Spacing"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "verticalAlignment": {
+      "type": "formatting",
+      "displayName": "Vertical alignment"
+    }
+  }
+}

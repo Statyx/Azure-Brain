@@ -1,0 +1,45 @@
+﻿{
+  "data": {
+    "visualType": "matrix",
+    "capabilityKey": "matrix",
+    "roles": {
+      "Rows": {
+        "name": "Rows",
+        "kind": "Grouping",
+        "displayName": "Rows",
+        "description": "The fields to use on rows"
+      },
+      "Columns": {
+        "name": "Columns",
+        "kind": "Grouping",
+        "displayName": "Columns",
+        "description": "The fields to use on columns"
+      },
+      "Values": {
+        "name": "Values",
+        "kind": "Measure",
+        "displayName": "Values"
+      }
+    },
+    "requiredRoles": [
+      "Values"
+    ],
+    "optionalRoles": [
+      "Rows",
+      "Columns"
+    ],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "columnFormatting",
+      "columnHeaders",
+      "general",
+      "grid",
+      "rowHeaders",
+      "subTotals",
+      "total",
+      "values"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

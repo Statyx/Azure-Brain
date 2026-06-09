@@ -1,0 +1,39 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "fill (selector: default)",
+                                 "glow",
+                                 "outline (selector: default)",
+                                 "rotation",
+                                 "shadow",
+                                 "shape (selector: default)",
+                                 "text"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "fill",
+                                     "glow",
+                                     "outline",
+                                     "rotation",
+                                     "shadow",
+                                     "shape",
+                                     "text"
+                                 ]
+             }
+}

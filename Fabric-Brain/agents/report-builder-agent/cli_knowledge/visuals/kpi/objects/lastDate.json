@@ -1,0 +1,32 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "lastDateFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "lastDateFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    }
+  }
+}

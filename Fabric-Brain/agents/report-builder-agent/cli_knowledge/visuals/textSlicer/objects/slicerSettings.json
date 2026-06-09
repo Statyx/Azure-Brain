@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "multiselect": {
+      "type": "bool",
+      "displayName": "Accept multiple values"
+    },
+    "numericInputOnly": {
+      "type": "bool",
+      "displayName": "Numeric input only"
+    }
+  }
+}

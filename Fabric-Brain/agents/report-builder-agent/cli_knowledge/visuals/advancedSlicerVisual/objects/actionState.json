@@ -1,0 +1,24 @@
+﻿{
+  "data": {
+    "isCalloutValuesAdvanced": {
+      "type": "bool",
+      "displayName": "Advanced"
+    },
+    "isImageAdvanced": {
+      "type": "bool",
+      "displayName": "Advanced"
+    },
+    "isSelectionIconAdvanced": {
+      "type": "bool",
+      "displayName": "Advanced"
+    },
+    "isExpansionIconAdvanced": {
+      "type": "bool",
+      "displayName": "Advanced"
+    },
+    "IsButtonsAdvanced": {
+      "type": "bool",
+      "displayName": "Advanced"
+    }
+  }
+}

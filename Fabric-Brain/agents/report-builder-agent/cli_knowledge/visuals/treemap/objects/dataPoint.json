@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "fill": {
+      "type": "fill",
+      "displayName": "Default color"
+    },
+    "fillRule": {
+      "type": "unknown",
+      "displayName": "Color saturation"
+    }
+  }
+}

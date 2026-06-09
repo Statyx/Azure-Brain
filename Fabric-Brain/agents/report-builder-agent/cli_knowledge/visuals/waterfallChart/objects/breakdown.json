@@ -1,0 +1,9 @@
+﻿{
+  "data": {
+    "maxBreakdowns": {
+      "type": "integer",
+      "displayName": "Max breakdowns",
+      "description": "The number of individual breakdowns to show (rest grouped into Other)"
+    }
+  }
+}

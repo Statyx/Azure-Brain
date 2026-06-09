@@ -1,0 +1,29 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "width": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "style": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    }
+  }
+}

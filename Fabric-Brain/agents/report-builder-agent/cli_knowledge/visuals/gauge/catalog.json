@@ -1,0 +1,63 @@
+﻿{
+  "data": {
+    "visualType": "gauge",
+    "capabilityKey": "gauge",
+    "roles": {
+      "Y": {
+        "name": "Y",
+        "kind": "Measure",
+        "displayName": "Value",
+        "description": "The numeric amount to plot, also shown as digits in the middle of the visual"
+      },
+      "MinValue": {
+        "name": "MinValue",
+        "kind": "Measure",
+        "displayName": "Minimum value",
+        "description": "The value used for the start of the scale"
+      },
+      "MaxValue": {
+        "name": "MaxValue",
+        "kind": "Measure",
+        "displayName": "Maximum value",
+        "description": "The value used for the end of the scale"
+      },
+      "TargetValue": {
+        "name": "TargetValue",
+        "kind": "Measure",
+        "displayName": "Target value",
+        "description": "The value used for the goal indicator"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Y"
+    ],
+    "optionalRoles": [
+      "MinValue",
+      "MaxValue",
+      "TargetValue",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Y": 1,
+      "MinValue": 1,
+      "MaxValue": 1,
+      "TargetValue": 1
+    },
+    "formattingObjects": [
+      "axis",
+      "calloutValue",
+      "dataPoint",
+      "general",
+      "labels",
+      "target"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

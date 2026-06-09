@@ -1,0 +1,26 @@
+﻿{
+  "data": {
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "image": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    }
+  }
+}

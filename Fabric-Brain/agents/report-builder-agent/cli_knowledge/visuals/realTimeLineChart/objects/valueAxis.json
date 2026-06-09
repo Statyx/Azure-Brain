@@ -1,0 +1,36 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "showAxisTitle": {
+      "type": "bool",
+      "displayName": "Title",
+      "description": "Title for the Y-axis"
+    },
+    "axisStyle": {
+      "type": "enum",
+      "values": [
+        "showTitleOnly",
+        "showUnitOnly",
+        "showBoth"
+      ],
+      "displayName": "Style"
+    },
+    "labelColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "labelDisplayUnits": {
+      "type": "formatting",
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "labelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    }
+  }
+}

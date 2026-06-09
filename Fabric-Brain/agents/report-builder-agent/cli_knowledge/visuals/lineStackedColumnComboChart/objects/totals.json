@@ -1,0 +1,62 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "labelDisplayUnits": {
+      "type": "formatting",
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "labelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Select color for data labels"
+    },
+    "enableBackground": {
+      "type": "bool",
+      "displayName": "Show background"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Background color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "showPositiveAndNegative": {
+      "type": "bool",
+      "displayName": "Split positive and negative",
+      "description": "Show separate labels for the total of the positive values and the total of the negative values"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+﻿{
+  "data": {
+    "seriesOrderReversed": {
+      "type": "bool",
+      "displayName": "Reverse order",
+      "description": "Reverse the series order of your bars or columns."
+    }
+  }
+}

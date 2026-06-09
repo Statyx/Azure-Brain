@@ -1,0 +1,37 @@
+﻿{
+  "data": {
+    "visualType": "accessibleTable",
+    "capabilityKey": "accessibleTable",
+    "roles": {
+      "Rows": {
+        "name": "Rows",
+        "kind": "Grouping",
+        "displayName": "Rows",
+        "description": "The fields to use on rows"
+      },
+      "Columns": {
+        "name": "Columns",
+        "kind": "Grouping",
+        "displayName": "Columns",
+        "description": "The fields to use on columns"
+      },
+      "Values": {
+        "name": "Values",
+        "kind": "Measure",
+        "displayName": "Values"
+      }
+    },
+    "requiredRoles": [],
+    "optionalRoles": [
+      "Rows",
+      "Columns",
+      "Values"
+    ],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "general"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

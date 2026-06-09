@@ -1,0 +1,43 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "breakdown",
+                                 "categoryAxis",
+                                 "general",
+                                 "labels",
+                                 "legend",
+                                 "plotArea",
+                                 "sentimentColors",
+                                 "valueAxis",
+                                 "y1AxisReferenceLine"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "breakdown",
+                                     "categoryAxis",
+                                     "general",
+                                     "labels",
+                                     "legend",
+                                     "plotArea",
+                                     "sentimentColors",
+                                     "valueAxis",
+                                     "y1AxisReferenceLine"
+                                 ]
+             }
+}

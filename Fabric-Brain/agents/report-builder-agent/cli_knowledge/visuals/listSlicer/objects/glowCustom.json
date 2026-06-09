@@ -1,0 +1,56 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "shadowBlur": {
+      "type": "numeric",
+      "displayName": "Blur"
+    },
+    "glowPositionPreset": {
+      "type": "enum",
+      "values": [
+        "custom",
+        "top",
+        "topLeft",
+        "topRight",
+        "center",
+        "centerLeft",
+        "centerRight",
+        "bottom",
+        "bottomLeft",
+        "bottomRight"
+      ],
+      "displayName": "Preset"
+    },
+    "angle": {
+      "type": "numeric",
+      "displayName": "Angle"
+    },
+    "glowDistance": {
+      "type": "numeric",
+      "displayName": "Distance"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Outer",
+        "Inner"
+      ],
+      "displayName": "Offset"
+    },
+    "glowSpread": {
+      "type": "numeric",
+      "displayName": "Size"
+    }
+  }
+}

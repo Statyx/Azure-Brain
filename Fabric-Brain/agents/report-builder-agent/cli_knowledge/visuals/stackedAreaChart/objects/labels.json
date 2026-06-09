@@ -1,0 +1,303 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "showByDefault": {
+      "type": "bool"
+    },
+    "showSeries": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "showAll": {
+      "type": "bool",
+      "displayName": "Customize series"
+    },
+    "labelPosition": {
+      "type": "enum",
+      "values": [
+        "Auto",
+        "InsideEnd",
+        "OutsideEnd",
+        "InsideCenter",
+        "InsideBase",
+        "Above",
+        "Under"
+      ],
+      "displayName": "Position"
+    },
+    "labelDensity": {
+      "type": "integer",
+      "displayName": "Label density"
+    },
+    "optimizeLabelDisplay": {
+      "type": "bool",
+      "displayName": "Optimize label display"
+    },
+    "labelContainerMaxWidth": {
+      "type": "numeric",
+      "displayName": "Maximum width"
+    },
+    "maximumOffset": {
+      "type": "numeric",
+      "displayName": "Maximum offset"
+    },
+    "minimumOffset": {
+      "type": "numeric",
+      "displayName": "Minimum offset"
+    },
+    "enableBackground": {
+      "type": "bool",
+      "displayName": "Show background"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Background color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "showDynamicLabels": {
+      "type": "bool",
+      "displayName": "Custom label"
+    },
+    "dynamicLabelValue": {
+      "type": "unknown",
+      "displayName": "Field"
+    },
+    "dynamicLabelTitle": {
+      "type": "unknown",
+      "displayName": "Field"
+    },
+    "dynamicLabelDetail": {
+      "type": "unknown",
+      "displayName": "Field"
+    },
+    "valueFormatString": {
+      "type": "formatting"
+    },
+    "titleFormatString": {
+      "type": "formatting"
+    },
+    "detailFormatString": {
+      "type": "formatting"
+    },
+    "enableValueDataLabel": {
+      "type": "bool"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Select color for data labels"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "labelDisplayUnits": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "1000",
+        "1000000",
+        "1000000000",
+        "1000000000000",
+        "-1"
+      ],
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "valueCustomFormatString": {
+      "type": "text",
+      "displayName": "Format code",
+      "description": "Enter a custom number format for your callout."
+    },
+    "labelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "showBlankAs": {
+      "type": "text",
+      "displayName": "Show blank as"
+    },
+    "enableTitleDataLabel": {
+      "type": "bool"
+    },
+    "titleContentType": {
+      "type": "enum",
+      "values": [
+        "Series name",
+        "Custom"
+      ],
+      "displayName": "Content"
+    },
+    "titleFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "titleFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "titleBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "titleItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "titleUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "titleColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Select color for data labels"
+    },
+    "titleTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "titleLabelDisplayUnits": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "1000",
+        "1000000",
+        "1000000000",
+        "1000000000000",
+        "-1"
+      ],
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "titleCustomFormatString": {
+      "type": "text",
+      "displayName": "Format code",
+      "description": "Enter a custom number format for your callout."
+    },
+    "titleLabelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "titleShowBlankAs": {
+      "type": "text",
+      "displayName": "Show blank as"
+    },
+    "enableDetailDataLabel": {
+      "type": "bool"
+    },
+    "detailContentType": {
+      "type": "enum",
+      "values": [
+        "Percent of total",
+        "Custom"
+      ],
+      "displayName": "Content"
+    },
+    "detailFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "detailFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "detailBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "detailItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "detailUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "detailColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Select color for data labels"
+    },
+    "detailTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "detailLabelDisplayUnits": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "1000",
+        "1000000",
+        "1000000000",
+        "1000000000000",
+        "-1"
+      ],
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "detailCustomFormatString": {
+      "type": "text",
+      "displayName": "Format code",
+      "description": "Enter a custom number format for your callout."
+    },
+    "detailLabelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "detailShowBlankAs": {
+      "type": "text",
+      "displayName": "Show blank as"
+    },
+    "labelContentLayout": {
+      "type": "enum",
+      "values": [
+        "MultiLine",
+        "SingleLine"
+      ],
+      "displayName": "Layout"
+    },
+    "horizontalAlignment": {
+      "type": "formatting",
+      "displayName": "Horizontal alignment"
+    },
+    "leaderLines": {
+      "type": "bool",
+      "displayName": "Leader lines"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "iconType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl"
+      ],
+      "displayName": "Icon type"
+    },
+    "icon": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    },
+    "iconUrl": {
+      "type": "text",
+      "displayName": "Image URL"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Left",
+        "Right",
+        "Bottom",
+        "Top"
+      ],
+      "displayName": "Position"
+    },
+    "padding": {
+      "type": "integer",
+      "displayName": "Padding"
+    },
+    "size": {
+      "type": "integer",
+      "displayName": "Size"
+    },
+    "altText": {
+      "type": "formatting",
+      "displayName": "Alt text"
+    }
+  }
+}

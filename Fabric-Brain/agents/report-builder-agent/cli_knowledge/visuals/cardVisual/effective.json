@@ -1,0 +1,2850 @@
+﻿{
+  "data": {
+    "visualType": "cardVisual",
+    "capabilityKey": "cardVisual",
+    "visualObjects": {
+      "accentBar": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "position": {
+          "type": "enum",
+          "values": [
+            "Left",
+            "Right",
+            "Bottom",
+            "Top"
+          ],
+          "displayName": "Position"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "width": {
+          "type": "numeric",
+          "displayName": "Width"
+        }
+      },
+      "border": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "width": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "style": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        }
+      },
+      "cardCalloutArea": {
+        "paddingUniform": {
+          "type": "integer",
+          "displayName": "Uniform padding"
+        },
+        "paddingIndividual": {
+          "type": "bool",
+          "displayName": "Individual padding"
+        },
+        "paddingLeft": {
+          "type": "integer",
+          "displayName": "Left margin"
+        },
+        "paddingRight": {
+          "type": "integer",
+          "displayName": "Right margin"
+        },
+        "paddingTop": {
+          "type": "integer",
+          "displayName": "Top margin"
+        },
+        "paddingBottom": {
+          "type": "integer",
+          "displayName": "Bottom margin"
+        },
+        "rectangleRoundedCurve": {
+          "type": "integer",
+          "displayName": "Corner radius"
+        },
+        "rectangleRoundedCurveCustomStyle": {
+          "type": "bool",
+          "displayName": "Individual corners"
+        },
+        "rectangleRoundedCurveLeftBottom": {
+          "type": "integer",
+          "displayName": "Bottom left corner"
+        },
+        "rectangleRoundedCurveLeftTop": {
+          "type": "integer",
+          "displayName": "Top left corner"
+        },
+        "rectangleRoundedCurveRightBottom": {
+          "type": "integer",
+          "displayName": "Bottom right corner"
+        },
+        "rectangleRoundedCurveRightTop": {
+          "type": "integer",
+          "displayName": "Top right corner"
+        },
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "backgroundFillColor": {
+          "type": "fill",
+          "displayName": "Fill color"
+        },
+        "backgroundTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        }
+      },
+      "cardImage": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "altText": {
+          "type": "formatting",
+          "displayName": "Alt text"
+        },
+        "addBackground": {
+          "type": "bool",
+          "displayName": "Add background"
+        },
+        "backgroundFillColor": {
+          "type": "fill",
+          "displayName": "Fill color"
+        },
+        "backgroundTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        },
+        "image": {
+          "type": "image",
+          "subProperties": {
+            "name": {
+              "type": "expr",
+              "required": true
+            },
+            "url": {
+              "type": "expr",
+              "required": true
+            },
+            "scaling": {
+              "type": "expr",
+              "required": false
+            }
+          }
+        },
+        "imageBlur": {
+          "type": "integer",
+          "displayName": "Blur"
+        },
+        "imageContrast": {
+          "type": "integer",
+          "displayName": "Contrast"
+        },
+        "imageData": {
+          "type": "text",
+          "displayName": "Data"
+        },
+        "imageDataFit": {
+          "type": "enum",
+          "values": [
+            "Fit",
+            "Stretch",
+            "Fill",
+            "Normal"
+          ],
+          "displayName": "Image fit"
+        },
+        "imageEffects": {
+          "type": "bool",
+          "displayName": "Image effects"
+        },
+        "imageExposure": {
+          "type": "integer",
+          "displayName": "Exposure"
+        },
+        "imageHeight": {
+          "type": "integer",
+          "displayName": "Image height"
+        },
+        "imageSaturation": {
+          "type": "integer",
+          "displayName": "Saturation"
+        },
+        "imageTransparency": {
+          "type": "numeric",
+          "displayName": "Image transparency",
+          "description": "Background image transparency"
+        },
+        "imageType": {
+          "type": "enum",
+          "values": [
+            "image",
+            "imageUrl",
+            "imageData"
+          ],
+          "displayName": "Image source"
+        },
+        "imageUrl": {
+          "type": "unknown",
+          "displayName": "Image URL"
+        },
+        "imageUrlFit": {
+          "type": "enum",
+          "values": [
+            "Fit",
+            "Stretch",
+            "Fill",
+            "Normal"
+          ],
+          "displayName": "Image fit"
+        },
+        "paddingUniform": {
+          "type": "integer",
+          "displayName": "Uniform padding"
+        },
+        "paddingIndividual": {
+          "type": "bool",
+          "displayName": "Individual padding"
+        },
+        "paddingLeft": {
+          "type": "integer",
+          "displayName": "Left margin"
+        },
+        "paddingRight": {
+          "type": "integer",
+          "displayName": "Right margin"
+        },
+        "paddingTop": {
+          "type": "integer",
+          "displayName": "Top margin"
+        },
+        "paddingBottom": {
+          "type": "integer",
+          "displayName": "Bottom margin"
+        },
+        "rectangleRoundedCurve": {
+          "type": "integer",
+          "displayName": "Corner radius"
+        },
+        "rectangleRoundedCurveCustomStyle": {
+          "type": "bool",
+          "displayName": "Individual corners"
+        },
+        "rectangleRoundedCurveLeftBottom": {
+          "type": "integer",
+          "displayName": "Bottom left corner"
+        },
+        "rectangleRoundedCurveLeftTop": {
+          "type": "integer",
+          "displayName": "Top left corner"
+        },
+        "rectangleRoundedCurveRightBottom": {
+          "type": "integer",
+          "displayName": "Bottom right corner"
+        },
+        "rectangleRoundedCurveRightTop": {
+          "type": "integer",
+          "displayName": "Top right corner"
+        }
+      },
+      "divider": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "dividerWidth": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "dividerColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "dividerTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "dividerLineStyle": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        },
+        "dividerIgnorePadding": {
+          "type": "bool",
+          "displayName": "Ignore padding"
+        }
+      },
+      "fillCustom": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "fillColor": {
+          "type": "fill",
+          "displayName": "Fill color"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        },
+        "image": {
+          "type": "image",
+          "subProperties": {
+            "name": {
+              "type": "expr",
+              "required": true
+            },
+            "url": {
+              "type": "expr",
+              "required": true
+            },
+            "scaling": {
+              "type": "expr",
+              "required": false
+            }
+          }
+        },
+        "imageTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        },
+        "imageSplitTransparency": {
+          "type": "bool"
+        },
+        "imageBlur": {
+          "type": "integer",
+          "displayName": "Blur"
+        },
+        "imageContrast": {
+          "type": "integer",
+          "displayName": "Contrast"
+        },
+        "imageData": {
+          "type": "text",
+          "displayName": "Data"
+        },
+        "imageEffects": {
+          "type": "bool",
+          "displayName": "Image effects"
+        },
+        "imageExposure": {
+          "type": "integer",
+          "displayName": "Exposure"
+        },
+        "imageFit": {
+          "type": "enum",
+          "values": [
+            "Fit",
+            "Stretch",
+            "Fill",
+            "Normal"
+          ],
+          "displayName": "Image fit"
+        },
+        "imageHeight": {
+          "type": "integer",
+          "displayName": "Image height"
+        },
+        "imageSaturation": {
+          "type": "integer",
+          "displayName": "Saturation"
+        },
+        "imageShow": {
+          "type": "bool",
+          "displayName": "Add image"
+        },
+        "imageType": {
+          "type": "enum",
+          "values": [
+            "image",
+            "imageUrl",
+            "imageData"
+          ],
+          "displayName": "Image source"
+        },
+        "imageUrl": {
+          "type": "unknown",
+          "displayName": "Image URL"
+        }
+      },
+      "general": {
+        "formatString": {
+          "type": "formatting"
+        },
+        "applyFormattingNullSelectorDefaults": {
+          "type": "bool"
+        }
+      },
+      "glowCustom": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "shadowBlur": {
+          "type": "numeric",
+          "displayName": "Blur"
+        },
+        "glowPositionPreset": {
+          "type": "enum",
+          "values": [
+            "custom",
+            "top",
+            "topLeft",
+            "topRight",
+            "center",
+            "centerLeft",
+            "centerRight",
+            "bottom",
+            "bottomLeft",
+            "bottomRight"
+          ],
+          "displayName": "Preset"
+        },
+        "angle": {
+          "type": "numeric",
+          "displayName": "Angle"
+        },
+        "glowDistance": {
+          "type": "numeric",
+          "displayName": "Distance"
+        },
+        "position": {
+          "type": "enum",
+          "values": [
+            "Outer",
+            "Inner"
+          ],
+          "displayName": "Offset"
+        },
+        "glowSpread": {
+          "type": "numeric",
+          "displayName": "Size"
+        }
+      },
+      "grid": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "width": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "style": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        }
+      },
+      "image": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "imageType": {
+          "type": "enum",
+          "values": [
+            "image",
+            "imageUrl",
+            "imageData"
+          ],
+          "displayName": "Image type"
+        },
+        "image": {
+          "type": "image",
+          "subProperties": {
+            "name": {
+              "type": "expr",
+              "required": true
+            },
+            "url": {
+              "type": "expr",
+              "required": true
+            },
+            "scaling": {
+              "type": "expr",
+              "required": false
+            }
+          }
+        },
+        "imageUrl": {
+          "type": "text",
+          "displayName": "Image URL"
+        },
+        "imageData": {
+          "type": "text",
+          "displayName": "Data"
+        },
+        "fit": {
+          "type": "enum",
+          "values": [
+            "Fit",
+            "Stretch",
+            "Fill",
+            "Normal"
+          ],
+          "displayName": "Image fit"
+        },
+        "imageEffects": {
+          "type": "bool",
+          "displayName": "Image effects"
+        },
+        "blur": {
+          "type": "integer",
+          "displayName": "Blur"
+        },
+        "contrast": {
+          "type": "integer",
+          "displayName": "Contrast"
+        },
+        "exposure": {
+          "type": "integer",
+          "displayName": "Exposure"
+        },
+        "saturation": {
+          "type": "integer",
+          "displayName": "Saturation"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        },
+        "position": {
+          "type": "enum",
+          "values": [
+            "Left",
+            "Right",
+            "Bottom",
+            "Top"
+          ],
+          "displayName": "Position"
+        },
+        "padding": {
+          "type": "integer",
+          "displayName": "Space between image and callout"
+        },
+        "size": {
+          "type": "integer",
+          "displayName": "Size"
+        },
+        "altText": {
+          "type": "formatting",
+          "displayName": "Alt text"
+        },
+        "fixedSize": {
+          "type": "bool",
+          "displayName": "Image height"
+        },
+        "imageAreaSize": {
+          "type": "integer",
+          "displayName": "Image area size"
+        },
+        "verticalAlignment": {
+          "type": "formatting",
+          "displayName": "Vertical alignment"
+        },
+        "horizontalAlignment": {
+          "type": "formatting",
+          "displayName": "Horizontal alignment"
+        },
+        "rectangleRoundedCurve": {
+          "type": "integer",
+          "displayName": "Corner radius"
+        },
+        "rectangleRoundedCurveCustomStyle": {
+          "type": "bool",
+          "displayName": "Individual corners"
+        },
+        "rectangleRoundedCurveLeftBottom": {
+          "type": "integer",
+          "displayName": "Bottom left corner"
+        },
+        "rectangleRoundedCurveLeftTop": {
+          "type": "integer",
+          "displayName": "Top left corner"
+        },
+        "rectangleRoundedCurveRightBottom": {
+          "type": "integer",
+          "displayName": "Bottom right corner"
+        },
+        "rectangleRoundedCurveRightTop": {
+          "type": "integer",
+          "displayName": "Top right corner"
+        }
+      },
+      "label": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "text": {
+          "type": "text",
+          "displayName": "Text"
+        },
+        "heading": {
+          "type": "enum",
+          "values": [
+            "Normal",
+            "Heading2",
+            "Heading3",
+            "Heading4",
+            "Heading5",
+            "Heading6"
+          ],
+          "displayName": "Heading"
+        },
+        "fontFamily": {
+          "type": "formatting",
+          "displayName": "Font family"
+        },
+        "fontSize": {
+          "type": "formatting",
+          "displayName": "Text size"
+        },
+        "bold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "italic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "underline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "fontColor": {
+          "type": "fill",
+          "displayName": "Font color"
+        },
+        "position": {
+          "type": "enum",
+          "values": [
+            "belowValue",
+            "aboveValue"
+          ],
+          "displayName": "Position"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "textWrap": {
+          "type": "bool",
+          "displayName": "Text wrap"
+        },
+        "alignBaselines": {
+          "type": "bool",
+          "displayName": "Align baselines"
+        },
+        "matchValueAlignment": {
+          "type": "bool",
+          "displayName": "Match value alignment"
+        },
+        "horizontalAlignment": {
+          "type": "formatting",
+          "displayName": "Horizontal alignment"
+        }
+      },
+      "layout": {
+        "alignment": {
+          "type": "formatting",
+          "displayName": "Alignment"
+        },
+        "orientation": {
+          "type": "enum",
+          "values": [
+            "2",
+            "1",
+            "0"
+          ],
+          "displayName": "Arrangement"
+        },
+        "rowCount": {
+          "type": "integer",
+          "displayName": "Rows"
+        },
+        "columnCount": {
+          "type": "integer",
+          "displayName": "Columns"
+        },
+        "maxTiles": {
+          "type": "integer",
+          "displayName": "Max cards shown"
+        },
+        "cellPadding": {
+          "type": "integer",
+          "displayName": "Space between cards"
+        },
+        "customizePadding": {
+          "type": "bool",
+          "displayName": "Customize spacing"
+        },
+        "rowPadding": {
+          "type": "integer",
+          "displayName": "Space between rows"
+        },
+        "columnPadding": {
+          "type": "integer",
+          "displayName": "Space between columns"
+        },
+        "calloutSize": {
+          "type": "numeric",
+          "displayName": "Callout size"
+        },
+        "style": {
+          "type": "enum",
+          "values": [
+            "Table",
+            "Cards"
+          ],
+          "displayName": "Style"
+        },
+        "backgroundFillColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "backgroundTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        },
+        "backgroundShow": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "backgroundImage": {
+          "type": "image",
+          "subProperties": {
+            "name": {
+              "type": "expr",
+              "required": true
+            },
+            "url": {
+              "type": "expr",
+              "required": true
+            },
+            "scaling": {
+              "type": "expr",
+              "required": false
+            }
+          }
+        },
+        "backgroundImageTransparency": {
+          "type": "numeric",
+          "displayName": "Image transparency"
+        },
+        "rectangleRoundedCurve": {
+          "type": "integer",
+          "displayName": "Rounded corners"
+        },
+        "rectangleRoundedCurveCustomStyle": {
+          "type": "bool",
+          "displayName": "Individual corners"
+        },
+        "rectangleRoundedCurveLeftTop": {
+          "type": "integer",
+          "displayName": "Top left corner"
+        },
+        "rectangleRoundedCurveRightTop": {
+          "type": "integer",
+          "displayName": "Top right corner"
+        },
+        "rectangleRoundedCurveLeftBottom": {
+          "type": "integer",
+          "displayName": "Bottom left corner"
+        },
+        "rectangleRoundedCurveRightBottom": {
+          "type": "integer",
+          "displayName": "Bottom right corner"
+        },
+        "customizeLines": {
+          "type": "bool",
+          "displayName": "Customize lines"
+        },
+        "lineWidth": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "lineColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "lineTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "lineStyle": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        },
+        "gridlineWidth": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "gridlineColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "gridlineTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "gridlineStyle": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        },
+        "borderWidth": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "borderColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "borderTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "borderStyle": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        },
+        "leftOuterMargin": {
+          "type": "integer",
+          "displayName": "Left padding"
+        },
+        "rightOuterMargin": {
+          "type": "integer",
+          "displayName": "Right padding"
+        },
+        "topOuterMargin": {
+          "type": "integer",
+          "displayName": "Top padding"
+        },
+        "bottomOuterMargin": {
+          "type": "integer",
+          "displayName": "Bottom padding"
+        },
+        "fixedHeight": {
+          "type": "integer",
+          "displayName": "Height"
+        },
+        "fixedWidth": {
+          "type": "integer",
+          "displayName": "Width"
+        },
+        "showFixedSize": {
+          "type": "bool",
+          "displayName": "Fixed size"
+        },
+        "contentOrder": {
+          "type": "enum",
+          "values": [
+            "callout_image_referenceLabel",
+            "callout_referenceLabel_image",
+            "image_callout_referenceLabel",
+            "image_referenceLabel_callout",
+            "referenceLabel_callout_image",
+            "referenceLabel_image_callout"
+          ],
+          "displayName": "Order"
+        },
+        "collage": {
+          "type": "enum",
+          "values": [
+            "None",
+            "Default",
+            "Reverse"
+          ],
+          "displayName": "Collage"
+        },
+        "paddingUniform": {
+          "type": "integer",
+          "displayName": "Uniform padding"
+        },
+        "paddingIndividual": {
+          "type": "bool",
+          "displayName": "Individual padding"
+        },
+        "backgroundImageBlur": {
+          "type": "integer",
+          "displayName": "Blur"
+        },
+        "backgroundImageContrast": {
+          "type": "integer",
+          "displayName": "Contrast"
+        },
+        "backgroundImageData": {
+          "type": "text",
+          "displayName": "Data"
+        },
+        "backgroundImageEffects": {
+          "type": "bool",
+          "displayName": "Image effects"
+        },
+        "backgroundImageExposure": {
+          "type": "integer",
+          "displayName": "Exposure"
+        },
+        "backgroundImageFit": {
+          "type": "enum",
+          "values": [
+            "Fit",
+            "Stretch",
+            "Fill",
+            "Normal"
+          ],
+          "displayName": "Image fit"
+        },
+        "backgroundImageHeight": {
+          "type": "integer",
+          "displayName": "Image height"
+        },
+        "backgroundImageSaturation": {
+          "type": "integer",
+          "displayName": "Saturation"
+        },
+        "backgroundImageShow": {
+          "type": "bool",
+          "displayName": "Add image"
+        },
+        "backgroundImageType": {
+          "type": "enum",
+          "values": [
+            "image",
+            "imageUrl",
+            "imageData"
+          ],
+          "displayName": "Image source"
+        },
+        "backgroundImageUrl": {
+          "type": "unknown",
+          "displayName": "Image URL"
+        },
+        "autoGrid": {
+          "type": "bool",
+          "displayName": "Fit to space"
+        }
+      },
+      "outline": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "lineColor": {
+          "type": "fill",
+          "displayName": "Outline color",
+          "description": "Color of the outline"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Set transparency for line color"
+        },
+        "weight": {
+          "type": "numeric",
+          "displayName": "Outline weight",
+          "description": "Thickness of the outline in pixels"
+        }
+      },
+      "overFlow": {
+        "overFlowStyle": {
+          "type": "enum",
+          "values": [
+            "1",
+            "0"
+          ],
+          "displayName": "Overflow style"
+        },
+        "overFlowDirection": {
+          "type": "enum",
+          "values": [
+            "1",
+            "0"
+          ],
+          "displayName": "Overflow direction"
+        }
+      },
+      "padding": {
+        "paddingSelection": {
+          "type": "enum",
+          "values": [
+            "Wide",
+            "Normal",
+            "Narrow",
+            "Custom"
+          ],
+          "displayName": "Size"
+        },
+        "leftMargin": {
+          "type": "integer",
+          "displayName": "Left margin"
+        },
+        "rightMargin": {
+          "type": "integer",
+          "displayName": "Right margin"
+        },
+        "topMargin": {
+          "type": "integer",
+          "displayName": "Top margin"
+        },
+        "bottomMargin": {
+          "type": "integer",
+          "displayName": "Bottom margin"
+        },
+        "paddingUniform": {
+          "type": "integer",
+          "displayName": "Uniform padding"
+        },
+        "paddingIndividual": {
+          "type": "bool",
+          "displayName": "Individual padding"
+        }
+      },
+      "referenceLabel": {
+        "value": {
+          "type": "unknown",
+          "displayName": "Add label"
+        },
+        "formatString": {
+          "type": "formatting"
+        },
+        "backgroundColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "backgroundTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        },
+        "backgroundShow": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "paddingUniform": {
+          "type": "integer",
+          "displayName": "Uniform padding"
+        },
+        "paddingIndividual": {
+          "type": "bool",
+          "displayName": "Individual padding"
+        },
+        "paddingLeft": {
+          "type": "integer",
+          "displayName": "Left margin"
+        },
+        "paddingRight": {
+          "type": "integer",
+          "displayName": "Right margin"
+        },
+        "paddingTop": {
+          "type": "integer",
+          "displayName": "Top margin"
+        },
+        "paddingBottom": {
+          "type": "integer",
+          "displayName": "Bottom margin"
+        },
+        "rectangleRoundedCurve": {
+          "type": "integer",
+          "displayName": "Corner radius"
+        },
+        "rectangleRoundedCurveCustomStyle": {
+          "type": "bool",
+          "displayName": "Individual corners"
+        },
+        "rectangleRoundedCurveLeftBottom": {
+          "type": "integer",
+          "displayName": "Bottom left corner"
+        },
+        "rectangleRoundedCurveLeftTop": {
+          "type": "integer",
+          "displayName": "Top left corner"
+        },
+        "rectangleRoundedCurveRightBottom": {
+          "type": "integer",
+          "displayName": "Bottom right corner"
+        },
+        "rectangleRoundedCurveRightTop": {
+          "type": "integer",
+          "displayName": "Top right corner"
+        }
+      },
+      "referenceLabelDetail": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "detailFontColor": {
+          "type": "fill",
+          "displayName": "Font color"
+        },
+        "detailFontSize": {
+          "type": "formatting",
+          "displayName": "Text size"
+        },
+        "detailFontFamily": {
+          "type": "formatting",
+          "displayName": "Font family"
+        },
+        "detailUnderline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "detailBold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "detailItalic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "detailTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "detailPrecision": {
+          "type": "integer",
+          "displayName": "Value decimal places",
+          "description": "Select the number of decimal places to display for the values"
+        },
+        "detailDisplayUnits": {
+          "type": "enum",
+          "values": [
+            "0",
+            "1",
+            "1000",
+            "1000000",
+            "1000000000",
+            "1000000000000",
+            "-1"
+          ],
+          "displayName": "Display units",
+          "description": "Select the units (millions, billions, etc.)"
+        },
+        "showBlankAs": {
+          "type": "text",
+          "displayName": "Show blank as"
+        },
+        "detailValue": {
+          "type": "unknown",
+          "displayName": "Field"
+        },
+        "formatString": {
+          "type": "formatting"
+        },
+        "detailBackgroundColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "customFormatString": {
+          "type": "text",
+          "displayName": "Format code",
+          "description": "Enter a custom number format for your callout."
+        },
+        "textWrap": {
+          "type": "bool",
+          "displayName": "Text wrap"
+        }
+      },
+      "referenceLabelLayout": {
+        "position": {
+          "type": "enum",
+          "values": [
+            "below",
+            "right"
+          ],
+          "displayName": "Arrangement"
+        },
+        "arrangement": {
+          "type": "enum",
+          "values": [
+            "rows",
+            "columns"
+          ],
+          "displayName": "Arrangement"
+        },
+        "style": {
+          "type": "enum",
+          "values": [
+            "sentence",
+            "tabular"
+          ],
+          "displayName": "Style"
+        },
+        "horizontalAlignment": {
+          "type": "formatting",
+          "displayName": "Horizontal alignment"
+        },
+        "verticalAlignment": {
+          "type": "formatting",
+          "displayName": "Vertical alignment"
+        },
+        "valueArea": {
+          "type": "numeric",
+          "displayName": "Value area"
+        },
+        "labelSpace": {
+          "type": "numeric",
+          "displayName": "Space between labels"
+        },
+        "outerPadding": {
+          "type": "numeric",
+          "displayName": "Outer padding"
+        },
+        "customizePadding": {
+          "type": "bool",
+          "displayName": "Customize outer padding"
+        },
+        "paddingBeforeDivider": {
+          "type": "numeric",
+          "displayName": "Padding before divider line"
+        },
+        "paddingAfterDivider": {
+          "type": "numeric",
+          "displayName": "Padding after divider line"
+        }
+      },
+      "referenceLabelTitle": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "titleText": {
+          "type": "text",
+          "displayName": "Text"
+        },
+        "titleFontSize": {
+          "type": "formatting",
+          "displayName": "Text size"
+        },
+        "titleFontFamily": {
+          "type": "formatting",
+          "displayName": "Font family"
+        },
+        "titleUnderline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "titleItalic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "titleBold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "titleFontColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "titleTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "titleContentType": {
+          "type": "enum",
+          "values": [
+            "custom",
+            "fieldName"
+          ],
+          "displayName": "Content"
+        },
+        "textWrap": {
+          "type": "bool",
+          "displayName": "Text wrap"
+        }
+      },
+      "referenceLabelValue": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "valueFontColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "valueFontSize": {
+          "type": "formatting",
+          "displayName": "Text size"
+        },
+        "valueFontFamily": {
+          "type": "formatting",
+          "displayName": "Font family"
+        },
+        "valueUnderline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "valueBold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "valueItalic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "valueTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "valuePrecision": {
+          "type": "integer",
+          "displayName": "Value decimal places",
+          "description": "Select the number of decimal places to display for the values"
+        },
+        "valueDisplayUnits": {
+          "type": "enum",
+          "values": [
+            "0",
+            "1",
+            "1000",
+            "1000000",
+            "1000000000",
+            "1000000000000",
+            "-1"
+          ],
+          "displayName": "Display units",
+          "description": "Select the units (millions, billions, etc.)"
+        },
+        "showBlankAs": {
+          "type": "text",
+          "displayName": "Show blank as"
+        },
+        "customFormatString": {
+          "type": "text",
+          "displayName": "Format code",
+          "description": "Enter a custom number format for your callout."
+        },
+        "textWrap": {
+          "type": "bool",
+          "displayName": "Text wrap"
+        }
+      },
+      "rotation": {
+        "angle": {
+          "type": "numeric",
+          "displayName": "Rotation"
+        },
+        "shapeAngle": {
+          "type": "integer",
+          "displayName": "Shape rotation"
+        },
+        "textAngle": {
+          "type": "integer",
+          "displayName": "Text rotation"
+        }
+      },
+      "shadowCustom": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "shadowBlur": {
+          "type": "numeric",
+          "displayName": "Blur"
+        },
+        "shadowPositionPreset": {
+          "type": "enum",
+          "values": [
+            "custom",
+            "top",
+            "topLeft",
+            "topRight",
+            "center",
+            "centerLeft",
+            "centerRight",
+            "bottom",
+            "bottomLeft",
+            "bottomRight"
+          ],
+          "displayName": "Preset"
+        },
+        "angle": {
+          "type": "numeric",
+          "displayName": "Angle"
+        },
+        "shadowDistance": {
+          "type": "numeric",
+          "displayName": "Distance"
+        },
+        "position": {
+          "type": "enum",
+          "values": [
+            "Outer",
+            "Inner"
+          ],
+          "displayName": "Offset"
+        },
+        "shadowSpread": {
+          "type": "numeric",
+          "displayName": "Size"
+        }
+      },
+      "shapeCustomRectangle": {
+        "tileShape": {
+          "type": "enum",
+          "values": [
+            "arrow",
+            "arrowChevron",
+            "arrowPentagon",
+            "heart",
+            "hexagon",
+            "line",
+            "octagon",
+            "oval",
+            "parallelogram",
+            "pentagon",
+            "pill",
+            "rectangle",
+            "rectangleRounded",
+            "rectangleRoundedByPixel",
+            "tabCutCorner",
+            "tabCutTopCorners",
+            "tabCutTopCornersByPixel",
+            "tabRoundCorner",
+            "tabRoundTopCorners",
+            "speechbubbleRectangle",
+            "trapezoid",
+            "triangleIsoc",
+            "triangleRight"
+          ],
+          "displayName": "Shape"
+        },
+        "rectangleRoundedCurve": {
+          "type": "integer",
+          "displayName": "Rounded corners"
+        },
+        "rectangleRoundedCurveCustomStyle": {
+          "type": "bool",
+          "displayName": "Customize style"
+        },
+        "rectangleRoundedCurveLeftTop": {
+          "type": "integer",
+          "displayName": "Top left corner"
+        },
+        "rectangleRoundedCurveRightTop": {
+          "type": "integer",
+          "displayName": "Top right corner"
+        },
+        "rectangleRoundedCurveLeftBottom": {
+          "type": "integer",
+          "displayName": "Bottom left corner"
+        },
+        "rectangleRoundedCurveRightBottom": {
+          "type": "integer",
+          "displayName": "Bottom right corner"
+        },
+        "tabCutCornerSnipSizeTop": {
+          "type": "integer",
+          "displayName": "Size of top snips"
+        },
+        "tabCutCornerSnipSizeCustomStyle": {
+          "type": "bool",
+          "displayName": "Customize style"
+        },
+        "tabCutCornerSnipSizeLeftTop": {
+          "type": "integer",
+          "displayName": "Top left corner"
+        },
+        "tabCutCornerSnipSizeRightTop": {
+          "type": "integer",
+          "displayName": "Top right corner"
+        },
+        "tabCutCornerSnipSizeLeftBottom": {
+          "type": "integer",
+          "displayName": "Bottom left corner"
+        },
+        "tabCutCornerSnipSizeRightBottom": {
+          "type": "integer",
+          "displayName": "Bottom right corner"
+        },
+        "tabCutCornerSnipSizeBottom": {
+          "type": "integer",
+          "displayName": "Size of bottom snips"
+        }
+      },
+      "smallMultiplesAccentBar": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "position": {
+          "type": "enum",
+          "values": [
+            "Left",
+            "Right",
+            "Bottom",
+            "Top"
+          ],
+          "displayName": "Position"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "width": {
+          "type": "numeric",
+          "displayName": "Width"
+        }
+      },
+      "smallMultiplesBorder": {
+        "gridlineShow": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "gridlineWidth": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "gridlineColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "gridlineTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "gridlineStyle": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        }
+      },
+      "smallMultiplesCellBackGround": {
+        "backgroundFillColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "backgroundTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        },
+        "backgroundShow": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "backgroundImage": {
+          "type": "image",
+          "subProperties": {
+            "name": {
+              "type": "expr",
+              "required": true
+            },
+            "url": {
+              "type": "expr",
+              "required": true
+            },
+            "scaling": {
+              "type": "expr",
+              "required": false
+            }
+          },
+          "displayName": "Image"
+        },
+        "backgroundImageTransparency": {
+          "type": "numeric",
+          "displayName": "Image transparency",
+          "description": "Background image transparency"
+        },
+        "backgroundImageShow": {
+          "type": "bool",
+          "displayName": "Add image"
+        },
+        "backgroundImageType": {
+          "type": "enum",
+          "values": [
+            "image",
+            "imageUrl",
+            "imageData"
+          ],
+          "displayName": "Image source"
+        },
+        "backgroundImageUrl": {
+          "type": "unknown",
+          "displayName": "Image URL"
+        },
+        "backgroundImageData": {
+          "type": "text",
+          "displayName": "Data"
+        },
+        "backgroundImageDataFit": {
+          "type": "enum",
+          "values": [
+            "Fit",
+            "Stretch",
+            "Fill",
+            "Normal"
+          ],
+          "displayName": "Image fit"
+        },
+        "backgroundImageHeight": {
+          "type": "integer",
+          "displayName": "Image height"
+        },
+        "backgroundImageUrlFit": {
+          "type": "enum",
+          "values": [
+            "Fit",
+            "Stretch",
+            "Fill",
+            "Normal"
+          ],
+          "displayName": "Image fit"
+        },
+        "backgroundImageEffects": {
+          "type": "bool",
+          "displayName": "Image effects"
+        },
+        "backgroundImageExposure": {
+          "type": "integer",
+          "displayName": "Exposure"
+        },
+        "backgroundImageContrast": {
+          "type": "integer",
+          "displayName": "Contrast"
+        },
+        "backgroundImageSaturation": {
+          "type": "integer",
+          "displayName": "Saturation"
+        },
+        "backgroundImageBlur": {
+          "type": "integer",
+          "displayName": "Blur"
+        }
+      },
+      "smallMultiplesGrid": {
+        "gridlineShow": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "gridlineWidth": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "gridlineColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "gridlineTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "gridlineStyle": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        },
+        "gridlineRegion": {
+          "type": "enum",
+          "values": [
+            "all",
+            "inner",
+            "innerHorizontal",
+            "innerVertical"
+          ],
+          "displayName": "Gridlines"
+        }
+      },
+      "smallMultiplesHeader": {
+        "fontFamily": {
+          "type": "formatting",
+          "displayName": "Font family"
+        },
+        "fontSize": {
+          "type": "formatting",
+          "displayName": "Text size"
+        },
+        "fontColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "bold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "italic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "underline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "horizontalAlignment": {
+          "type": "formatting",
+          "displayName": "Horizontal alignment"
+        },
+        "verticalAlignment": {
+          "type": "formatting",
+          "displayName": "Vertical alignment"
+        },
+        "textWrap": {
+          "type": "bool",
+          "displayName": "Text wrap"
+        },
+        "displayUnits": {
+          "type": "enum",
+          "values": [
+            "0",
+            "1",
+            "1000",
+            "1000000",
+            "1000000000",
+            "1000000000000",
+            "-1"
+          ],
+          "displayName": "Display units",
+          "description": "Select the units (millions, billions, etc.)"
+        },
+        "precision": {
+          "type": "integer",
+          "displayName": "Value decimal places",
+          "description": "Select the number of decimal places to display for the values"
+        },
+        "showBlankAs": {
+          "type": "text",
+          "displayName": "Show blank as"
+        },
+        "leftMargin": {
+          "type": "integer",
+          "displayName": "Left padding"
+        },
+        "rightMargin": {
+          "type": "integer",
+          "displayName": "Right padding"
+        },
+        "topMargin": {
+          "type": "integer",
+          "displayName": "Top padding"
+        },
+        "bottomMargin": {
+          "type": "integer",
+          "displayName": "Bottom padding"
+        },
+        "backgroundShow": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "backgroundColor": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "backgroundTransparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        },
+        "backgroundImage": {
+          "type": "image",
+          "subProperties": {
+            "name": {
+              "type": "expr",
+              "required": true
+            },
+            "url": {
+              "type": "expr",
+              "required": true
+            },
+            "scaling": {
+              "type": "expr",
+              "required": false
+            }
+          },
+          "displayName": "Background Image"
+        },
+        "backgroundImageTransparency": {
+          "type": "numeric",
+          "displayName": "Image transparency"
+        },
+        "backgroundImageBlur": {
+          "type": "integer",
+          "displayName": "Blur"
+        },
+        "backgroundImageContrast": {
+          "type": "integer",
+          "displayName": "Contrast"
+        },
+        "backgroundImageData": {
+          "type": "text",
+          "displayName": "Data"
+        },
+        "backgroundImageEffects": {
+          "type": "bool",
+          "displayName": "Image effects"
+        },
+        "backgroundImageExposure": {
+          "type": "integer",
+          "displayName": "Exposure"
+        },
+        "backgroundImageFit": {
+          "type": "enum",
+          "values": [
+            "Fit",
+            "Stretch",
+            "Fill",
+            "Normal"
+          ],
+          "displayName": "Image fit"
+        },
+        "backgroundImageHeight": {
+          "type": "integer",
+          "displayName": "Image height"
+        },
+        "backgroundImageSaturation": {
+          "type": "integer",
+          "displayName": "Saturation"
+        },
+        "backgroundImageShow": {
+          "type": "bool",
+          "displayName": "Add image"
+        },
+        "backgroundImageType": {
+          "type": "enum",
+          "values": [
+            "image",
+            "imageUrl",
+            "imageData"
+          ],
+          "displayName": "Image source"
+        },
+        "backgroundImageUrl": {
+          "type": "unknown",
+          "displayName": "Image URL"
+        },
+        "customFormatString": {
+          "type": "text",
+          "displayName": "Format code",
+          "description": "Enter a custom number format for your callout."
+        },
+        "paddingUniform": {
+          "type": "integer",
+          "displayName": "Uniform padding"
+        },
+        "paddingIndividual": {
+          "type": "bool",
+          "displayName": "Individual padding"
+        }
+      },
+      "smallMultiplesLayout": {
+        "orientation": {
+          "type": "enum",
+          "values": [
+            "2",
+            "1",
+            "0"
+          ],
+          "displayName": "Arrangement"
+        },
+        "maxSmallMultiples": {
+          "type": "integer",
+          "displayName": "Rows"
+        },
+        "rowCount": {
+          "type": "integer",
+          "displayName": "Rows"
+        },
+        "columnCount": {
+          "type": "integer",
+          "displayName": "Columns"
+        },
+        "maxHeaderSize": {
+          "type": "integer",
+          "displayName": "Maximum header size",
+          "description": "The maximum percent of the visual allowed for the small multiple header"
+        },
+        "titleOrientation": {
+          "type": "enum",
+          "values": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "displayName": "Orientation"
+        },
+        "headerPosition": {
+          "type": "enum",
+          "values": [
+            "Top",
+            "Bottom",
+            "Left",
+            "Right"
+          ],
+          "displayName": "Position"
+        },
+        "cellPadding": {
+          "type": "integer",
+          "displayName": "Space between cards"
+        },
+        "customizePadding": {
+          "type": "bool",
+          "displayName": "Customize spacing"
+        },
+        "rowPadding": {
+          "type": "integer",
+          "displayName": "Space between rows"
+        },
+        "columnPadding": {
+          "type": "integer",
+          "displayName": "Space between columns"
+        },
+        "style": {
+          "type": "enum",
+          "values": [
+            "Table",
+            "Cards"
+          ],
+          "displayName": "Style"
+        },
+        "fixNumberOfTiles": {
+          "type": "bool",
+          "displayName": "Fit to space"
+        },
+        "autoGrid": {
+          "type": "bool",
+          "displayName": "Fit to space"
+        }
+      },
+      "smallMultiplesOuterShape": {
+        "rectangleRoundedCurve": {
+          "type": "integer",
+          "displayName": "Rounded corners"
+        },
+        "rectangleRoundedCurveLeftBottom": {
+          "type": "integer",
+          "displayName": "Bottom left corner"
+        },
+        "rectangleRoundedCurveLeftTop": {
+          "type": "integer",
+          "displayName": "Top left corner"
+        },
+        "rectangleRoundedCurveRightBottom": {
+          "type": "integer",
+          "displayName": "Bottom right corner"
+        },
+        "rectangleRoundedCurveRightTop": {
+          "type": "integer",
+          "displayName": "Top right corner"
+        },
+        "rectangleRoundedCurveCustomStyle": {
+          "type": "bool",
+          "displayName": "Individual corners"
+        }
+      },
+      "smallMultiplesOverFlow": {
+        "overFlowStyle": {
+          "type": "enum",
+          "values": [
+            "1",
+            "0"
+          ],
+          "displayName": "Overflow style"
+        },
+        "overFlowDirection": {
+          "type": "enum",
+          "values": [
+            "1",
+            "0"
+          ],
+          "displayName": "Overflow direction"
+        }
+      },
+      "spacing": {
+        "verticalSpacing": {
+          "type": "integer",
+          "displayName": "Space between label and value"
+        }
+      },
+      "value": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "fontFamily": {
+          "type": "formatting",
+          "displayName": "Font family"
+        },
+        "fontSize": {
+          "type": "formatting",
+          "displayName": "Text size"
+        },
+        "bold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "italic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "underline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "fontColor": {
+          "type": "fill",
+          "displayName": "Font color"
+        },
+        "horizontalAlignment": {
+          "type": "formatting",
+          "displayName": "Horizontal alignment"
+        },
+        "textWrap": {
+          "type": "bool",
+          "displayName": "Text wrap"
+        },
+        "labelDisplayUnits": {
+          "type": "enum",
+          "values": [
+            "0",
+            "1",
+            "1000",
+            "1000000",
+            "1000000000",
+            "1000000000000",
+            "-1"
+          ],
+          "displayName": "Display units",
+          "description": "Select the units (millions, billions, etc.)"
+        },
+        "labelPrecision": {
+          "type": "integer",
+          "displayName": "Value decimal places",
+          "description": "Select the number of decimal places to display for the values"
+        },
+        "customFormatString": {
+          "type": "text",
+          "displayName": "Format code",
+          "description": "Enter a custom number format for your callout."
+        },
+        "showBlankAs": {
+          "type": "text",
+          "displayName": "Show blank as"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color",
+          "description": "The background color for the visual"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Background color transparency"
+        }
+      },
+      "border": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "radius": {
+          "type": "numeric",
+          "displayName": "Radius"
+        },
+        "width": {
+          "type": "numeric",
+          "displayName": "Width"
+        }
+      },
+      "divider": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "width": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "style": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "displayName": "Line style"
+        },
+        "ignorePadding": {
+          "type": "bool",
+          "displayName": "Ignore padding"
+        }
+      },
+      "dropShadow": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "preset": {
+          "type": "enum",
+          "values": [
+            "BottomRight",
+            "Bottom",
+            "BottomLeft",
+            "CenterRight",
+            "Center",
+            "CenterLeft",
+            "TopRight",
+            "Top",
+            "TopLeft",
+            "Custom"
+          ],
+          "displayName": "Preset"
+        },
+        "position": {
+          "type": "enum",
+          "values": [
+            "Outer",
+            "Inner"
+          ],
+          "displayName": "Shadow position"
+        },
+        "color": {
+          "type": "fill",
+          "displayName": "Color"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency"
+        },
+        "shadowSpread": {
+          "type": "numeric",
+          "displayName": "Size"
+        },
+        "shadowBlur": {
+          "type": "numeric",
+          "displayName": "Blur"
+        },
+        "angle": {
+          "type": "numeric",
+          "displayName": "Angle"
+        },
+        "shadowDistance": {
+          "type": "numeric",
+          "displayName": "Distance"
+        }
+      },
+      "general": {
+        "x": {
+          "type": "numeric",
+          "displayName": "X Position"
+        },
+        "y": {
+          "type": "numeric",
+          "displayName": "Y Position"
+        },
+        "width": {
+          "type": "numeric",
+          "displayName": "Width"
+        },
+        "height": {
+          "type": "numeric",
+          "displayName": "Height"
+        },
+        "altText": {
+          "type": "formatting",
+          "displayName": "Alt text"
+        },
+        "allowBinnedLineSample": {
+          "type": "bool",
+          "displayName": "High density sampling"
+        },
+        "allowOverlappingPointsSample": {
+          "type": "bool",
+          "displayName": "High density sampling"
+        },
+        "keepLayerOrder": {
+          "type": "bool",
+          "displayName": "Maintain layer order",
+          "description": "Maintain layer order in reading view, even when selected"
+        }
+      },
+      "lockAspect": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        }
+      },
+      "padding": {
+        "top": {
+          "type": "numeric",
+          "displayName": "Top padding"
+        },
+        "bottom": {
+          "type": "numeric",
+          "displayName": "Bottom padding"
+        },
+        "left": {
+          "type": "numeric",
+          "displayName": "Left padding"
+        },
+        "right": {
+          "type": "numeric",
+          "displayName": "Right padding"
+        }
+      },
+      "spacing": {
+        "customizeSpacing": {
+          "type": "bool",
+          "displayName": "Customize spacing"
+        },
+        "verticalSpacing": {
+          "type": "numeric",
+          "displayName": "Space between label and value"
+        },
+        "spaceBelowTitle": {
+          "type": "numeric",
+          "displayName": "Space below title"
+        },
+        "spaceBelowSubTitle": {
+          "type": "numeric",
+          "displayName": "Space below subtitle"
+        },
+        "spaceBelowTitleArea": {
+          "type": "numeric",
+          "displayName": "Space below title area"
+        },
+        "spaceAbovePlotArea": {
+          "type": "numeric",
+          "displayName": "Space above plot area"
+        },
+        "spaceAboveDivider": {
+          "type": "numeric",
+          "displayName": "Space above divider"
+        },
+        "spaceAboveSubtitle": {
+          "type": "numeric",
+          "displayName": "Space above subtitle"
+        }
+      },
+      "stylePreset": {
+        "name": {
+          "type": "formatting",
+          "displayName": "Style"
+        }
+      },
+      "subTitle": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "text": {
+          "type": "text",
+          "displayName": "Title text",
+          "description": "The name of the visual"
+        },
+        "heading": {
+          "type": "enum",
+          "values": [
+            "Normal",
+            "Heading2",
+            "Heading3",
+            "Heading4",
+            "Heading5",
+            "Heading6"
+          ],
+          "displayName": "Title heading",
+          "description": "Set the heading tag for your visual titles to help with screen reader accessibility. This won't impact the visual styling of your titles."
+        },
+        "titleWrap": {
+          "type": "bool",
+          "displayName": "Word wrap"
+        },
+        "fontColor": {
+          "type": "fill",
+          "displayName": "Font color",
+          "description": "Font color for the title"
+        },
+        "alignment": {
+          "type": "formatting",
+          "displayName": "Alignment",
+          "description": "Alignment position for the title"
+        },
+        "fontSize": {
+          "type": "formatting",
+          "displayName": "Text size",
+          "description": "Font size for the title"
+        },
+        "bold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "italic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "underline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "fontFamily": {
+          "type": "formatting",
+          "displayName": "Font family"
+        }
+      },
+      "title": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "text": {
+          "type": "text",
+          "displayName": "Title text",
+          "description": "The name of the visual"
+        },
+        "heading": {
+          "type": "enum",
+          "values": [
+            "Normal",
+            "Heading2",
+            "Heading3",
+            "Heading4",
+            "Heading5",
+            "Heading6"
+          ],
+          "displayName": "Title heading",
+          "description": "Set the heading tag for your visual titles to help with screen reader accessibility. This won't impact the visual styling of your titles."
+        },
+        "titleWrap": {
+          "type": "bool",
+          "displayName": "Word wrap"
+        },
+        "fontColor": {
+          "type": "fill",
+          "displayName": "Font color",
+          "description": "Font color for the title"
+        },
+        "background": {
+          "type": "fill",
+          "displayName": "Background color",
+          "description": "Background color for the title"
+        },
+        "alignment": {
+          "type": "formatting",
+          "displayName": "Alignment",
+          "description": "Alignment position for the title"
+        },
+        "fontSize": {
+          "type": "formatting",
+          "displayName": "Text size",
+          "description": "Font size for the title"
+        },
+        "bold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "italic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "underline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "fontFamily": {
+          "type": "formatting",
+          "displayName": "Font family"
+        }
+      },
+      "visualHeader": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "background": {
+          "type": "fill",
+          "displayName": "Background color",
+          "description": "The background color for the visual header"
+        },
+        "border": {
+          "type": "fill",
+          "displayName": "Border",
+          "description": "Border"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Set transparency for visual header background"
+        },
+        "foreground": {
+          "type": "fill",
+          "displayName": "Icon color",
+          "description": "The color for the visual header icons"
+        },
+        "showVisualInformationButton": {
+          "type": "bool",
+          "displayName": "Visual information icon",
+          "description": "Select to turn on visual information icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showVisualWarningButton": {
+          "type": "bool",
+          "displayName": "Visual warning icon",
+          "description": "Select to turn on visual warning icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showVisualErrorButton": {
+          "type": "bool",
+          "displayName": "Visual error icon",
+          "description": "Select to turn on visual error icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showDrillRoleSelector": {
+          "type": "bool",
+          "displayName": "Drill on dropdown",
+          "description": "Select to turn on drill on dropdown. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showDrillUpButton": {
+          "type": "bool",
+          "displayName": "Drill up icon",
+          "description": "Select to turn on drill up icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showDrillToggleButton": {
+          "type": "bool",
+          "displayName": "Drill down icon",
+          "description": "Select to turn on drill down icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showDrillDownLevelButton": {
+          "type": "bool",
+          "displayName": "Show next level icon",
+          "description": "Select to turn on show next level icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showDrillDownExpandButton": {
+          "type": "bool",
+          "displayName": "Expand to next level icon",
+          "description": "Select to turn on expand to next level icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showPinButton": {
+          "type": "bool",
+          "displayName": "Pin icon",
+          "description": "Select to turn on pin icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showFilterRestatementButton": {
+          "type": "bool",
+          "displayName": "Filter icon",
+          "description": "Turn on the filter icon to show users a summary of the visual-level filters applied to each visual."
+        },
+        "showFocusModeButton": {
+          "type": "bool",
+          "displayName": "Focus mode icon",
+          "description": "Select to turn on focus mode icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showCopyVisualImageButton": {
+          "type": "bool",
+          "displayName": "Copy icon",
+          "description": "Turn on the copy icon to allow people in reading view to copy visuals and paste them elsewhere"
+        },
+        "showSeeDataLayoutToggleButton": {
+          "type": "bool",
+          "displayName": "See data layout icon",
+          "description": "Select to turn on See Data layout icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showOptionsMenu": {
+          "type": "bool",
+          "displayName": "More options icon",
+          "description": "Select to turn on more options icon. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showCommentButton": {
+          "type": "bool",
+          "displayName": "Comment button",
+          "description": "Select to show comment indicator button. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showTooltipButton": {
+          "type": "bool",
+          "displayName": "Visual header tooltip icon",
+          "description": "Select to show the visual header tooltip icon"
+        },
+        "showPersonalizeVisualButton": {
+          "type": "bool",
+          "displayName": "Personalize visual",
+          "description": "Allow report readers to personalize this visual to suit their needs."
+        },
+        "showSmartNarrativeButton": {
+          "type": "bool",
+          "displayName": "Smart narrative",
+          "description": "Select to turn on smart narrative icon."
+        },
+        "showSetAlertButton": {
+          "type": "bool",
+          "displayName": "Set alert button",
+          "description": "Turn on the set alert icon to allow people to create an alert on a measure in the visual. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showFollowVisualButton": {
+          "type": "bool",
+          "displayName": "Follow visual button",
+          "description": "Turn on the follow visual icon to allow people to get alerts whenever a measure changes in the visual. Changes to the visual header icon's visibility will only be applied in reading view."
+        },
+        "showCopilotSummaryButton": {
+          "type": "bool",
+          "displayName": "Copilot summary",
+          "description": "Select to show the Copilot summary icon"
+        }
+      },
+      "visualHeaderTooltip": {
+        "type": {
+          "type": "enum",
+          "values": [
+            "Default",
+            "Canvas"
+          ],
+          "displayName": "Type"
+        },
+        "section": {
+          "type": "unknown",
+          "displayName": "Page",
+          "description": "Choose the page you want to use for your tooltip"
+        },
+        "text": {
+          "type": "text",
+          "displayName": "Tooltip text",
+          "description": "Write the custom tooltip that will show up when a report page tooltip hasn't been chosen or isn't supported"
+        },
+        "titleFontColor": {
+          "type": "fill",
+          "displayName": "Color",
+          "description": "Font color for the tooltip"
+        },
+        "fontSize": {
+          "type": "formatting",
+          "displayName": "Text size",
+          "description": "Font size for the tooltip"
+        },
+        "fontFamily": {
+          "type": "formatting",
+          "displayName": "Font family",
+          "description": "Font family for the tooltip"
+        },
+        "bold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "italic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "underline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "background": {
+          "type": "fill",
+          "displayName": "Background color",
+          "description": "Background color for the tooltip"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Set transparency for the tooltip background"
+        },
+        "themedTitleFontColor": {
+          "type": "fill",
+          "displayName": "Color",
+          "description": "Font color for the tooltip"
+        },
+        "themedBackground": {
+          "type": "fill",
+          "displayName": "Background color",
+          "description": "Background color for the tooltip"
+        }
+      },
+      "visualLink": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "type": {
+          "type": "enum",
+          "values": [
+            "Back",
+            "Bookmark",
+            "Drillthrough",
+            "PageNavigation",
+            "Qna",
+            "WebUrl",
+            "ApplyAllSlicers",
+            "ClearAllSlicers",
+            "DataFunction"
+          ],
+          "displayName": "Type",
+          "description": "Choose what action will occur when this element is selected."
+        },
+        "bookmark": {
+          "type": "unknown",
+          "displayName": "Bookmark",
+          "description": "Choose which bookmark will open when this element is selected."
+        },
+        "disabledTooltip": {
+          "type": "text",
+          "displayName": "Disabled tooltip"
+        },
+        "drillthroughSection": {
+          "type": "unknown",
+          "displayName": "Destination",
+          "description": "Select a single destination or use conditional formatting for custom destination logic, such as multi-destination support."
+        },
+        "enabledTooltip": {
+          "type": "text",
+          "displayName": "Enabled tooltip"
+        },
+        "qna": {
+          "type": "unknown"
+        },
+        "suppressDefaultTooltip": {
+          "type": "bool",
+          "displayName": "No tooltips"
+        },
+        "showDefaultTooltip": {
+          "type": "bool",
+          "displayName": "Show tooltips"
+        },
+        "navigationSection": {
+          "type": "unknown",
+          "displayName": "Destination",
+          "description": "Select a single destination or use conditional formatting for custom destination logic, such as multi-destination support."
+        },
+        "tooltip": {
+          "type": "text",
+          "displayName": "Tooltip",
+          "description": "Write the custom tooltip that will show when users hover over this element."
+        },
+        "tooltipPlaceholderText": {
+          "type": "text",
+          "displayName": "Placeholder for tooltip"
+        },
+        "webUrl": {
+          "type": "unknown",
+          "displayName": "Web URL"
+        },
+        "dataFunction": {
+          "type": "unknown",
+          "displayName": "Data function"
+        }
+      },
+      "visualTooltip": {
+        "show": {
+          "type": "bool",
+          "displayName": "Show"
+        },
+        "type": {
+          "type": "enum",
+          "values": [
+            "Default",
+            "Canvas"
+          ],
+          "displayName": "Type",
+          "description": "Allows report pages to be used as tooltips for this visual"
+        },
+        "section": {
+          "type": "unknown",
+          "displayName": "Page",
+          "description": "Choose the page you want to use for your tooltip"
+        },
+        "showActionsInTooltips": {
+          "type": "bool",
+          "displayName": "Actions",
+          "description": "Add drill options within tooltips"
+        },
+        "titleFontColor": {
+          "type": "fill",
+          "displayName": "Label text color",
+          "description": "Text color for the tooltip label"
+        },
+        "valueFontColor": {
+          "type": "fill",
+          "displayName": "Value text color",
+          "description": "Text color for the tooltip value"
+        },
+        "fontSize": {
+          "type": "formatting",
+          "displayName": "Text size",
+          "description": "Font size for the tooltip"
+        },
+        "bold": {
+          "type": "bool",
+          "displayName": "Bold"
+        },
+        "italic": {
+          "type": "bool",
+          "displayName": "Italic"
+        },
+        "underline": {
+          "type": "bool",
+          "displayName": "Underline"
+        },
+        "fontFamily": {
+          "type": "formatting",
+          "displayName": "Font family",
+          "description": "Font family for the tooltip"
+        },
+        "background": {
+          "type": "fill",
+          "displayName": "Background color",
+          "description": "Background color for the tooltip"
+        },
+        "transparency": {
+          "type": "numeric",
+          "displayName": "Transparency",
+          "description": "Set transparency for the tooltip background"
+        },
+        "actionFontColor": {
+          "type": "fill",
+          "displayName": "Drill text and icon color",
+          "description": "Color for drill icon and text"
+        },
+        "themedTitleFontColor": {
+          "type": "fill",
+          "displayName": "Label text color",
+          "description": "Text color for the tooltip label"
+        },
+        "themedBackground": {
+          "type": "fill",
+          "displayName": "Background color",
+          "description": "Background color for the tooltip"
+        },
+        "themedValueFontColor": {
+          "type": "fill",
+          "displayName": "Value text color",
+          "description": "Text color for the tooltip value"
+        },
+        "showTooltipFieldsOnly": {
+          "type": "bool",
+          "displayName": "Tooltip fields only",
+          "description": "Include only the fields you've explicitly added to Tooltips in the Build visual pane"
+        },
+        "showSentenceFormat": {
+          "type": "bool",
+          "displayName": "Sentence format only",
+          "description": "Display tooltips using your sentence template"
+        },
+        "sentenceTemplate": {
+          "type": "text",
+          "displayName": "Sentence template",
+          "description": "A template string with {placeholder} tokens that are replaced with tooltip values"
+        },
+        "showChartSpecificTooltips": {
+          "type": "bool",
+          "displayName": "Chart-specific tooltips",
+          "description": "Show chart-specific tooltips"
+        },
+        "showValuesInBold": {
+          "type": "bool",
+          "displayName": "Bold values",
+          "description": "Show sentence values in bold"
+        }
+      }
+    }
+  }
+}

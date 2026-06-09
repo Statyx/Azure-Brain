@@ -1,0 +1,85 @@
+﻿{
+  "data": {
+    "tileShape": {
+      "type": "enum",
+      "values": [
+        "arrow",
+        "arrowChevron",
+        "arrowPentagon",
+        "heart",
+        "hexagon",
+        "line",
+        "octagon",
+        "oval",
+        "parallelogram",
+        "pentagon",
+        "pill",
+        "rectangle",
+        "rectangleRounded",
+        "rectangleRoundedByPixel",
+        "tabCutCorner",
+        "tabCutTopCorners",
+        "tabCutTopCornersByPixel",
+        "tabRoundCorner",
+        "tabRoundTopCorners",
+        "speechbubbleRectangle",
+        "trapezoid",
+        "triangleIsoc",
+        "triangleRight"
+      ],
+      "displayName": "Shape"
+    },
+    "rectangleRoundedCurve": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "rectangleRoundedCurveCustomStyle": {
+      "type": "bool",
+      "displayName": "Customize style"
+    },
+    "rectangleRoundedCurveLeftTop": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "rectangleRoundedCurveRightTop": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "rectangleRoundedCurveLeftBottom": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "rectangleRoundedCurveRightBottom": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "tabCutCornerSnipSizeTop": {
+      "type": "integer",
+      "displayName": "Size of top snips"
+    },
+    "tabCutCornerSnipSizeCustomStyle": {
+      "type": "bool",
+      "displayName": "Customize style"
+    },
+    "tabCutCornerSnipSizeLeftTop": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "tabCutCornerSnipSizeRightTop": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "tabCutCornerSnipSizeLeftBottom": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "tabCutCornerSnipSizeRightBottom": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "tabCutCornerSnipSizeBottom": {
+      "type": "integer",
+      "displayName": "Size of bottom snips"
+    }
+  }
+}

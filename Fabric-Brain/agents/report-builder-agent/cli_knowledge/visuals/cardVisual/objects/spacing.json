@@ -1,0 +1,40 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "_selectorHint": [
+      "default"
+    ],
+    "customizeSpacing": {
+      "type": "bool",
+      "displayName": "Customize spacing"
+    },
+    "verticalSpacing": {
+      "type": "numeric",
+      "displayName": "Space between label and value"
+    },
+    "spaceBelowTitle": {
+      "type": "numeric",
+      "displayName": "Space below title"
+    },
+    "spaceBelowSubTitle": {
+      "type": "numeric",
+      "displayName": "Space below subtitle"
+    },
+    "spaceBelowTitleArea": {
+      "type": "numeric",
+      "displayName": "Space below title area"
+    },
+    "spaceAbovePlotArea": {
+      "type": "numeric",
+      "displayName": "Space above plot area"
+    },
+    "spaceAboveDivider": {
+      "type": "numeric",
+      "displayName": "Space above divider"
+    },
+    "spaceAboveSubtitle": {
+      "type": "numeric",
+      "displayName": "Space above subtitle"
+    }
+  }
+}

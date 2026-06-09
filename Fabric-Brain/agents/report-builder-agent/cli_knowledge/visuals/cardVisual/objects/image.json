@@ -1,0 +1,142 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "imageType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image type"
+    },
+    "image": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    },
+    "imageUrl": {
+      "type": "text",
+      "displayName": "Image URL"
+    },
+    "imageData": {
+      "type": "text",
+      "displayName": "Data"
+    },
+    "fit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "imageEffects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "blur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "contrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "exposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "saturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Left",
+        "Right",
+        "Bottom",
+        "Top"
+      ],
+      "displayName": "Position"
+    },
+    "padding": {
+      "type": "integer",
+      "displayName": "Space between image and callout"
+    },
+    "size": {
+      "type": "integer",
+      "displayName": "Size"
+    },
+    "altText": {
+      "type": "formatting",
+      "displayName": "Alt text"
+    },
+    "fixedSize": {
+      "type": "bool",
+      "displayName": "Image height"
+    },
+    "imageAreaSize": {
+      "type": "integer",
+      "displayName": "Image area size"
+    },
+    "verticalAlignment": {
+      "type": "formatting",
+      "displayName": "Vertical alignment"
+    },
+    "horizontalAlignment": {
+      "type": "formatting",
+      "displayName": "Horizontal alignment"
+    },
+    "rectangleRoundedCurve": {
+      "type": "integer",
+      "displayName": "Corner radius"
+    },
+    "rectangleRoundedCurveCustomStyle": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "rectangleRoundedCurveLeftBottom": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "rectangleRoundedCurveLeftTop": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "rectangleRoundedCurveRightBottom": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "rectangleRoundedCurveRightTop": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    }
+  }
+}

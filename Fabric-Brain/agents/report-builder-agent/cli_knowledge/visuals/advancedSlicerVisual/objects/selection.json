@@ -1,0 +1,23 @@
+﻿{
+  "data": {
+    "selectAllCheckboxEnabled": {
+      "type": "bool",
+      "displayName": "Show \"Select all\" option",
+      "description": "Show \"Select all\" as an option in the slicer. This selects all the values in the slicer so you can unselect them one by one to create an \"is not\" type filter."
+    },
+    "strictSingleSelect": {
+      "type": "bool",
+      "displayName": "Force selection",
+      "description": "Force Selection ensures only one item can be chosen at a time. If no item is selected, the first available will be automatically chosen."
+    },
+    "singleSelect": {
+      "type": "bool",
+      "displayName": "Single select"
+    },
+    "restrictToLeafNodes": {
+      "type": "bool",
+      "displayName": "Restrict to leaf nodes",
+      "description": "Enable this option to allow selection only at the last level (leaf nodes) of the hierarchy tree. This ensures that users can only select the most specific items, preventing selection of intermediate categories"
+    }
+  }
+}

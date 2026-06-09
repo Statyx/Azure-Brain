@@ -1,0 +1,45 @@
+﻿{
+  "data": {
+    "scorecardId": {
+      "type": "text",
+      "displayName": "URL"
+    },
+    "scorecardReference": {
+      "type": "unknown"
+    },
+    "goalIds": {
+      "type": "text",
+      "displayName": "Metrics"
+    },
+    "displayMode": {
+      "type": "enum",
+      "values": [
+        "tile",
+        "list"
+      ],
+      "displayName": "Display"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "foregroundColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "tableBackgroundColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "showCommandBar": {
+      "type": "bool",
+      "displayName": "Show command bar in reading view"
+    }
+  }
+}

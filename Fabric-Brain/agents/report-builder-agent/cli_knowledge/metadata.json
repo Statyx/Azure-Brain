@@ -1,0 +1,7 @@
+﻿{
+    "cli_version":  "0.1.1",
+    "dumped_at_utc":  "2026-06-09T14:26:49.0666056Z",
+    "visual_type_count":  57,
+    "vco_count":  15,
+    "provider_source":  "npm:@microsoft/powerbi-core-visual-schema"
+}

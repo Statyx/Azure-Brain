@@ -1,0 +1,37 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "axis",
+                                 "calloutValue",
+                                 "dataPoint",
+                                 "general",
+                                 "labels",
+                                 "target"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "axis",
+                                     "calloutValue",
+                                     "dataPoint",
+                                     "general",
+                                     "labels",
+                                     "target"
+                                 ]
+             }
+}

@@ -1,0 +1,86 @@
+﻿{
+  "data": {
+    "visualType": "lineChart",
+    "capabilityKey": "lineChart",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "X-axis",
+        "description": "Fields to place on the horizontal or vertical axis"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "Measure",
+        "displayName": "Y-axis",
+        "description": "The numeric amounts to plot"
+      },
+      "Y2": {
+        "name": "Y2",
+        "kind": "Measure",
+        "displayName": "Secondary y-axis",
+        "description": "The numeric amounts to plot"
+      },
+      "Rows": {
+        "name": "Rows",
+        "kind": "Grouping",
+        "displayName": "Small multiples",
+        "description": "Split your visual into multiple, smaller visuals based on your selected fields"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Category",
+      "Y"
+    ],
+    "optionalRoles": [
+      "Series",
+      "Y2",
+      "Rows",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Series": 1
+    },
+    "formattingObjects": [
+      "annotationTemplate",
+      "anomalyDetection",
+      "categoryAxis",
+      "dataPoint",
+      "error",
+      "filters",
+      "forecast",
+      "general",
+      "labels",
+      "layout",
+      "legend",
+      "lineStyles",
+      "markers",
+      "plotArea",
+      "referenceLine",
+      "scalarKey",
+      "seriesLabels",
+      "smallMultiplesLayout",
+      "subheader",
+      "trend",
+      "valueAxis",
+      "xAxisReferenceLine",
+      "y1AxisReferenceLine",
+      "y2Axis",
+      "zoom"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

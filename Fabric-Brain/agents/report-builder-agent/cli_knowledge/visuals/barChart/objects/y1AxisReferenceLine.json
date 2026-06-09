@@ -1,0 +1,141 @@
+﻿{
+  "data": {
+    "displayName": {
+      "type": "text",
+      "displayName": "Name",
+      "description": "Set reference line name"
+    },
+    "value": {
+      "type": "numeric",
+      "displayName": "Value",
+      "description": "Set reference line numeric value "
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "back",
+        "front"
+      ],
+      "displayName": "Position",
+      "description": "Arrange relative to chart data points"
+    },
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "width": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "lineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "style": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted",
+        "custom"
+      ],
+      "displayName": "Line style"
+    },
+    "autoScale": {
+      "type": "bool",
+      "displayName": "Scale by width",
+      "description": "Automatically adjust the spacing between dashes and dots based on line width."
+    },
+    "dashArray": {
+      "type": "formatting",
+      "displayName": "Dash array",
+      "description": "Space-separated values for dash and gap lengths in pixels, repeating in sequence."
+    },
+    "dashCap": {
+      "type": "enum",
+      "values": [
+        "none",
+        "round",
+        "square"
+      ],
+      "displayName": "Dash cap"
+    },
+    "dataLabelShow": {
+      "type": "bool",
+      "displayName": "Data label",
+      "description": "Display a data label for the reference line"
+    },
+    "dataLabelText": {
+      "type": "enum",
+      "values": [
+        "Value",
+        "Name",
+        "ValueAndName"
+      ],
+      "displayName": "Text",
+      "description": "Text shown in the label"
+    },
+    "dataLabelColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Set the reference line data label color"
+    },
+    "dataLabelDecimalPoints": {
+      "type": "numeric",
+      "displayName": "Value decimal places"
+    },
+    "dataLabelHorizontalPosition": {
+      "type": "enum",
+      "values": [
+        "left",
+        "right"
+      ],
+      "displayName": "Horizontal position",
+      "description": "Set the horizontal position for the reference line data label"
+    },
+    "dataLabelVerticalPosition": {
+      "type": "enum",
+      "values": [
+        "above",
+        "under"
+      ],
+      "displayName": "Vertical position",
+      "description": "Set the vertical position for the reference line data label"
+    },
+    "dataLabelDisplayUnits": {
+      "type": "formatting",
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "shadeShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "shadeRegion": {
+      "type": "enum",
+      "values": [
+        "before",
+        "after",
+        "none"
+      ],
+      "displayName": "Shade region"
+    },
+    "shadeColor": {
+      "type": "fill",
+      "displayName": "Shade color"
+    },
+    "shadeColorMatchStroke": {
+      "type": "bool",
+      "displayName": "Match line color",
+      "description": "Match the legend icon color to the color of the line, not the marker"
+    },
+    "shadeTransparency": {
+      "type": "numeric",
+      "displayName": "Shade transparency"
+    }
+  }
+}

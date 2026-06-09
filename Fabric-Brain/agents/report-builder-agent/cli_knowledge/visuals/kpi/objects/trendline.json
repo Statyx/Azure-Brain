@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    }
+  }
+}

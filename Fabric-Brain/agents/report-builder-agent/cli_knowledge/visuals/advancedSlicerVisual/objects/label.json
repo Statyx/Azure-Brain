@@ -1,0 +1,91 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default",
+      "hover",
+      "press",
+      "selected",
+      "mixed"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "heading": {
+      "type": "enum",
+      "values": [
+        "Normal",
+        "Heading2",
+        "Heading3",
+        "Heading4",
+        "Heading5",
+        "Heading6"
+      ],
+      "displayName": "Heading"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "belowValue",
+        "aboveValue"
+      ],
+      "displayName": "Position"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "textWrap": {
+      "type": "bool",
+      "displayName": "Text wrap"
+    },
+    "alignBaselines": {
+      "type": "bool",
+      "displayName": "Align baselines"
+    },
+    "matchValueAlignment": {
+      "type": "bool",
+      "displayName": "Match value alignment"
+    },
+    "horizontalAlignment": {
+      "type": "formatting",
+      "displayName": "Horizontal alignment"
+    },
+    "field": {
+      "type": "unknown",
+      "displayName": "Field"
+    },
+    "labelSource": {
+      "type": "enum",
+      "values": [
+        "auto",
+        "custom"
+      ],
+      "displayName": "Label source"
+    }
+  }
+}

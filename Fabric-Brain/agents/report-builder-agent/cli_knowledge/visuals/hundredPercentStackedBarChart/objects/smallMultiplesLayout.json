@@ -1,0 +1,90 @@
+﻿{
+  "data": {
+    "layoutType": {
+      "type": "enum",
+      "values": [
+        "auto",
+        "custom"
+      ],
+      "displayName": "Grid layout"
+    },
+    "rowCount": {
+      "type": "integer",
+      "displayName": "Rows"
+    },
+    "columnCount": {
+      "type": "integer",
+      "displayName": "Columns"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color for each small multiple"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Background transparency",
+      "description": "Background color transparency"
+    },
+    "gridLineType": {
+      "type": "enum",
+      "values": [
+        "all",
+        "inner",
+        "innerHorizontal",
+        "innerVertical"
+      ],
+      "displayName": "Gridlines",
+      "description": "Gridlines to delineate the small multiple visuals"
+    },
+    "gridLineShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "gridLineWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "gridLineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "gridLineTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "gridLineStyle": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    },
+    "gridPadding": {
+      "type": "numeric",
+      "displayName": "Grid padding"
+    },
+    "advancedPaddingOptions": {
+      "type": "bool",
+      "displayName": "Advanced padding options"
+    },
+    "columnPaddingInner": {
+      "type": "numeric",
+      "displayName": "Inner column padding"
+    },
+    "columnPaddingOuter": {
+      "type": "numeric",
+      "displayName": "Outer column padding"
+    },
+    "rowPaddingInner": {
+      "type": "numeric",
+      "displayName": "Inner row padding"
+    },
+    "rowPaddingOuter": {
+      "type": "numeric",
+      "displayName": "Outer row padding"
+    }
+  }
+}

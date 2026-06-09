@@ -1,0 +1,28 @@
+﻿{
+  "data": {
+    "rectangleRoundedCurve": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "rectangleRoundedCurveLeftBottom": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "rectangleRoundedCurveLeftTop": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "rectangleRoundedCurveRightBottom": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "rectangleRoundedCurveRightTop": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "rectangleRoundedCurveCustomStyle": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    }
+  }
+}

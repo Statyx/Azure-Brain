@@ -1,0 +1,42 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "fillMatchColor": {
+      "type": "bool",
+      "displayName": "Match series color",
+      "description": "Change the color of ribbons to match the color of the series."
+    },
+    "fillColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "fillTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderShow": {
+      "type": "bool",
+      "displayName": "Border"
+    },
+    "borderSize": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "borderColorMatchFill": {
+      "type": "bool",
+      "displayName": "Match fill color",
+      "description": "Match the border color to the main shape color."
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "borderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    }
+  }
+}

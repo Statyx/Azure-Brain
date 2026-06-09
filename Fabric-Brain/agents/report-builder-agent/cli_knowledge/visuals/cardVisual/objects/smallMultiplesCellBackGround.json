@@ -1,0 +1,105 @@
+﻿{
+  "data": {
+    "backgroundFillColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "backgroundShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "backgroundImage": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      },
+      "displayName": "Image"
+    },
+    "backgroundImageTransparency": {
+      "type": "numeric",
+      "displayName": "Image transparency",
+      "description": "Background image transparency"
+    },
+    "backgroundImageShow": {
+      "type": "bool",
+      "displayName": "Add image"
+    },
+    "backgroundImageType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image source"
+    },
+    "backgroundImageUrl": {
+      "type": "unknown",
+      "displayName": "Image URL"
+    },
+    "backgroundImageData": {
+      "type": "text",
+      "displayName": "Data"
+    },
+    "backgroundImageDataFit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "backgroundImageHeight": {
+      "type": "integer",
+      "displayName": "Image height"
+    },
+    "backgroundImageUrlFit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "backgroundImageEffects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "backgroundImageExposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "backgroundImageContrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "backgroundImageSaturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "backgroundImageBlur": {
+      "type": "integer",
+      "displayName": "Blur"
+    }
+  }
+}

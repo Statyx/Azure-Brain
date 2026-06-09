@@ -1,0 +1,24 @@
+﻿{
+  "data": {
+    "visualType": "pageNavigator",
+    "capabilityKey": "pageNavigator",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "accentBar",
+      "fill",
+      "glow",
+      "layout",
+      "outline",
+      "pages",
+      "rotation",
+      "shadow",
+      "shape",
+      "text"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

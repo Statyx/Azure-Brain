@@ -1,0 +1,45 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "accentBar (selector: default|hover|selected|disabled)",
+                                 "fill (selector: default|hover|selected|disabled)",
+                                 "glow (selector: default|hover|selected|disabled)",
+                                 "layout",
+                                 "outline (selector: default|hover|selected|disabled)",
+                                 "pages",
+                                 "rotation",
+                                 "shadow (selector: default|hover|selected|disabled)",
+                                 "shape",
+                                 "text (selector: default|hover|selected|disabled)"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "accentBar",
+                                     "fill",
+                                     "glow",
+                                     "layout",
+                                     "outline",
+                                     "pages",
+                                     "rotation",
+                                     "shadow",
+                                     "shape",
+                                     "text"
+                                 ]
+             }
+}

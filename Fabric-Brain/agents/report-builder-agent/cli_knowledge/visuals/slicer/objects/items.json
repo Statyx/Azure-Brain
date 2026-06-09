@@ -1,0 +1,56 @@
+﻿{
+  "data": {
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "textSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "background": {
+      "type": "fill",
+      "displayName": "Background color"
+    },
+    "outlineStyle": {
+      "type": "unknown",
+      "displayName": "Outline"
+    },
+    "expandCollapseToggleType": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "2"
+      ],
+      "displayName": "Expand/collapse icon"
+    },
+    "steppedLayoutIndentation": {
+      "type": "numeric",
+      "displayName": "Stepped layout indentation"
+    },
+    "padding": {
+      "type": "numeric",
+      "displayName": "Padding"
+    },
+    "accessibilityContrastProperties": {
+      "type": "bool"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+﻿{
+  "data": {
+    "visualType": "basicShape",
+    "capabilityKey": "basicShape",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "fill",
+      "general",
+      "line",
+      "rotation"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

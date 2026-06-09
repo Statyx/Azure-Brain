@@ -1,0 +1,82 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "Row",
+      "Column"
+    ],
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color",
+      "description": "Font color of the cells"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "rowSubtotals": {
+      "type": "bool",
+      "displayName": "Row subtotals",
+      "description": "Show subtotals for all row groups"
+    },
+    "rowSubtotalsLabel": {
+      "type": "text",
+      "displayName": "Row subtotals label"
+    },
+    "rowSubtotalsPosition": {
+      "type": "enum",
+      "values": [
+        "Top",
+        "Bottom"
+      ],
+      "displayName": "Row subtotal position"
+    },
+    "perRowLevel": {
+      "type": "bool",
+      "displayName": "Per row level"
+    },
+    "columnSubtotals": {
+      "type": "bool",
+      "displayName": "Column subtotals",
+      "description": "Show subtotals for all column groups"
+    },
+    "columnSubtotalsLabel": {
+      "type": "text",
+      "displayName": "Column subtotals label"
+    },
+    "perColumnLevel": {
+      "type": "bool",
+      "displayName": "Per column level"
+    },
+    "applyToHeaders": {
+      "type": "bool",
+      "displayName": "Apply to labels"
+    },
+    "levelSubtotalEnabled": {
+      "type": "bool"
+    },
+    "levelSubtotalLabel": {
+      "type": "text"
+    }
+  }
+}

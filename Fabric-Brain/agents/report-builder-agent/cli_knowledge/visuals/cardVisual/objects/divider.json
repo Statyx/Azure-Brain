@@ -1,0 +1,33 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "_selectorHint": [
+      "default"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "width": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "style": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    },
+    "ignorePadding": {
+      "type": "bool",
+      "displayName": "Ignore padding"
+    }
+  }
+}

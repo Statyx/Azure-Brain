@@ -1,0 +1,46 @@
+﻿{
+  "data": {
+    "visualType": "realTimeLineChart",
+    "capabilityKey": "realTimeLineChart",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "Axis",
+        "description": "Fields to place on the horizontal or vertical axis"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "Measure",
+        "displayName": "Values",
+        "description": "The numeric amounts to plot"
+      }
+    },
+    "requiredRoles": [],
+    "optionalRoles": [
+      "Category",
+      "Series",
+      "Y"
+    ],
+    "maxPerRole": {
+      "Category": 1,
+      "Series": 1
+    },
+    "formattingObjects": [
+      "categoryAxis",
+      "dataPoint",
+      "general",
+      "legend",
+      "plotArea",
+      "valueAxis"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

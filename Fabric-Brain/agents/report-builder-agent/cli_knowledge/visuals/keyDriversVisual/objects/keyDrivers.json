@@ -1,0 +1,57 @@
+﻿{
+  "data": {
+    "allowKeyDrivers": {
+      "type": "bool",
+      "displayName": "Enable key influencers",
+      "description": "Enable key influencers analysis option"
+    },
+    "allowProfiles": {
+      "type": "bool",
+      "displayName": "Enable segments",
+      "description": "Enable segment analysis option"
+    },
+    "selectedNumericAnalysis": {
+      "type": "enum",
+      "values": [
+        "Continuous",
+        "Categorical"
+      ],
+      "displayName": "Analysis type",
+      "description": "Choose whether to treat the field you are analyzing as categorical or continuous"
+    },
+    "allowKeyDriversCounting": {
+      "type": "bool",
+      "displayName": "Enable counts",
+      "description": "Show estimated data points for key influencers"
+    },
+    "countType": {
+      "type": "enum",
+      "values": [
+        "absolute",
+        "relative"
+      ],
+      "displayName": "Count type",
+      "description": "Choose whether the displayed estimated counts will be relative to the maximum key influencer or absolute."
+    },
+    "selectedAnalysis": {
+      "type": "enum",
+      "values": [
+        "keyInfluencers",
+        "topProfiles"
+      ]
+    },
+    "selectedSort": {
+      "type": "enum",
+      "values": [
+        "impact",
+        "count"
+      ]
+    },
+    "targetValue": {
+      "type": "text"
+    },
+    "numericTargetSelectedKind": {
+      "type": "numeric"
+    }
+  }
+}

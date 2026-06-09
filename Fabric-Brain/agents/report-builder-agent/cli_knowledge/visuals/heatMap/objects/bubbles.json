@@ -1,0 +1,17 @@
+﻿{
+  "data": {
+    "bubbleSize": {
+      "type": "integer",
+      "displayName": "Size"
+    },
+    "markerRangeType": {
+      "type": "enum",
+      "values": [
+        "magnitude",
+        "dataRange",
+        "auto"
+      ],
+      "displayName": "Range scaling"
+    }
+  }
+}

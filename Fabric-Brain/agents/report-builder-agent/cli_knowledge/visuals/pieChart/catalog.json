@@ -1,0 +1,58 @@
+﻿{
+  "data": {
+    "visualType": "pieChart",
+    "capabilityKey": "pieChart",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Details",
+        "description": "Each slice is split by this categorical field"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "Measure",
+        "displayName": "Values",
+        "description": "The numeric amounts to plot"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Category",
+      "Y"
+    ],
+    "optionalRoles": [
+      "Series",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Category": 1,
+      "Series": 1
+    },
+    "formattingObjects": [
+      "annotationTemplate",
+      "centerValue",
+      "dataPoint",
+      "general",
+      "image",
+      "label",
+      "labels",
+      "legend",
+      "slices",
+      "value"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

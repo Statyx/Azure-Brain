@@ -1,0 +1,24 @@
+﻿{
+  "data": {
+    "tilingMethod": {
+      "type": "enum",
+      "values": [
+        "stableSquarified",
+        "binary",
+        "alternating"
+      ],
+      "displayName": "Tiling Method",
+      "description": "Select the algorithm used to generate dimensions and positions of each rectangle."
+    },
+    "innerPadding": {
+      "type": "numeric",
+      "displayName": "Space between all nodes",
+      "description": "Separate neighboring nodes across all levels"
+    },
+    "outerPadding": {
+      "type": "numeric",
+      "displayName": "Space between groups",
+      "description": "Add additional space for each node group"
+    }
+  }
+}

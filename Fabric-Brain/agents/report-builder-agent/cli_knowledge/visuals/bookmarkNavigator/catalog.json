@@ -1,0 +1,24 @@
+﻿{
+  "data": {
+    "visualType": "bookmarkNavigator",
+    "capabilityKey": "bookmarkNavigator",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "accentBar",
+      "bookmarks",
+      "fill",
+      "glow",
+      "layout",
+      "outline",
+      "rotation",
+      "shadow",
+      "shape",
+      "text"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

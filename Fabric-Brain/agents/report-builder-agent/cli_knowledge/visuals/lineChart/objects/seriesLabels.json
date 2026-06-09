@@ -1,0 +1,130 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show for this series"
+    },
+    "showByDefault": {
+      "type": "bool"
+    },
+    "seriesColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "seriesMatchColor": {
+      "type": "bool",
+      "displayName": "Match series color"
+    },
+    "seriesTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "seriesPosition": {
+      "type": "enum",
+      "values": [
+        "Left",
+        "Right"
+      ],
+      "displayName": "Position"
+    },
+    "enableBackground": {
+      "type": "bool",
+      "displayName": "Show background"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Background color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "backgroundMatchColor": {
+      "type": "bool",
+      "displayName": "Match series color"
+    },
+    "showAll": {
+      "type": "bool",
+      "displayName": "Customize series"
+    },
+    "textSize": {
+      "type": "formatting",
+      "displayName": "Series font size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "seriesFontFamily": {
+      "type": "formatting",
+      "displayName": "Series font family"
+    },
+    "seriesWordWrap": {
+      "type": "bool",
+      "displayName": "Word wrap"
+    },
+    "seriesMaximumWidth": {
+      "type": "integer",
+      "displayName": "Width"
+    },
+    "maximumOffset": {
+      "type": "numeric",
+      "displayName": "Maximum offset"
+    },
+    "leaderLines": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "leaderLineWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "leaderLineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "leaderLineTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "leaderLinePattern": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted",
+        "custom"
+      ],
+      "displayName": "Line style"
+    },
+    "leaderLineAutoScale": {
+      "type": "bool",
+      "displayName": "Scale by width",
+      "description": "Automatically adjust the spacing between dashes and dots based on line width."
+    },
+    "leaderLineDashArray": {
+      "type": "formatting",
+      "displayName": "Dash array",
+      "description": "Space-separated values for dash and gap lengths in pixels, repeating in sequence."
+    },
+    "leaderLineDashCap": {
+      "type": "enum",
+      "values": [
+        "none",
+        "round",
+        "square"
+      ],
+      "displayName": "Dash cap"
+    }
+  }
+}

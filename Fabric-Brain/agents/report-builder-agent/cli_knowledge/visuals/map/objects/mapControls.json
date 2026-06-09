@@ -1,0 +1,53 @@
+﻿{
+  "data": {
+    "autoZoom": {
+      "type": "bool",
+      "displayName": "Auto zoom"
+    },
+    "zoomLevel": {
+      "type": "numeric"
+    },
+    "centerLatitude": {
+      "type": "numeric"
+    },
+    "centerLongitude": {
+      "type": "numeric"
+    },
+    "showZoomButtons": {
+      "type": "bool",
+      "displayName": "Zoom buttons"
+    },
+    "showLassoButton": {
+      "type": "bool",
+      "displayName": "Lasso button"
+    },
+    "minZoom": {
+      "type": "numeric",
+      "displayName": "Min zoom level"
+    },
+    "maxZoom": {
+      "type": "numeric",
+      "displayName": "Max zoom level"
+    },
+    "geocodingCulture": {
+      "type": "enum",
+      "values": [
+        "",
+        "de-de",
+        "en-GB",
+        "en-US",
+        "es-ES",
+        "fr-FR",
+        "it-it",
+        "ja",
+        "ko",
+        "nl-BE",
+        "pt-BR",
+        "ru",
+        "zh-Hans",
+        "zh-Hant"
+      ],
+      "displayName": "Geocoding culture"
+    }
+  }
+}

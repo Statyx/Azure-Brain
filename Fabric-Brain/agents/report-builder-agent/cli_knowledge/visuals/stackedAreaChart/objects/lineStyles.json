@@ -1,0 +1,148 @@
+﻿{
+  "data": {
+    "strokeShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "strokeWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "strokeColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "strokeTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "lineStyle": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted",
+        "custom"
+      ],
+      "displayName": "Line style"
+    },
+    "strokeAutoScale": {
+      "type": "bool",
+      "displayName": "Scale by width",
+      "description": "Automatically adjust the spacing between dashes and dots based on line width."
+    },
+    "strokeDashArray": {
+      "type": "formatting",
+      "displayName": "Dash array",
+      "description": "Space-separated values for dash and gap lengths in pixels, repeating in sequence."
+    },
+    "strokeDashCap": {
+      "type": "enum",
+      "values": [
+        "none",
+        "round",
+        "square"
+      ],
+      "displayName": "Dash cap"
+    },
+    "strokeLineJoin": {
+      "type": "enum",
+      "values": [
+        "miter",
+        "round",
+        "bevel"
+      ],
+      "displayName": "Join type"
+    },
+    "showMarker": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "markerShape": {
+      "type": "enum",
+      "values": [
+        "circle",
+        "square",
+        "diamond",
+        "triangle",
+        "x",
+        "shortDash",
+        "longDash",
+        "plus"
+      ],
+      "displayName": "Type"
+    },
+    "markerSize": {
+      "type": "numeric",
+      "displayName": "Size"
+    },
+    "markerColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "showMarkerByDefault": {
+      "type": "bool"
+    },
+    "showSeries": {
+      "type": "bool",
+      "displayName": "Customize series"
+    },
+    "lineChartType": {
+      "type": "enum",
+      "values": [
+        "linear",
+        "smooth",
+        "step"
+      ],
+      "displayName": "Interpolation type",
+      "description": "Set interpolation type between line data points."
+    },
+    "interpolationStep": {
+      "type": "enum",
+      "values": [
+        "before",
+        "center",
+        "after"
+      ],
+      "displayName": "Step position"
+    },
+    "interpolationSmooth": {
+      "type": "enum",
+      "values": [
+        "monotoneX",
+        "cardinal"
+      ],
+      "displayName": "Smooth type"
+    },
+    "interpolationSmoothParam": {
+      "type": "numeric",
+      "displayName": "Tension"
+    },
+    "areaShow": {
+      "type": "bool",
+      "displayName": "Shade area"
+    },
+    "areaColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "areaMatchStrokeColor": {
+      "type": "bool",
+      "displayName": "Match line color",
+      "description": "Match the legend icon color to the color of the line, not the marker"
+    },
+    "segmentAlignment": {
+      "type": "enum",
+      "values": [
+        "left",
+        "center",
+        "right"
+      ],
+      "displayName": "Segment type"
+    },
+    "segmentGradient": {
+      "type": "bool",
+      "displayName": "Gradient"
+    }
+  }
+}

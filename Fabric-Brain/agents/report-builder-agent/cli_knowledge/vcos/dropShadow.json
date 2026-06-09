@@ -1,0 +1,57 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "preset": {
+      "type": "enum",
+      "values": [
+        "BottomRight",
+        "Bottom",
+        "BottomLeft",
+        "CenterRight",
+        "Center",
+        "CenterLeft",
+        "TopRight",
+        "Top",
+        "TopLeft",
+        "Custom"
+      ],
+      "displayName": "Preset"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Outer",
+        "Inner"
+      ],
+      "displayName": "Shadow position"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "shadowSpread": {
+      "type": "numeric",
+      "displayName": "Size"
+    },
+    "shadowBlur": {
+      "type": "numeric",
+      "displayName": "Blur"
+    },
+    "angle": {
+      "type": "numeric",
+      "displayName": "Angle"
+    },
+    "shadowDistance": {
+      "type": "numeric",
+      "displayName": "Distance"
+    }
+  }
+}

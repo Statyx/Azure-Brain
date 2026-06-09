@@ -1,0 +1,88 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "preferredCategoryWidth": {
+      "type": "numeric",
+      "displayName": "Minimum category width"
+    },
+    "maxMarginFactor": {
+      "type": "integer",
+      "displayName": "Maximum size",
+      "description": "The maximum percent of the visual allowed for the axis"
+    },
+    "innerPadding": {
+      "type": "integer",
+      "displayName": "Space between categories",
+      "description": "Space between categories (inner padding) as a percentage of the total category width/height."
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "labelColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "showAxisTitle": {
+      "type": "bool",
+      "displayName": "Title",
+      "description": "Title for the X-axis"
+    },
+    "titleText": {
+      "type": "text",
+      "displayName": "Axis title"
+    },
+    "axisStyle": {
+      "type": "enum",
+      "values": [
+        "showTitleOnly",
+        "showUnitOnly",
+        "showBoth"
+      ],
+      "displayName": "Style"
+    },
+    "titleFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "titleFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "titleBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "titleItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "titleUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "titleColor": {
+      "type": "fill",
+      "displayName": "Title color"
+    }
+  }
+}

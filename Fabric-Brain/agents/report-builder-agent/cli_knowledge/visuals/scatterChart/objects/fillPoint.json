@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "style": {
+      "type": "enum",
+      "values": [
+        "Fill only",
+        "Border only"
+      ],
+      "displayName": "Style"
+    }
+  }
+}

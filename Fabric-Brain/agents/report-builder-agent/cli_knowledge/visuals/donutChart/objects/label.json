@@ -1,0 +1,52 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "text": {
+      "type": "unknown",
+      "displayName": "Text"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Bottom",
+        "Top"
+      ],
+      "displayName": "Position"
+    },
+    "gap": {
+      "type": "integer",
+      "displayName": "Gap"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+﻿{
+  "data": {
+    "datasourceType": {
+      "type": "enum",
+      "values": [
+        "url",
+        "file_upload"
+      ],
+      "displayName": "Type",
+      "description": "Specifies the type of the reference layer data source"
+    },
+    "mapUrl": {
+      "type": "unknown",
+      "displayName": "Enter a URL"
+    },
+    "map": {
+      "type": "unknown"
+    },
+    "projectionEnum": {
+      "type": "enum",
+      "values": [
+        "albersUsa",
+        "equirectangular",
+        "mercator",
+        "orthographic"
+      ],
+      "displayName": "Projection",
+      "description": "Projection"
+    }
+  }
+}

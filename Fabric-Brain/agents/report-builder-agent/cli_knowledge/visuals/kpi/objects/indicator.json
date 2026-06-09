@@ -1,0 +1,54 @@
+﻿{
+  "data": {
+    "indicatorDisplayUnits": {
+      "type": "formatting",
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "indicatorPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "showIcon": {
+      "type": "bool",
+      "displayName": "Show icon"
+    },
+    "iconSize": {
+      "type": "formatting",
+      "displayName": "Icon size"
+    },
+    "verticalAlignment": {
+      "type": "formatting",
+      "displayName": "Vertical alignment"
+    },
+    "horizontalAlignment": {
+      "type": "formatting",
+      "displayName": "Horizontal alignment"
+    }
+  }
+}

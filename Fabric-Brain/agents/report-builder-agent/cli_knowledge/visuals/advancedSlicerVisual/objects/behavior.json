@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "disabledItemsOrder": {
+      "type": "enum",
+      "values": [
+        "inPlace",
+        "moveToEnd"
+      ],
+      "displayName": "Placement"
+    }
+  }
+}

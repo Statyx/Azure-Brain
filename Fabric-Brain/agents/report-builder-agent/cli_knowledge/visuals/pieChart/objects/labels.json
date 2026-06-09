@@ -1,0 +1,84 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Select color for data labels"
+    },
+    "labelDisplayUnits": {
+      "type": "formatting",
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "labelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "percentageLabelPrecision": {
+      "type": "integer",
+      "displayName": "% decimal places",
+      "description": "Select the number of decimal places to display for the percentages"
+    },
+    "labelStyle": {
+      "type": "enum",
+      "values": [
+        "Category",
+        "Data",
+        "Percent of total",
+        "Both",
+        "Category, percent of total",
+        "Data value, percent of total",
+        "Category, data value, percent of total"
+      ],
+      "displayName": "Label style"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "outside",
+        "inside",
+        "preferOutside",
+        "preferInside"
+      ],
+      "displayName": "Label position"
+    },
+    "overflow": {
+      "type": "bool",
+      "displayName": "Overflow text"
+    },
+    "background": {
+      "type": "enum",
+      "values": [
+        "auto",
+        "on",
+        "off"
+      ],
+      "displayName": "Background"
+    }
+  }
+}

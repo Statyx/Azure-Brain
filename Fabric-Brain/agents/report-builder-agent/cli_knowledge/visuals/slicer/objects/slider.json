@@ -1,0 +1,24 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "handleFillColor": {
+      "type": "fill",
+      "displayName": "Fill"
+    },
+    "handleBorderColor": {
+      "type": "fill",
+      "displayName": "Border"
+    },
+    "secondaryLineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    }
+  }
+}

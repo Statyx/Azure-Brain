@@ -1,0 +1,18 @@
+﻿{
+  "data": {
+    "text": {
+      "type": "text",
+      "displayName": "Text"
+    },
+    "selectedVisualsJson": {
+      "type": "text",
+      "displayName": "Selected visuals"
+    },
+    "useAllVisuals": {
+      "type": "bool"
+    },
+    "useCurrentLocale": {
+      "type": "bool"
+    }
+  }
+}

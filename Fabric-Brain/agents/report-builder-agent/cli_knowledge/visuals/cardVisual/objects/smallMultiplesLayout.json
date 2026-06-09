@@ -1,0 +1,82 @@
+﻿{
+  "data": {
+    "orientation": {
+      "type": "enum",
+      "values": [
+        "2",
+        "1",
+        "0"
+      ],
+      "displayName": "Arrangement"
+    },
+    "maxSmallMultiples": {
+      "type": "integer",
+      "displayName": "Rows"
+    },
+    "rowCount": {
+      "type": "integer",
+      "displayName": "Rows"
+    },
+    "columnCount": {
+      "type": "integer",
+      "displayName": "Columns"
+    },
+    "maxHeaderSize": {
+      "type": "integer",
+      "displayName": "Maximum header size",
+      "description": "The maximum percent of the visual allowed for the small multiple header"
+    },
+    "titleOrientation": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "displayName": "Orientation"
+    },
+    "headerPosition": {
+      "type": "enum",
+      "values": [
+        "Top",
+        "Bottom",
+        "Left",
+        "Right"
+      ],
+      "displayName": "Position"
+    },
+    "cellPadding": {
+      "type": "integer",
+      "displayName": "Space between cards"
+    },
+    "customizePadding": {
+      "type": "bool",
+      "displayName": "Customize spacing"
+    },
+    "rowPadding": {
+      "type": "integer",
+      "displayName": "Space between rows"
+    },
+    "columnPadding": {
+      "type": "integer",
+      "displayName": "Space between columns"
+    },
+    "style": {
+      "type": "enum",
+      "values": [
+        "Table",
+        "Cards"
+      ],
+      "displayName": "Style"
+    },
+    "fixNumberOfTiles": {
+      "type": "bool",
+      "displayName": "Fit to space"
+    },
+    "autoGrid": {
+      "type": "bool",
+      "displayName": "Fit to space"
+    }
+  }
+}

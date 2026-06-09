@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "fill": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "target": {
+      "type": "fill",
+      "displayName": "Target color"
+    }
+  }
+}

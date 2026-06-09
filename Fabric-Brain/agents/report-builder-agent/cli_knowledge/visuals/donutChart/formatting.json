@@ -1,0 +1,45 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "annotationTemplate",
+                                 "centerValue",
+                                 "dataPoint",
+                                 "general",
+                                 "image",
+                                 "label",
+                                 "labels",
+                                 "legend",
+                                 "slices",
+                                 "value"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "annotationTemplate",
+                                     "centerValue",
+                                     "dataPoint",
+                                     "general",
+                                     "image",
+                                     "label",
+                                     "labels",
+                                     "legend",
+                                     "slices",
+                                     "value"
+                                 ]
+             }
+}

@@ -1,0 +1,62 @@
+﻿{
+  "data": {
+    "visualType": "advancedSlicerVisual",
+    "capabilityKey": "advancedSlicerVisual",
+    "roles": {
+      "Values": {
+        "name": "Values",
+        "kind": "Grouping",
+        "displayName": "Value",
+        "description": "The field to display"
+      },
+      "Label": {
+        "name": "Label",
+        "kind": "Measure",
+        "displayName": "Highlight label",
+        "description": "An alternative label or measure to label slicer items. If a highlight yields no label value for a slicer item, then that slicer item will be disabled."
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Values"
+    ],
+    "optionalRoles": [
+      "Label",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Values": 1
+    },
+    "formattingObjects": [
+      "accentBar",
+      "actionState",
+      "background",
+      "behavior",
+      "data",
+      "fillCustom",
+      "general",
+      "glowCustom",
+      "icon",
+      "image",
+      "label",
+      "layout",
+      "outline",
+      "overFlow",
+      "padding",
+      "rotation",
+      "selection",
+      "selectionIcon",
+      "shadowCustom",
+      "shapeCustomRectangle",
+      "spacing",
+      "value"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

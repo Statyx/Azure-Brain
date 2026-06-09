@@ -1,0 +1,33 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "narrativeSelection",
+                                 "summary",
+                                 "text",
+                                 "userPrompt"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "narrativeSelection",
+                                     "summary",
+                                     "text",
+                                     "userPrompt"
+                                 ]
+             }
+}

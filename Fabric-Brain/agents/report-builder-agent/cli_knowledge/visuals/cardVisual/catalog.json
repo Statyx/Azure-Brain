@@ -1,0 +1,70 @@
+﻿{
+  "data": {
+    "visualType": "cardVisual",
+    "capabilityKey": "cardVisual",
+    "roles": {
+      "Data": {
+        "name": "Data",
+        "kind": "Measure",
+        "displayName": "Value"
+      },
+      "Rows": {
+        "name": "Rows",
+        "kind": "Grouping",
+        "displayName": "Categories",
+        "description": "Split your visual into multiple, smaller visuals based on your selected fields"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Data"
+    ],
+    "optionalRoles": [
+      "Rows",
+      "Tooltips"
+    ],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "accentBar",
+      "border",
+      "cardCalloutArea",
+      "cardImage",
+      "divider",
+      "fillCustom",
+      "general",
+      "glowCustom",
+      "grid",
+      "image",
+      "label",
+      "layout",
+      "outline",
+      "overFlow",
+      "padding",
+      "referenceLabel",
+      "referenceLabelDetail",
+      "referenceLabelLayout",
+      "referenceLabelTitle",
+      "referenceLabelValue",
+      "rotation",
+      "shadowCustom",
+      "shapeCustomRectangle",
+      "smallMultiplesAccentBar",
+      "smallMultiplesBorder",
+      "smallMultiplesCellBackGround",
+      "smallMultiplesGrid",
+      "smallMultiplesHeader",
+      "smallMultiplesLayout",
+      "smallMultiplesOuterShape",
+      "smallMultiplesOverFlow",
+      "spacing",
+      "value"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

@@ -1,0 +1,143 @@
+﻿{
+  "data": {
+    "sourceType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image source"
+    },
+    "sourceUrl": {
+      "type": "unknown",
+      "displayName": "Image URL"
+    },
+    "sourceFile": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      },
+      "displayName": "Upload a file"
+    },
+    "sourceField": {
+      "type": "text",
+      "displayName": "Data"
+    },
+    "fit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "height": {
+      "type": "integer",
+      "displayName": "Image height"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "effects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "exposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "contrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "saturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "blur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "altText": {
+      "type": "text",
+      "displayName": "Alt text"
+    },
+    "cornerRadius": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "cornerRadiusAdvanced": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "cornerRadiusLeftTop": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "cornerRadiusRightTop": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "cornerRadiusLeftBottom": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "cornerRadiusRightBottom": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "backgroundEnabled": {
+      "type": "bool",
+      "displayName": "Show background"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Background color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "strokeShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "strokeWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "strokeColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "strokeTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "strokePattern": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    }
+  }
+}

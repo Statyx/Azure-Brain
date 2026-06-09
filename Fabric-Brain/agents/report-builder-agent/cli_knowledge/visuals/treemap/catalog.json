@@ -1,0 +1,53 @@
+﻿{
+  "data": {
+    "visualType": "treemap",
+    "capabilityKey": "treemap",
+    "roles": {
+      "Group": {
+        "name": "Group",
+        "kind": "Grouping",
+        "displayName": "Category",
+        "description": "A rectangle of relative size is created for each value in this field"
+      },
+      "Details": {
+        "name": "Details",
+        "kind": "Grouping",
+        "displayName": "Details"
+      },
+      "Values": {
+        "name": "Values",
+        "kind": "Measure",
+        "displayName": "Values",
+        "description": "The numeric amounts to plot"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Values"
+    ],
+    "optionalRoles": [
+      "Group",
+      "Details",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Group": 1,
+      "Details": 1
+    },
+    "formattingObjects": [
+      "categoryLabels",
+      "dataPoint",
+      "general",
+      "labels",
+      "layout",
+      "legend"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

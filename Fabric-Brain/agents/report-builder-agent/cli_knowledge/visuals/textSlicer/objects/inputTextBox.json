@@ -1,0 +1,130 @@
+﻿{
+  "data": {
+    "paddingTop": {
+      "type": "integer",
+      "displayName": "Top margin"
+    },
+    "paddingRight": {
+      "type": "integer",
+      "displayName": "Right margin"
+    },
+    "paddingBottom": {
+      "type": "integer",
+      "displayName": "Bottom margin"
+    },
+    "paddingLeft": {
+      "type": "integer",
+      "displayName": "Left margin"
+    },
+    "backShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "backTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "borderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "accentBarShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "accentBarPosition": {
+      "type": "enum",
+      "values": [
+        "--accent-bar-top",
+        "--accent-bar-right",
+        "--accent-bar-bottom",
+        "--accent-bar-left"
+      ],
+      "displayName": "Position"
+    },
+    "accentBarColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "accentBarTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "accentBarWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "containerCornerRadius": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "containerIndividualCorners": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "containerCornerTopLeft": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "containerCornerTopRight": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "containerCornerBottomLeft": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "containerCornerBottomRight": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "placeholder": {
+      "type": "text",
+      "displayName": "Placeholder"
+    },
+    "placeholderFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "placeholderFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "placeholderBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "placeholderItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "placeholderUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "placeholderFontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "placeholderFontTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    }
+  }
+}

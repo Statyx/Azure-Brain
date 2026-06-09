@@ -1,0 +1,35 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "categoryAxis",
+                                 "dataPoint",
+                                 "general",
+                                 "labels",
+                                 "percentBarLabel"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "categoryAxis",
+                                     "dataPoint",
+                                     "general",
+                                     "labels",
+                                     "percentBarLabel"
+                                 ]
+             }
+}

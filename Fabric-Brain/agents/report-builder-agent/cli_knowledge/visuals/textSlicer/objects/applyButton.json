@@ -1,0 +1,64 @@
+﻿{
+  "data": {
+    "iconColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "iconTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "iconSize": {
+      "type": "formatting",
+      "displayName": "Icon size"
+    },
+    "paddingTop": {
+      "type": "integer",
+      "displayName": "Top margin"
+    },
+    "paddingRight": {
+      "type": "integer",
+      "displayName": "Right margin"
+    },
+    "paddingBottom": {
+      "type": "integer",
+      "displayName": "Bottom margin"
+    },
+    "paddingLeft": {
+      "type": "integer",
+      "displayName": "Left margin"
+    },
+    "backShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "backTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "borderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "spacing": {
+      "type": "integer",
+      "displayName": "Spacing"
+    }
+  }
+}

@@ -1,51 +1,66 @@
-# Report Structure — Legacy PBIX Format
+# Report Structure — PBIR Folder Format
 
-> **THE critical knowledge**: This file defines the only report format that works in Fabric.
-
----
-
-## Format Choice: Legacy PBIX Only
-
-| Format | Structure | API Accepts? | Renders? |
-|--------|-----------|:---:|:---:|
-| **PBIR Folder** | `definition/pages/{page}/visuals/{vis}/visual.json` | YES | **NO** (BLANK) |
-| **Legacy PBIX** | `report.json` at root with `sections[].visualContainers[]` | YES | **YES** |
-
-The API silently accepts PBIR with no error. The report item appears in the workspace.
-But visuals are **completely blank** when opened. This was discovered after hours of debugging.
+> Authoritative anatomy of a `<Report>.Report/` PBIR folder, the schema URLs each file references, and the exact payload shape for Fabric REST.
 
 ---
 
-## Required Definition Parts
+## Folder Layout
 
-A working report needs these parts in the API payload:
-
-| Part | Path | Required? | Notes |
-|------|------|:---------:|-------|
-| Report definition | `report.json` | **Yes** | The entire report in one file |
-| Connection info | `definition.pbir` | **Yes** | Links report to semantic model |
-| Base theme | `StaticResources/SharedResources/BaseThemes/CY26SU02.json` | Recommended | Without it, default theme is ugly |
-| Custom resources | `StaticResources/RegisteredResources/{file}` | Optional | Logos, custom themes |
-| Platform metadata | `.platform` | Auto-generated | Don't include manually |
-
-### API Payload Structure
-```json
-{
-  "definition": {
-    "parts": [
-      {"path": "report.json", "payload": "<base64>", "payloadType": "InlineBase64"},
-      {"path": "definition.pbir", "payload": "<base64>", "payloadType": "InlineBase64"},
-      {"path": "StaticResources/SharedResources/BaseThemes/CY26SU02.json", "payload": "<base64>", "payloadType": "InlineBase64"}
-    ]
-  }
-}
+```
+<Report>.Report/
+├─ definition/
+│  ├─ version.json                # PBIR format version (REQUIRED)
+│  ├─ report.json                 # top-level report metadata + theme reference
+│  ├─ pages/
+│  │  ├─ pages.json               # ordered list of page folders + active page
+│  │  └─ <pageId>/
+│  │     ├─ page.json             # page-level config (size, filters, display name)
+│  │     ├─ filters.json          # optional, page-scoped filters
+│  │     └─ visuals/
+│  │        └─ <visualId>/
+│  │           ├─ visual.json     # the visual definition
+│  │           ├─ filters.json    # optional, visual-scoped filters
+│  │           └─ mobile.json     # optional, mobile layout overrides
+│  ├─ filters.json                # optional, report-scoped filters
+│  ├─ bookmarks/                  # optional
+│  │  ├─ bookmarks.json
+│  │  └─ <bookmark>.bookmark.json
+│  └─ reportExtensions.json       # optional, report-level measures
+├─ StaticResources/
+│  ├─ SharedResources/
+│  │  └─ BaseThemes/
+│  │     └─ <theme>.json
+│  └─ RegisteredResources/        # optional logos, custom theme files, images
+│     └─ <file>
+└─ definition.pbir                # connection binding — at ROOT, not under definition/
 ```
 
+The `definition.pbir` file is **at the root** of `<Report>.Report/`, not inside `definition/`. The `definition/` subfolder holds everything that describes pages, visuals, filters, and the top-level `report.json`. The `version.json` file is **required** — without it `validate` fails with `PBIR_VERSION_MISSING`.
+
 ---
 
-## definition.pbir
+## Schema URLs
 
-### V2 Schema (ALWAYS USE THIS)
+Every JSON file in `definition/` declares a `$schema`. The schemas live under `https://developer.microsoft.com/json-schemas/fabric/item/report/definition/`. The directory name on disk and the schema name **do not always match** — use this table as the canonical reference. Versions shown are current as of the migration; check [CHANGELOGs](https://github.com/microsoft/json-schemas/tree/main/fabric/item/report/definition) for newer revisions.
+
+| File | `$schema` |
+|---|---|
+| `definition/version.json` | `.../versionMetadata/1.0.0/schema.json` |
+| `definition/report.json` | `.../report/3.3.0/schema.json` |
+| `definition/pages/pages.json` | `.../pagesMetadata/1.1.0/schema.json` |
+| `definition/pages/<id>/page.json` | `.../page/2.1.0/schema.json` |
+| `definition/pages/<id>/visuals/<vid>/visual.json` | `.../visualContainer/2.5.0/schema.json` |
+| `definition/**/filters.json` *(any filters.json)* | `.../filterConfiguration/1.2.0/schema.json` |
+| `definition.pbir` | `.../definitionProperties/2.0.0/schema.json` |
+| `StaticResources/SharedResources/BaseThemes/<t>.json` | `.../theme/2.140.0/schema.json` |
+
+> **Schema names vs file names** — note that `pages.json` uses the **`pagesMetadata`** schema, `page.json` uses **`page`**, and `visual.json` uses **`visualContainer`** (not `visual`). The CLI will surface mismatches as `PBIR_FORMATTING_*` or `PBIR_VCO_*` errors. If `validate --format text` reports a missing-property error, do not silence it — re-check property names in `cli_knowledge/`.
+
+---
+
+## `definition.pbir` — Connection Binding
+
+**V2 schema, byConnection, full XMLA — always.**
 
 ```json
 {
@@ -53,266 +68,197 @@ A working report needs these parts in the API payload:
   "version": "4.0",
   "datasetReference": {
     "byConnection": {
-      "connectionString": "Data Source=\"powerbi://api.powerbi.com/v1.0/myorg/<YOUR_WORKSPACE_NAME>\";initial catalog=SM_Finance;integrated security=ClaimsToken;semanticmodelid=<YOUR_MODEL_ID>"
+      "connectionString": "Data Source=\"powerbi://api.powerbi.com/v1.0/myorg/<WORKSPACE_NAME>\";initial catalog=<MODEL_NAME>;integrated security=ClaimsToken;semanticmodelid=<MODEL_GUID>",
+      "pbiServiceModelId": null,
+      "pbiModelVirtualServerName": null,
+      "pbiModelDatabaseName": null
     }
   }
 }
 ```
 
-### Connection String Template
-```
-Data Source="powerbi://api.powerbi.com/v1.0/myorg/{WORKSPACE_NAME}";initial catalog={MODEL_NAME};integrated security=ClaimsToken;semanticmodelid={MODEL_GUID}
-```
+| Field | Value |
+|---|---|
+| `version` | `"4.0"` |
+| `byConnection.connectionString` | full XMLA string with `Data Source`, `initial catalog`, `semanticmodelid` |
+| Other `pbi*` fields | leave `null` |
 
-### Shorthand Alternative
-```json
-"connectionString": "semanticmodelid=<YOUR_MODEL_ID>"
-```
-Works but the full XMLA string is preferred (matches Fabric Copilot's own output).
-
-### V1 Schema (NEVER USE)
-The `1.0.0` schema requires `pbiServiceModelId`, `pbiModelVirtualServerName`, etc. — nearly impossible to get right. Always use V2.
+Shorthand `"semanticmodelid=<GUID>"` works but the full XMLA is preferred — it round-trips through `getDefinition` cleanly and matches Fabric's own output.
 
 ---
 
-## report.json — Top-Level Structure
+## `report.json` — Top-Level Report
+
+Minimal viable shape:
 
 ```json
 {
-  "config": "<STRINGIFIED JSON>",
-  "layoutOptimization": 0,
-  "resourcePackages": [
-    {
-      "resourcePackage": {
-        "name": "SharedResources",
-        "type": 2,
-        "items": [
-          {
-            "type": 202,
-            "path": "BaseThemes/CY26SU02.json",
-            "name": "CY26SU02"
-          }
-        ],
-        "disabled": false
-      }
-    }
-  ],
-  "sections": [],
-  "theme": "CY26SU02"
-}
-```
-
-### Critical Fields
-
-| Field | Type | Value | Notes |
-|-------|------|-------|-------|
-| `config` | string | Stringified JSON | Report-level config (see below) |
-| `layoutOptimization` | integer | `0` | **REQUIRED** — without it, import fails |
-| `sections` | array | Page objects | Each page is a section |
-| `theme` | string | `"CY26SU02"` | Must match resourcePackages theme name |
-| `resourcePackages` | array | Theme refs | Links to base theme file |
-
-### Report Config (stringified into `config` field)
-
-```json
-{
-  "version": "5.70",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
   "themeCollection": {
-    "baseTheme": {
-      "name": "CY26SU02",
-      "version": {"visual": "2.6.0", "report": "3.1.0", "page": "2.3.0"},
-      "type": 2
-    }
+    "baseTheme": { "name": "AzureBrainLight" }
   },
-  "activeSectionIndex": 0,
-  "defaultDrillFilterOtherVisuals": true,
-  "settings": {
-    "useNewFilterPaneExperience": true,
-    "allowChangeFilterTypes": true,
-    "useStylableVisualContainerHeader": true,
-    "exportDataMode": 1
+  "publicCustomVisuals": []
+}
+```
+
+`report.json` carries:
+
+- `themeCollection.baseTheme.name` — must match a `BaseThemes/<name>.json` file
+- optional `themeCollection.customTheme` for user-provided palettes
+- `publicCustomVisuals[]` — IDs of marketplace visuals (usually empty)
+- `objects` / `pods` / etc. — rarely needed; let Fabric apply defaults
+
+## `version.json` — Format Version
+
+```json
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/versionMetadata/1.0.0/schema.json",
+  "version": "4.0.0"
+}
+```
+
+Version pattern: `major.minor.0`, major ≥ 1, patch is always `0`. Required.
+
+---
+
+## `pages/pages.json` — Page Index
+
+```json
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "activePageName": "overview",
+  "pageOrder": ["overview", "trends", "details"]
+}
+```
+
+| Field | Value |
+|---|---|
+| `pageOrder` | array of page folder names — order = tab order |
+| `activePageName` | folder name shown on open |
+
+Every entry must correspond to an existing `pages/<name>/page.json`.
+
+---
+
+## `pages/<pageId>/page.json` — Page Metadata
+
+```json
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "overview",
+  "displayName": "Overview",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "visualInteractions": [],
+  "objects": {}
+}
+```
+
+| Field | Notes |
+|---|---|
+| `name` | must match folder name |
+| `displayName` | user-visible page title in the tab |
+| `displayOption` | `"FitToPage"` (default) / `"ActualSize"` / `"FitToWidth"` |
+| `height` / `width` | 720×1280 standard 16:9; 1080×1920 for big screens |
+| `objects` | page-level VCOs (background, displayArea, outspace, …) — values must be PBIR expressions |
+
+---
+
+## `visuals/<visualId>/visual.json` — Visual Definition
+
+Skeleton (cardVisual example):
+
+```json
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "<uuid>",
+  "position": { "x": 20, "y": 80, "z": 0, "width": 200, "height": 120, "tabOrder": 0 },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            { "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "fact_general_ledger" }}, "Property": "Total Revenue" }}, "queryRef": "fact_general_ledger.Total Revenue", "nativeQueryRef": "Total Revenue" }
+          ]
+        }
+      },
+      "sortDefinition": { "sort": [], "isDefaultSort": true }
+    },
+    "objects": {
+      "value": [{ "properties": { "fontSize": { "expr": { "Literal": { "Value": "27D" }}}, "fontColor": { "solid": { "color": { "expr": { "ThemeDataColor": { "ColorId": 1, "Percent": 0 }}}}} }}]
+    },
+    "visualContainerObjects": {
+      "title": [{ "properties": { "show": { "expr": { "Literal": { "Value": "true" }}}, "text": { "expr": { "Literal": { "Value": "'Total Revenue'" }}} }}]
+    },
+    "drillFilterOtherVisuals": true
   }
 }
 ```
 
+| Section | Source of truth |
+|---|---|
+| `visualType` | [`cli_knowledge/visual_types.json`](cli_knowledge/visual_types.json) |
+| `query.queryState.<Role>` | [`cli_knowledge/visuals/<type>/catalog.json`](cli_knowledge/visuals/) — see `roles` map |
+| `objects.<obj>` | [`cli_knowledge/visuals/<type>/formatting.json`](cli_knowledge/visuals/) — `objects[]` / `objectsBase[]` |
+| `objects.<obj>[].properties.<prop>` | [`cli_knowledge/visuals/<type>/objects/<obj>.json`](cli_knowledge/visuals/) |
+| `visualContainerObjects.<vco>` | [`cli_knowledge/vcos/<vco>.json`](cli_knowledge/vcos/) |
+
+> Property values are **always** PBIR literal expressions. Use `powerbi-report-author expr encode --kind <kind> <value>` whenever in doubt. See [`themes_styling.md`](themes_styling.md) for the full cheatsheet.
+
 ---
 
-## Section (Page) Structure
+## Required Parts for `updateDefinition`
+
+When sending the report to Fabric REST, **every file under `<Report>.Report/`** becomes a `part`:
 
 ```json
 {
-  "name": "PageInternalName",
-  "displayName": "Page Display Name",
-  "displayOption": 1,
-  "width": 1280,
-  "height": 720,
-  "config": "{\"name\":\"PageInternalName\"}",
-  "filters": "[]",
-  "visualContainers": []
+  "definition": {
+    "parts": [
+      { "path": "definition.pbir", "payload": "<base64>", "payloadType": "InlineBase64" },
+      { "path": "definition/version.json", "payload": "<base64>", "payloadType": "InlineBase64" },
+      { "path": "definition/report.json", "payload": "<base64>", "payloadType": "InlineBase64" },
+      { "path": "definition/pages/pages.json", "payload": "<base64>", "payloadType": "InlineBase64" },
+      { "path": "definition/pages/overview/page.json", "payload": "<base64>", "payloadType": "InlineBase64" },
+      { "path": "definition/pages/overview/visuals/abc/visual.json", "payload": "<base64>", "payloadType": "InlineBase64" },
+      { "path": "StaticResources/SharedResources/BaseThemes/AzureBrainLight.json", "payload": "<base64>", "payloadType": "InlineBase64" }
+    ]
+  }
 }
 ```
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `name` | string | Internal ID (no spaces, no special chars) |
-| `displayName` | string | User-visible tab title |
-| `displayOption` | integer | `1` = fit to page |
-| `width` / `height` | integer | Standard: 1280 × 720 (16:9) |
-| `config` | string | **Stringified** `{"name": "<name>"}` |
-| `filters` | string | **Stringified** `[]` |
-| `visualContainers` | array | Array of visual objects |
+Rules:
+- `path` is **relative to the `<Report>.Report/` root**, with forward slashes.
+- `payload` is **base64 of the file's UTF-8 bytes** (no BOM).
+- `updateDefinition` is a **full replace** — omit a file and it disappears from the report.
+- Do not send `.platform` — Fabric generates it.
+
+The reference uploader is [`templates/deploy_report.py`](templates/deploy_report.py); the walker is `walk(<Report>.Report)` → exclude `.platform`.
 
 ---
 
-## Visual Container Structure
+## Validation Before Deployment
 
-Each visual in `visualContainers[]`:
-
-```json
-{
-  "x": 30.0,
-  "y": 60.0,
-  "z": 1,
-  "width": 390.0,
-  "height": 120.0,
-  "config": "<STRINGIFIED JSON>",
-  "filters": "[]"
-}
+```powershell
+powerbi-report-author validate "<Report>.Report" --format text
 ```
 
-**`config` is STRINGIFIED** — `json.dumps(config_dict)`, not an embedded object.
+`validate` performs:
+- schema check against `developer.microsoft.com` URLs (use `--no-schema` to go offline)
+- cross-reference check (every page in `pages.json` exists, every visualType is in the catalog, every formatting object is valid for its visualType, every VCO is a known VCO, every measure/column is `entity.field`-shaped)
+- `$schema` URL freshness check
 
-The config object inside follows this pattern:
-```json
-{
-  "name": "unique_hex_id",
-  "layouts": [{"id": 0, "position": {"x": 30, "y": 60, "z": 1, "width": 390, "height": 120}}],
-  "singleVisual": {
-    "visualType": "cardVisual",
-    "projections": {},
-    "prototypeQuery": {},
-    "drillFilterOtherVisuals": true,
-    "objects": {},
-    "vcObjects": {}
-  },
-  "howCreated": "Copilot"
-}
-```
-
-### Position Rules
-- `x`, `y`, `z`, `width`, `height` must appear **both** at visual container level AND inside `layouts[0].position`
-- `z` determines stacking order (higher = on top)
-- Coordinates are in pixels relative to the 1280×720 canvas
+Fix every `error` and ideally every `warning` before calling REST.
 
 ---
 
-## Python: Base64 Encoding
+## Cross-References
 
-```python
-import base64, json
-
-def encode_part(obj) -> str:
-    """Encode a Python dict/string to base64 for API payload."""
-    if isinstance(obj, dict):
-        content = json.dumps(obj, ensure_ascii=False)
-    else:
-        content = str(obj)
-    return base64.b64encode(content.encode("utf-8")).decode("ascii")
-
-# Example usage
-report_b64 = encode_part(report_json_dict)
-pbir_b64 = encode_part(definition_pbir_dict)
-```
-
----
-
-## Python: Stringifying Configs
-
-```python
-import json
-
-def make_visual_container(x, y, z, w, h, config_dict):
-    """Build a visual container with properly stringified config."""
-    return {
-        "x": float(x),
-        "y": float(y),
-        "z": z,
-        "width": float(w),
-        "height": float(h),
-        "config": json.dumps(config_dict),
-        "filters": "[]"
-    }
-
-def make_section(name, display_name, visual_containers):
-    """Build a page section."""
-    return {
-        "name": name,
-        "displayName": display_name,
-        "displayOption": 1,
-        "width": 1280,
-        "height": 720,
-        "config": json.dumps({"name": name}),
-        "filters": "[]",
-        "visualContainers": visual_containers
-    }
-```
-
----
-
-## REST API: Create Report
-
-```python
-import requests, base64, json
-
-API = "https://api.fabric.microsoft.com/v1"
-WS_ID = "<YOUR_WORKSPACE_ID>"  # from resource_ids.md
-
-body = {
-    "displayName": "RPT_Finance_Dashboard",
-    "definition": {
-        "parts": [
-            {"path": "report.json", "payload": report_b64, "payloadType": "InlineBase64"},
-            {"path": "definition.pbir", "payload": pbir_b64, "payloadType": "InlineBase64"},
-            {"path": "StaticResources/SharedResources/BaseThemes/CY26SU02.json",
-             "payload": theme_b64, "payloadType": "InlineBase64"},
-        ]
-    }
-}
-
-resp = requests.post(f"{API}/workspaces/{WS_ID}/reports", headers=headers, json=body)
-
-if resp.status_code == 202:
-    op_id = resp.headers["x-ms-operation-id"]
-    # Poll until Succeeded...
-```
-
-## REST API: Get Definition (for editing)
-
-```python
-# Step 1: Start async getDefinition
-resp = requests.post(f"{API}/workspaces/{WS_ID}/reports/{REPORT_ID}/getDefinition", headers=headers)
-op_id = resp.headers["x-ms-operation-id"]
-
-# Step 2: Poll until done
-# ... (see fabric_api.md for polling pattern)
-
-# Step 3: Get result
-result = requests.get(f"{API}/operations/{op_id}/result", headers=headers).json()
-
-# Step 4: Decode report.json
-for part in result["definition"]["parts"]:
-    if part["path"] == "report.json":
-        report_json = json.loads(base64.b64decode(part["payload"]).decode("utf-8"))
-        break
-```
-
-## REST API: Update Definition
-
-```python
-resp = requests.post(
-    f"{API}/workspaces/{WS_ID}/reports/{REPORT_ID}/updateDefinition",
-    headers=headers,
-    json={"definition": {"parts": updated_parts}}
-)
-# updateDefinition replaces the ENTIRE definition — no partial patches
-```
+- Property lookups → [`cli_knowledge/`](cli_knowledge/)
+- Expression encoding → [`themes_styling.md`](themes_styling.md)
+- Visual selection by archetype → [`visual_catalog.md`](visual_catalog.md)
+- Page grid system → [`pages_layout.md`](pages_layout.md)
+- Deployment script reference → [`templates/deploy_report.py`](templates/deploy_report.py)
+- Known issues → [`known_issues.md`](known_issues.md)

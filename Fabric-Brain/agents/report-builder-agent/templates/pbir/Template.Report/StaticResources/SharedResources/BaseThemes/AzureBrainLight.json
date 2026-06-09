@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/theme/2.140.0/schema.json",
+  "name": "AzureBrainLight",
+  "dataColors": [
+    "#0078D4",
+    "#107C10",
+    "#C42B1C",
+    "#FF8C00",
+    "#5C2D91",
+    "#008272",
+    "#B4A0FF",
+    "#767676"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#1F2A37",
+  "tableAccent": "#0078D4",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "fontSize": 11,
+            "fontFamily": "Segoe UI Semibold",
+            "fontColor": { "solid": { "color": "#1F2A37" } }
+          }
+        ],
+        "background": [
+          { "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }
+        ]
+      }
+    },
+    "cardVisual": {
+      "*": {
+        "cardCalloutArea": [
+          { "fontSize": 27, "fontFamily": "Segoe UI Semibold" }
+        ]
+      }
+    }
+  }
+}

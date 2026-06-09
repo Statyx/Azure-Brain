@@ -1,0 +1,18 @@
+﻿{
+  "data": {
+    "aiEnabled": {
+      "type": "bool",
+      "displayName": "Enable AI splits",
+      "description": "Show AI options when choosing a column to drill down into"
+    },
+    "aiMode": {
+      "type": "enum",
+      "values": [
+        "absolute",
+        "relative"
+      ],
+      "displayName": "Analysis type",
+      "description": "Choose whether AI splits find absolute high/low values or the ones that stand out the most"
+    }
+  }
+}

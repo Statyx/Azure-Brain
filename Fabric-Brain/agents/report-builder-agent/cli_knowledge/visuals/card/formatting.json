@@ -1,0 +1,33 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "categoryLabels",
+                                 "general",
+                                 "labels",
+                                 "wordWrap"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "categoryLabels",
+                                     "general",
+                                     "labels",
+                                     "wordWrap"
+                                 ]
+             }
+}

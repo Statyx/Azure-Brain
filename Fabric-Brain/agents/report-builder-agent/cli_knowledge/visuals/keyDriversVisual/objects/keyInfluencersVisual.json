@@ -1,0 +1,33 @@
+﻿{
+  "data": {
+    "primaryColor": {
+      "type": "fill",
+      "displayName": "Primary color",
+      "description": "Primary accent color of the analysis visual"
+    },
+    "primaryFontColor": {
+      "type": "fill",
+      "displayName": "Primary text color",
+      "description": "Primary text accent color of the analysis visual"
+    },
+    "secondaryColor": {
+      "type": "fill",
+      "displayName": "Secondary color",
+      "description": "Secondary accent color of the analysis visual"
+    },
+    "secondaryFontColor": {
+      "type": "fill",
+      "displayName": "Secondary text color",
+      "description": "Secondary text accent color of the analysis visual"
+    },
+    "canvasColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the analysis visual"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    }
+  }
+}

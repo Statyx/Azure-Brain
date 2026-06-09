@@ -1,0 +1,186 @@
+﻿{
+  "data": {
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "horizontalAlignment": {
+      "type": "formatting",
+      "displayName": "Horizontal alignment"
+    },
+    "verticalAlignment": {
+      "type": "formatting",
+      "displayName": "Vertical alignment"
+    },
+    "textWrap": {
+      "type": "bool",
+      "displayName": "Text wrap"
+    },
+    "displayUnits": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "1000",
+        "1000000",
+        "1000000000",
+        "1000000000000",
+        "-1"
+      ],
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "precision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "showBlankAs": {
+      "type": "text",
+      "displayName": "Show blank as"
+    },
+    "leftMargin": {
+      "type": "integer",
+      "displayName": "Left padding"
+    },
+    "rightMargin": {
+      "type": "integer",
+      "displayName": "Right padding"
+    },
+    "topMargin": {
+      "type": "integer",
+      "displayName": "Top padding"
+    },
+    "bottomMargin": {
+      "type": "integer",
+      "displayName": "Bottom padding"
+    },
+    "backgroundShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "backgroundImage": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      },
+      "displayName": "Background Image"
+    },
+    "backgroundImageTransparency": {
+      "type": "numeric",
+      "displayName": "Image transparency"
+    },
+    "backgroundImageBlur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "backgroundImageContrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "backgroundImageData": {
+      "type": "text",
+      "displayName": "Data"
+    },
+    "backgroundImageEffects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "backgroundImageExposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "backgroundImageFit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "backgroundImageHeight": {
+      "type": "integer",
+      "displayName": "Image height"
+    },
+    "backgroundImageSaturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "backgroundImageShow": {
+      "type": "bool",
+      "displayName": "Add image"
+    },
+    "backgroundImageType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image source"
+    },
+    "backgroundImageUrl": {
+      "type": "unknown",
+      "displayName": "Image URL"
+    },
+    "customFormatString": {
+      "type": "text",
+      "displayName": "Format code",
+      "description": "Enter a custom number format for your callout."
+    },
+    "paddingUniform": {
+      "type": "integer",
+      "displayName": "Uniform padding"
+    },
+    "paddingIndividual": {
+      "type": "bool",
+      "displayName": "Individual padding"
+    }
+  }
+}

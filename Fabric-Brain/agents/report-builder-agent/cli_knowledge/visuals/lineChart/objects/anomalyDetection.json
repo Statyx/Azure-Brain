@@ -1,0 +1,118 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "displayName": {
+      "type": "text",
+      "displayName": "Name",
+      "description": "Set anomaly name"
+    },
+    "markerShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "markerShape": {
+      "type": "enum",
+      "values": [
+        "circle",
+        "square",
+        "diamond",
+        "triangle",
+        "droplet"
+      ],
+      "displayName": "Type",
+      "description": "Choose the shape used to point out the anomalies on the visual."
+    },
+    "markerShapeSize": {
+      "type": "numeric",
+      "displayName": "Size"
+    },
+    "markerColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "markerTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "markerRotation": {
+      "type": "numeric",
+      "displayName": "Rotation"
+    },
+    "markerBorderShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "markerBorderWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "markerBorderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "markerBorderColorMatchFill": {
+      "type": "bool",
+      "displayName": "Match line color",
+      "description": "Match the legend icon color to the color of the line, not the marker"
+    },
+    "markerBorderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "confidenceBandShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "confidenceBandStyle": {
+      "type": "enum",
+      "values": [
+        "fill",
+        "line",
+        "none"
+      ],
+      "displayName": "Style",
+      "description": "Choose the style for the range of normal values. Any value outside of the range will be considered an anomaly."
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "confidenceBandColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "CategoryValue": {
+      "type": "unknown"
+    },
+    "Value": {
+      "type": "numeric"
+    },
+    "ExpectedValue": {
+      "type": "numeric"
+    },
+    "ExpectedLow": {
+      "type": "numeric"
+    },
+    "ExpectedHigh": {
+      "type": "numeric"
+    },
+    "BatchStart": {
+      "type": "unknown"
+    },
+    "BatchEnd": {
+      "type": "unknown"
+    },
+    "transform": {
+      "type": "unknown"
+    },
+    "explainBy": {
+      "type": "unknown"
+    },
+    "isAnomalyHighlighted": {
+      "type": "bool"
+    }
+  }
+}

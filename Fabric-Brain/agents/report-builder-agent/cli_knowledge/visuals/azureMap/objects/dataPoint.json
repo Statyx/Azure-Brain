@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "showAllDataPoints": {
+      "type": "bool",
+      "displayName": "Show all"
+    },
+    "fill": {
+      "type": "fill",
+      "displayName": "Color"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+﻿{
+  "data": {
+    "unselectedTransparency": {
+      "type": "numeric",
+      "displayName": "Unselected data transparency",
+      "description": "Transparency of unselected data points on the map"
+    },
+    "showZeros": {
+      "type": "bool",
+      "displayName": "Show zeros",
+      "description": "Specifies if points that have a size value of zero should be shown on the map using the minimum radius"
+    },
+    "showNegatives": {
+      "type": "bool",
+      "displayName": "Show negatives",
+      "description": "Specifies if absolute value of negative size values should be plotted"
+    },
+    "minDataValue": {
+      "type": "numeric",
+      "displayName": "Min data value",
+      "description": "The minimum value of the input data to scale against"
+    },
+    "maxDataValue": {
+      "type": "numeric",
+      "displayName": "Max data value",
+      "description": "The maximum value of the input data to scale against"
+    }
+  }
+}

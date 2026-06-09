@@ -1,0 +1,44 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "custom",
+        "left",
+        "right",
+        "above",
+        "below"
+      ],
+      "displayName": "Position"
+    },
+    "size": {
+      "type": "numeric",
+      "displayName": "Size"
+    },
+    "showTooltip": {
+      "type": "bool",
+      "displayName": "Show tooltip"
+    },
+    "tooltipText": {
+      "type": "text",
+      "displayName": "Tooltip text"
+    },
+    "tooltipLabel": {
+      "type": "text",
+      "displayName": "Label text"
+    }
+  }
+}

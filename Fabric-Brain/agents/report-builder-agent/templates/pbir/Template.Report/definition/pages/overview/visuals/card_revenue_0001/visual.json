@@ -1,0 +1,75 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "card_revenue_0001",
+  "position": { "x": 30, "y": 60, "z": 1500, "width": 285, "height": 120, "tabOrder": 0 },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": { "SourceRef": { "Entity": "fact_general_ledger" } },
+                  "Property": "Total Revenue"
+                }
+              },
+              "queryRef": "fact_general_ledger.Total Revenue",
+              "nativeQueryRef": "Total Revenue"
+            }
+          ]
+        }
+      },
+      "sortDefinition": { "sort": [], "isDefaultSort": true }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "fontSize": { "expr": { "Literal": { "Value": "27D" } } },
+            "fontColor": { "solid": { "color": { "expr": { "ThemeDataColor": { "ColorId": 1, "Percent": 0 } } } } },
+            "bold": { "expr": { "Literal": { "Value": "true" } } }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": { "expr": { "Literal": { "Value": "true" } } },
+            "text": { "expr": { "Literal": { "Value": "'Total Revenue'" } } },
+            "fontSize": { "expr": { "Literal": { "Value": "11D" } } },
+            "bold": { "expr": { "Literal": { "Value": "true" } } }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": { "expr": { "Literal": { "Value": "true" } } },
+            "color": { "solid": { "color": { "expr": { "Literal": { "Value": "'#FFFFFF'" } } } } },
+            "transparency": { "expr": { "Literal": { "Value": "0L" } } }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": { "expr": { "Literal": { "Value": "true" } } },
+            "color": { "solid": { "color": { "expr": { "Literal": { "Value": "'#000000'" } } } } },
+            "transparency": { "expr": { "Literal": { "Value": "92L" } } },
+            "shadowBlur": { "expr": { "Literal": { "Value": "8L" } } },
+            "preset": { "expr": { "Literal": { "Value": "'BottomRight'" } } },
+            "position": { "expr": { "Literal": { "Value": "'Outer'" } } }
+          }
+        }
+      ],
+      "border": [
+        { "properties": { "show": { "expr": { "Literal": { "Value": "false" } } } } }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

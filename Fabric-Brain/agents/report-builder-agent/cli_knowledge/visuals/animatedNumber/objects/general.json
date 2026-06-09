@@ -1,0 +1,38 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "x": {
+      "type": "numeric",
+      "displayName": "X Position"
+    },
+    "y": {
+      "type": "numeric",
+      "displayName": "Y Position"
+    },
+    "width": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "height": {
+      "type": "numeric",
+      "displayName": "Height"
+    },
+    "altText": {
+      "type": "formatting",
+      "displayName": "Alt text"
+    },
+    "allowBinnedLineSample": {
+      "type": "bool",
+      "displayName": "High density sampling"
+    },
+    "allowOverlappingPointsSample": {
+      "type": "bool",
+      "displayName": "High density sampling"
+    },
+    "keepLayerOrder": {
+      "type": "bool",
+      "displayName": "Maintain layer order",
+      "description": "Maintain layer order in reading view, even when selected"
+    }
+  }
+}

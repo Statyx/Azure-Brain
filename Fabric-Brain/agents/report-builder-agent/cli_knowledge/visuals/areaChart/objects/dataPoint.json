@@ -1,0 +1,20 @@
+﻿{
+  "data": {
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Area transparency"
+    },
+    "defaultColor": {
+      "type": "fill",
+      "displayName": "Default color"
+    },
+    "fill": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "showAllDataPoints": {
+      "type": "bool",
+      "displayName": "Show all"
+    }
+  }
+}

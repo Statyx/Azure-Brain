@@ -1,0 +1,95 @@
+﻿{
+  "data": {
+    "visualType": "azureMap",
+    "capabilityKey": "azureMap",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "Location",
+        "description": "The locations to plot"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "GroupingOrMeasure",
+        "displayName": "Latitude",
+        "description": "Use to override the latitude of locations"
+      },
+      "X": {
+        "name": "X",
+        "kind": "GroupingOrMeasure",
+        "displayName": "Longitude",
+        "description": "Use to override the longitude of locations"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "Size": {
+        "name": "Size",
+        "kind": "Measure",
+        "displayName": "Size",
+        "description": "The measure to use for relative sizing of data points"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      },
+      "PathID": {
+        "name": "PathID",
+        "kind": "Grouping",
+        "displayName": "Path ID",
+        "description": "A group of location data points that belong to the same path."
+      },
+      "PointOrder": {
+        "name": "PointOrder",
+        "kind": "Grouping",
+        "displayName": "Point Order",
+        "description": "The order of the data points in each path."
+      }
+    },
+    "requiredRoles": [
+      "Category"
+    ],
+    "optionalRoles": [
+      "Y",
+      "X",
+      "Series",
+      "Size",
+      "Tooltips",
+      "PathID",
+      "PointOrder"
+    ],
+    "maxPerRole": {
+      "Y": 1,
+      "X": 1,
+      "Series": 1,
+      "Size": 1,
+      "PathID": 1,
+      "PointOrder": 1
+    },
+    "formattingObjects": [
+      "barChart",
+      "bubbleLayer",
+      "categoryLabels",
+      "commonDataOptions",
+      "dataPoint",
+      "filledMap",
+      "general",
+      "heatMapLayer",
+      "labels",
+      "legend",
+      "mapControls",
+      "pathLayer",
+      "referenceLayer",
+      "tileLayer",
+      "traffic"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

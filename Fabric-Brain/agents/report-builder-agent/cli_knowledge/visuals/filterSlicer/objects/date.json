@@ -1,0 +1,35 @@
+﻿{
+  "data": {
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "textSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "background": {
+      "type": "fill",
+      "displayName": "Background color"
+    },
+    "hideDatePickerButton": {
+      "type": "bool"
+    }
+  }
+}

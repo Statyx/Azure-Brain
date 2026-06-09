@@ -1,0 +1,19 @@
+﻿{
+  "data": {
+    "selectAllCheckboxEnabled": {
+      "type": "bool",
+      "displayName": "Show \"Select all\" option",
+      "description": "Show \"Select all\" as an option in the slicer. This selects all the values in the slicer so you can unselect them one by one to create an \"is not\" type filter."
+    },
+    "singleSelect": {
+      "type": "bool",
+      "displayName": "Multi-select with CTRL",
+      "description": "Allow multiple selections in check boxes only when CTRL or Command + click is used"
+    },
+    "strictSingleSelect": {
+      "type": "bool",
+      "displayName": "Single select",
+      "description": "Force Selection ensures only one item can be chosen at a time. If no item is selected, the first available will be automatically chosen."
+    }
+  }
+}

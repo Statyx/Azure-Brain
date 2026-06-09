@@ -1,0 +1,27 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "displayName": {
+      "type": "text",
+      "displayName": "Name"
+    },
+    "upperShadingColor": {
+      "type": "fill",
+      "displayName": "Upper shading",
+      "description": "Shading color of the upper region"
+    },
+    "lowerShadingColor": {
+      "type": "fill",
+      "displayName": "Lower shading",
+      "description": "Shading color of the lower region"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    }
+  }
+}

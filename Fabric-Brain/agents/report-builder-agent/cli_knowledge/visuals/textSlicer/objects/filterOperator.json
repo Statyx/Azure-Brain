@@ -1,0 +1,100 @@
+﻿{
+  "data": {
+    "showText": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "fontTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "iconColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "iconTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "iconSize": {
+      "type": "formatting",
+      "displayName": "Icon size"
+    },
+    "backShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "backTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "borderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "cornerRadius": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "individualCorners": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "cornerTopLeft": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "cornerTopRight": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "cornerBottomLeft": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "cornerBottomRight": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    }
+  }
+}

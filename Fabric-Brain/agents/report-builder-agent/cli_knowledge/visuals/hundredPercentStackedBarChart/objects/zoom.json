@@ -1,0 +1,42 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "showOnCategoryAxis": {
+      "type": "bool",
+      "displayName": "Y axis"
+    },
+    "categoryMin": {
+      "type": "numeric"
+    },
+    "categoryMax": {
+      "type": "numeric"
+    },
+    "categorySize": {
+      "type": "numeric"
+    },
+    "showOnValueAxis": {
+      "type": "bool",
+      "displayName": "X axis"
+    },
+    "valueMin": {
+      "type": "numeric"
+    },
+    "valueMax": {
+      "type": "numeric"
+    },
+    "valueSize": {
+      "type": "numeric"
+    },
+    "showLabels": {
+      "type": "bool",
+      "displayName": "Slider labels"
+    },
+    "showTooltip": {
+      "type": "bool",
+      "displayName": "Slider tooltips"
+    }
+  }
+}

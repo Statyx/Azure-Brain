@@ -1,0 +1,60 @@
+﻿{
+  "data": {
+    "position": {
+      "type": "enum",
+      "values": [
+        "below",
+        "right"
+      ],
+      "displayName": "Arrangement"
+    },
+    "arrangement": {
+      "type": "enum",
+      "values": [
+        "rows",
+        "columns"
+      ],
+      "displayName": "Arrangement"
+    },
+    "style": {
+      "type": "enum",
+      "values": [
+        "sentence",
+        "tabular"
+      ],
+      "displayName": "Style"
+    },
+    "horizontalAlignment": {
+      "type": "formatting",
+      "displayName": "Horizontal alignment"
+    },
+    "verticalAlignment": {
+      "type": "formatting",
+      "displayName": "Vertical alignment"
+    },
+    "valueArea": {
+      "type": "numeric",
+      "displayName": "Value area"
+    },
+    "labelSpace": {
+      "type": "numeric",
+      "displayName": "Space between labels"
+    },
+    "outerPadding": {
+      "type": "numeric",
+      "displayName": "Outer padding"
+    },
+    "customizePadding": {
+      "type": "bool",
+      "displayName": "Customize outer padding"
+    },
+    "paddingBeforeDivider": {
+      "type": "numeric",
+      "displayName": "Padding before divider line"
+    },
+    "paddingAfterDivider": {
+      "type": "numeric",
+      "displayName": "Padding after divider line"
+    }
+  }
+}

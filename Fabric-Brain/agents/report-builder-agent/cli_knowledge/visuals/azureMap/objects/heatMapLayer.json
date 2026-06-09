@@ -1,0 +1,80 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "heatMapRadius": {
+      "type": "numeric",
+      "displayName": "Radius",
+      "description": "The radius of each data point in the heat map"
+    },
+    "heatMapRadiusUnit": {
+      "type": "enum",
+      "values": [
+        "pixels",
+        "meters"
+      ],
+      "displayName": "Radius units",
+      "description": "Use meters or pixels as units to visualize the data"
+    },
+    "mapTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Sets the transparency of the heat map layer"
+    },
+    "heatMapIntensity": {
+      "type": "numeric",
+      "displayName": "Intensity",
+      "description": "Set the baseline intensity level for all data points."
+    },
+    "heatMapColorLow": {
+      "type": "fill",
+      "displayName": "0% gradient stop",
+      "description": "The color used on the low end of the color gradient"
+    },
+    "heatMapColorCenter": {
+      "type": "fill",
+      "displayName": "50% gradient stop",
+      "description": "The color used in the center of the color gradient"
+    },
+    "heatMapColorHigh": {
+      "type": "fill",
+      "displayName": "100% gradient stop",
+      "description": "The color used on the high end of the color gradient"
+    },
+    "heatMapUseSize": {
+      "type": "bool",
+      "displayName": "Intensity by value",
+      "description": "Use data from the 'Size' field well to determine heat intensity."
+    },
+    "minZoom": {
+      "type": "integer",
+      "displayName": "Minimum",
+      "description": "Minimum zoom level where layer is visible"
+    },
+    "maxZoom": {
+      "type": "integer",
+      "displayName": "Maximum",
+      "description": "Maximum zoom level where layer is visible"
+    },
+    "layerPosition": {
+      "type": "enum",
+      "values": [
+        "",
+        "labels",
+        "transit"
+      ],
+      "displayName": "Layer position",
+      "description": "Specifies the position of the layer relative to other map layers"
+    },
+    "minDataScalingRange": {
+      "type": "numeric",
+      "displayName": "Minimum"
+    },
+    "maxDataScalingRange": {
+      "type": "numeric",
+      "displayName": "Maximum"
+    }
+  }
+}

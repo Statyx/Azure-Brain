@@ -1,0 +1,79 @@
+﻿{
+  "data": {
+    "visualTypes": [
+      "accessibleTable",
+      "actionButton",
+      "advancedSlicerVisual",
+      "aiNarratives",
+      "animatedNumber",
+      "areaChart",
+      "azureMap",
+      "barChart",
+      "basicShape",
+      "bookmarkNavigator",
+      "card",
+      "cardVisual",
+      "clusteredBarChart",
+      "clusteredColumnChart",
+      "columnChart",
+      "dataQueryVisual",
+      "decompositionTreeVisual",
+      "donutChart",
+      "filledMap",
+      "filterSlicer",
+      "funnel",
+      "gauge",
+      "heatMap",
+      "hundredPercentStackedAreaChart",
+      "hundredPercentStackedBarChart",
+      "hundredPercentStackedColumnChart",
+      "image",
+      "keyDriversVisual",
+      "kpi",
+      "lineChart",
+      "lineClusteredColumnComboChart",
+      "lineStackedColumnComboChart",
+      "listSlicer",
+      "map",
+      "matrix",
+      "multiRowCard",
+      "pageNavigator",
+      "pieChart",
+      "pivotTable",
+      "pythonVisual",
+      "qnaVisual",
+      "rdlVisual",
+      "realTimeLineChart",
+      "ribbonChart",
+      "scatterChart",
+      "scorecard",
+      "scriptVisual",
+      "shape",
+      "shapeMap",
+      "slicer",
+      "stackedAreaChart",
+      "table",
+      "tableEx",
+      "textSlicer",
+      "textbox",
+      "treemap",
+      "waterfallChart"
+    ],
+    "deprecated": [
+      {
+        "visualType": "filledMap",
+        "alternative": "azureMap",
+        "reason": "Legacy Bing Maps filled map visual - replaced by Azure Maps"
+      },
+      {
+        "visualType": "map",
+        "alternative": "azureMap",
+        "reason": "Legacy Bing Maps visual - replaced by Azure Maps"
+      },
+      {
+        "visualType": "qnaVisual",
+        "reason": "Q&A visual is not supported in PBIR authoring workflows"
+      }
+    ]
+  }
+}

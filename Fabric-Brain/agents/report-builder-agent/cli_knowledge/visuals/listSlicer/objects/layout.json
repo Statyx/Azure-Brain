@@ -1,0 +1,285 @@
+﻿{
+  "data": {
+    "alignment": {
+      "type": "formatting",
+      "displayName": "Alignment"
+    },
+    "orientation": {
+      "type": "enum",
+      "values": [
+        "2",
+        "1",
+        "0"
+      ],
+      "displayName": "Arrangement"
+    },
+    "rowCount": {
+      "type": "integer",
+      "displayName": "Rows"
+    },
+    "columnCount": {
+      "type": "integer",
+      "displayName": "Columns"
+    },
+    "maxTiles": {
+      "type": "integer",
+      "displayName": "Max cards shown"
+    },
+    "cellPadding": {
+      "type": "integer",
+      "displayName": "Space between cards"
+    },
+    "customizePadding": {
+      "type": "bool",
+      "displayName": "Customize spacing"
+    },
+    "rowPadding": {
+      "type": "integer",
+      "displayName": "Space between rows"
+    },
+    "columnPadding": {
+      "type": "integer",
+      "displayName": "Space between columns"
+    },
+    "calloutSize": {
+      "type": "numeric",
+      "displayName": "Callout size"
+    },
+    "style": {
+      "type": "enum",
+      "values": [
+        "Table",
+        "Cards"
+      ],
+      "displayName": "Style"
+    },
+    "backgroundFillColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "backgroundShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "backgroundImage": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    },
+    "backgroundImageTransparency": {
+      "type": "numeric",
+      "displayName": "Image transparency"
+    },
+    "rectangleRoundedCurve": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "rectangleRoundedCurveCustomStyle": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "rectangleRoundedCurveLeftTop": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "rectangleRoundedCurveRightTop": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "rectangleRoundedCurveLeftBottom": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "rectangleRoundedCurveRightBottom": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "customizeLines": {
+      "type": "bool",
+      "displayName": "Customize lines"
+    },
+    "lineWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "lineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "lineTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "lineStyle": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    },
+    "gridlineWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "gridlineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "gridlineTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "gridlineStyle": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    },
+    "borderWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "borderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderStyle": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    },
+    "leftOuterMargin": {
+      "type": "integer",
+      "displayName": "Left padding"
+    },
+    "rightOuterMargin": {
+      "type": "integer",
+      "displayName": "Right padding"
+    },
+    "topOuterMargin": {
+      "type": "integer",
+      "displayName": "Top padding"
+    },
+    "bottomOuterMargin": {
+      "type": "integer",
+      "displayName": "Bottom padding"
+    },
+    "fixedHeight": {
+      "type": "integer",
+      "displayName": "Height"
+    },
+    "fixedWidth": {
+      "type": "integer",
+      "displayName": "Width"
+    },
+    "showFixedSize": {
+      "type": "bool",
+      "displayName": "Fixed size"
+    },
+    "indentation": {
+      "type": "integer",
+      "displayName": "Indentation"
+    },
+    "reverseIndentation": {
+      "type": "bool",
+      "displayName": "Reverse indentation"
+    },
+    "containerIndentation": {
+      "type": "bool",
+      "displayName": "Indent button container"
+    },
+    "fixedButtonsCount": {
+      "type": "bool",
+      "displayName": "Fixed number of buttons"
+    },
+    "autoGrid": {
+      "type": "bool",
+      "displayName": "Fit to space"
+    },
+    "backgroundImageBlur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "backgroundImageContrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "backgroundImageData": {
+      "type": "text",
+      "displayName": "Data"
+    },
+    "backgroundImageEffects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "backgroundImageExposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "backgroundImageFit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "backgroundImageHeight": {
+      "type": "integer",
+      "displayName": "Image height"
+    },
+    "backgroundImageSaturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "backgroundImageShow": {
+      "type": "bool",
+      "displayName": "Add image"
+    },
+    "backgroundImageType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image source"
+    },
+    "backgroundImageUrl": {
+      "type": "unknown",
+      "displayName": "Image URL"
+    }
+  }
+}

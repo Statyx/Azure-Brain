@@ -1,0 +1,39 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "applyButton",
+                                 "dropdown",
+                                 "filterOperator",
+                                 "general",
+                                 "inputText",
+                                 "inputTextBox",
+                                 "slicerSettings"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "applyButton",
+                                     "dropdown",
+                                     "filterOperator",
+                                     "general",
+                                     "inputText",
+                                     "inputTextBox",
+                                     "slicerSettings"
+                                 ]
+             }
+}

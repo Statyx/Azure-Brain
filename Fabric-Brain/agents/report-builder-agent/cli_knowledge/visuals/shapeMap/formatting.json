@@ -1,0 +1,37 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "dataPoint",
+                                 "defaultColors",
+                                 "general",
+                                 "legend",
+                                 "shape",
+                                 "zoom"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "dataPoint",
+                                     "defaultColors",
+                                     "general",
+                                     "legend",
+                                     "shape",
+                                     "zoom"
+                                 ]
+             }
+}

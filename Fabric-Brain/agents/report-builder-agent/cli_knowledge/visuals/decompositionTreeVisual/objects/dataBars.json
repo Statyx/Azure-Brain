@@ -1,0 +1,49 @@
+﻿{
+  "data": {
+    "positiveBarColor": {
+      "type": "fill",
+      "displayName": "Positive bar",
+      "description": "Color of data bars with positive values"
+    },
+    "negativeBarColor": {
+      "type": "fill",
+      "displayName": "Negative bar",
+      "description": "Color of data bars with negative values"
+    },
+    "dataBarBackgroundColor": {
+      "type": "fill",
+      "displayName": "Bar background",
+      "description": "Color of the unoccupied area of the bar"
+    },
+    "dataBarColor": {
+      "type": "fill",
+      "displayName": "Data bar color",
+      "description": "Format data bars with color based on a value."
+    },
+    "dataBarWidthPercent": {
+      "type": "integer",
+      "displayName": "Size",
+      "description": "Size"
+    },
+    "dataBarScalingType": {
+      "type": "enum",
+      "values": [
+        "topNode",
+        "parentNode",
+        "levelMaximum"
+      ],
+      "displayName": "Scale to",
+      "description": "Choose how to scale the contents of the data bar"
+    },
+    "axisStart": {
+      "type": "unknown",
+      "displayName": "Start",
+      "description": "Enter a starting value (optional)"
+    },
+    "axisEnd": {
+      "type": "unknown",
+      "displayName": "End",
+      "description": "Enter an ending value (optional)"
+    }
+  }
+}

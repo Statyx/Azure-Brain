@@ -1,0 +1,71 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "valueFontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "valueFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "valueFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "valueUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "valueBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "valueItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "valueTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "valuePrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "valueDisplayUnits": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "1000",
+        "1000000",
+        "1000000000",
+        "1000000000000",
+        "-1"
+      ],
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "showBlankAs": {
+      "type": "text",
+      "displayName": "Show blank as"
+    },
+    "customFormatString": {
+      "type": "text",
+      "displayName": "Format code",
+      "description": "Enter a custom number format for your callout."
+    },
+    "textWrap": {
+      "type": "bool",
+      "displayName": "Text wrap"
+    }
+  }
+}

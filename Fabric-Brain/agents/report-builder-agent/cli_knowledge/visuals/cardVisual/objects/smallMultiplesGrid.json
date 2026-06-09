@@ -1,0 +1,39 @@
+﻿{
+  "data": {
+    "gridlineShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "gridlineWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "gridlineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "gridlineTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "gridlineStyle": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    },
+    "gridlineRegion": {
+      "type": "enum",
+      "values": [
+        "all",
+        "inner",
+        "innerHorizontal",
+        "innerVertical"
+      ],
+      "displayName": "Gridlines"
+    }
+  }
+}

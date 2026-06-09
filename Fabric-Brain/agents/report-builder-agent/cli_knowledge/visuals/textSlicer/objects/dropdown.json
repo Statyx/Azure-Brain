@@ -1,0 +1,16 @@
+﻿{
+  "data": {
+    "filterMode": {
+      "type": "enum",
+      "values": [
+        "Filter_Contains_All",
+        "Filter_Contains_Any",
+        "Filter_Does_Not_Contain_Any",
+        "Filter_Starts_With_Any",
+        "Filter_Does_Not_Start_With_Any",
+        "Filter_Is_Any",
+        "Filter_Is_Not_Any"
+      ]
+    }
+  }
+}

@@ -1,0 +1,58 @@
+﻿{
+  "data": {
+    "visualType": "waterfallChart",
+    "capabilityKey": "waterfallChart",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "Category",
+        "description": "Each field is a stage in the waterfall"
+      },
+      "Breakdown": {
+        "name": "Breakdown",
+        "kind": "Grouping",
+        "displayName": "Breakdown",
+        "description": "Explore change between categories based on this field"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "Measure",
+        "displayName": "Y-axis",
+        "description": "The numeric amounts to plot"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Category",
+      "Y"
+    ],
+    "optionalRoles": [
+      "Breakdown",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Category": 1,
+      "Breakdown": 1,
+      "Y": 1
+    },
+    "formattingObjects": [
+      "breakdown",
+      "categoryAxis",
+      "general",
+      "labels",
+      "legend",
+      "plotArea",
+      "sentimentColors",
+      "valueAxis",
+      "y1AxisReferenceLine"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

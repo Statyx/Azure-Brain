@@ -1,371 +1,257 @@
-# Pages & Layout — Canvas Grid System
+# Pages & Layout — PBIR
 
-> **See also**: `dashboard_design_guide.md` for comprehensive design principles, typography scale, color system, and setup checklist.
-
----
-
-## Design Principles (Quick Reference)
-
-1. **F-Pattern reading**: KPIs top-left → charts middle → detail tables bottom
-2. **One story per page**: Each page answers ONE business question
-3. **Consistent grid**: All visuals align to the column system below — no arbitrary positioning
-4. **White space matters**: Minimum 10px gap between visuals; don't fill every pixel
-5. **5-second rule**: User understands the main message within 5 seconds
+> Canvas dimensions, grid system, and ready-to-use page layouts per dashboard archetype.
 
 ---
 
-## Standard Canvas
+## 1. Page Structure on Disk
 
-| Property | Value | Notes |
-|----------|-------|-------|
-| Width | 1280 px | 16:9 aspect ratio |
-| Height | 720 px | Standard HD |
-| `displayOption` | `1` | Fit to page |
+```
+pages/
+├─ pages.json
+└─ <pageId>/
+   ├─ page.json
+   ├─ filters.json          # optional, page-scoped filters
+   └─ visuals/
+      └─ <visualId>/
+         ├─ visual.json
+         ├─ filters.json    # optional, visual-scoped filters
+         └─ mobile.json     # optional, mobile layout overrides
+```
 
-All visual coordinates are relative to this 1280×720 grid.
+`pageId` is the page's internal name (no spaces, no special chars: `overview`, `cash_flow`, `pnl_q2`).  
+`visualId` is a UUID (`uuidgen` in PowerShell: `[guid]::NewGuid().ToString('N').Substring(0,16)`).
 
 ---
 
-## Margin & Spacing Rules
-
-| Rule | Value |
-|------|-------|
-| Left/right margin | 30 px |
-| Top margin | 10 px |
-| Gap between columns | 20 px |
-| Gap between rows | 10–15 px |
-| Usable width | 1220 px (1280 − 30 − 30) |
-
----
-
-## Column Systems
-
-### 3-Column Layout (KPI Cards)
-```
-Usable: 1220 px
-Columns: 3
-Gap: 20 px
-Column width: (1220 - 2×20) / 3 = 390 px (rounded)
-
-x positions:  30  |  440  |  850
-```
-
-### 2-Column Layout (Charts)
-```
-Usable: 1220 px
-Columns: 2
-Gap: 30 px
-Column width: (1220 - 30) / 2 = 595 px
-
-x positions:  30  |  655
-```
-
-### Full-Width Layout
-```
-x: 30, width: 1220
-```
-
----
-
-## Recommended Heights
-
-| Element | Height | Notes |
-|---------|--------|-------|
-| Title bar (textbox) | 40 px | Dashboard heading |
-| KPI Card | 120 px | **Minimum for readable calloutValue + category label** |
-| Small Chart | 200 px | Minimum for axis visibility |
-| Medium Chart | 250 px | More detail / labels |
-| Large Chart | 350 px | Complex charts, tables |
-| Slicer (no title) | 50 px | Dropdown only |
-| Slicer (with title) | **75 px** | Title (22px) + dropdown (53px) — NEVER less than 70px |
-| Table / Matrix | 200–500 px | Depends on row count |
-
-**CRITICAL**: Card height must be ≥ 120px for `calloutValue.fontSize: 14D` and ≥ 130px for `27D`.
-**CRITICAL**: Slicer at 55px with vcObjects.title = BROKEN (title eats 22px, only 33px left for dropdown).
-
----
-
-## Dashboard Templates
-
-### Template A: Executive Overview (6 KPIs + 4 Charts)
-
-```
-y=10    [─────────── Title Bar (1220×40) ───────────]
-
-y=60    [ KPI 1 (390×120) ] [ KPI 2 (390×120) ] [ KPI 3 (390×120) ]
-
-y=190   [ KPI 4 (390×120) ] [ KPI 5 (390×120) ] [ KPI 6 (390×120) ]
-
-y=325   [ Chart 1 (595×185) ]    [ Chart 2 (595×185) ]
-
-y=525   [ Chart 3 (595×185) ]    [ Chart 4 (595×185) ]
-
-Total: 710 px → fits in 720 canvas
-```
-
-Visual coordinates:
-| Visual | x | y | width | height |
-|--------|---|---|-------|--------|
-| Title | 30 | 10 | 1220 | 40 |
-| KPI 1 | 30 | 60 | 390 | 120 |
-| KPI 2 | 440 | 60 | 390 | 120 |
-| KPI 3 | 850 | 60 | 390 | 120 |
-| KPI 4 | 30 | 190 | 390 | 120 |
-| KPI 5 | 440 | 190 | 390 | 120 |
-| KPI 6 | 850 | 190 | 390 | 120 |
-| Chart 1 | 30 | 325 | 595 | 185 |
-| Chart 2 | 655 | 325 | 595 | 185 |
-| Chart 3 | 30 | 525 | 595 | 185 |
-| Chart 4 | 655 | 525 | 595 | 185 |
-
-### Template B: KPI Row + One Large Chart
-
-```
-y=10    [─────────── Title Bar (1220×40) ───────────]
-
-y=60    [ KPI 1 (390×120) ] [ KPI 2 (390×120) ] [ KPI 3 (390×120) ]
-
-y=195   [──────────── Large Chart (1220×350) ────────────]
-
-y=560   [──────── Slicer Row (1220×50) ────────]
-```
-
-### Template C: Table/Matrix Focus
-
-```
-y=10    [─────────── Title Bar (1220×40) ───────────]
-
-y=60    [ KPI 1 (295×120) ] [ KPI 2 (295×120) ] [ KPI 3 (295×120) ] [ KPI 4 (295×120) ]
-
-y=195   [──────────── Table or Matrix (1220×510) ────────────]
-```
-
-### Template D: Slicer Page (KPIs + Charts with Filters)
-
-**The standard layout for any page with slicers.** Slicers go in the title bar area.
-
-```
-y=0     [━━━━━━━ Accent Bar (1280×5) ━━━━━━━━]          y=0–5
-y=8     [ Title (580×40) ]     [Slicer1 (245×75)] [Slicer2 (245×75)]  y=8–83
-y=85    [────── Separator ──────]                               y=85
-y=93    [ KPI 1 (290×120) ][ KPI 2 (290×120) ][ KPI 3 (290×120) ][ KPI 4 (295×120) ]  y=93–213
-y=221   [────── Separator ──────]                               y=221
-y=229   [ Chart 1 (595×200) ]    [ Chart 2 (595×200) ]          y=229–429
-y=437   [────── Separator ──────]                               y=437
-y=445   [──── Chart 3 or Table (1220×267) ────]           y=445–712
-```
-
-Visual coordinates:
-| Visual | x | y | width | height | Notes |
-|--------|---|---|-------|--------|-------|
-| Accent bar | 0 | 0 | 1280 | 5 | Page accent color |
-| Title | 30 | 10 | 580–700 | 40 | Shorter to leave room for slicers |
-| Slicer 1 | 760 | 8 | 245 | **75** | Dropdown + title |
-| Slicer 2 | 1020 | 8 | 245 | **75** | Dropdown + title |
-| Sep 1 | 30 | 85 | 1220 | 2 | Below slicers |
-| KPI 1–4 | 30/335/640/945 | 93 | 290–295 | **120** | Same height as non-slicer pages |
-| Sep 2 | 30 | 221 | 1220 | 2 | Below cards |
-| Chart 1 | 30 | 229 | 595 | 200 | 2-col chart |
-| Chart 2 | 655 | 229 | 595 | 200 | 2-col chart |
-| Sep 3 | 30 | 437 | 1220 | 2 | Optional |
-| Full-width | 30 | 445 | 1220 | 267 | Table/scatter/chart |
-
-**Key spacing rules:**
-- Slicer bottom (83) → card top (93) = **10px gap** ✔️
-- Card bottom (213) → separator (221) = **8px gap** ✔️  
-- Separator (221+2) → chart top (229) = **6px gap** ✔️
-- Last visual bottom (712) < canvas (720) = **8px margin** ✔️
-
-**CRITICAL**: Cards MUST be 120px on slicer pages too. Do NOT shrink to 100px to save vertical space.
-The trade-off is to shrink the chart heights or remove the bottom separator instead.
-
-4-column for KPI row:
-```
-Column width: (1220 - 3×20) / 4 = 290 px (rounded to 295)
-x positions:  30  |  335  |  640  |  945
-Widths: 295 each (last one: 285 to fit)
-```
-
----
-
-## Multi-Page Reports
-
-### Adding Pages
-
-Each page is a `section` in the `sections[]` array:
-
-```python
-sections = [
-    make_section("Overview", "Executive Overview", overview_visuals),
-    make_section("Revenue", "Revenue Analysis", revenue_visuals),
-    make_section("Budget", "Budget vs Actual", budget_visuals),
-    make_section("AR", "Accounts Receivable", ar_visuals),
-]
-```
-
-### Page Naming Rules
-- `name`: Internal identifier — no spaces, no special characters, unique per report
-- `displayName`: User-visible tab name — spaces OK, unicode OK
-- `config`: Must contain `{"name": "<name>"}` stringified — name must match the `name` field
-
-### Page Order
-Pages appear in the order they occur in `sections[]`. First page is shown by default.
-The `activeSectionIndex` in report config controls which page opens first (0-based).
-
----
-
-## Z-Index Stacking
-
-The `z` property controls visual overlap order:
-- `z: 0` — Background elements (shapes, images)
-- `z: 1` — Standard visuals (cards, charts)
-- `z: 2+` — Overlapping elements
-- Higher `z` = on top
-
----
-
-## Python: Layout Helpers
-
-```python
-def kpi_row_3col(y: int, measures: list[tuple[str, str, str]], table: str = "fact_general_ledger"):
-    """Generate 3 KPI cards in a row.
-    
-    Args:
-        y: Y position of the row
-        measures: List of (measure_name, title, visual_id) tuples
-    """
-    x_positions = [30, 440, 850]
-    visuals = []
-    for i, (measure, title, vid) in enumerate(measures):
-        visuals.append(make_card(vid, x_positions[i], y, 390, 120, table, measure, title))
-    return visuals
-
-def chart_row_2col(y: int, chart1_config: dict, chart2_config: dict):
-    """Position two chart configs side by side."""
-    chart1_config["layouts"][0]["position"].update({"x": 30, "y": y, "width": 595, "height": 185})
-    chart2_config["layouts"][0]["position"].update({"x": 655, "y": y, "width": 595, "height": 185})
-    return [chart1_config, chart2_config]
-
-def full_width(y: int, height: int, config: dict):
-    """Position a visual full-width."""
-    config["layouts"][0]["position"].update({"x": 30, "y": y, "width": 1220, "height": height})
-    return config
-```
-
----
-
-## Finance Dashboard — RPT_Finance_Dashboard (5 Pages)
-
-Uses the **Copilot standard layout** matching the working `Finance_Report` in the same workspace. Light theme with drop shadows, accent bars on cards.
-
-### Standard Page Layout (Copilot Style)
-
-```
-┌────────────────────────────────────────────────────────────────┐
-│ Header bar (shape)     h=80          [Slicer1] [Slicer2]      │  y=0
-│ Page Title (textbox)   z=2                                     │  y=20
-├──────────────────────────────┬─────────────────────────────────┤
-│ Card 1  (w=595, h=112)      │ Card 2   (w=595, h=112)        │  y=100
-├──────────────────────────────┬─────────────────────────────────┤
-│ Chart 1 (w=595, h=224)      │ Chart 2  (w=595, h=224)        │  y=222
-├──────────────────────────────┬─────────────────────────────────┤
-│ Chart 3 (w=595, h=224)      │ Chart 4  (w=595, h=224)        │  y=456
-└──────────────────────────────┴─────────────────────────────────┘
-```
-
-Grid: x=40 (left col), x=645 (right col), w=595 each
-
-| Element | x | y | z | w×h | Notes |
-|---------|---|---|---|-----|-------|
-| Header shape | 0 | 0 | 1 | 1280×80 | fill=off, outline=off, dropShadow=on |
-| Page title | 40 | 20 | 2 | 620×40 | Segoe UI 14pt bold |
-| Slicer 1 | 840 | 0 | 2 | 212×**75** | Dropdown mode + title |
-| Slicer 2 | 1068 | 0 | 2 | 212×**75** | Dropdown mode + title |
-| Card left | 40 | 100 | 1 | 595×112 | cardVisual with accentBar |
-| Card right | 645 | 100 | 1 | 595×112 | cardVisual with accentBar |
-| Chart TL | 40 | 222 | 1 | 595×224 | Any axis chart |
-| Chart TR | 645 | 222 | 1 | 595×224 | Any axis chart |
-| Chart BL | 40 | 456 | 1 | 595×224 | Any axis chart |
-| Chart BR | 645 | 456 | 1 | 595×224 | Any axis chart |
-
-### vcObjects (standard for all visuals)
+## 2. `pages.json` (Page Index)
 
 ```json
-"vcObjects": {
-  "dropShadow": [{"properties": {"show": "true", "color": "#A6ADC6", "preset": "Custom", "shadowSpread": "0L", "shadowBlur": "5L", "angle": "90L", "shadowDistance": "4L", "transparency": "85L"}}],
-  "background": [{"properties": {"show": "true"}}],
-  "border": [{"properties": {"show": "true", "color": "#E0E0E0", "radius": "4L"}}],
-  "title": [{"properties": {"show": "true", "text": "'Chart Title'"}}]
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "activePageName": "overview",
+  "pageOrder": ["overview", "pnl", "cash_flow", "trends"]
 }
 ```
 
-### Card objects (standard)
+- `pageOrder[]` defines the tab order in the report viewer.
+- Every entry must match an existing `pages/<id>/page.json` folder.
+- `activePageName` is the page shown on first open.
+
+---
+
+## 3. `page.json` (Page Metadata)
 
 ```json
-"objects": {
-  "accentBar": [{"properties": {"color": "#118DFF"}, "selector": {"metadata": "table.Measure"}}],
-  "outline": [{"properties": {"show": "false"}}],
-  "layout": [{"properties": {"maxTiles": "10L"}}]
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "overview",
+  "displayName": "Overview",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "visualInteractions": [],
+  "objects": {}
 }
 ```
 
-### Slicer objects (standard — with full vcObjects styling)
+### Canvas sizing
+
+| Use case | Width × Height | Notes |
+|---|---|---|
+| **Standard 16:9** | 1280 × 720 | Default; renders crisp on most screens |
+| **Wide 16:9 HD** | 1920 × 1080 | Use only if you have data density to fill it |
+| **Mobile portrait** | 320 × 568 | Defined in `mobile.json` per visual, not page-level |
+| **Letter (print)** | 816 × 1056 | Set `displayOption: "ActualSize"` |
+
+### `displayOption`
+
+| Value | Behaviour |
+|---|---|
+| `"FitToPage"` (default) | Scales to fit the browser window, preserving aspect ratio |
+| `"ActualSize"` | Renders pixel-perfect — scroll bars appear if window is smaller |
+| `"FitToWidth"` | Scales to fit width; height scrolls |
+
+### Page-level `objects`
+
+Page objects style the canvas itself. Use sparingly:
+
+| Object | Purpose |
+|---|---|
+| `background` | Page background color / image |
+| `displayArea` | Inner padding around all visuals |
+| `outspace` | Color outside the canvas (when `FitToPage` shows letterboxing) |
+| `pageInformation` | Title, type, hidden flag |
+| `pageRefresh` | Auto-refresh interval (for `realTimeLineChart` pages) |
+| `pageSize` | Width / height (mirror of `width`/`height` top-level) |
+| `filterSortOrder` | Order of filters in the filter pane |
+
+Values use the same PBIR expression envelopes as visuals (see [`themes_styling.md`](themes_styling.md)).
+
+---
+
+## 4. The 1280 × 720 Grid
+
+### Margins & Gutters
+
+| Edge | Padding |
+|---|---|
+| Left | 30 px |
+| Right | 30 px |
+| Top | 10 px (title bar starts immediately) |
+| Bottom | 20 px |
+| Between columns | 20 px |
+| Between rows | 10–15 px |
+
+Usable area: **1220 × 690** (after side margins and top/bottom padding).
+
+### 12-column system
+
+`12 × 100 - 20 × 11 = 980` doesn't fit 1220, so we use simpler ratios:
+
+| Layout | Column widths (px) |
+|---|---|
+| **6 KPI cards** | `200 + 20 + 200 + 20 + 200 + 20 + 200 + 20 + 200 + 20 + 200 = 1320` → shrink to `190`: `190×6 + 20×5 = 1240` ✓ |
+| **4 KPI cards** | `285 × 4 + 20 × 3 = 1200` ✓ |
+| **3 + 1 split** | `390 × 3 + 20 × 2 + 20 + 30 = 1230 - extras = 1240` → use `400 + 20 + 400 + 20 + 400 + 20 + 0 = 1260` |
+| **Sidebar + content** | sidebar `220` + gap `20` + content `980` = `1220` ✓ |
+| **Two-column 50/50** | `600 + 20 + 600 = 1220` ✓ |
+| **Three-column 33/33/33** | `393 + 20 + 393 + 20 + 393 = 1219` ✓ |
+
+Rule of thumb: **divide 1220 by N visuals in a row, subtract 20·(N-1)/N for gaps**.
+
+### Standard heights
+
+| Element | Height (px) |
+|---|---|
+| Page title row | 50 |
+| KPI card row | **120** (mandatory minimum for `cardVisual` callout) |
+| Slicer row | 75 (when `vcObjects.title.show = true`) |
+| Chart (compact) | 240 |
+| Chart (standard) | 320 |
+| Chart (hero) | 480 |
+| Table / matrix | 260 (header + 8 rows × 28) — scale up |
+| Separator line | 1 |
+
+---
+
+## 5. Archetype Layout Templates
+
+Match each layout to the archetype defined in [`dashboard_design_guide.md`](dashboard_design_guide.md). All coordinates assume 1280 × 720.
+
+### A. Executive Summary
+
+```
+┌──────────────────────────── 1280 ────────────────────────────┐
+│ (10)  Title textbox 1220×40                                  │
+│ (60)  KPI₁ 285×120  KPI₂ 285×120  KPI₃ 285×120  KPI₄ 285×120 │
+│ (200) Trend line chart 800×220   Gauge 400×220               │
+│ (440) Region bar chart 800×260   Narrative aiNarratives 400×260
+└──────────────────────────────────────────────────────────────┘
+```
+
+### B. Operational Monitor
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ Title 1220×40                                                │
+│ Site selector 280×75    Time-range slicer 280×75    Alerts list 600×75
+│ Status tiles row (5 × 230×120)                               │
+│ Heat map 800×320                       Real-time line 400×320│
+│ Anomalies tableEx 1220×140                                   │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### C. Analytical Canvas
+
+```
+┌─────────────────── sidebar 220 + content 980 ────────────────┐
+│ Title 1220×40                                                │
+│ ┌─ filters ─┐  ┌─ Key influencers (keyDriversVisual) 980×260 ┐
+│ │ slicer 1  │  │                                              │
+│ │ slicer 2  │  ├─ Decomposition tree 980×300 ────────────────┤
+│ │ slicer 3  │  │                                              │
+│ │ slicer 4  │  ├─ Scatter + matrix 480×280 + 480×280 ────────┤
+│ │ slicer 5  │  │                                              │
+│ └───────────┘  └──────────────────────────────────────────────┘
+```
+
+### D. Narrative Story (one hero per page)
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ Section title 1220×60                                        │
+│ Paragraph textbox 800×120  (left)                            │
+│ Hero visual 1220×440 (full width)                            │
+│ Caption textbox 1220×60                                      │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### E. Comparative Benchmark
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ Title + scope selector 1220×60                               │
+│ "This period" KPIs 600×120   "Last period" KPIs 600×120      │
+│ Combo (line + column) 1220×320 — period-over-period delta    │
+│ Variance waterfall 1220×180                                  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 6. Z-Index & Layering
+
+`visual.position.z` controls stacking. Conventions:
+
+| Layer | `z` | Examples |
+|---|---|---|
+| Background shapes / images | 0 | Card backgrounds, accent strips |
+| Charts / tables | 1000 | Most data visuals |
+| KPI cards | 1500 | Always above background, below overlays |
+| Section titles | 2000 | Textboxes |
+| Overlays / annotations | 9000 | Tooltips, bookmark navigators |
+
+Same `z` → declaration order in `pages.json` wins (last visual wins).
+
+---
+
+## 7. Mobile Layout (`mobile.json`)
+
+Optional per-visual override:
 
 ```json
-"objects": {
-  "data": [{"properties": {"mode": "Dropdown"}}],
-  "header": [{"properties": {"show": "false"}}],
-  "selection": [{"properties": {"selectAllCheckboxEnabled": "false", "singleSelect": "false"}}]
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/mobile/1.0.0/schema.json",
+  "position": { "x": 0, "y": 0, "z": 0, "width": 320, "height": 200, "tabOrder": 0 },
+  "hidden": false
 }
 ```
 
-**vcObjects (MANDATORY — must match card/chart styling):**
-```json
-"vcObjects": {
-  "title": [{"properties": {"show": "true", "text": "'Filter Name'", "fontSize": "10D", "fontColor": "#616161"}}],
-  "visualHeader": [{"properties": {"show": "false"}}],
-  "background": [{"properties": {"show": "true"}}],
-  "border": [{"properties": {"show": "false"}}],
-  "dropShadow": [{"properties": {"show": "true", "color": "#cccccc", "preset": "Custom", "shadowBlur": "5L", "shadowDistance": "4L", "transparency": "85L"}}]
-}
-```
+Drop in `visuals/<visualId>/mobile.json` to override the visual's desktop coordinates on phones.
 
-**Key learnings:**
-- Use `header.show: false` to hide the PBI native header — it's ugly and inconsistent
-- Use `vcObjects.title` instead for the label — same font system as cards
-- Title font: **10D** with color **#616161** (lighter than card title at 11D)
-- The vcObjects title renders INSIDE the visual height — budget 22px for it
-- Without background + shadow, slicers look disconnected from the rest of the dashboard
+---
 
-### Page 1: Financial Performance Overview (10 visuals)
-| Slicers | period_month, fiscal_year |
-| Cards | Total Revenue, Net Income |
-| Charts | Gross Profit by Fiscal Year (bar), EBITDA by Month (line), Gross Margin % by Fiscal Year (bar), Net Income by Month (line) |
+## 8. Validation Checklist
 
-### Page 2: P&L Analysis (10 visuals)
-| Slicers | period_month, fiscal_year |
-| Cards | Total Revenue, Total COGS |
-| Charts | Revenue vs COGS by Month (clustered column, 2 measures), Margin Trends (line, 2 measures), Revenue by Sub-Category (bar), OpEx by Cost Center (bar) |
+Before deployment:
 
-### Page 3: Budget vs Actuals Analysis (10 visuals)
-| Slicers | cost_center_name, fiscal_year |
-| Cards | Budget Amount, Actual Amount |
-| Charts | Budget vs Actual by Account (bar, 2 measures), Variance by Account (bar), Variance % by Month (line), Variance by Cost Center (bar) |
+- [ ] Every page folder is listed in `pages.json.pageOrder`.
+- [ ] Every visual has unique `position` (no overlapping unless intentional).
+- [ ] All `cardVisual` heights ≥ 120 px.
+- [ ] All slicers with `title.show=true` have height ≥ 75 px.
+- [ ] Page total width ≤ canvas width (no off-canvas visuals).
+- [ ] Section dividers (1 px shapes) span the usable width (1220 px) with `x=30`.
+- [ ] `displayOption` is consistent across all pages.
 
-### Page 4: Cash Flow & Receivables (10 visuals)
-| Slicers | region, fiscal_year |
-| Cards | Total AR, DSO |
-| Charts | AR by Customer (bar), Invoices by Status (donut), Overdue by Customer (bar), Paid vs Unpaid by Region (column, 2 measures) |
+Run `powerbi-report-author validate <Report>.Report` to catch off-canvas, overlapping, and missing references.
 
-### Page 5: Product Profitability Analysis (9 visuals)
-| Slicers | category (1 slicer only) |
-| Cards | Gross Profit, Gross Margin % |
-| Charts | Revenue by Product (bar), Revenue vs COGS Trend (line, 2 measures), Gross Profit by Category (bar), Gross Profit Trend (line) |
+---
 
-### Generation Script
+## 9. Cross-References
 
-The report is generated by `temp/rebuild_report.py` using the exact visual format from the Copilot-generated Finance_Report reference. Deploy with:
-```bash
-python temp/rebuild_report.py          # Generate report.json
-python src/deploy_report.py --from-file report.json  # Deploy to Fabric
-```
+- Visual types and skeletons → [`visual_catalog.md`](visual_catalog.md)
+- Container styling, expression encoding → [`themes_styling.md`](themes_styling.md)
+- Tones, archetypes, typography → [`dashboard_design_guide.md`](dashboard_design_guide.md)
+- Deployment payload → [`report_structure.md`](report_structure.md)
+- Property lookups → [`cli_knowledge/`](cli_knowledge/)

@@ -1,0 +1,19 @@
+﻿{
+  "data": {
+    "mapTheme": {
+      "type": "enum",
+      "values": [
+        "aerial",
+        "canvasDark",
+        "canvasLight",
+        "grayscale",
+        "road"
+      ],
+      "displayName": "Theme"
+    },
+    "showLabels": {
+      "type": "bool",
+      "displayName": "Show labels"
+    }
+  }
+}

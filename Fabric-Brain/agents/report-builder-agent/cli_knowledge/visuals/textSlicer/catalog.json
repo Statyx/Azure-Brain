@@ -1,0 +1,32 @@
+﻿{
+  "data": {
+    "visualType": "textSlicer",
+    "capabilityKey": "textSlicer",
+    "roles": {
+      "Values": {
+        "name": "Values",
+        "kind": "Grouping",
+        "displayName": "Field",
+        "description": "The field to display"
+      }
+    },
+    "requiredRoles": [
+      "Values"
+    ],
+    "optionalRoles": [],
+    "maxPerRole": {
+      "Values": 1
+    },
+    "formattingObjects": [
+      "applyButton",
+      "dropdown",
+      "filterOperator",
+      "general",
+      "inputText",
+      "inputTextBox",
+      "slicerSettings"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

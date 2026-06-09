@@ -1,0 +1,76 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "type": {
+      "type": "enum",
+      "values": [
+        "Back",
+        "Bookmark",
+        "Drillthrough",
+        "PageNavigation",
+        "Qna",
+        "WebUrl",
+        "ApplyAllSlicers",
+        "ClearAllSlicers",
+        "DataFunction"
+      ],
+      "displayName": "Type",
+      "description": "Choose what action will occur when this element is selected."
+    },
+    "bookmark": {
+      "type": "unknown",
+      "displayName": "Bookmark",
+      "description": "Choose which bookmark will open when this element is selected."
+    },
+    "disabledTooltip": {
+      "type": "text",
+      "displayName": "Disabled tooltip"
+    },
+    "drillthroughSection": {
+      "type": "unknown",
+      "displayName": "Destination",
+      "description": "Select a single destination or use conditional formatting for custom destination logic, such as multi-destination support."
+    },
+    "enabledTooltip": {
+      "type": "text",
+      "displayName": "Enabled tooltip"
+    },
+    "qna": {
+      "type": "unknown"
+    },
+    "suppressDefaultTooltip": {
+      "type": "bool",
+      "displayName": "No tooltips"
+    },
+    "showDefaultTooltip": {
+      "type": "bool",
+      "displayName": "Show tooltips"
+    },
+    "navigationSection": {
+      "type": "unknown",
+      "displayName": "Destination",
+      "description": "Select a single destination or use conditional formatting for custom destination logic, such as multi-destination support."
+    },
+    "tooltip": {
+      "type": "text",
+      "displayName": "Tooltip",
+      "description": "Write the custom tooltip that will show when users hover over this element."
+    },
+    "tooltipPlaceholderText": {
+      "type": "text",
+      "displayName": "Placeholder for tooltip"
+    },
+    "webUrl": {
+      "type": "unknown",
+      "displayName": "Web URL"
+    },
+    "dataFunction": {
+      "type": "unknown",
+      "displayName": "Data function"
+    }
+  }
+}

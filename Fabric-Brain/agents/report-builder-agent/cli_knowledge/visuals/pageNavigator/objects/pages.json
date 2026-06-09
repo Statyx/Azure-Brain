@@ -1,0 +1,20 @@
+﻿{
+  "data": {
+    "showHiddenPages": {
+      "type": "bool",
+      "displayName": "Show hidden pages"
+    },
+    "showTooltipPages": {
+      "type": "bool",
+      "displayName": "Show tooltip pages"
+    },
+    "showByDefault": {
+      "type": "bool",
+      "displayName": "Show all by default"
+    },
+    "showPage": {
+      "type": "bool",
+      "displayName": "Show"
+    }
+  }
+}

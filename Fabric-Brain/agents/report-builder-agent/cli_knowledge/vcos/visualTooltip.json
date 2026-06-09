@@ -1,0 +1,115 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "type": {
+      "type": "enum",
+      "values": [
+        "Default",
+        "Canvas"
+      ],
+      "displayName": "Type",
+      "description": "Allows report pages to be used as tooltips for this visual"
+    },
+    "section": {
+      "type": "unknown",
+      "displayName": "Page",
+      "description": "Choose the page you want to use for your tooltip"
+    },
+    "showActionsInTooltips": {
+      "type": "bool",
+      "displayName": "Actions",
+      "description": "Add drill options within tooltips"
+    },
+    "titleFontColor": {
+      "type": "fill",
+      "displayName": "Label text color",
+      "description": "Text color for the tooltip label"
+    },
+    "valueFontColor": {
+      "type": "fill",
+      "displayName": "Value text color",
+      "description": "Text color for the tooltip value"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size",
+      "description": "Font size for the tooltip"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family",
+      "description": "Font family for the tooltip"
+    },
+    "background": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color for the tooltip"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Set transparency for the tooltip background"
+    },
+    "actionFontColor": {
+      "type": "fill",
+      "displayName": "Drill text and icon color",
+      "description": "Color for drill icon and text"
+    },
+    "themedTitleFontColor": {
+      "type": "fill",
+      "displayName": "Label text color",
+      "description": "Text color for the tooltip label"
+    },
+    "themedBackground": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color for the tooltip"
+    },
+    "themedValueFontColor": {
+      "type": "fill",
+      "displayName": "Value text color",
+      "description": "Text color for the tooltip value"
+    },
+    "showTooltipFieldsOnly": {
+      "type": "bool",
+      "displayName": "Tooltip fields only",
+      "description": "Include only the fields you've explicitly added to Tooltips in the Build visual pane"
+    },
+    "showSentenceFormat": {
+      "type": "bool",
+      "displayName": "Sentence format only",
+      "description": "Display tooltips using your sentence template"
+    },
+    "sentenceTemplate": {
+      "type": "text",
+      "displayName": "Sentence template",
+      "description": "A template string with {placeholder} tokens that are replaced with tooltip values"
+    },
+    "showChartSpecificTooltips": {
+      "type": "bool",
+      "displayName": "Chart-specific tooltips",
+      "description": "Show chart-specific tooltips"
+    },
+    "showValuesInBold": {
+      "type": "bool",
+      "displayName": "Bold values",
+      "description": "Show sentence values in bold"
+    }
+  }
+}

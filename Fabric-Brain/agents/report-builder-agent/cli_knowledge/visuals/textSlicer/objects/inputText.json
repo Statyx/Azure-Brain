@@ -1,0 +1,138 @@
+﻿{
+  "data": {
+    "placeholder": {
+      "type": "text",
+      "displayName": "Placeholder"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "fontTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "dismissColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "dismissTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "dismissSize": {
+      "type": "formatting",
+      "displayName": "Icon size"
+    },
+    "dismissSpacing": {
+      "type": "integer",
+      "displayName": "Spacing"
+    },
+    "pillHorizontalPosition": {
+      "type": "enum",
+      "values": [
+        "left",
+        "right"
+      ],
+      "displayName": "Horizontal position",
+      "description": "Set the horizontal position for the reference line data label"
+    },
+    "dismissPosition": {
+      "type": "enum",
+      "values": [
+        "left",
+        "right"
+      ],
+      "displayName": "Horizontal position",
+      "description": "Set the horizontal position for the reference line data label"
+    },
+    "paddingTop": {
+      "type": "integer",
+      "displayName": "Top margin"
+    },
+    "paddingRight": {
+      "type": "integer",
+      "displayName": "Right margin"
+    },
+    "paddingBottom": {
+      "type": "integer",
+      "displayName": "Bottom margin"
+    },
+    "paddingLeft": {
+      "type": "integer",
+      "displayName": "Left margin"
+    },
+    "backShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "backTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "borderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "pillCornerRadius": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "pillIndividualCorners": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "pillCornerTopLeft": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "pillCornerTopRight": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "pillCornerBottomLeft": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "pillCornerBottomRight": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    }
+  }
+}

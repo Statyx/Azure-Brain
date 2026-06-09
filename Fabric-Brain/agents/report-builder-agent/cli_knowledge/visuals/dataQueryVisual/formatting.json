@@ -1,0 +1,31 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "columnOptions",
+                                 "general",
+                                 "overrideDataReduction"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "columnOptions",
+                                     "general",
+                                     "overrideDataReduction"
+                                 ]
+             }
+}

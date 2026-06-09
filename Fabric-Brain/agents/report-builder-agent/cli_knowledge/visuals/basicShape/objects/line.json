@@ -1,0 +1,21 @@
+﻿{
+  "data": {
+    "lineColor": {
+      "type": "fill",
+      "displayName": "Line color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "weight": {
+      "type": "numeric",
+      "displayName": "Weight"
+    },
+    "roundEdge": {
+      "type": "integer",
+      "displayName": "Round edges"
+    }
+  }
+}

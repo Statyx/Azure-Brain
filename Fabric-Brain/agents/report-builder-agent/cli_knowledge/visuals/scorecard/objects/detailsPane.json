@@ -1,0 +1,29 @@
+﻿{
+  "data": {
+    "foregroundColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "cardForegroundColor": {
+      "type": "fill",
+      "displayName": "Card text color"
+    },
+    "cardBackgroundColor": {
+      "type": "fill",
+      "displayName": "Card background"
+    },
+    "chartBackgroundColor": {
+      "type": "fill",
+      "displayName": "Chart background"
+    },
+    "chartForegroundColor": {
+      "type": "fill",
+      "displayName": "Chart text color"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+﻿{
+  "data": {
+    "additionalDatasource": {
+      "type": "unknown",
+      "displayName": ""
+    },
+    "bubbleFillColor": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "bubbleStrokeColor": {
+      "type": "fill",
+      "displayName": "Border color"
+    },
+    "bubbleStrokeWidth": {
+      "type": "integer",
+      "displayName": "Border width "
+    },
+    "bubbleStrokeTransparency": {
+      "type": "numeric",
+      "displayName": "Border transparency"
+    },
+    "polygonFillColor": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "polygonStrokeColor": {
+      "type": "fill",
+      "displayName": "Border color"
+    },
+    "polygonStrokeWidth": {
+      "type": "integer",
+      "displayName": "Border width "
+    },
+    "polygonStrokeTransparency": {
+      "type": "numeric",
+      "displayName": "Border transparency"
+    },
+    "lineStrokeColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "lineStrokeWidth": {
+      "type": "integer",
+      "displayName": "Width"
+    },
+    "lineStrokeTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "unmappedObjectVisibility": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "unmappedObjectUseCustomColors": {
+      "type": "bool",
+      "displayName": "Use custom colors"
+    },
+    "unmappedObjectFillColor": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "unmappedObjectStrokeColor": {
+      "type": "fill",
+      "displayName": "Border color"
+    },
+    "datasourceType": {
+      "type": "enum",
+      "values": [
+        "url",
+        "file_upload"
+      ],
+      "displayName": "Type",
+      "description": "Specifies the type of the reference layer data source"
+    },
+    "referenceLayerUrl": {
+      "type": "text",
+      "displayName": "Enter a URL",
+      "description": "Accepted file formats include GeoJSON, KML, WKT, and shapefiles that are uploaded within a zip file."
+    },
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "defaultColor": {
+      "type": "fill",
+      "displayName": "Default color"
+    },
+    "fill": {
+      "type": "fill",
+      "displayName": "Fill color"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+﻿{
+  "data": {
+    "foregroundColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    }
+  }
+}

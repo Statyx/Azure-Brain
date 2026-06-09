@@ -1,0 +1,48 @@
+﻿{
+  "data": {
+    "visualType": "decompositionTreeVisual",
+    "capabilityKey": "decompositionTreeVisual",
+    "roles": {
+      "Analyze": {
+        "name": "Analyze",
+        "kind": "Measure",
+        "displayName": "Analyze",
+        "description": "A metric you want to break down."
+      },
+      "ExplainBy": {
+        "name": "ExplainBy",
+        "kind": "Grouping",
+        "displayName": "Explain by",
+        "description": "Fields you want to break down your 'Analyze' metric by."
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Analyze"
+    ],
+    "optionalRoles": [
+      "ExplainBy",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Analyze": 1
+    },
+    "formattingObjects": [
+      "analysis",
+      "categoryLabels",
+      "dataBars",
+      "dataLabels",
+      "general",
+      "insights",
+      "levelHeader",
+      "tree"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

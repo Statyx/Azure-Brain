@@ -1,0 +1,26 @@
+﻿{
+  "data": {
+    "seriesOrderReversed": {
+      "type": "bool",
+      "displayName": "Reverse order",
+      "description": "Reverse the series order of your bars or columns."
+    },
+    "seriesOrderSorted": {
+      "type": "bool",
+      "displayName": "Sort by value",
+      "description": "Within each category, dynamically sort series by their data value."
+    },
+    "stackedGapSize": {
+      "type": "numeric",
+      "displayName": "Space between series"
+    },
+    "stackedGapExplodes": {
+      "type": "bool",
+      "displayName": "Series explosion"
+    },
+    "ribbonGapSize": {
+      "type": "numeric",
+      "displayName": "Space between ribbons and columns"
+    }
+  }
+}

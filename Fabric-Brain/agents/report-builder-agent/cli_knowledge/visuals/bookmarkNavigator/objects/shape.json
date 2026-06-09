@@ -1,0 +1,119 @@
+﻿{
+  "data": {
+    "tileShape": {
+      "type": "enum",
+      "values": [
+        "arrow",
+        "arrowChevron",
+        "arrowPentagon",
+        "heart",
+        "hexagon",
+        "line",
+        "octagon",
+        "oval",
+        "parallelogram",
+        "pentagon",
+        "pill",
+        "rectangle",
+        "rectangleRounded",
+        "rectangleRoundedByPixel",
+        "tabCutCorner",
+        "tabCutTopCorners",
+        "tabCutTopCornersByPixel",
+        "tabRoundCorner",
+        "tabRoundTopCorners",
+        "speechbubbleRectangle",
+        "trapezoid",
+        "triangleIsoc",
+        "triangleRight"
+      ],
+      "displayName": "Shape"
+    },
+    "roundEdge": {
+      "type": "integer",
+      "displayName": "Round edges"
+    },
+    "arrowheadSize": {
+      "type": "integer",
+      "displayName": "Arrowhead size"
+    },
+    "arrowStemWidth": {
+      "type": "integer",
+      "displayName": "Stem width"
+    },
+    "chevronAngle": {
+      "type": "integer",
+      "displayName": "Angle"
+    },
+    "isocelesTriangleTipPosition": {
+      "type": "integer",
+      "displayName": "Tip position"
+    },
+    "parallelogramSlant": {
+      "type": "integer",
+      "displayName": "Slant"
+    },
+    "trapezoidSlant": {
+      "type": "integer",
+      "displayName": "Slant"
+    },
+    "hexagonSlant": {
+      "type": "integer",
+      "displayName": "Slant"
+    },
+    "octagonSnipSize": {
+      "type": "integer",
+      "displayName": "Size of snips"
+    },
+    "speechBubbleHeight": {
+      "type": "integer",
+      "displayName": "Chat bubble height"
+    },
+    "speechBubbleTailPosition": {
+      "type": "enum",
+      "values": [
+        "bottomLeft",
+        "bottomRight",
+        "rightDown",
+        "rightUp",
+        "topRight",
+        "topLeft",
+        "leftUp",
+        "leftDown"
+      ],
+      "displayName": "Tail position"
+    },
+    "speechBubbleTailAngle": {
+      "type": "integer",
+      "displayName": "Tail angle"
+    },
+    "rectangleRoundedCurve": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "tabCutCornerSnipSizeTopRight": {
+      "type": "integer",
+      "displayName": "Size of top right snip"
+    },
+    "tabCutCornerSnipSizeTop": {
+      "type": "integer",
+      "displayName": "Size of top snips"
+    },
+    "tabCutCornerSnipSizeBottom": {
+      "type": "integer",
+      "displayName": "Size of bottom snips"
+    },
+    "tabRoundCornerTopRight": {
+      "type": "integer",
+      "displayName": "Rounded top right corner"
+    },
+    "tabRoundCornerTop": {
+      "type": "integer",
+      "displayName": "Rounded top corners"
+    },
+    "tabRoundCornerBottom": {
+      "type": "integer",
+      "displayName": "Rounded bottom corners"
+    }
+  }
+}

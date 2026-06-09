@@ -1,0 +1,70 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "type": {
+      "type": "enum",
+      "values": [
+        "Default",
+        "Canvas"
+      ],
+      "displayName": "Type"
+    },
+    "section": {
+      "type": "unknown",
+      "displayName": "Page",
+      "description": "Choose the page you want to use for your tooltip"
+    },
+    "text": {
+      "type": "text",
+      "displayName": "Tooltip text",
+      "description": "Write the custom tooltip that will show up when a report page tooltip hasn't been chosen or isn't supported"
+    },
+    "titleFontColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Font color for the tooltip"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size",
+      "description": "Font size for the tooltip"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family",
+      "description": "Font family for the tooltip"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "background": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color for the tooltip"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Set transparency for the tooltip background"
+    },
+    "themedTitleFontColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Font color for the tooltip"
+    },
+    "themedBackground": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color for the tooltip"
+    }
+  }
+}

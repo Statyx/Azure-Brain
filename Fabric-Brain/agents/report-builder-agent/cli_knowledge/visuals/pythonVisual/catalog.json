@@ -1,0 +1,23 @@
+﻿{
+  "data": {
+    "visualType": "pythonVisual",
+    "capabilityKey": "pythonVisual",
+    "roles": {
+      "Values": {
+        "name": "Values",
+        "kind": "GroupingOrMeasure",
+        "displayName": "Values"
+      }
+    },
+    "requiredRoles": [],
+    "optionalRoles": [
+      "Values"
+    ],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "script"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

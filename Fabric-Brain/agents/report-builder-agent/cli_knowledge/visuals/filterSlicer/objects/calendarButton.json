@@ -1,0 +1,80 @@
+﻿{
+  "data": {
+    "iconColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "iconTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "iconSize": {
+      "type": "formatting",
+      "displayName": "Icon size"
+    },
+    "cornerRadius": {
+      "type": "integer",
+      "displayName": "Rounded corners"
+    },
+    "individualCorners": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "cornerTopLeft": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "cornerTopRight": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    },
+    "cornerBottomLeft": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "cornerBottomRight": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "backgroundShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Background color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "strokeShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "strokeColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "strokeTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "strokeWidth": {
+      "type": "numeric",
+      "displayName": "Outline weight",
+      "description": "Thickness of the outline in pixels"
+    },
+    "strokePattern": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "displayName": "Line style"
+    }
+  }
+}

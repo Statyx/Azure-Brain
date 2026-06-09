@@ -1,0 +1,33 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "fill",
+                                 "general",
+                                 "line",
+                                 "rotation"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "fill",
+                                     "general",
+                                     "line",
+                                     "rotation"
+                                 ]
+             }
+}

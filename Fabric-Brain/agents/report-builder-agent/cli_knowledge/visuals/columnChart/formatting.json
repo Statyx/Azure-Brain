@@ -1,0 +1,63 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "annotationTemplate",
+                                 "categoryAxis",
+                                 "dataPoint",
+                                 "error",
+                                 "filters",
+                                 "general",
+                                 "labels",
+                                 "layout",
+                                 "legend",
+                                 "plotArea",
+                                 "ribbonBands",
+                                 "smallMultiplesLayout",
+                                 "subheader",
+                                 "totals",
+                                 "trend",
+                                 "valueAxis",
+                                 "xAxisReferenceLine",
+                                 "y1AxisReferenceLine",
+                                 "zoom"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "annotationTemplate",
+                                     "categoryAxis",
+                                     "dataPoint",
+                                     "error",
+                                     "filters",
+                                     "general",
+                                     "labels",
+                                     "layout",
+                                     "legend",
+                                     "plotArea",
+                                     "ribbonBands",
+                                     "smallMultiplesLayout",
+                                     "subheader",
+                                     "totals",
+                                     "trend",
+                                     "valueAxis",
+                                     "xAxisReferenceLine",
+                                     "y1AxisReferenceLine",
+                                     "zoom"
+                                 ]
+             }
+}

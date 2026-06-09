@@ -1,0 +1,86 @@
+﻿{
+  "data": {
+    "showGoal": {
+      "type": "bool",
+      "displayName": "Goal"
+    },
+    "goalText": {
+      "type": "text",
+      "displayName": "Label"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "goalFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "goalFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "showDistance": {
+      "type": "bool",
+      "displayName": "Distance"
+    },
+    "distanceLabel": {
+      "type": "enum",
+      "values": [
+        "Value",
+        "Percent",
+        "Value, percent"
+      ],
+      "displayName": "Label"
+    },
+    "labelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "titleFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "titleBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "titleItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "titleUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "distanceFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "distanceFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "direction": {
+      "type": "enum",
+      "values": [
+        "High is good",
+        "Low is good"
+      ],
+      "displayName": "Distance direction"
+    }
+  }
+}

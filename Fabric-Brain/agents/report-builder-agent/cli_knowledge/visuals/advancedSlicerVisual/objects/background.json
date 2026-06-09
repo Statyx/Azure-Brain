@@ -1,0 +1,26 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "_selectorHint": [
+      "default",
+      "hover",
+      "press",
+      "selected",
+      "mixed"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "The background color for the visual"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    }
+  }
+}

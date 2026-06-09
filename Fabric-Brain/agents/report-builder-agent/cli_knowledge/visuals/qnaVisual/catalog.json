@@ -1,0 +1,18 @@
+﻿{
+  "data": {
+    "visualType": "qnaVisual",
+    "capabilityKey": "qnaVisual",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "hiddenProperties",
+      "inputBox",
+      "suggestions"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": true,
+    "deprecatedReason": "Q&A visual is not supported in PBIR authoring workflows"
+  }
+}

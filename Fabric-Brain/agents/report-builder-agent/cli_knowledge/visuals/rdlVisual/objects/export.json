@@ -1,0 +1,40 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "exportExcel": {
+      "type": "bool",
+      "displayName": "Microsoft Excel (.xlsx)"
+    },
+    "exportPDF": {
+      "type": "bool",
+      "displayName": "PDF (.pdf)"
+    },
+    "exportAccessiblePDF": {
+      "type": "bool",
+      "displayName": "Accessible PDF (.pdf)"
+    },
+    "exportCSV": {
+      "type": "bool",
+      "displayName": "Comma Separated Values (.csv)"
+    },
+    "exportPPTX": {
+      "type": "bool",
+      "displayName": "Microsoft PowerPoint (.pptx)"
+    },
+    "exportWord": {
+      "type": "bool",
+      "displayName": "Microsoft Word (.docx)"
+    },
+    "exportMHTML": {
+      "type": "bool",
+      "displayName": "Web Archive (.mhtml)"
+    },
+    "exportXML": {
+      "type": "bool",
+      "displayName": "XML (.xml)"
+    }
+  }
+}

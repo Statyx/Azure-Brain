@@ -1,0 +1,19 @@
+﻿{
+  "data": {
+    "autoZoom": {
+      "type": "bool",
+      "displayName": "Auto zoom",
+      "description": "Zoom in on shapes with available data"
+    },
+    "selectionZoom": {
+      "type": "bool",
+      "displayName": "Zoom on selection",
+      "description": "Zoom in on selected shapes"
+    },
+    "manualZoom": {
+      "type": "bool",
+      "displayName": "Manual zoom",
+      "description": "Allow user to zoom and pan"
+    }
+  }
+}

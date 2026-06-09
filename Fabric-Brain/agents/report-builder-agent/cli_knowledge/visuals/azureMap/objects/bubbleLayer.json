@@ -1,0 +1,282 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "mapTransparency": {
+      "type": "numeric",
+      "displayName": "Fill transparency",
+      "description": "Transparency of each bubble"
+    },
+    "bubbleRadius": {
+      "type": "integer",
+      "displayName": "Size",
+      "description": "Size of each bubble"
+    },
+    "minBubbleRadius": {
+      "type": "integer",
+      "displayName": "Min size",
+      "description": "Min size of each bubble"
+    },
+    "markerRangeType": {
+      "type": "enum",
+      "values": [
+        "magnitude",
+        "dataRange",
+        "auto"
+      ],
+      "displayName": "Range scaling"
+    },
+    "radiusScalingMethod": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "2"
+      ],
+      "displayName": "Size scaling method",
+      "description": "Scaling algorithm used to determine bubble size"
+    },
+    "maxRadius": {
+      "type": "integer",
+      "displayName": "Max size",
+      "description": "Maximum bubble size when scaling the data"
+    },
+    "logScale": {
+      "type": "integer",
+      "displayName": "Log Scale",
+      "description": "Range of input data logarithmically mapped to the minimum and maximum size"
+    },
+    "x1": {
+      "type": "numeric",
+      "displayName": "X1",
+      "description": "X1 parameter of a cubic bezier curve"
+    },
+    "x2": {
+      "type": "numeric",
+      "displayName": "X2",
+      "description": "X2 parameter of a cubic bezier curve"
+    },
+    "y1": {
+      "type": "numeric",
+      "displayName": "Y1",
+      "description": "Y1 parameter of a cubic bezier curve"
+    },
+    "y2": {
+      "type": "numeric",
+      "displayName": "Y2",
+      "description": "Y2 parameter of a cubic bezier curve"
+    },
+    "strokeColor": {
+      "type": "fill",
+      "displayName": "Outline color",
+      "description": "Color that outlines the bubble"
+    },
+    "autoStrokeColor": {
+      "type": "bool",
+      "displayName": "High-contrast outline",
+      "description": "Makes the outline color contrast with the fill color for better accessibility"
+    },
+    "strokeTransparency": {
+      "type": "numeric",
+      "displayName": "Outline transparency",
+      "description": "Transparency of the outline"
+    },
+    "bubbleStrokeWidth": {
+      "type": "integer",
+      "displayName": "Outline width",
+      "description": "Width of the outline"
+    },
+    "blur": {
+      "type": "numeric",
+      "displayName": "Blur",
+      "description": "Amount of blur applied to the outline"
+    },
+    "pitchAlignment": {
+      "type": "enum",
+      "values": [
+        "map",
+        "viewport"
+      ],
+      "displayName": "Pitch alignment",
+      "description": "How the bubble looks when the map is pitched"
+    },
+    "zoomScaleFactor": {
+      "type": "integer",
+      "displayName": "Zoom scale",
+      "description": "Amount the bubbles should scale relative to the zoom level. A zoom scale of one means no scaling. Large values will make bubbles smaller when zoomed out and larger when zoomed in"
+    },
+    "minZoom": {
+      "type": "integer",
+      "displayName": "Min zoom",
+      "description": "Minimum zoom level where layer is visible"
+    },
+    "maxZoom": {
+      "type": "integer",
+      "displayName": "Max zoom",
+      "description": "Maximum zoom level where layer is visible"
+    },
+    "layerPosition": {
+      "type": "enum",
+      "values": [
+        "",
+        "labels",
+        "transit"
+      ],
+      "displayName": "Layer position",
+      "description": "Specifies the position of the layer relative to other map layers"
+    },
+    "clusteredBubbleFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "clusteredBubbleStrokeColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "clusteringEnabled": {
+      "type": "bool",
+      "displayName": "Cluster bubbles",
+      "description": "Cluster nearby data points into one bubble to display their aggregate."
+    },
+    "clusteredBubbleRadius": {
+      "type": "integer",
+      "displayName": "Cluster size"
+    },
+    "clusteredBubbleFillColor": {
+      "type": "fill",
+      "displayName": "Cluster color"
+    },
+    "clusteredBubbleTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "clusteredBubbleFontColor": {
+      "type": "fill",
+      "displayName": "Text color"
+    },
+    "clusteredBubbleStrokeWidth": {
+      "type": "integer",
+      "displayName": "Width"
+    },
+    "clusteredBubbleAutoStrokeColor": {
+      "type": "bool",
+      "displayName": "High contrast",
+      "description": "Makes the outline color contrast with the fill color for better accessibility"
+    },
+    "clusteredBubbleMatchFillColor": {
+      "type": "bool",
+      "displayName": "Match fill color",
+      "description": "Makes the outline color align with fill color"
+    },
+    "clusteredBubbleStrokeTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "fillColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "matchFillColor": {
+      "type": "bool",
+      "displayName": "Outline matches fill color",
+      "description": "Makes the outline color align with fill color"
+    },
+    "scale": {
+      "type": "integer",
+      "displayName": "Scale",
+      "description": "Scale of the public URL marker relative to its original size"
+    },
+    "minScale": {
+      "type": "integer",
+      "displayName": "Minimum Scale",
+      "description": "Minimum scale public URL marker relative to its original size"
+    },
+    "maxScale": {
+      "type": "integer",
+      "displayName": "Maximum Scale",
+      "description": "Maximum scale of the public URL marker relative to its original size"
+    },
+    "markerType": {
+      "type": "enum",
+      "values": [
+        "icon",
+        "image"
+      ],
+      "displayName": "Marker type",
+      "description": "The source of the marker"
+    },
+    "imageSourceType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl"
+      ],
+      "displayName": "Image type",
+      "description": "Specifies the source of marker images"
+    },
+    "imageData": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      },
+      "displayName": "Upload a file"
+    },
+    "imageUrl": {
+      "type": "text",
+      "displayName": "Enter a URL",
+      "description": "Accepted file formats for marker images sourced from URLs include PNG, JPEG, GIF, and SVG."
+    },
+    "iconId": {
+      "type": "text",
+      "displayName": "Icon"
+    },
+    "markerRotation": {
+      "type": "numeric",
+      "displayName": "Rotation",
+      "description": "Specifies the rotation angle of markers."
+    },
+    "rotationAlignment": {
+      "type": "enum",
+      "values": [
+        "map",
+        "viewport"
+      ],
+      "displayName": "Rotation alignment",
+      "description": "How the bubble looks when the map is rotated"
+    },
+    "clusteredBubbleBorderShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "borderShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "sizeByValue": {
+      "type": "bool",
+      "displayName": "Size by value",
+      "description": "Use data from the 'Size' field well to determine marker size."
+    },
+    "minDataScalingRange": {
+      "type": "numeric",
+      "displayName": "Minimum"
+    },
+    "maxDataScalingRange": {
+      "type": "numeric",
+      "displayName": "Maximum"
+    }
+  }
+}

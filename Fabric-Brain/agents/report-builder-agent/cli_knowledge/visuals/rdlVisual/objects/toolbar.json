@@ -1,0 +1,32 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "pageNavigation": {
+      "type": "bool",
+      "displayName": "Page navigation"
+    },
+    "paramButton": {
+      "type": "bool",
+      "displayName": "Parameters"
+    },
+    "openReportButton": {
+      "type": "bool",
+      "displayName": "Open report"
+    },
+    "useFloatingToolbar": {
+      "type": "bool",
+      "displayName": "Floating"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1"
+      ],
+      "displayName": "Toolbar position"
+    }
+  }
+}

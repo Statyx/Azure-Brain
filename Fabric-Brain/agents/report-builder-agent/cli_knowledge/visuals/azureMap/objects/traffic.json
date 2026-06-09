@@ -1,0 +1,19 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Traffic",
+      "description": "Show live traffic data on the map"
+    },
+    "showIncidents": {
+      "type": "bool",
+      "displayName": "Traffic incidents",
+      "description": "Show traffic incidents on the map"
+    },
+    "showTrafficControl": {
+      "type": "bool",
+      "displayName": "Traffic",
+      "description": "Allow report readers to turn the traffic layer on or off"
+    }
+  }
+}

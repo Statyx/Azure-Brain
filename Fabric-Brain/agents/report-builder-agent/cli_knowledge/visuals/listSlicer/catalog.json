@@ -1,0 +1,55 @@
+﻿{
+  "data": {
+    "visualType": "listSlicer",
+    "capabilityKey": "listSlicer",
+    "roles": {
+      "Values": {
+        "name": "Values",
+        "kind": "Grouping",
+        "displayName": "Value",
+        "description": "The field to display"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Values"
+    ],
+    "optionalRoles": [
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Values": 1
+    },
+    "formattingObjects": [
+      "accentBar",
+      "actionState",
+      "background",
+      "data",
+      "expansionIcon",
+      "fillCustom",
+      "general",
+      "glowCustom",
+      "icon",
+      "image",
+      "label",
+      "layout",
+      "outline",
+      "overFlow",
+      "padding",
+      "rotation",
+      "selection",
+      "selectionIcon",
+      "shadowCustom",
+      "shapeCustomRectangle",
+      "spacing",
+      "value"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

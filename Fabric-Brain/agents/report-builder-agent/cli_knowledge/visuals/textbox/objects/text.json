@@ -1,0 +1,16 @@
+﻿{
+  "data": {
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Default font size"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Default font family"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Default color"
+    }
+  }
+}

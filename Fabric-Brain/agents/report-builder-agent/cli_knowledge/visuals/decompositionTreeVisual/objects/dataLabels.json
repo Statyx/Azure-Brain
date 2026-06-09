@@ -1,0 +1,38 @@
+﻿{
+  "data": {
+    "dataLabelFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "dataLabelFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "dataLabelBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "dataLabelItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "dataLabelUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "dataLabelFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "dataLabelDisplayUnits": {
+      "type": "formatting",
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "dataLabelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    }
+  }
+}

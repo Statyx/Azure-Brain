@@ -1,0 +1,237 @@
+﻿{
+  "data": {
+    "visualContainerObjects": [
+      {
+        "name": "background",
+        "propertyCount": 3,
+        "properties": [
+          "color",
+          "show",
+          "transparency"
+        ]
+      },
+      {
+        "name": "border",
+        "propertyCount": 4,
+        "properties": [
+          "color",
+          "radius",
+          "show",
+          "width"
+        ]
+      },
+      {
+        "name": "divider",
+        "propertyCount": 5,
+        "properties": [
+          "color",
+          "ignorePadding",
+          "show",
+          "style",
+          "width"
+        ]
+      },
+      {
+        "name": "dropShadow",
+        "propertyCount": 9,
+        "properties": [
+          "angle",
+          "color",
+          "position",
+          "preset",
+          "shadowBlur",
+          "shadowDistance",
+          "shadowSpread",
+          "show",
+          "transparency"
+        ]
+      },
+      {
+        "name": "general",
+        "propertyCount": 8,
+        "properties": [
+          "allowBinnedLineSample",
+          "allowOverlappingPointsSample",
+          "altText",
+          "height",
+          "keepLayerOrder",
+          "width",
+          "x",
+          "y"
+        ]
+      },
+      {
+        "name": "lockAspect",
+        "propertyCount": 1,
+        "properties": [
+          "show"
+        ]
+      },
+      {
+        "name": "padding",
+        "propertyCount": 4,
+        "properties": [
+          "bottom",
+          "left",
+          "right",
+          "top"
+        ]
+      },
+      {
+        "name": "spacing",
+        "propertyCount": 8,
+        "properties": [
+          "customizeSpacing",
+          "spaceAboveDivider",
+          "spaceAbovePlotArea",
+          "spaceAboveSubtitle",
+          "spaceBelowSubTitle",
+          "spaceBelowTitle",
+          "spaceBelowTitleArea",
+          "verticalSpacing"
+        ]
+      },
+      {
+        "name": "stylePreset",
+        "propertyCount": 1,
+        "properties": [
+          "name"
+        ]
+      },
+      {
+        "name": "subTitle",
+        "propertyCount": 11,
+        "properties": [
+          "alignment",
+          "bold",
+          "fontColor",
+          "fontFamily",
+          "fontSize",
+          "heading",
+          "italic",
+          "show",
+          "text",
+          "titleWrap",
+          "underline"
+        ]
+      },
+      {
+        "name": "title",
+        "propertyCount": 12,
+        "properties": [
+          "alignment",
+          "background",
+          "bold",
+          "fontColor",
+          "fontFamily",
+          "fontSize",
+          "heading",
+          "italic",
+          "show",
+          "text",
+          "titleWrap",
+          "underline"
+        ]
+      },
+      {
+        "name": "visualHeader",
+        "propertyCount": 26,
+        "properties": [
+          "background",
+          "border",
+          "foreground",
+          "show",
+          "showCommentButton",
+          "showCopilotSummaryButton",
+          "showCopyVisualImageButton",
+          "showDrillDownExpandButton",
+          "showDrillDownLevelButton",
+          "showDrillRoleSelector",
+          "showDrillToggleButton",
+          "showDrillUpButton",
+          "showFilterRestatementButton",
+          "showFocusModeButton",
+          "showFollowVisualButton",
+          "showOptionsMenu",
+          "showPersonalizeVisualButton",
+          "showPinButton",
+          "showSeeDataLayoutToggleButton",
+          "showSetAlertButton",
+          "showSmartNarrativeButton",
+          "showTooltipButton",
+          "showVisualErrorButton",
+          "showVisualInformationButton",
+          "showVisualWarningButton",
+          "transparency"
+        ]
+      },
+      {
+        "name": "visualHeaderTooltip",
+        "propertyCount": 13,
+        "properties": [
+          "background",
+          "bold",
+          "fontFamily",
+          "fontSize",
+          "italic",
+          "section",
+          "text",
+          "themedBackground",
+          "themedTitleFontColor",
+          "titleFontColor",
+          "transparency",
+          "type",
+          "underline"
+        ]
+      },
+      {
+        "name": "visualLink",
+        "propertyCount": 14,
+        "properties": [
+          "bookmark",
+          "dataFunction",
+          "disabledTooltip",
+          "drillthroughSection",
+          "enabledTooltip",
+          "navigationSection",
+          "qna",
+          "show",
+          "showDefaultTooltip",
+          "suppressDefaultTooltip",
+          "tooltip",
+          "tooltipPlaceholderText",
+          "type",
+          "webUrl"
+        ]
+      },
+      {
+        "name": "visualTooltip",
+        "propertyCount": 22,
+        "properties": [
+          "actionFontColor",
+          "background",
+          "bold",
+          "fontFamily",
+          "fontSize",
+          "italic",
+          "section",
+          "sentenceTemplate",
+          "show",
+          "showActionsInTooltips",
+          "showChartSpecificTooltips",
+          "showSentenceFormat",
+          "showTooltipFieldsOnly",
+          "showValuesInBold",
+          "themedBackground",
+          "themedTitleFontColor",
+          "themedValueFontColor",
+          "titleFontColor",
+          "transparency",
+          "type",
+          "underline",
+          "valueFontColor"
+        ]
+      }
+    ]
+  }
+}

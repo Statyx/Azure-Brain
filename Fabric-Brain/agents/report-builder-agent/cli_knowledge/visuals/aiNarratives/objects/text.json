@@ -1,0 +1,26 @@
+﻿{
+  "data": {
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "textAlignment": {
+      "type": "enum",
+      "values": [
+        "Auto",
+        "Left",
+        "Center",
+        "Right"
+      ],
+      "displayName": "Alignment"
+    }
+  }
+}

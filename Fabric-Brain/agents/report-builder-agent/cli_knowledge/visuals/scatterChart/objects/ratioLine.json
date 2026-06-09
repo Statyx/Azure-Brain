@@ -1,0 +1,53 @@
+﻿{
+  "data": {
+    "displayName": {
+      "type": "text",
+      "displayName": "Name"
+    },
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "width": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "lineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "style": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted",
+        "custom"
+      ],
+      "displayName": "Line style"
+    },
+    "autoScale": {
+      "type": "bool",
+      "displayName": "Scale by width",
+      "description": "Automatically adjust the spacing between dashes and dots based on line width."
+    },
+    "dashArray": {
+      "type": "formatting",
+      "displayName": "Dash array",
+      "description": "Space-separated values for dash and gap lengths in pixels, repeating in sequence."
+    },
+    "dashCap": {
+      "type": "enum",
+      "values": [
+        "none",
+        "round",
+        "square"
+      ],
+      "displayName": "Dash cap"
+    }
+  }
+}

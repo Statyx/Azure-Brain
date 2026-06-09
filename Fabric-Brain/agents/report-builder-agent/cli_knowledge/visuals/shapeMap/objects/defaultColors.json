@@ -1,0 +1,22 @@
+﻿{
+  "data": {
+    "defaultShow": {
+      "type": "bool",
+      "displayName": "Show",
+      "description": "Show shapes with no data"
+    },
+    "defaultColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "Color of shapes with no data"
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Border color"
+    },
+    "borderThickness": {
+      "type": "numeric",
+      "displayName": "Border thickness"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+﻿{
+  "data": {
+    "defaultColor": {
+      "type": "fill",
+      "displayName": "Default color"
+    },
+    "showAllDataPoints": {
+      "type": "bool",
+      "displayName": "Show all"
+    },
+    "fill": {
+      "type": "fill",
+      "displayName": "Default color"
+    },
+    "fillRule": {
+      "type": "unknown",
+      "displayName": "Values",
+      "description": "The numeric amounts to plot"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "autoFilter",
+                                 "export",
+                                 "parameterMapping",
+                                 "reportInfo",
+                                 "toolbar"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "autoFilter",
+                                     "export",
+                                     "parameterMapping",
+                                     "reportInfo",
+                                     "toolbar"
+                                 ]
+             }
+}

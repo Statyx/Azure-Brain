@@ -1,0 +1,157 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "showModern": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "barShape": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1"
+      ],
+      "displayName": "Bar shape",
+      "description": "The shape of the 3D bar"
+    },
+    "barHeight": {
+      "type": "integer",
+      "displayName": "Height",
+      "description": "A relative height value"
+    },
+    "heightPixels": {
+      "type": "integer",
+      "displayName": "Height",
+      "description": "A relative height value"
+    },
+    "heightMeters": {
+      "type": "integer",
+      "displayName": "Height",
+      "description": "A relative height value"
+    },
+    "scaleHeightOnZoom": {
+      "type": "bool",
+      "displayName": "Scale height on zoom",
+      "description": "Specifies if the height of the bars should scale relative to the zoom level"
+    },
+    "thickness": {
+      "type": "integer",
+      "displayName": "Width",
+      "description": "The width of the bars"
+    },
+    "widthPixels": {
+      "type": "integer",
+      "displayName": "Width",
+      "description": "The width of the bars"
+    },
+    "widthMeters": {
+      "type": "integer",
+      "displayName": "Width",
+      "description": "The width of the bars"
+    },
+    "scaleThicknessOnZoom": {
+      "type": "bool",
+      "displayName": "Scale width on zoom",
+      "description": "Specifies if the width of the bars should scale relative to the zoom level"
+    },
+    "defaultColor": {
+      "type": "fill",
+      "displayName": "Fill color",
+      "description": "Color of each column"
+    },
+    "mapTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Transparency of each bar"
+    },
+    "minZoom": {
+      "type": "integer",
+      "displayName": "Min zoom",
+      "description": "Minimum zoom level where layer is visible"
+    },
+    "maxZoom": {
+      "type": "integer",
+      "displayName": "Max zoom",
+      "description": "Maximum zoom level where layer is visible"
+    },
+    "layerPosition": {
+      "type": "enum",
+      "values": [
+        "",
+        "labels",
+        "transit"
+      ],
+      "displayName": "Layer position",
+      "description": "Specifies the position of the layer relative to other map layers"
+    },
+    "heightUnit": {
+      "type": "enum",
+      "values": [
+        "pixels",
+        "meters"
+      ],
+      "displayName": "Height unit"
+    },
+    "widthUnit": {
+      "type": "enum",
+      "values": [
+        "pixels",
+        "meters"
+      ],
+      "displayName": "Width unit"
+    },
+    "minimumHeightPixels": {
+      "type": "integer",
+      "displayName": "Minimum height"
+    },
+    "maximumHeightPixels": {
+      "type": "integer",
+      "displayName": "Maximum height"
+    },
+    "minimumHeightMeters": {
+      "type": "integer",
+      "displayName": "Minimum height"
+    },
+    "maximumHeightMeters": {
+      "type": "integer",
+      "displayName": "Maximum height"
+    },
+    "heightByValue": {
+      "type": "bool",
+      "displayName": "Height by value",
+      "description": "Use data from the 'Size' field well to determine column height."
+    },
+    "widthByValue": {
+      "type": "bool",
+      "displayName": "Width by value",
+      "description": "Use data from the 'Size' field well to determine column width."
+    },
+    "minimumWidthPixels": {
+      "type": "numeric",
+      "displayName": "Minimum thickness"
+    },
+    "maximumWidthPixels": {
+      "type": "numeric",
+      "displayName": "Maximum thickness"
+    },
+    "minimumWidthMeters": {
+      "type": "numeric",
+      "displayName": "Minimum thickness"
+    },
+    "maximumWidthMeters": {
+      "type": "numeric",
+      "displayName": "Maximum thickness"
+    },
+    "minDataScalingRange": {
+      "type": "numeric",
+      "displayName": "Minimum"
+    },
+    "maxDataScalingRange": {
+      "type": "numeric",
+      "displayName": "Maximum"
+    }
+  }
+}

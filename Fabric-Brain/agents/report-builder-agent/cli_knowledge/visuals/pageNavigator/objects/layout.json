@@ -1,0 +1,25 @@
+﻿{
+  "data": {
+    "orientation": {
+      "type": "enum",
+      "values": [
+        "2",
+        "1",
+        "0"
+      ],
+      "displayName": "Orientation"
+    },
+    "rowCount": {
+      "type": "integer",
+      "displayName": "Rows"
+    },
+    "columnCount": {
+      "type": "integer",
+      "displayName": "Columns"
+    },
+    "cellPadding": {
+      "type": "integer",
+      "displayName": "Padding"
+    }
+  }
+}

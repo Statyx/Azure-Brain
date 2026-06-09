@@ -1,0 +1,13 @@
+﻿{
+  "data": {
+    "imageScalingType": {
+      "type": "enum",
+      "values": [
+        "Normal",
+        "Fit",
+        "Fill"
+      ],
+      "displayName": "Scaling"
+    }
+  }
+}

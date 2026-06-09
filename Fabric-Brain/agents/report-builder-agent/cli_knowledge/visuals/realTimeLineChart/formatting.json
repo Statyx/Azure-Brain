@@ -1,0 +1,37 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "categoryAxis",
+                                 "dataPoint",
+                                 "general",
+                                 "legend",
+                                 "plotArea",
+                                 "valueAxis"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "categoryAxis",
+                                     "dataPoint",
+                                     "general",
+                                     "legend",
+                                     "plotArea",
+                                     "valueAxis"
+                                 ]
+             }
+}

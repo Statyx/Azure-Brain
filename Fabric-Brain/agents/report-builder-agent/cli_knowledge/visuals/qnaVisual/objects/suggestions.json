@@ -1,0 +1,67 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "headerFontColor": {
+      "type": "fill",
+      "displayName": "Header font color",
+      "description": "Adjust the font color for the suggestions header."
+    },
+    "headerFontSize": {
+      "type": "formatting",
+      "displayName": "Header font size",
+      "description": "Adjust the font size for the suggestions header."
+    },
+    "headerBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "headerItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "headerUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "headerFontFamily": {
+      "type": "formatting",
+      "displayName": "Header font family",
+      "description": "Adjust the font family for the suggestions header."
+    },
+    "cardBackground": {
+      "type": "fill",
+      "displayName": "Card background color",
+      "description": "Adjust the background color of the suggestion cards."
+    },
+    "cardFontColor": {
+      "type": "fill",
+      "displayName": "Card font color",
+      "description": "Adjust the font color for the text within the suggestion cards."
+    },
+    "cardFontSize": {
+      "type": "formatting",
+      "displayName": "Card font size",
+      "description": "Adjust the font size for the text within the suggestion cards."
+    },
+    "cardBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "cardItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "cardUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "cardFontFamily": {
+      "type": "formatting",
+      "displayName": "Card font family",
+      "description": "Adjust the font family for the text within the suggestion cards."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+﻿{
+  "data": {
+    "direction": {
+      "type": "enum",
+      "values": [
+        "Positive",
+        "Negative"
+      ],
+      "displayName": "Direction"
+    },
+    "goodColor": {
+      "type": "fill",
+      "displayName": "Good Color"
+    },
+    "neutralColor": {
+      "type": "fill",
+      "displayName": "Neutral Color"
+    },
+    "badColor": {
+      "type": "fill",
+      "displayName": "Bad Color"
+    }
+  }
+}

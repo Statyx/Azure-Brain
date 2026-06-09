@@ -1,0 +1,68 @@
+﻿{
+  "data": {
+    "startDate": {
+      "type": "unknown"
+    },
+    "endDate": {
+      "type": "unknown"
+    },
+    "numericStart": {
+      "type": "numeric"
+    },
+    "numericEnd": {
+      "type": "numeric"
+    },
+    "relativeRange": {
+      "type": "enum",
+      "values": [
+        "Last",
+        "Next",
+        "This"
+      ]
+    },
+    "relativePeriod": {
+      "type": "enum",
+      "values": [
+        "None",
+        "Days",
+        "Weeks",
+        "Calendar Weeks",
+        "Months",
+        "Calendar Months",
+        "Years",
+        "Calendar Years"
+      ]
+    },
+    "relativeTimePeriod": {
+      "type": "enum",
+      "values": [
+        "None",
+        "Minutes",
+        "Hours"
+      ]
+    },
+    "relativeDuration": {
+      "type": "numeric"
+    },
+    "mode": {
+      "type": "enum",
+      "values": [
+        "VerticalList",
+        "HorizontalList",
+        "Between",
+        "Before",
+        "After",
+        "Basic",
+        "Dropdown",
+        "Relative",
+        "Single",
+        "RelativeTime",
+        "RelativeDatePicker"
+      ],
+      "displayName": "Style"
+    },
+    "isInvertedSelectionMode": {
+      "type": "bool"
+    }
+  }
+}

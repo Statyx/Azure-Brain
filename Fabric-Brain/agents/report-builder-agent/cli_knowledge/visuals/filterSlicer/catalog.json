@@ -1,0 +1,40 @@
+﻿{
+  "data": {
+    "visualType": "filterSlicer",
+    "capabilityKey": "filterSlicer",
+    "roles": {
+      "Values": {
+        "name": "Values",
+        "kind": "Grouping",
+        "displayName": "Field",
+        "description": "The field to display"
+      }
+    },
+    "requiredRoles": [
+      "Values"
+    ],
+    "optionalRoles": [],
+    "maxPerRole": {
+      "Values": 1
+    },
+    "formattingObjects": [
+      "calendarButton",
+      "data",
+      "date",
+      "dateRange",
+      "dateRangeText",
+      "general",
+      "header",
+      "items",
+      "numericInputStyle",
+      "pendingChangesIcon",
+      "relativeText",
+      "searchBox",
+      "selection",
+      "selectionIcon",
+      "slider"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

@@ -1,0 +1,20 @@
+﻿{
+  "data": {
+    "overFlowStyle": {
+      "type": "enum",
+      "values": [
+        "1",
+        "0"
+      ],
+      "displayName": "Overflow style"
+    },
+    "overFlowDirection": {
+      "type": "enum",
+      "values": [
+        "1",
+        "0"
+      ],
+      "displayName": "Overflow direction"
+    }
+  }
+}

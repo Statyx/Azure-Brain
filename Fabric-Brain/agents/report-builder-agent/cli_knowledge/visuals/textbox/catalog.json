@@ -1,0 +1,17 @@
+﻿{
+  "data": {
+    "visualType": "textbox",
+    "capabilityKey": "textbox",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "general",
+      "text",
+      "values"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

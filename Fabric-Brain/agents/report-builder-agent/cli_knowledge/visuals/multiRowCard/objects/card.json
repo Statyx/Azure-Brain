@@ -1,0 +1,41 @@
+﻿{
+  "data": {
+    "outlineStyle": {
+      "type": "unknown",
+      "displayName": "Outline"
+    },
+    "outlineColor": {
+      "type": "fill",
+      "displayName": "Outline color",
+      "description": "Color of the outline"
+    },
+    "outlineWeight": {
+      "type": "numeric",
+      "displayName": "Outline weight",
+      "description": "Thickness of the outline in pixels"
+    },
+    "barShow": {
+      "type": "bool",
+      "displayName": "Show bar",
+      "description": "Display a bar to the left side of the card as an accent"
+    },
+    "barColor": {
+      "type": "fill",
+      "displayName": "Bar color"
+    },
+    "barWeight": {
+      "type": "numeric",
+      "displayName": "Bar thickness",
+      "description": "Thickness of the bar in pixels"
+    },
+    "cardPadding": {
+      "type": "numeric",
+      "displayName": "Padding",
+      "description": "Background"
+    },
+    "cardBackground": {
+      "type": "fill",
+      "displayName": "Background color"
+    }
+  }
+}

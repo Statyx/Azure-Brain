@@ -1,0 +1,16 @@
+﻿{
+  "data": {
+    "angle": {
+      "type": "numeric",
+      "displayName": "Rotation"
+    },
+    "shapeAngle": {
+      "type": "integer",
+      "displayName": "Shape rotation"
+    },
+    "textAngle": {
+      "type": "integer",
+      "displayName": "Text rotation"
+    }
+  }
+}

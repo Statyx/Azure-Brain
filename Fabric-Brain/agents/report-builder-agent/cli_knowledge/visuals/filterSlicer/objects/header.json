@@ -1,0 +1,49 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "text": {
+      "type": "text",
+      "displayName": "Title text",
+      "description": "The name of the visual"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "textSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "background": {
+      "type": "fill",
+      "displayName": "Background color"
+    },
+    "outlineStyle": {
+      "type": "unknown",
+      "displayName": "Outline"
+    },
+    "showRestatement": {
+      "type": "bool",
+      "displayName": "Show summary"
+    }
+  }
+}

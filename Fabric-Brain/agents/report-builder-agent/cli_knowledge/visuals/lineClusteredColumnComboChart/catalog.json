@@ -1,0 +1,81 @@
+﻿{
+  "data": {
+    "visualType": "lineClusteredColumnComboChart",
+    "capabilityKey": "lineClusteredColumnComboChart",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "X-axis",
+        "description": "Fields to place on the horizontal axis"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Column legend"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "Measure",
+        "displayName": "Column y-axis",
+        "description": "The values to plot as columns"
+      },
+      "Y2": {
+        "name": "Y2",
+        "kind": "Measure",
+        "displayName": "Line y-axis",
+        "description": "The values to plot as lines"
+      },
+      "Rows": {
+        "name": "Rows",
+        "kind": "Grouping",
+        "displayName": "Small multiples",
+        "description": "Split your visual into multiple, smaller visuals based on your selected fields"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Category"
+    ],
+    "optionalRoles": [
+      "Series",
+      "Y",
+      "Y2",
+      "Rows",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Series": 1
+    },
+    "formattingObjects": [
+      "annotationTemplate",
+      "categoryAxis",
+      "dataPoint",
+      "error",
+      "filters",
+      "general",
+      "labels",
+      "layout",
+      "legend",
+      "lineStyles",
+      "markers",
+      "plotArea",
+      "referenceLine",
+      "seriesLabels",
+      "smallMultiplesLayout",
+      "subheader",
+      "trend",
+      "valueAxis",
+      "xAxisReferenceLine",
+      "y1AxisReferenceLine",
+      "zoom"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

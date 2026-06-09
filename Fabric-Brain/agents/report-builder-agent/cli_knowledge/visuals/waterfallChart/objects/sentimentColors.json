@@ -1,0 +1,20 @@
+﻿{
+  "data": {
+    "increaseFill": {
+      "type": "fill",
+      "displayName": "Increase"
+    },
+    "decreaseFill": {
+      "type": "fill",
+      "displayName": "Decrease"
+    },
+    "totalFill": {
+      "type": "fill",
+      "displayName": "Total"
+    },
+    "otherFill": {
+      "type": "fill",
+      "displayName": "Other"
+    }
+  }
+}

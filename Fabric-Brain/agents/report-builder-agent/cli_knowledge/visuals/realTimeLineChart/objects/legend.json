@@ -1,0 +1,43 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Top",
+        "TopCenter",
+        "TopRight",
+        "Left",
+        "Right",
+        "LeftCenter",
+        "RightCenter",
+        "Bottom",
+        "BottomCenter",
+        "BottomRight"
+      ],
+      "displayName": "Position",
+      "description": "Select the location for the legend"
+    },
+    "showTitle": {
+      "type": "bool",
+      "displayName": "Title",
+      "description": "Display a title for legend symbols"
+    },
+    "titleText": {
+      "type": "text",
+      "displayName": "Legend Name",
+      "description": "Title text"
+    },
+    "labelColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    }
+  }
+}

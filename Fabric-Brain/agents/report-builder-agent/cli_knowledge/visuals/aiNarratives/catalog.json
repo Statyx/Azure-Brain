@@ -1,0 +1,18 @@
+﻿{
+  "data": {
+    "visualType": "aiNarratives",
+    "capabilityKey": "aiNarratives",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "narrativeSelection",
+      "summary",
+      "text",
+      "userPrompt"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

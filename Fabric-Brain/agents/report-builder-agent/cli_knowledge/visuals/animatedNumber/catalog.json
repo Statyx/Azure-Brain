@@ -1,0 +1,15 @@
+﻿{
+  "data": {
+    "visualType": "animatedNumber",
+    "capabilityKey": "animatedNumber",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "general"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

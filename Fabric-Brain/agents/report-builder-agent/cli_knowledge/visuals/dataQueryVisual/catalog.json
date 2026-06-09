@@ -1,0 +1,24 @@
+﻿{
+  "data": {
+    "visualType": "dataQueryVisual",
+    "capabilityKey": "dataQueryVisual",
+    "roles": {
+      "Values": {
+        "name": "Values",
+        "kind": "GroupingOrMeasure"
+      }
+    },
+    "requiredRoles": [],
+    "optionalRoles": [
+      "Values"
+    ],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "columnOptions",
+      "general",
+      "overrideDataReduction"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

@@ -1,0 +1,61 @@
+﻿{
+  "data": {
+    "levelHeaderBackgroundColor": {
+      "type": "fill",
+      "displayName": "Color",
+      "description": "The background color for the group"
+    },
+    "levelTitleFontFamily": {
+      "type": "formatting",
+      "displayName": "Title font family"
+    },
+    "levelTitleFontSize": {
+      "type": "formatting",
+      "displayName": "Title font size"
+    },
+    "levelTitleBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "levelTitleItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "levelTitleUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "levelTitleFontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "showSubtitles": {
+      "type": "bool",
+      "displayName": "Show subtitles"
+    },
+    "levelSubtitleFontFamily": {
+      "type": "formatting",
+      "displayName": "Subtitle font family"
+    },
+    "levelSubtitleFontSize": {
+      "type": "formatting",
+      "displayName": "Subtitle font size"
+    },
+    "levelSubtitleBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "levelSubtitleItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "levelSubtitleUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "levelSubtitleFontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    }
+  }
+}

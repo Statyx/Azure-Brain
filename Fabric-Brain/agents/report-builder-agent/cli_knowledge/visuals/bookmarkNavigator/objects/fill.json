@@ -1,0 +1,23 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default",
+      "hover",
+      "selected",
+      "disabled"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "fillColor": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    }
+  }
+}

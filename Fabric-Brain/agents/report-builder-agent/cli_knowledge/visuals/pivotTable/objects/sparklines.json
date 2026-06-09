@@ -1,0 +1,46 @@
+﻿{
+  "data": {
+    "chartType": {
+      "type": "enum",
+      "values": [
+        "line",
+        "column"
+      ],
+      "displayName": "Chart type"
+    },
+    "dataColor": {
+      "type": "fill",
+      "displayName": "Data color"
+    },
+    "strokeWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "markers": {
+      "type": "unknown",
+      "displayName": "Show these markers"
+    },
+    "markerColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "markerSize": {
+      "type": "numeric",
+      "displayName": "Size"
+    },
+    "markerShape": {
+      "type": "enum",
+      "values": [
+        "circle",
+        "square",
+        "diamond",
+        "triangle",
+        "x",
+        "shortDash",
+        "longDash",
+        "plus"
+      ],
+      "displayName": "Type"
+    }
+  }
+}

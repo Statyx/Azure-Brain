@@ -1,0 +1,63 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "value": {
+      "type": "unknown",
+      "displayName": "Value"
+    },
+    "valueFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "valueFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "valueBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "valueItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "valueUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "valueFontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "valueTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "showBlankAs": {
+      "type": "text",
+      "displayName": "Show blank as"
+    },
+    "valueDisplayUnits": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "1000",
+        "1000000",
+        "1000000000",
+        "1000000000000",
+        "-1"
+      ],
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "valuePrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    }
+  }
+}

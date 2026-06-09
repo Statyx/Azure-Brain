@@ -1,0 +1,76 @@
+﻿{
+  "data": {
+    "background": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Adjust the background color for the question field."
+    },
+    "questionFontColor": {
+      "type": "fill",
+      "displayName": "Question font color",
+      "description": "Adjust the font color for the text within the question field."
+    },
+    "questionFontSize": {
+      "type": "formatting",
+      "displayName": "Question font size",
+      "description": "Adjust the font size for the text within the question field."
+    },
+    "questionBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "questionItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "questionUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "questionFontFamily": {
+      "type": "formatting",
+      "displayName": "Question font family",
+      "description": "Adjust the font family for the text within the question field."
+    },
+    "hoverColor": {
+      "type": "fill",
+      "displayName": "Hover color",
+      "description": "Adjust the color used to highlight different options in the question field dropdown menu."
+    },
+    "acceptedColor": {
+      "type": "fill",
+      "displayName": "Accepted underline color",
+      "description": "We'll underline the words we understand in this color."
+    },
+    "errorColor": {
+      "type": "fill",
+      "displayName": "Error underline color",
+      "description": "We'll underline the words we don't understand in this color."
+    },
+    "warningColor": {
+      "type": "fill",
+      "displayName": "Warning underline color",
+      "description": "We'll underline the words we're not sure about in this color."
+    },
+    "restatementFontColor": {
+      "type": "fill",
+      "displayName": "Restatement font color",
+      "description": "Adjust the font color for the text below the question field that restates what you've entered. This text only appears if you enter something we don't understand."
+    },
+    "restatementFontSize": {
+      "type": "formatting",
+      "displayName": "Restatement font size",
+      "description": "Adjust the font size for the text below the question field that restates what you've entered. This text only appears if you enter something we don't understand."
+    },
+    "restatementFontFamily": {
+      "type": "formatting",
+      "displayName": "Restatement font family",
+      "description": "Adjust the font family for the text below the question field that restates what you've entered. This text only appears if you enter something we don't understand."
+    },
+    "commitButtonBackgroundColor": {
+      "type": "fill",
+      "displayName": "Submit button background color",
+      "description": "Select a color for the background of the submit button."
+    }
+  }
+}

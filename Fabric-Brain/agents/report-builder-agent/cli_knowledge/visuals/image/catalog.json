@@ -1,0 +1,17 @@
+﻿{
+  "data": {
+    "visualType": "image",
+    "capabilityKey": "image",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "general",
+      "image",
+      "imageScaling"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

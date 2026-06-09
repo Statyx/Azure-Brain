@@ -1,0 +1,30 @@
+﻿{
+  "data": {
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "strokeWidth": {
+      "type": "integer",
+      "displayName": "Width"
+    },
+    "strokeTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "minZoom": {
+      "type": "integer",
+      "displayName": "Min zoom",
+      "description": "Minimum zoom level where layer is visible"
+    },
+    "maxZoom": {
+      "type": "integer",
+      "displayName": "Max zoom",
+      "description": "Maximum zoom level where layer is visible"
+    },
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    }
+  }
+}

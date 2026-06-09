@@ -1,0 +1,120 @@
+﻿{
+  "data": {
+    "outlineStyle": {
+      "type": "unknown",
+      "displayName": "Outline"
+    },
+    "outlineColor": {
+      "type": "fill",
+      "displayName": "Outline color",
+      "description": "Color of the outline"
+    },
+    "outlineWeight": {
+      "type": "numeric",
+      "displayName": "Outline weight",
+      "description": "Thickness of the outline in pixels"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color",
+      "description": "Font color of the cells"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "alignment": {
+      "type": "enum",
+      "values": [
+        "Auto",
+        "Left",
+        "Center",
+        "Right"
+      ],
+      "displayName": "Alignment"
+    },
+    "titleAlignment": {
+      "type": "enum",
+      "values": [
+        "Auto",
+        "Left",
+        "Center",
+        "Right"
+      ],
+      "displayName": "Title alignment"
+    },
+    "autoSizeColumnWidth": {
+      "type": "bool",
+      "displayName": "Auto-size column width"
+    },
+    "urlIcon": {
+      "type": "bool",
+      "displayName": "URL icon",
+      "description": "Show an icon instead of the full URL"
+    },
+    "columnAdjustment": {
+      "type": "enum",
+      "values": [
+        "fitToContent",
+        "growToFit",
+        "fixedWidth"
+      ],
+      "displayName": "Auto-size behavior"
+    },
+    "defaultColumnWidth": {
+      "type": "numeric",
+      "displayName": "Default width"
+    },
+    "customColumnWidth": {
+      "type": "bool",
+      "displayName": "Custom widths",
+      "description": "Customize individual column widths. Turning off clears all custom widths."
+    },
+    "customColumnWidthGranularView": {
+      "type": "bool",
+      "displayName": "More granular"
+    },
+    "wordWrap": {
+      "type": "bool",
+      "displayName": "Word wrap"
+    },
+    "showExpandCollapseButtons": {
+      "type": "bool",
+      "displayName": "+/- icons"
+    },
+    "expandCollapseButtonsColor": {
+      "type": "fill",
+      "displayName": "Icon color"
+    },
+    "expandCollapseButtonsSize": {
+      "type": "formatting",
+      "displayName": "Icon size"
+    },
+    "autoExpand": {
+      "type": "bool",
+      "displayName": "Auto expand",
+      "description": "While editing, automatically expands the matrix to show a new level when you add a field to Columns"
+    }
+  }
+}

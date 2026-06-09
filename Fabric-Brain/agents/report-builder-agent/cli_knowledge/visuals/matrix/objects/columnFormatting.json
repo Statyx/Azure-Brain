@@ -1,0 +1,30 @@
+﻿{
+  "data": {
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color",
+      "description": "Font color of the cells"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "styleHeader": {
+      "type": "bool",
+      "displayName": "Apply to header"
+    },
+    "styleValues": {
+      "type": "bool",
+      "displayName": "Apply to values"
+    },
+    "styleSubtotals": {
+      "type": "bool",
+      "displayName": "Apply to subtotals"
+    },
+    "styleTotal": {
+      "type": "bool",
+      "displayName": "Apply to total"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+﻿{
+  "data": {
+    "visualType": "shapeMap",
+    "capabilityKey": "shapeMap",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "Location",
+        "description": "The locations to plot"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "Value": {
+        "name": "Value",
+        "kind": "Measure",
+        "displayName": "Color saturation",
+        "description": "The value used to determine saturation of the data points"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Category"
+    ],
+    "optionalRoles": [
+      "Series",
+      "Value",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Category": 1,
+      "Series": 1,
+      "Value": 1
+    },
+    "formattingObjects": [
+      "dataPoint",
+      "defaultColors",
+      "general",
+      "legend",
+      "shape",
+      "zoom"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

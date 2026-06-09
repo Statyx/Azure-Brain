@@ -1,0 +1,41 @@
+﻿{
+  "data": {
+    "showBlankRows": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "blankRowColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "blankRowTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "showBorder": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "borderPosition": {
+      "type": "enum",
+      "values": [
+        "Top",
+        "Bottom",
+        "TopAndBottom"
+      ],
+      "displayName": "Position"
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "borderTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "borderWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    }
+  }
+}

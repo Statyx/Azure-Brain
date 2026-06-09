@@ -1,0 +1,107 @@
+﻿{
+  "data": {
+    "unfrozen": {
+      "type": "bool"
+    },
+    "outlineStyle": {
+      "type": "unknown",
+      "displayName": "Outline"
+    },
+    "outlineColor": {
+      "type": "fill",
+      "displayName": "Outline color",
+      "description": "Color of the outline"
+    },
+    "outlineWeight": {
+      "type": "numeric",
+      "displayName": "Outline weight",
+      "description": "Thickness of the outline in pixels"
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "fontColor": {
+      "type": "fill",
+      "displayName": "Font color",
+      "description": "Font color of the cells"
+    },
+    "backColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "alignment": {
+      "type": "enum",
+      "values": [
+        "Auto",
+        "Left",
+        "Center",
+        "Right"
+      ],
+      "displayName": "Alignment"
+    },
+    "stepped": {
+      "type": "bool",
+      "displayName": "Stepped layout",
+      "description": "Render row headers with stepped layout"
+    },
+    "steppedLayoutIndentation": {
+      "type": "numeric",
+      "displayName": "Indentation",
+      "description": "Set the indentation, in pixels, applied to row headers"
+    },
+    "urlIcon": {
+      "type": "bool",
+      "displayName": "URL icon",
+      "description": "Show an icon instead of the full URL"
+    },
+    "wordWrap": {
+      "type": "bool",
+      "displayName": "Word wrap"
+    },
+    "showExpandCollapseButtons": {
+      "type": "bool",
+      "displayName": "+/- icons"
+    },
+    "expandCollapseButtonsColor": {
+      "type": "fill",
+      "displayName": "Icon color"
+    },
+    "expandCollapseButtonsSize": {
+      "type": "formatting",
+      "displayName": "Icon size"
+    },
+    "expandCompositeHierarchy": {
+      "type": "bool"
+    },
+    "autoExpand": {
+      "type": "bool",
+      "displayName": "Auto expand",
+      "description": "While editing, automatically expands the matrix to show a new level when you add a field to Rows"
+    },
+    "repeatRowHeaders": {
+      "type": "bool",
+      "displayName": "Repeat row headers"
+    },
+    "legacyStyleDisabled": {
+      "type": "bool"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "titleText": {
+      "type": "text",
+      "displayName": "Text"
+    },
+    "titleFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "titleFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "titleUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "titleItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "titleBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "titleFontColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "titleTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "titleContentType": {
+      "type": "enum",
+      "values": [
+        "custom",
+        "fieldName"
+      ],
+      "displayName": "Content"
+    },
+    "textWrap": {
+      "type": "bool",
+      "displayName": "Text wrap"
+    }
+  }
+}

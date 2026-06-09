@@ -1,0 +1,129 @@
+﻿{
+  "data": {
+    "image": {
+      "type": "text",
+      "displayName": "Field"
+    },
+    "imageFit": {
+      "type": "enum",
+      "values": [
+        "Normal",
+        "Fit",
+        "Fill"
+      ],
+      "displayName": "Image fit"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Left",
+        "Right",
+        "Bottom",
+        "Top"
+      ],
+      "displayName": "Position"
+    },
+    "saturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "blur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "ignorePadding": {
+      "type": "bool",
+      "displayName": "Ignore padding",
+      "description": "Image ignores buttons padding and reaches the edges."
+    },
+    "setAsBackGround": {
+      "type": "bool",
+      "displayName": "Set as background"
+    },
+    "padding": {
+      "type": "integer",
+      "displayName": "Space between image and callout"
+    },
+    "imageAreaSize": {
+      "type": "integer",
+      "displayName": "Image area size"
+    },
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "imageFile": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    },
+    "url": {
+      "type": "unknown",
+      "displayName": "Image URL"
+    },
+    "effects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "sourceType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image source"
+    },
+    "exposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "contrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "height": {
+      "type": "integer",
+      "displayName": "Image height"
+    },
+    "altText": {
+      "type": "text",
+      "displayName": "Alt text"
+    },
+    "enhancedFit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "enhancedBlur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "enhancedSaturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    }
+  }
+}

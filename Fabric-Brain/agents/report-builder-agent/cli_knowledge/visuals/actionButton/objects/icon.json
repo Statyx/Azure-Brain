@@ -1,0 +1,102 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default",
+      "hover",
+      "selected",
+      "disabled"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "shapeType": {
+      "type": "enum",
+      "values": [
+        "blank",
+        "leftArrow",
+        "rightArrow",
+        "back",
+        "reset",
+        "help",
+        "information",
+        "qna",
+        "bookmarks",
+        "applyAllSlicers",
+        "clearAllSlicers",
+        "custom",
+        "spinner"
+      ],
+      "displayName": "Icon"
+    },
+    "image": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    },
+    "lineColor": {
+      "type": "fill",
+      "displayName": "Line color"
+    },
+    "lineTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Set transparency for line color"
+    },
+    "lineWeight": {
+      "type": "integer",
+      "displayName": "Weight"
+    },
+    "placement": {
+      "type": "enum",
+      "values": [
+        "custom",
+        "left",
+        "right",
+        "above",
+        "below"
+      ],
+      "displayName": "Icon placement"
+    },
+    "verticalAlignment": {
+      "type": "formatting",
+      "displayName": "Vertical alignment"
+    },
+    "horizontalAlignment": {
+      "type": "formatting",
+      "displayName": "Horizontal alignment"
+    },
+    "leftMargin": {
+      "type": "integer",
+      "displayName": "Left margin"
+    },
+    "rightMargin": {
+      "type": "integer",
+      "displayName": "Right margin"
+    },
+    "topMargin": {
+      "type": "integer",
+      "displayName": "Top margin"
+    },
+    "bottomMargin": {
+      "type": "integer",
+      "displayName": "Bottom margin"
+    },
+    "iconSize": {
+      "type": "numeric",
+      "displayName": "Icon size"
+    }
+  }
+}

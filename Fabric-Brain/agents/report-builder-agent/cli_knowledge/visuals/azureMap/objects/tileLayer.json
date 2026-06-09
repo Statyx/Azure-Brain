@@ -1,0 +1,78 @@
+﻿{
+  "data": {
+    "tileLayerUrl": {
+      "type": "text",
+      "displayName": "Tile URL",
+      "description": "Formatted URL to the tile layer service or TileJSON resource"
+    },
+    "tileSize": {
+      "type": "numeric",
+      "displayName": "Tile size",
+      "description": "An integer value that specifies both the width and height dimensions of the map tiles"
+    },
+    "northBounds": {
+      "type": "numeric",
+      "displayName": "North boundary",
+      "description": "Northern latitude of the bounding box where this tile is available"
+    },
+    "southBounds": {
+      "type": "numeric",
+      "displayName": "South boundary",
+      "description": "Southern latitude of the bounding box where this tile is available"
+    },
+    "eastBounds": {
+      "type": "numeric",
+      "displayName": "East boundary",
+      "description": "Eastern longitude of the bounding box where this tile is available"
+    },
+    "westBounds": {
+      "type": "numeric",
+      "displayName": "West boundary",
+      "description": "Western longitude of the bounding box where this tile is available"
+    },
+    "mapTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Transparency of tile layer"
+    },
+    "isTMS": {
+      "type": "bool",
+      "displayName": "TMS",
+      "description": "Use Tile Map Service (TMS) protocol, which reverses Y-axis numbering. Turn this on if your tiles appear upside-down."
+    },
+    "minZoom": {
+      "type": "integer",
+      "displayName": "Min zoom",
+      "description": "Minimum zoom level where layer is visible"
+    },
+    "maxZoom": {
+      "type": "integer",
+      "displayName": "Max zoom",
+      "description": "Maximum zoom level where layer is visible"
+    },
+    "layerPosition": {
+      "type": "enum",
+      "values": [
+        "",
+        "labels",
+        "transit"
+      ],
+      "displayName": "Layer position",
+      "description": "Specifies the position of the layer relative to other map layers"
+    },
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "tileSizeDropdown": {
+      "type": "enum",
+      "values": [
+        "preset-256",
+        "preset-512",
+        "custom"
+      ],
+      "displayName": "Tile size",
+      "description": "An integer value that specifies both the width and height dimensions of the map tiles"
+    }
+  }
+}

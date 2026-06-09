@@ -1,401 +1,219 @@
-# Dashboard Design Guide — Layout, Typography & Setup Best Practices
+# Dashboard Design Guide
 
-This file is the **definitive reference** for building professional, readable, and consistent Power BI dashboards via API. It codifies layout principles, typography rules, color usage, and page setup standards.
-
----
-
-## 1. Design Principles
-
-### The 5-Second Rule
-A user should understand the dashboard's main message within 5 seconds of looking at it. This means:
-- **KPIs first** — Place the most important numbers at the top-left (F-pattern reading)
-- **Progressive detail** — Summary metrics → charts → detail tables, top to bottom
-- **One story per page** — Each page answers ONE business question
-
-### Visual Hierarchy (Top → Bottom)
-```
-1. Page title           — Establishes context ("What am I looking at?")
-2. KPI cards (row)      — Key numbers with trend indicators
-3. Primary charts       — Visual patterns, comparisons, trends
-4. Secondary charts     — Supporting detail, breakdowns
-5. Tables / matrices    — Granular data for drill-down
-6. Slicers / filters    — User controls (top or side)
-```
-
-### The Inverted Pyramid
-- **Top of page**: Most aggregated, broadest data (total revenue, overall margin)
-- **Middle**: Segmented data (by region, by product, by period)
-- **Bottom**: Most detailed data (individual transactions, line items)
+> The design bible: tones, typography, color, layout principles, and the five dashboard archetypes. **Format-agnostic** — applies equally to PBIR and any future format.
 
 ---
 
-## 2. Layout Grid System
+## 1. Five Archetypes
 
-### Canvas Standard
-| Property | Value |
-|----------|-------|
-| Width | 1280 px |
-| Height | 720 px |
-| Aspect ratio | 16:9 |
-| `displayOption` | `1` (Fit to page) |
+Every dashboard answers one of five primary user intents. Pick **one** archetype per page; mix archetypes only across pages, never within a page.
 
-### Spacing Rules
-| Rule | Value | Why |
-|------|-------|-----|
-| Page margins (left/right) | 30 px | Prevents content from touching edges |
-| Top margin | 10 px | Compact — title bar starts immediately |
-| Column gap | 20 px | Clear separation without wasting space |
-| Row gap | 10–15 px | Tight vertical rhythm |
-| Usable width | 1220 px | 1280 − 30 − 30 |
+| Archetype | User intent | Reading time | Density |
+|---|---|---|---|
+| **Executive Summary** | *"Give me the headline."* | 5 seconds | Sparse |
+| **Operational Monitor** | *"What's happening now? Is anything broken?"* | 10–30 seconds | Medium-high |
+| **Analytical Canvas** | *"Let me explore. I'll drill, slice, ask questions."* | Minutes | High |
+| **Narrative Story** | *"Walk me through the insight."* | 1–3 min, sequential | Sparse |
+| **Comparative Benchmark** | *"How does X compare to Y?"* | 30 seconds | Medium |
 
-### Alignment Rules
-- **Always align** visuals to the grid — no arbitrary x/y values
-- **Consistent widths** within a row — all KPIs same width, all charts same width
-- **Consistent heights** within a row — mixed heights create visual noise
-- **Left-align text** in cards and titles (Western languages read left-to-right)
-
-### White Space
-- White space is **not wasted space** — it aids readability and focus
-- Minimum 10px gap between any two visuals
-- Don't fill every pixel — a crowded page overwhelms users
-- Use `background: transparent` for spacer areas if needed
+Layouts and visual mixes per archetype are in [`pages_layout.md`](pages_layout.md) and [`visual_catalog.md`](visual_catalog.md).
 
 ---
 
-## 3. Typography System
+## 2. The 5-Second Rule
 
-### Font Stack
-Power BI supports limited fonts via API. Use this hierarchy:
-
-| Priority | Font | Use Case |
-|----------|------|----------|
-| 1st | **Segoe UI** | Default for all dashboard text — designed for screens |
-| 2nd | **Segoe UI Semibold** | Emphasis text, card values |
-| 3rd | **DIN** | Numeric-heavy displays (alternative to Segoe UI) |
-| Fallback | **Arial** | Safe fallback if Segoe unavailable |
-
-> **Rule**: Use ONE font family per dashboard. Segoe UI for everything. Differentiate via weight and size, not font family.
-
-### Font Size Scale (Modular Scale)
-Use a consistent type scale based on functional roles:
-
-| Role | Size | Weight | Where Used |
-|------|------|--------|------------|
-| Page title | 14pt / `14D` | Bold | Title textbox at top of page |
-| Section heading | 12pt / `12D` | Semibold | Visual group labels |
-| Visual title | 11pt / `11D` | Regular or Semibold | `vcObjects.title.fontSize` |
-| KPI callout value | 27pt / `27D` | Semibold | `objects.calloutValue.fontSize` — **CRITICAL: never use default** |
-| KPI label | 10pt / `10D` | Regular | Category label below KPI value |
-| Axis labels | 10pt / `10D` | Regular | Chart `categoryAxis` / `valueAxis` |
-| Data labels | 9pt / `9D` | Regular | Chart `labels.fontSize` |
-| Legend | 10pt / `10D` | Regular | `legend.fontSize` |
-| Table header | 11pt / `11D` | Semibold | Table column headers |
-| Table body | 10pt / `10D` | Regular | Table cell values |
-| Tooltip | 10pt / `10D` | Regular | Tooltip body text |
-| Slicer items | 10pt / `10D` | Regular | Dropdown/list items |
-
-### Typography Implementation in JSON
-
-#### Page Title (Textbox)
-```python
-"objects": {
-    "general": [{"properties": {
-        "paragraphs": [{
-            "textRuns": [{
-                "value": "Finance Overview",
-                "textStyle": {
-                    "fontFamily": "Segoe UI",
-                    "fontSize": "14pt",
-                    "fontWeight": "bold",
-                    "color": "#333333"
-                }
-            }],
-            "horizontalTextAlignment": "left"
-        }]
-    }}]
-}
-```
-
-#### Visual Title
-```python
-"vcObjects": {
-    "title": [{"properties": {
-        "show":      _lit("true"),
-        "text":      _lit("'Revenue by Region'"),
-        "fontSize":  _lit("11D"),
-        "fontColor": _color("#333333"),
-        "fontFamily": _lit("'Segoe UI'"),
-    }}]
-}
-```
-
-#### KPI Card Value
-```python
-"objects": {
-    "calloutValue": [{"properties": {
-        "fontSize":   _lit("27D"),
-        "fontFamily": _lit("'Segoe UI Semibold'"),
-        "color":      _color("#333333"),
-    }}],
-}
-```
-
-### Typography Anti-Patterns
-| Don't | Why | Do Instead |
-|-------|-----|------------|
-| Use more than 2 font families | Creates visual chaos | Segoe UI + Segoe UI Semibold |
-| Use font sizes below 9pt | Unreadable on most screens | Minimum 9pt for any text |
-| Use ALL CAPS for long text | Hard to read | Use bold weight for emphasis |
-| Leave default card font size | Values clip or are too large | Always set `calloutValue.fontSize: 27D` |
-| Mix pt sizes without a scale | Inconsistent hierarchy | Use the modular scale above |
+A reader should grasp the page's primary message in 5 seconds. Implications:
+- **KPIs at the top-left** (F-pattern reading)
+- **One headline per page** — a single title that names the question being answered
+- **Progressive detail** — KPI → trend → breakdown → drill table, top to bottom
+- **One story per page** — if there are two stories, split into two pages
 
 ---
 
-## 4. Color System
+## 3. Visual Hierarchy
 
-### Microsoft Fluent 2 Palette (Active Standard)
-
-This is the standard palette for all new reports. PBI assigns these colors automatically to data series in charts.
-
-| Index | Name | Hex | Auto-assigned to |
-|:---:|-------|-----|-------|
-| 1 | Blue | `#118DFF` | 1st series |
-| 2 | Navy | `#12239E` | 2nd series |
-| 3 | Orange | `#E66C37` | 3rd series |
-| 4 | Purple | `#6B007B` | 4th series |
-| 5 | Pink | `#E044A7` | 5th series |
-| 6 | Violet | `#744EC2` | 6th series |
-| 7 | Gold | `#D9B300` | 7th series |
-| 8 | Red | `#D64550` | 8th series |
-
-### Structural Colors
-
-| Element | Color | Hex |
-|---------|-------|-----|
-| Primary text | Dark charcoal | `#252423` |
-| Visual titles / labels | Medium gray | `#616161` |
-| Page background | White | `#FFFFFF` |
-| Card background | White | `#FFFFFF` |
-| Background panel | Near-white | `#F6F6F6` |
-| Border | Cool gray | `#c7c8ce` |
-| Shadow | Light gray | `#cccccc` |
-| Accent bar | Fluent Blue | `#118DFF` |
-| Separator line | Cool gray | `#c7c8ce` |
-| Positive | Green | `#70AD47` |
-| Warning | Amber | `#FFC000` |
-| Negative | Red | `#D64550` |
-
-### Color Rules
-1. **Maximum 6 colors** in any single chart — beyond 6, use "Other" bucket
-2. **Consistent meaning** — same color = same semantic throughout all pages
-3. **Sufficient contrast** — WCAG AA minimum (4.5:1 for text, 3:1 for graphics)
-4. **No pure black text** — Use `#252423` (softer on eyes, still high contrast)
-5. **Color is not the only indicator** — Pair with icons, labels, or patterns for accessibility
-6. **Avoid red/green only** — ~8% of men have color vision deficiency; add shapes or labels
-
-### Multi-Color Bar/Scatter Charts (CRITICAL)
-To get a different color per category in bar charts (instead of all bars being the same blue):
-- Add the **same category column** to the `Series` projection bucket alongside `Category`
-- This forces PBI to treat each category value as a separate series → different Fluent 2 colors
-- Hide the legend (it duplicates the axis labels): `"legend": [{"properties": {"show": _lit("false")}}]`
-- **Do NOT use** `dataPoint.colorByCategory: true` — this does not work when deploying via API
-- See `known_issues.md` Issue #13 for details
-
-### Conditional Formatting Colors
-For variance/performance indicators:
-```python
-# Positive variance (green)
-_color("#70AD47")
-# Negative variance (red)  
-_color("#D64550")
-# Neutral / on target
-_color("#616161")
 ```
+1. Page title          — establishes context ("what am I looking at?")
+2. KPI cards (row)     — key numbers, ideally with delta vs target/period
+3. Primary chart       — the headline pattern (trend / comparison / split)
+4. Secondary chart(s)  — supporting detail
+5. Table / matrix      — granular data for drill
+6. Slicers             — user controls (top bar or left sidebar)
+```
+
+**Inverted pyramid by aggregation level**: most aggregated at top, most granular at bottom.
 
 ---
 
-## 5. Page Layout Templates
+## 4. Tones (Color Strategy)
 
-### Template: Executive Overview
-**Purpose**: High-level KPIs + trend overview. First page of any dashboard.
+Pick one tone per report. Every visual inherits the tone's palette via the theme file ([`themes_styling.md`](themes_styling.md)).
 
-```
-┌──────────────────────────────────────────────────────┐
-│ [Title: "Finance Overview"]           y=10, h=40     │
-├──────────┬──────────┬──────────┬─────────────────────┤
-│ KPI 1    │ KPI 2    │ KPI 3    │     y=60, h=120     │
-├──────────┴──────────┴──────────┤                     │
-│ KPI 4    │ KPI 5    │ KPI 6    │     y=190, h=120    │
-├──────────────────┬─────────────┤                     │
-│ Trend Chart      │ Pie/Donut  │     y=325, h=185    │
-├──────────────────┼─────────────┤                     │
-│ Bar Chart        │ Map/Table  │     y=525, h=185    │
-└──────────────────┴─────────────┘                     │
-```
+### Bright Light (default office)
+- Background `#FFFFFF`, Foreground `#1F2A37`
+- Accents: `#0078D4 #107C10 #C42B1C #FF8C00 #5C2D91 #008272 #B4A0FF #767676`
+- Use for: operational reports, finance, HR, supply chain.
 
-Key decisions:
-- 6 KPIs in 2 rows of 3 (390px wide each)
-- 4 charts in 2×2 grid (595px wide each)
-- Total vertical: 710px — fits in 720px canvas
+### Soft Pastel (friendly narrative)
+- Background `#F4F6F8`, Foreground `#2D3748`
+- Accents: `#5B8DEF #6FCF97 #F2994A #EB5757 #BB6BD9 #56CCF2 #F2C94C #828282`
+- Use for: customer success, brand reports, narrative storytelling.
 
-### Template: Analysis Deep-Dive
-**Purpose**: Detailed breakdown with filtering. Interior pages.
+### High Contrast (accessibility, regulated)
+- Background `#FFFFFF`, Foreground `#000000`
+- Accents: `#0F62FE #198038 #DA1E28 #FA4D56 #6929C4 #1192E8 #B28600 #525252`
+- Use for: audit, compliance, healthcare, government.
 
-```
-┌──────────────────────────────────────────────────────┐
-│ [Title (580×40)] [Slicer1 (245×75)] [Slicer2 (245×75)] │  y=8–83
-│ [─── Separator ───]                                  │  y=85
-├──────────┬──────────┬──────────┬─────────────────────┤
-│ KPI 1    │ KPI 2    │ KPI 3    │ KPI 4  y=93, h=120  │
-│ [─── Separator ───]                                  │  y=221
-├──────────────────────────────────────────────────────┤
-│ [Chart 1 (595×200)]  [Chart 2 (595×200)]            │  y=229–429
-│ [─── Separator ───]                                  │  y=437
-├─────────────────┬────────────────────────────────────┤
-│ [Full-width chart/scatter (1220×267)]              │  y=445–712
-└─────────────────┴────────────────────────────────────┘
-```
+### Dark Mode (executive, NOC)
+- Background `#1A1F2C`, Foreground `#E5E7EB`
+- Accents: `#36B5FF #57D9A3 #FFAB48 #FF7185 #B68AFF #58D2D2 #FFE15D #9CA3AF`
+- Use for: real-time monitors, exec dashboards, NOC, IoT.
 
-Key decisions:
-- Slicers in title row at **h=75px** (title + dropdown needs 70px+)
-- KPIs at **h=120px** (same as non-slicer pages — NEVER reduce to 100px)
-- Charts at 200px minimum height
-- Separators with 8px gap below cards
-- **Vertical chain**: slicer(83) → 10px gap → card(93–213) → 8px gap → sep(221) → chart(229)
+### Earthy Warm (brand-driven)
+- Background `#FBF7F2`, Foreground `#3D2C1E`
+- Accents: `#C2570C #5F8B4C #B45253 #D9A05B #7C5C42 #2F6B7E #B89F65 #6E5849`
+- Use for: sustainability, retail, hospitality, lifestyle brands.
 
-### Template: Table-Centric
-**Purpose**: Line-item detail, drill-down data, export-friendly.
-
-```
-┌──────────────────────────────────────────────────────┐
-│ [Title (700×40)] [Slicer1 (245×75)] [Slicer2 (245×75)]  │  y=8–83
-│ [─── Separator ───]                                  │  y=85
-├──────────┬──────────┬──────────┬──────┬──────────────┤
-│ KPI 1    │ KPI 2    │ KPI 3    │KPI 4│ y=93, h=120  │
-│ [─── Separator ───]                                  │  y=221
-├──────────────────────────────────────────────────────┤
-│                                                      │
-│             Table / Matrix                           │
-│             (Full Width)              y=229, h=483   │
-│                                                      │
-└──────────────────────────────────────────────────────┘
-```
-
-**CRITICAL for table pages with slicers:**
-- Slicers: h=75px (not 50px — title needs space)
-- Cards: h=120px (same as ALL other pages)
-- Table starts at y=229 (after sep at 221), height=483px (fits to y=712)
+### Tone selection checklist
+- [ ] One tone selected
+- [ ] Theme file built with the tone's palette
+- [ ] All visual fills resolved via `ThemeDataColor` (not hard-coded hex) when possible
+- [ ] Foreground reaches WCAG AA contrast against background
+- [ ] If dark mode: dark-mode checklist from [`themes_styling.md`](themes_styling.md) verified
 
 ---
 
-## 6. Dashboard Setup Checklist
+## 5. Typography
 
-When creating a **new dashboard from scratch**, follow this checklist:
+### Font stack
 
-### Pre-Build
-- [ ] Identify the **target audience** (executive, analyst, operational)
-- [ ] List the **top 5 questions** the dashboard must answer
-- [ ] Verify all **measures exist** in the semantic model (`model.bim`)
-- [ ] Choose a **page template** per page (Overview, Analysis, Table)
-- [ ] Define the **color assignments** (which measure = which color)
+| Priority | Font | Use |
+|---|---|---|
+| 1 | **Segoe UI** | Default for all dashboard text |
+| 2 | **Segoe UI Semibold** | Emphasis, card values |
+| 3 | **DIN** | Numeric-heavy displays (alternative) |
+| Fallback | **Arial** | Safe fallback |
 
-### Report.json Setup
-- [ ] Set `layoutOptimization: 0` (integer, not string)
-- [ ] Set canvas `width: 1280`, `height: 720`
-- [ ] Include `theme: "CY26SU02"` and `resourcePackages` with base theme
-- [ ] Set `activeSectionIndex: 0`
-- [ ] Include `config` with `themeCollection.baseTheme`
+**Rule**: one font family per report. Differentiate via weight and size, never family.
 
-### Per Page
-- [ ] Unique `section.name` (no spaces, no special characters)
-- [ ] Human-readable `section.displayName`
-- [ ] `section.config` = `json.dumps({"name": "<internalName>"})`
-- [ ] `section.filters` = `"[]"` (stringified)
-- [ ] Width = 1280, Height = 720
+### Scale
 
-### Per Visual
-- [ ] Unique visual ID (guid or descriptive slug)
-- [ ] Position on grid (x, y, width, height aligned to layout system)
-- [ ] `prototypeQuery` with `Version: 2`, `From`, `Select` — **MANDATORY**
-- [ ] `config` is `json.dumps(...)` (stringified, not embedded)
-- [ ] Correct measure/column names (exact match to model, case-sensitive)
-- [ ] Card `calloutValue.fontSize: 14D` or `27D` (never leave default)
-- [ ] Card height ≥ **120px** (on ALL pages, including slicer pages)
-- [ ] Slicer height ≥ **75px** when using `vcObjects.title`
-- [ ] Slicer has `vcObjects`: background, dropShadow, border=false (matches cards)
-- [ ] Slicer uses `header.show: false` + `vcObjects.title` (not PBI native header)
-- [ ] Card heights CONSISTENT across all pages (120px everywhere)
-- [ ] Separator gap ≥ 8px below card row bottom
+| Role | Size | Weight | Where |
+|---|---|---|---|
+| Page title | 14pt | Bold | Top-of-page textbox |
+| Section heading | 12pt | Semibold | Group label |
+| Visual title | 11pt | Regular or Semibold | `visualContainerObjects.title.fontSize` |
+| KPI callout value | 27pt | Semibold | `objects.value.fontSize` *(cardVisual)* |
+| KPI label | 10pt | Regular | Below the KPI value |
+| Axis labels | 10pt | Regular | `categoryAxis.fontSize` / `valueAxis.fontSize` |
+| Data labels | 9pt | Regular | `labels.fontSize` |
+| Legend | 10pt | Regular | `legend.fontSize` |
+| Table header | 11pt | Semibold | `columnHeaders.fontSize` |
+| Table body | 10pt | Regular | `values.fontSize` |
+| Tooltip | 10pt | Regular | `visualTooltip` |
+| Slicer items | 10pt | Regular | `slicerSettings.fontSize` |
 
-### Deployment
-- [ ] Build `definition.pbir` using V2 schema with XMLA connection string
-- [ ] Include base theme as a separate part (`StaticResources/SharedResources/BaseThemes/CY26SU02.json`)
-- [ ] Deploy via POST (create) or POST updateDefinition (update)
-- [ ] Poll async operation until Succeeded
-- [ ] Verify with `getDefinition` round-trip
+**Always** set `value.fontSize` on `cardVisual` — the schema default is enormous and clips at any sensible width. (Note: `cardCalloutArea` controls the rectangle, **not** the text — see `cli_knowledge/visuals/cardVisual/objects/`.)
 
 ---
 
-## 7. Responsive Design Considerations
+## 6. The 1280 × 720 Grid (8 px rhythm)
 
-### Display Contexts
-Power BI reports may be viewed on:
-- **Desktop** (1920×1080+) — full experience
-- **Web browser** (varies) — "Fit to page" scales the 1280×720 canvas
-- **Mobile app** — separate mobile layout (not covered by API yet)
-- **Embedded / Teams** — similar to web, may be narrower
+| Rule | Value |
+|---|---|
+| Canvas | 1280 × 720 (`displayOption: FitToPage`) |
+| Side margins | 30 px |
+| Top margin | 10 px |
+| Bottom margin | 20 px |
+| Inter-column gap | 20 px |
+| Inter-row gap | 10–15 px |
+| Usable area | 1220 × 690 |
+| Grid unit | 8 px (all sizes are multiples of 8 where possible) |
 
-### Best Practices for Multi-Context
-- Design at **1280×720** as the canonical size
-- Use `displayOption: 1` (Fit to page) — canvas scales proportionally
-- Avoid text smaller than **9pt** — won't be readable when scaled down
-- Test that KPI card values don't clip at smaller viewport sizes
-- Keep critical content in the **top-left quadrant** (visible without scrolling on mobile)
+**KPI card minimum height: 120 px** (otherwise callout numbers clip).  
+**Slicer minimum height with title: 75 px** (otherwise title overlaps value).
 
----
-
-## 8. Navigation & Multi-Page Design
-
-### Page Naming Convention
-| Page | Internal Name | Display Name |
-|------|--------------|--------------|
-| Page 1 | `overview` | Finance Overview |
-| Page 2 | `pnl_analysis` | P&L Analysis |
-| Page 3 | `budget_analysis` | Budget Analysis |
-| Page 4 | `cash_flow` | Cash Flow |
-| Page 5 | `monthly_trends` | Monthly Trends |
-
-### Navigation Sidebar Pattern
-If using a navigation sidebar (like MF_Finance):
-- Sidebar width: 160px (reduces usable content width to 1060px)
-- Place at x=0, full height (720px)
-- Use dark background (`#2D2D2D`) with white text
-- Active page indicator: accent color bar or highlight
-- Each nav item is a button or textbox with bookmark/page navigation action
-
-### Page Flow
-- **Page 1**: Always the executive overview — broadest, most aggregated
-- **Pages 2–4**: Analytical deep-dives, one topic each
-- **Last page**: Most detailed or specialized view
+See [`pages_layout.md`](pages_layout.md) for full layout templates per archetype.
 
 ---
 
-## 9. Accessibility Checklist
+## 7. White Space
 
-- [ ] All visuals have descriptive titles (not "Chart 1")
-- [ ] Color contrast meets WCAG AA (4.5:1 text, 3:1 graphics)
-- [ ] Information is not conveyed by color alone
-- [ ] Font sizes ≥ 9pt everywhere
-- [ ] Tab order follows logical reading flow (top-left to bottom-right)
-- [ ] Alt text on images and shapes (if any)
-- [ ] Avoid using only red/green to indicate good/bad
+White space is **content**, not waste.
+- Minimum 10 px gap between any two visuals.
+- Do not fill every pixel — readers need breathing room.
+- Group related visuals tightly (8-10 px gaps); separate unrelated groups widely (20-30 px gaps).
+- A page with 5 well-spaced visuals always reads better than 10 cramped ones.
 
 ---
 
-## Cross-References
+## 8. Color Use Discipline
 
-- Grid coordinates & column systems → `pages_layout.md`
-- Expression language & vcObjects → `themes_styling.md`
-- Visual type catalog & prototypeQuery patterns → `visual_catalog.md`
-- Known issues & gotchas → `known_issues.md`
-- Report JSON structure → `report_structure.md`
+| Rule | Why |
+|---|---|
+| One accent color per page | Multiple accents fight for attention |
+| Categorical colors only when categories differ qualitatively | "Region A vs B" yes; "Q1 vs Q2" no — use the same color |
+| Sequential colors for ordinal data | Heatmaps, intensity, score |
+| Diverging colors for signed values | Variance, gain/loss, sentiment |
+| Red = bad, Green = good — only with cultural context | In finance, red can mean "negative", in retail "luxury" |
+| Grey is a color | Use neutral grey for context data so accent pops |
+| Match `dropShadow.color` to background | Black shadow on dark bg = invisible mass; use 92+ transparency |
+
+---
+
+## 9. Page Setup Checklist
+
+Before declaring a page done:
+
+- [ ] Title textbox at top, 1220×40, page-name visible
+- [ ] Tone applied via theme
+- [ ] All visuals snap to the 8 px grid
+- [ ] All KPI cards same height (120) and same width within a row
+- [ ] All chart visuals same height within a row
+- [ ] No off-canvas visuals (x+width ≤ 1250, y+height ≤ 710)
+- [ ] One archetype per page (no mixing)
+- [ ] Page-level filters set if scope differs from report-level
+- [ ] Slicers (if any) anchored top or left, not floating
+- [ ] Page tested at FitToPage on a 1366×768 laptop (smallest realistic screen)
+
+---
+
+## 10. Anti-Patterns (Avoid These)
+
+| Anti-pattern | Why it hurts | Replacement |
+|---|---|---|
+| 3D pie chart | Distorts angle perception | Donut with ≤ 6 slices, or bar chart |
+| Truncated Y-axis on bar chart | Exaggerates difference deceptively | Either zero-baseline or call attention with annotation |
+| 8-color palette on one chart | Eye can't separate more than 5-6 hues | Group into "top N + Other" |
+| Multiple fonts | Cognitive load, looks unprofessional | One family + weights |
+| Rainbow palette for ordinal data | No perceptual order | Sequential single-hue gradient |
+| Tiny callout numbers in cards | Defeats the point of a KPI | Always set `value.fontSize: 27D+` on cardVisual |
+| Visuals touching the edge | Looks unfinished | Respect the 30 px side margin |
+| Two visuals showing the same data differently | Reader picks the worse one | Pick one — the one matching the question |
+| Action button without target | Frustrates the user | Always bind `action` to a page navigation or bookmark |
+
+---
+
+## 11. From Screenshot to PBIR — Mini-Workflow
+
+If the user gives a screenshot, decode it before generating:
+
+1. **Tone**: dark or light? primary accent hue?
+2. **Archetype**: one headline number row? trend? grid of small multiples? sidebar? → match to section 1.
+3. **Visual inventory**: enumerate each rectangle, label it with a visual type from [`visual_catalog.md`](visual_catalog.md).
+4. **Grid**: measure pixel ratios → snap to 1280 × 720 with 8 px rhythm.
+5. **Typography**: estimate title size, KPI size, body size — match to section 5 scale.
+6. **Generate** the PBIR folder, validate, deploy.
+7. **Compare** the deployed report to the screenshot — adjust spacing/colors as needed.
+
+---
+
+## 12. Cross-References
+
+- Mandatory agent rules → [`instructions.md`](instructions.md)
+- PBIR folder anatomy → [`report_structure.md`](report_structure.md)
+- Visual selection per archetype → [`visual_catalog.md`](visual_catalog.md)
+- Grid + page layouts → [`pages_layout.md`](pages_layout.md)
+- Expression encoding + VCO usage → [`themes_styling.md`](themes_styling.md)
+- Property lookups → [`cli_knowledge/`](cli_knowledge/)
+- Known issues → [`known_issues.md`](known_issues.md)

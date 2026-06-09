@@ -1,0 +1,21 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "radius": {
+      "type": "numeric",
+      "displayName": "Radius"
+    },
+    "width": {
+      "type": "numeric",
+      "displayName": "Width"
+    }
+  }
+}

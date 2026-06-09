@@ -1,0 +1,67 @@
+﻿{
+  "data": {
+    "outlineStyle": {
+      "type": "unknown",
+      "displayName": "Outline"
+    },
+    "outlineColor": {
+      "type": "fill",
+      "displayName": "Outline color",
+      "description": "Color of the outline"
+    },
+    "outlineWeight": {
+      "type": "numeric",
+      "displayName": "Outline weight",
+      "description": "Thickness of the outline in pixels"
+    },
+    "gridVertical": {
+      "type": "bool",
+      "displayName": "Vertical grid",
+      "description": "Show/Hide the vertical gridlines"
+    },
+    "gridVerticalColor": {
+      "type": "fill",
+      "displayName": "Vertical grid color",
+      "description": "Color for the vertical gridlines"
+    },
+    "gridVerticalWeight": {
+      "type": "numeric",
+      "displayName": "Vertical grid thickness",
+      "description": "Thickness of the vertical gridlines in pixels"
+    },
+    "gridHorizontal": {
+      "type": "bool",
+      "displayName": "Horizontal grid",
+      "description": "Show/Hide the horizontal gridlines"
+    },
+    "gridHorizontalColor": {
+      "type": "fill",
+      "displayName": "Horizontal grid color",
+      "description": "Color for the horizontal gridlines"
+    },
+    "gridHorizontalWeight": {
+      "type": "numeric",
+      "displayName": "Horizontal grid thickness",
+      "description": "Thickness of the horizontal gridlines in pixels"
+    },
+    "rowPadding": {
+      "type": "numeric",
+      "displayName": "Row padding",
+      "description": "Padding in pixels applied to top and bottom of every row"
+    },
+    "textSize": {
+      "type": "numeric",
+      "displayName": "Text size"
+    },
+    "imageHeight": {
+      "type": "numeric",
+      "displayName": "Height",
+      "description": "The height of images in pixels"
+    },
+    "imageWidth": {
+      "type": "numeric",
+      "displayName": "Width",
+      "description": "The width of images in pixels"
+    }
+  }
+}

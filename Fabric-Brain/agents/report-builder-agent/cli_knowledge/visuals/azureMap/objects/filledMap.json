@@ -1,0 +1,62 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "defaultColor": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "mapTransparency": {
+      "type": "numeric",
+      "displayName": "Fill transparency"
+    },
+    "strokeColor": {
+      "type": "fill",
+      "displayName": "Outline color"
+    },
+    "autoStrokeColor": {
+      "type": "bool",
+      "displayName": "High contrast",
+      "description": "Makes the outline color contrast with the fill color for better accessibility"
+    },
+    "matchFillColor": {
+      "type": "bool",
+      "displayName": "Match fill color",
+      "description": "Makes the outline color align with fill color"
+    },
+    "strokeTransparency": {
+      "type": "numeric",
+      "displayName": "Outline transparency"
+    },
+    "strokeWidth": {
+      "type": "integer",
+      "displayName": "Outline width"
+    },
+    "minZoom": {
+      "type": "integer",
+      "displayName": "Min zoom",
+      "description": "Minimum zoom level where layer is visible"
+    },
+    "maxZoom": {
+      "type": "integer",
+      "displayName": "Max zoom",
+      "description": "Maximum zoom level where layer is visible"
+    },
+    "layerPosition": {
+      "type": "enum",
+      "values": [
+        "",
+        "labels",
+        "transit"
+      ],
+      "displayName": "Layer position",
+      "description": "Specifies the position of the layer relative to other map layers"
+    },
+    "borderShow": {
+      "type": "bool",
+      "displayName": "Show"
+    }
+  }
+}

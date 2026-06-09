@@ -1,0 +1,97 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "fillColor": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "image": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    },
+    "imageTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "imageSplitTransparency": {
+      "type": "bool"
+    },
+    "sourceType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image source"
+    },
+    "effects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "exposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "contrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "saturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "blur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "fit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "url": {
+      "type": "unknown",
+      "displayName": "Image URL"
+    },
+    "field": {
+      "type": "text",
+      "displayName": "Field"
+    },
+    "height": {
+      "type": "integer",
+      "displayName": "Image height"
+    },
+    "imageShow": {
+      "type": "bool",
+      "displayName": "Add image"
+    }
+  }
+}

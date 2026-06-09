@@ -1,0 +1,72 @@
+﻿{
+  "data": {
+    "value": {
+      "type": "unknown",
+      "displayName": "Add label"
+    },
+    "formatString": {
+      "type": "formatting"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "backgroundShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "paddingUniform": {
+      "type": "integer",
+      "displayName": "Uniform padding"
+    },
+    "paddingIndividual": {
+      "type": "bool",
+      "displayName": "Individual padding"
+    },
+    "paddingLeft": {
+      "type": "integer",
+      "displayName": "Left margin"
+    },
+    "paddingRight": {
+      "type": "integer",
+      "displayName": "Right margin"
+    },
+    "paddingTop": {
+      "type": "integer",
+      "displayName": "Top margin"
+    },
+    "paddingBottom": {
+      "type": "integer",
+      "displayName": "Bottom margin"
+    },
+    "rectangleRoundedCurve": {
+      "type": "integer",
+      "displayName": "Corner radius"
+    },
+    "rectangleRoundedCurveCustomStyle": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "rectangleRoundedCurveLeftBottom": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "rectangleRoundedCurveLeftTop": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "rectangleRoundedCurveRightBottom": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "rectangleRoundedCurveRightTop": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    }
+  }
+}

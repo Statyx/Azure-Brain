@@ -1,0 +1,40 @@
+﻿{
+  "data": {
+    "bubbleSize": {
+      "type": "integer",
+      "displayName": "Size multiplier"
+    },
+    "markerRangeType": {
+      "type": "enum",
+      "values": [
+        "magnitude",
+        "dataRange",
+        "auto"
+      ],
+      "displayName": "Range scaling"
+    },
+    "preventOverflow": {
+      "type": "bool",
+      "displayName": "Auto-fit markers",
+      "description": "Adjusts the plot area so markers near edges aren't cut off"
+    },
+    "markerShape": {
+      "type": "enum",
+      "values": [
+        "circle",
+        "square",
+        "diamond",
+        "triangle",
+        "x",
+        "shortDash",
+        "longDash",
+        "plus"
+      ],
+      "displayName": "Type"
+    },
+    "showSeries": {
+      "type": "bool",
+      "displayName": "Customize series"
+    }
+  }
+}

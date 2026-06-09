@@ -1,0 +1,278 @@
+﻿{
+  "data": {
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "showScorecardName": {
+      "type": "bool",
+      "displayName": "Scorecard name"
+    },
+    "scorecardNameFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "scorecardNameFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "scorecardNameFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "scorecardNameBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "scorecardNameItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "scorecardNameUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "currentValueFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "currentValueFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "currentValueFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "currentValueBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "currentValueItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "currentValueUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "targetValueFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "targetValueFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "targetValueFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "targetValueBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "targetValueItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "targetValueUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "showGrowth": {
+      "type": "bool",
+      "displayName": "Growth"
+    },
+    "growthFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "growthFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "growthFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "growthBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "growthItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "growthUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "showGoalName": {
+      "type": "bool",
+      "displayName": "Goal name"
+    },
+    "goalNameFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "goalNameFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "goalNameFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "goalNameBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "goalNameItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "goalNameUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "showOwner": {
+      "type": "bool",
+      "displayName": "Owner"
+    },
+    "ownerPhotoSize": {
+      "type": "numeric",
+      "displayName": "Size"
+    },
+    "showDueDate": {
+      "type": "bool",
+      "displayName": "Due"
+    },
+    "dueDateFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "dueDateFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "dueDateFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "dueDateBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "dueDateItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "dueDateUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "showStatus": {
+      "type": "bool",
+      "displayName": "Status"
+    },
+    "showNotes": {
+      "type": "bool",
+      "displayName": "Notes"
+    },
+    "notesFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "notesFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "showVisualization": {
+      "type": "bool",
+      "displayName": "Visualization"
+    },
+    "showLegends": {
+      "type": "bool",
+      "displayName": "Legend"
+    },
+    "showTargetLine": {
+      "type": "bool",
+      "displayName": "Target line"
+    },
+    "targetLineColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "currentLineColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "currentAreaShaded": {
+      "type": "bool",
+      "displayName": "Shade area"
+    },
+    "showXAxis": {
+      "type": "bool",
+      "displayName": "X-axis"
+    },
+    "xAxisFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "xAxisFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "xAxisFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "xAxisBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "xAxisItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "xAxisUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "showYAxis": {
+      "type": "bool",
+      "displayName": "Y-axis"
+    },
+    "yAxisFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "yAxisFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "yAxisFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "yAxisBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "yAxisItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "yAxisUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    }
+  }
+}

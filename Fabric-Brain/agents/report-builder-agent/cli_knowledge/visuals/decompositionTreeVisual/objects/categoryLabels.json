@@ -1,0 +1,28 @@
+﻿{
+  "data": {
+    "categoryLabelFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "categoryLabelFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "categoryLabelBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "categoryLabelItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "categoryLabelUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "categoryLabelFontColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+﻿{
+  "data": {
+    "visualType": "kpi",
+    "capabilityKey": "kpi",
+    "roles": {
+      "Indicator": {
+        "name": "Indicator",
+        "kind": "Measure",
+        "displayName": "Value",
+        "description": "The performance measure to plot, shown as a number"
+      },
+      "TrendLine": {
+        "name": "TrendLine",
+        "kind": "Grouping",
+        "displayName": "Trend axis",
+        "description": "The period"
+      },
+      "Goal": {
+        "name": "Goal",
+        "kind": "Measure",
+        "displayName": "Target",
+        "description": "Field containing target number"
+      }
+    },
+    "requiredRoles": [
+      "Indicator"
+    ],
+    "optionalRoles": [
+      "TrendLine",
+      "Goal"
+    ],
+    "maxPerRole": {
+      "Indicator": 1,
+      "TrendLine": 1,
+      "Goal": 2
+    },
+    "formattingObjects": [
+      "general",
+      "goals",
+      "indicator",
+      "lastDate",
+      "status",
+      "trendline"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

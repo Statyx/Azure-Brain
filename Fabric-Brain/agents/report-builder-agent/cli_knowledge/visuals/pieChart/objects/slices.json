@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "innerRadiusRatio": {
+      "type": "integer",
+      "displayName": "Inner radius"
+    },
+    "startAngle": {
+      "type": "integer",
+      "displayName": "Start angle"
+    }
+  }
+}

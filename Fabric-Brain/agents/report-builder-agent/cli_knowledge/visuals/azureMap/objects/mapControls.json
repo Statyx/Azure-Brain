@@ -1,0 +1,127 @@
+﻿{
+  "data": {
+    "defaultStyle": {
+      "type": "enum",
+      "values": [
+        "road",
+        "satellite",
+        "satellite_road_labels",
+        "grayscale_dark",
+        "night",
+        "grayscale_light",
+        "road_shaded_relief",
+        "blank",
+        "blank_accessible",
+        "high_contrast_dark",
+        "high_contrast_light"
+      ],
+      "displayName": "Default style",
+      "description": "Default style in which the map is displayed"
+    },
+    "showStylePicker": {
+      "type": "bool",
+      "displayName": "Style picker",
+      "description": "Allow report readers to change the map style"
+    },
+    "showLabels": {
+      "type": "bool",
+      "displayName": "Labels",
+      "description": "Display labels for map elements such as streets and region names."
+    },
+    "showNavigationControls": {
+      "type": "bool",
+      "displayName": "Navigation controls",
+      "description": "Allow report readers to zoom, rotate and change the pitch of the map"
+    },
+    "zoom": {
+      "type": "numeric",
+      "displayName": "Zoom level",
+      "description": "Controls the default zoom level of the map. Lower values show a wider area; higher values zoom in closer."
+    },
+    "centerLatitude": {
+      "type": "numeric",
+      "displayName": "Center latitude",
+      "description": "Default latitude at the center of the map"
+    },
+    "centerLongitude": {
+      "type": "numeric",
+      "displayName": "Center longitude",
+      "description": "Default longitude at the center of the map"
+    },
+    "heading": {
+      "type": "numeric",
+      "displayName": "Orientation",
+      "description": "Default orientation of the map in degrees, where 0 is north, 90 is east, 180 is south, and 270 is west"
+    },
+    "pitch": {
+      "type": "numeric",
+      "displayName": "Pitch",
+      "description": "Default tilt of the map in degrees between 0 and 60, where 0 is looking straight down at the map"
+    },
+    "autoZoom": {
+      "type": "bool",
+      "displayName": "Auto zoom",
+      "description": "Allow the map to automatically zoom over the data as the visual updates"
+    },
+    "autoZoomIncludesReferenceLayer": {
+      "type": "bool",
+      "displayName": "Include reference layer",
+      "description": "Include reference layer data when the map automatically zooms."
+    },
+    "worldWrap": {
+      "type": "bool",
+      "displayName": "World wrap",
+      "description": "Allow the user to pan the map horizontally infinitively"
+    },
+    "showSelectionControl": {
+      "type": "bool",
+      "displayName": "Selection Control",
+      "description": "This control lets you draw polygon areas on the map and retrieve all the data points that are within that area."
+    },
+    "geocodingCulture": {
+      "type": "enum",
+      "values": [
+        "",
+        "de-de",
+        "en-GB",
+        "en-US",
+        "es-ES",
+        "fr-FR",
+        "it-it",
+        "ja",
+        "ko",
+        "nl-BE",
+        "pt-BR",
+        "ru",
+        "zh-Hans",
+        "zh-Hant"
+      ],
+      "displayName": "Geocoding culture"
+    },
+    "showCountryRegionBorders": {
+      "type": "bool",
+      "displayName": "Country/Region boundary",
+      "description": "Display country/region boundaries on the map."
+    },
+    "showAdminDistrictBorders": {
+      "type": "bool",
+      "displayName": "State/Province boundary",
+      "description": "Display the borders for the first-level administrative divisions, such as state or province boundaries, on the map."
+    },
+    "showAdminDistrict2Borders": {
+      "type": "bool",
+      "displayName": "County boundary",
+      "description": "Display the borders for the second-level administrative divisions, such as county boundaries, on the map."
+    },
+    "showBuildingFootprints": {
+      "type": "bool",
+      "displayName": "Buildings",
+      "description": "Display building footprints on the map."
+    },
+    "showRoadDetails": {
+      "type": "bool",
+      "displayName": "Road details",
+      "description": "Adjust the level of detail for visible roads. Turning this off will reduce the number of roads shown on the map."
+    }
+  }
+}

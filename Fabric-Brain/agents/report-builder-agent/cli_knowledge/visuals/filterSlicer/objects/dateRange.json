@@ -1,0 +1,13 @@
+﻿{
+  "data": {
+    "includeToday": {
+      "type": "bool",
+      "displayName": "Include today"
+    },
+    "anchorDate": {
+      "type": "unknown",
+      "displayName": "Anchor date",
+      "description": "Select a date to reference when filtering visuals by a relative range of time. If an anchor date isn't specified, we'll use the current date."
+    }
+  }
+}

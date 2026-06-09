@@ -1,0 +1,55 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "barChart",
+                                 "bubbleLayer",
+                                 "categoryLabels",
+                                 "commonDataOptions",
+                                 "dataPoint",
+                                 "filledMap",
+                                 "general",
+                                 "heatMapLayer",
+                                 "labels",
+                                 "legend",
+                                 "mapControls",
+                                 "pathLayer",
+                                 "referenceLayer",
+                                 "tileLayer",
+                                 "traffic"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "barChart",
+                                     "bubbleLayer",
+                                     "categoryLabels",
+                                     "commonDataOptions",
+                                     "dataPoint",
+                                     "filledMap",
+                                     "general",
+                                     "heatMapLayer",
+                                     "labels",
+                                     "legend",
+                                     "mapControls",
+                                     "pathLayer",
+                                     "referenceLayer",
+                                     "tileLayer",
+                                     "traffic"
+                                 ]
+             }
+}

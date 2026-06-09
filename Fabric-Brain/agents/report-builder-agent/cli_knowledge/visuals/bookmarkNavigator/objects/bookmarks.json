@@ -1,0 +1,26 @@
+﻿{
+  "data": {
+    "bookmarkGroup": {
+      "type": "unknown",
+      "displayName": "Bookmark"
+    },
+    "allowDeselectionBookmark": {
+      "type": "bool",
+      "displayName": "Allow deselection",
+      "description": "Allow users to deselect buttons in the bookmark navigator"
+    },
+    "deselectionBookmark": {
+      "type": "unknown",
+      "displayName": "Launch on deselection",
+      "description": "Launch this bookmark when a user deselects a button in the bookmark navigator"
+    },
+    "hideDeselectedBookmark": {
+      "type": "bool",
+      "displayName": "Hide deselection bookmark",
+      "description": "Hide the deselection bookmark from the bookmark navigator"
+    },
+    "selectedBookmark": {
+      "type": "text"
+    }
+  }
+}

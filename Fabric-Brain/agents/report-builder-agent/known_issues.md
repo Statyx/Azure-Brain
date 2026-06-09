@@ -1,227 +1,177 @@
-# Known Issues — Report-Specific
+# Known Issues — PBIR Reports
 
-All report-related gotchas discovered during this project, with fixes.
+PBIR-specific gotchas, with detection and fix. For Legacy PBIX issues, see [`known_issues.legacy.md`](known_issues.legacy.md) — kept only for migration reference.
 
 ---
 
 ## Issue Table
 
 | # | Issue | Severity | Fix |
-|---|-------|----------|-----|
-| 1 | PBIR folder format renders blank | **CRITICAL** | Use Legacy PBIX format exclusively |
-| 2 | Missing prototypeQuery = empty visuals | **HIGH** | Add prototypeQuery with Version 2, From, Select |
-| 3 | `card` vs `cardVisual` confusion | HIGH | Always use `cardVisual` with `Data` bucket |
-| 4 | Card values clipped/overflow | MEDIUM | Set `calloutValue.fontSize: 14D` or `27D`, height ≥ **120px** |
-| 5 | Measure name mismatch = silent blank | **HIGH** | Exact match: case + whitespace sensitive |
-| 6 | Missing `layoutOptimization` | HIGH | Add `"layoutOptimization": 0` (integer) to report.json |
-| 7 | V1 definition.pbir schema fails | HIGH | Use V2 schema (2.0.0) with full XMLA connectionString |
-| 8 | Config not stringified | HIGH | `json.dumps(config_dict)`, not embedded object |
-| 9 | Filters not stringified | MEDIUM | `"[]"` string, not `[]` array |
-| 10 | Base theme missing = ugly default | LOW | Include CY26SU02.json in StaticResources part |
-| 11 | `updateDefinition` is full replace | MEDIUM | Re-send ALL parts, not just changed ones |
-| 12 | `getDefinition` is always async | MEDIUM | Even for small reports, returns 202 → poll |
-| 13 | `colorByCategory` not working via API | **HIGH** | Use Series projection instead (see below) |
-| 14 | All bars same color (Fluent blue) | **HIGH** | Add category to both `Category` AND `Series` projections |
-| 15 | Slicer height too small with title | **HIGH** | Height must be ≥75px with vcObjects.title enabled |
-| 16 | Card height inconsistent across pages | **HIGH** | ALL cards must be 120px — even on slicer pages |
-| 17 | Separator overlaps card bottom | MEDIUM | Gap formula: `separator_y = card_y + card_h + 8` |
-| 18 | Slicer missing styling (no shadow) | MEDIUM | Add vcObjects: background, dropShadow, border=false |
+|---|---|---|---|
+| 1 | Property values not wrapped as PBIR expressions | **CRITICAL** | Use `expr encode --kind ...` — every value goes inside `{"expr":{"Literal":{"Value":...}}}` or `{"solid":{"color":...}}` |
+| 2 | Hex color without single-quote padding | **HIGH** | `"'#118DFF'"` not `"#118DFF"` |
+| 3 | Number missing `D` suffix, integer missing `L` suffix | **HIGH** | `100D` for doubles, `12L` for integers |
+| 4 | Page folder missing from `pages.json.pageOrder` | **HIGH** | Page becomes invisible in tabs |
+| 5 | Visual references non-existent measure/column | **HIGH** | Visual renders blank silently — check `nativeQueryRef` against semantic model |
+| 6 | Formatting object name with `(selector: ...)` suffix | MEDIUM | Strip suffix when calling `describe-object`; use `objectsBase[]` in `formatting.json` |
+| 7 | `updateDefinition` missing a file | MEDIUM | Full-replace: omit a file and it's deleted from the report |
+| 8 | Property put under `objects` instead of `visualContainerObjects` (or vice versa) | MEDIUM | Container styling (title, background, …) goes under `visualContainerObjects`; visual-specific properties (labels, axis, …) go under `objects` |
+| 9 | Slicer/textbox visual carries a non-empty query | LOW | Strip `query` for non-data visuals (`textbox`, `shape`, `image`, `basicShape`, `actionButton`, `bookmarkNavigator`, `pageNavigator`) |
+| 10 | `$schema` URL points to an outdated version | LOW | Schemas use semver; latest minor is forward-compatible. Re-pin from a known-valid report periodically. |
+| 11 | Visual position off-canvas | MEDIUM | `validate` flags this; ensure `x + width ≤ canvasWidth` and `y + height ≤ canvasHeight` |
+| 12 | UUID for `visualId` collides across pages | LOW | Use full UUIDs; the CLI tolerates collisions but `getDefinition` can return weird ordering |
+| 13 | `actionButton` without action target | MEDIUM | Bind `action` to `PageNavigation`, `Bookmark`, `Drill`, or `Url` — otherwise click does nothing |
+| 14 | Theme file references colors not in `dataColors[]` | LOW | `ThemeDataColor.ColorId` is 1-based and clamps to `dataColors.length` — extras are ignored |
+| 15 | Async `updateDefinition` 202 with no `Location` header | MEDIUM | Use the `x-ms-operation-id` response header instead; poll `/v1/operations/{id}` |
+| 16 | Card callout height < 120 px clips numbers | MEDIUM | Always height ≥ 120 px AND set `value.fontSize` explicitly on cardVisual (NOT `cardCalloutArea.fontSize` — that property does not exist; `cardCalloutArea` only owns padding/background/cornerRadius) |
+| 17 | `displayName` differs from `name` in `page.json` | LOW | OK — `name` is the folder ID, `displayName` is the tab label |
+| 18 | Filter file (`filters.json`) at wrong scope | LOW | Report-scoped: `definition/filters.json`. Page-scoped: `pages/<id>/filters.json`. Visual-scoped: `pages/<id>/visuals/<vid>/filters.json` |
 
 ---
 
 ## Detailed Fixes
 
-### 1. PBIR Folder Format Renders Blank
+### 1. Property values must be PBIR expressions
 
-**THE single biggest issue in this project.**
+**Symptom**: Visual renders but the property has no effect (color stays default, title stays empty, etc.).
 
-- **Symptom**: Report created, `getDefinition` returns all parts, but visuals are **completely blank** in portal
-- **Cause**: PBIR folder format (`definition/pages/{page}/visuals/{vis}/visual.json`) is accepted by the API but not rendered by the Fabric viewer
-- **Fix**: Use **Legacy PBIX format** (`report.json` at root with `sections[].visualContainers[]`)
-- **Detection**: If your definition has paths like `definition/pages/*/visuals/*/visual.json`, you're using the wrong format
+**Cause**: Raw JSON value placed where the schema expects an expression envelope.
 
-### 2. Missing prototypeQuery
+**Wrong**:
+```json
+"title": [{ "properties": { "text": "Total Revenue" }}]
+```
 
-- **Symptom**: Visual renders as empty box with title but no data
-- **Cause**: No `prototypeQuery` in the visual config
-- **Fix**: Every data visual MUST have:
-  ```json
-  "prototypeQuery": {
-    "Version": 2,
-    "From": [{"Name": "f", "Entity": "table_name", "Type": 0}],
-    "Select": [/* measure/column references */]
-  }
-  ```
-- **Exception**: `textbox`, `shape`, `image` don't need prototypeQuery
+**Right**:
+```json
+"title": [{ "properties": { "text": { "expr": { "Literal": { "Value": "'Total Revenue'" }}}}}]
+```
 
-### 3. `card` vs `cardVisual`
+When in doubt, round-trip through the CLI:
+```powershell
+powerbi-report-author expr encode --kind string "Total Revenue"
+```
 
-- **Symptom**: Card visual doesn't render or looks broken
-- **Fix**: Use `"visualType": "cardVisual"` (new card)
-- **Bucket**: `Data` (not `Values`)
-- The old `card` visual uses `Values` bucket and is deprecated
+### 2. Hex colors need single-quote padding
 
-### 4. Card Values Clipped
+**Symptom**: Color reverts to default theme color.
 
-- **Symptom**: KPI numbers cut off or overflow container
-- **Fix**: 
-  - Set `calloutValue.fontSize` to `27D` (27pt) in objects
-  - Ensure card height ≥ 120px
-  - Default font size is enormous and always clips
+**Wrong**: `"Value": "#118DFF"` — interpreted as something other than a string literal.
 
-### 5. Measure Name Mismatch
+**Right**: `"Value": "'#118DFF'"` — note the single quotes inside the JSON string.
 
-- **Symptom**: Visual blank despite correct structure
-- **Cause**: `Total_Revenue` in code, `Total Revenue` in model (underscore vs space)
-- **Fix**: Names are **case-sensitive** and **whitespace-sensitive**
-- **Verification**: Query model.bim or run `EVALUATE` DAX query to list exact measure names
+### 3. Number/integer suffixes
 
-### 6. Missing layoutOptimization
+| Want | Wrong | Right |
+|---|---|---|
+| Double `100.5` | `"100.5"` | `"100.5D"` |
+| Integer `12` | `"12"` | `"12L"` |
+| Percentage `25%` | `"25"` | `"25L"` (it's an int in PBIR) |
 
-- **Symptom**: `CorruptedPayload` or "Required properties are missing" error
-- **Fix**: Add `"layoutOptimization": 0` to report.json (integer, not string)
-- Legacy format uses integer `0`; PBIR uses string `"None"`
+### 4. Page invisible despite `page.json` existing
 
-### 7. V1 definition.pbir
+**Cause**: `pages.json.pageOrder` doesn't include the folder name.
 
-- **Symptom**: Report doesn't connect to semantic model
-- **Fix**: Always use V2 schema (`2.0.0`) with `byConnection` and full XMLA connection string
-- V1 requires `pbiServiceModelId`, `pbiModelVirtualServerName` — nearly impossible to get right
+**Fix**:
+```json
+{
+  "pageOrder": ["overview", "pnl", "<missing_page_here>"]
+}
+```
 
-### 8. Config Not Stringified
+### 5. Visual blank — measure name mismatch
 
-- **Symptom**: API rejects definition or visuals render incorrectly
-- **Fix**: Both `visualContainer.config` and `section.config` must be `json.dumps(dict)`, not embedded objects
-- **Common mistake**: Writing `"config": {...}` instead of `"config": "{\"name\":\"...\"}"` 
+**Symptom**: Visual container renders, query runs, but data area is empty.
 
-### 9. Filters Not Stringified
+**Cause**: `nativeQueryRef` doesn't match the measure name in the semantic model. **Case + whitespace sensitive.**
 
-- **Symptom**: Subtle rendering issues
-- **Fix**: `"filters": "[]"` (stringified empty array), not `"filters": []`
+**Fix**:
+```powershell
+# Verify exact name
+az rest --method POST --url "https://api.fabric.microsoft.com/v1/workspaces/<ws>/semanticModels/<sm>/queries" --body '{ "queries": [{ "query": "EVALUATE DISTINCT(VALUES(''SELECTEDMEASURE''))" }]}'
+```
 
-### 10. Base Theme Missing
+Or load the model with `dax_queries.md` patterns from `agents/semantic-model-agent/`.
 
-- **Symptom**: Report works but uses ugly default theme
-- **Fix**: Include base theme in API parts:
-  ```json
-  {"path": "StaticResources/SharedResources/BaseThemes/CY26SU02.json", "payload": "<base64>", "payloadType": "InlineBase64"}
-  ```
-- Extract from existing report via `getDefinition` if you don't have the theme file
+### 6. `FORMATTING_OBJECT_UNKNOWN` with decorated names
 
-### 11. updateDefinition Is Full Replace
+**Cause**: `formatting.json.objects[]` sometimes contains names like `"fill (selector: default|hover|selected|disabled)"`. The CLI `describe-object` rejects the decorated form.
 
-- **Symptom**: After update, some parts disappear (e.g., theme gone)
-- **Fix**: Always send ALL parts (report.json, definition.pbir, theme) in `updateDefinition`
-- There is no partial patch — the entire definition is replaced
+**Fix**: Use the **base name** only (just `fill`). Each `cli_knowledge/visuals/<type>/formatting.json` has an `objectsBase[]` array with deduped, stripped names — use that for code generation.
 
-### 12. getDefinition Is Always Async
+### 7. `updateDefinition` is a full replace
 
-- **Symptom**: Expecting 200 with body, getting 202 with no body
-- **Fix**: Always poll `x-ms-operation-id` from 202 response headers, then `GET /operations/{id}/result`
+**Symptom**: A file you didn't touch is missing from the report after redeployment.
 
-### 13. colorByCategory Does NOT Work via API
+**Cause**: `updateDefinition` replaces the entire `parts[]` set. Any file not in the new `parts[]` is deleted.
 
-- **Symptom**: Setting `"dataPoint": [{"properties": {"colorByCategory": _lit("true")}}]` in `objects` has no effect — all bars/dots stay the same first-theme color
-- **Cause**: `dataPoint.colorByCategory` is ignored when deploying report definitions via API (Fabric REST). It only works when set interactively in the portal
-- **Fix**: Add the **same category column** to the `Series` projection bucket:
-  ```json
-  "projections": {
-    "Category": [{"queryRef": "dim_disciplines.discipline_name"}],
-    "Y": [{"queryRef": "fact_benchmarks.Total Benchmark Lines"}],
-    "Series": [{"queryRef": "dim_disciplines.discipline_name"}]
-  }
-  ```
-  This forces PBI to assign a different Fluent 2 theme color per category value.
-- **Side effect**: A redundant legend appears (duplicates axis labels). Hide it:
-  ```json
-  "legend": [{"properties": {"show": _lit("false")}}]
-  ```
-- **Applies to**: `clusteredBarChart`, `clusteredColumnChart`, `scatterChart`, `donutChart`, and other chart types with a single data series
+**Fix**: Always walk the entire `<Report>.Report/` directory and include every file in the parts array. See [`templates/deploy_report.py`](templates/deploy_report.py).
 
-### 14. All Bars Same Color (Single-Series Problem)
+### 8. `objects` vs `visualContainerObjects`
 
-- **Symptom**: Every bar in a bar chart is the same blue (#118DFF), no matter how many categories
-- **Cause**: When a bar chart has only one measure in `Y` and no `Series`, PBI treats it as a single data series — all bars get the first theme color
-- **Fix**: Same as Issue #13 — add category column to `Series` projection
+Decision rule:
 
-### 15. Slicer Height Too Small With Title
+| Property type | Where it goes |
+|---|---|
+| Title, background, border, dropShadow, padding, spacing, header, tooltip, link, lockAspect, stylePreset, divider, subTitle | `visualContainerObjects` |
+| Anything visual-specific: labels, axis, legend, dataPoint, cardCalloutArea, plotArea, valueAxis, categoryAxis, smallMultiplesLayout, etc. | `objects` |
 
-- **Symptom**: Slicer dropdown appears crushed, barely clickable, or title overlaps the dropdown control
-- **Cause**: When `vcObjects.title.show: true`, the title renders INSIDE the visual height. At 55px, the title takes ~22px, leaving only ~33px for the dropdown — unusable.
-- **Fix**: Set slicer height to **75px** minimum when using `vcObjects.title`. Without title, 50px is OK.
-- **Height budget**:
-  ```
-  title zone     = 22px (font 10D + padding)
-  dropdown zone  = 40px (control + internal padding)  
-  container pad  = 8px
-  total          = 70px minimum, 75px recommended
-  ```
-- **Detection**: Any `_slicer()` call with `h < 70` and `vcObjects.title.show: true`
+The exhaustive lists are in [`cli_knowledge/visuals/<type>/formatting.json`](cli_knowledge/visuals/) — fields `objects[]` and `visualContainerObjects[]`.
 
-### 16. Card Height Inconsistent Across Pages
+### 11. Off-canvas visuals
 
-- **Symptom**: Category label text (e.g., "Anomaly Count", "Composite Score") is cut off at the bottom on some pages but not others
-- **Cause**: Pages with slicers were given 100px card heights to save space, while non-slicer pages used 120px. The 100px is technically enough (formula = 99px), but with ZERO margin the categoryLabel clips.
-- **Fix**: **ALL cards MUST be 120px** regardless of page type. If vertical space is tight on slicer pages, shrink the charts below instead.
-- **Rule**: When adding slicers to a page, cascade +20px to cards/charts below but KEEP card height at 120px.
-- **Vertical chain for slicer pages**:
-  ```
-  slicers:    y=8,   h=75  → bottom=83
-  cards:      y=93,  h=120 → bottom=213
-  separator:  y=221
-  charts:     y=229
-  ```
+**Detection**: `powerbi-report-author validate` reports `POSITION_OUT_OF_BOUNDS`.
 
-### 17. Separator Overlaps Card Bottom
+**Fix**: ensure `x + width ≤ width` and `y + height ≤ height` from `page.json`. For 1280×720: max visual right edge is 1280, max bottom is 720.
 
-- **Symptom**: A thin line appears to cut through the bottom of card visuals
-- **Cause**: Separator `y` value is less than `card_y + card_h`. Common when cascading layout changes (e.g., increasing card height without adjusting separator).
-- **Fix**: Formula: `separator_y = max(card_y + card_h for all cards in row) + 8`
-- **Self-test**: Run `_audit_layout.py` which checks `gap >= 4px` between card bottoms and next separator
+### 13. `actionButton` without a target
 
-### 18. Slicer Missing Container Styling
+**Symptom**: Button renders but clicking does nothing.
 
-- **Symptom**: Slicers look like plain floating dropdowns, disconnected from the card/chart grid. No background, no shadow.
-- **Cause**: The `_slicer()` function had no `vcObjects` for background, border, or dropShadow — only a bare title.
-- **Fix**: Add full vcObjects to `_slicer()` matching card/chart styling:
-  ```json
-  "vcObjects": {
-    "title": [{...fontSize: "10D", fontColor: "#616161"...}],
-    "visualHeader": [{"show": false}],
-    "background": [{"show": true}],
-    "border": [{"show": false}],
-    "dropShadow": [{...same as cards...}]
-  }
-  ```
-- **Visual impact**: Dramatic — slicers now look like integrated dashboard elements instead of floating orphans
+**Fix**: Set the `action` property:
+```json
+"action": [{ "properties": {
+  "type": { "expr": { "Literal": { "Value": "'PageNavigation'" }}},
+  "navigateTo": { "expr": { "Literal": { "Value": "'overview'" }}}
+}}]
+```
+
+Action types: `PageNavigation`, `Bookmark`, `Drill`, `Url`, `Q&A`, `WebUrl`.
+
+### 15. Async `updateDefinition` polling
+
+```powershell
+$resp = Invoke-RestMethod -Uri "https://api.fabric.microsoft.com/v1/workspaces/$wsId/reports/$id/updateDefinition" `
+                          -Method POST -Headers @{ Authorization = "Bearer $token" } `
+                          -Body $payload -ContentType "application/json"
+# Look for x-ms-operation-id header in the 202 response
+$opId = $resp.Headers["x-ms-operation-id"]
+do {
+    Start-Sleep -Seconds 3
+    $status = Invoke-RestMethod -Uri "https://api.fabric.microsoft.com/v1/operations/$opId" -Headers @{ Authorization = "Bearer $token" }
+} while ($status.status -in @("NotStarted", "Running"))
+if ($status.status -ne "Succeeded") { throw $status.error }
+```
 
 ---
 
 ## Debugging Checklist
 
-When a report isn't rendering correctly:
+When a report misbehaves, walk this list in order:
 
-```
-□ 1. Is format Legacy PBIX? (report.json at root, not definition/pages/...)
-□ 2. Is layoutOptimization: 0 present in report.json?
-□ 3. Is definition.pbir using V2 schema with connectionString?
-□ 4. Does connectionString contain correct workspace name + model GUID?
-□ 5. Is config stringified in every visualContainer?
-□ 6. Is config stringified in every section?
-□ 7. Are filters stringified ("[]" not [])?
-□ 8. Does every data visual have prototypeQuery?
-□ 9. Do prototypeQuery measure/column names exactly match model?
-□ 10. Is visualType correct? (cardVisual not card)
-□ 11. Is calloutValue.fontSize set for cards?
-□ 12. Is card height ≥ 120px?
-□ 13. Is base theme included in definition parts?
-□ 14. Do position values match between container level and layouts[0].position?
-□ 15. Are bar/scatter charts multi-colored? (Category col in Series projection)
-□ 16. Are Fluent 2 structural colors applied? (#252423 text, #c7c8ce border, #cccccc shadow)
-□ 17. Does each page have an accent bar at y=0?
-□ 18. Are card heights CONSISTENT (120px) across ALL pages? (slicer pages too)
-□ 19. Are slicer heights ≥75px when using vcObjects.title?
-□ 20. Do slicers have background + dropShadow vcObjects? (matching cards)
-□ 21. Is separator_y > max(card_bottom) with ≥4px gap?
-□ 22. Run _audit_layout.py — 0 errors, 0 warnings?
-```
+1. **`powerbi-report-author validate <Report>.Report`** — fix every `error`, review every `warning`
+2. Compare your visual's JSON against [`cli_knowledge/visuals/<type>/effective.json`](cli_knowledge/visuals/) — does the property exist? at the right path?
+3. Round-trip each suspicious value through `expr encode --kind ...`
+4. Inspect a known-good report with `preview-visuals` — compare structure
+5. Use `getDefinition` after deployment — does the round-tripped definition still contain your changes? If Fabric stripped them, they were invalid.
+
+---
+
+## Cross-References
+
+- Mandatory rules → [`instructions.md`](instructions.md)
+- PBIR folder + payload → [`report_structure.md`](report_structure.md)
+- Expression encoding → [`themes_styling.md`](themes_styling.md)
+- Property catalog → [`cli_knowledge/`](cli_knowledge/)
+- Legacy issues (kept for migration only) → [`known_issues.legacy.md`](known_issues.legacy.md)
+- Global brain known issues → [`../../known_issues.md`](../../known_issues.md)

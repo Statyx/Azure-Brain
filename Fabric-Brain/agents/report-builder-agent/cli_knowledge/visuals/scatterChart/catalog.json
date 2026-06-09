@@ -1,0 +1,92 @@
+﻿{
+  "data": {
+    "visualType": "scatterChart",
+    "capabilityKey": "scatterChart",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "Values",
+        "description": "A point is plotted for each value in this field"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "X": {
+        "name": "X",
+        "kind": "GroupingOrMeasure",
+        "displayName": "X Axis",
+        "description": "Values to place on the horizontal axis"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "GroupingOrMeasure",
+        "displayName": "Y Axis",
+        "description": "Values to place on the vertical axis"
+      },
+      "Size": {
+        "name": "Size",
+        "kind": "Measure",
+        "displayName": "Size",
+        "description": "The measure to use for relative bubble sizing"
+      },
+      "Play": {
+        "name": "Play",
+        "kind": "Grouping",
+        "displayName": "Play Axis"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "X",
+      "Y"
+    ],
+    "optionalRoles": [
+      "Category",
+      "Series",
+      "Size",
+      "Play",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Category": 1,
+      "Series": 1,
+      "Y": 1,
+      "Size": 1,
+      "Play": 1
+    },
+    "formattingObjects": [
+      "bubbles",
+      "categoryAxis",
+      "categoryLabels",
+      "clustering",
+      "colorBorder",
+      "colorByCategory",
+      "currentFrameIndex",
+      "dataPoint",
+      "fillPoint",
+      "general",
+      "legend",
+      "markers",
+      "plotArea",
+      "plotAreaShading",
+      "ratioLine",
+      "referenceLine",
+      "trend",
+      "valueAxis",
+      "xAxisReferenceLine",
+      "y1AxisReferenceLine",
+      "zoom"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

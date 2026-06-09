@@ -1,0 +1,55 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "calendarButton",
+                                 "data",
+                                 "date",
+                                 "dateRange",
+                                 "dateRangeText",
+                                 "general",
+                                 "header",
+                                 "items",
+                                 "numericInputStyle",
+                                 "pendingChangesIcon",
+                                 "relativeText",
+                                 "searchBox",
+                                 "selection",
+                                 "selectionIcon",
+                                 "slider"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "calendarButton",
+                                     "data",
+                                     "date",
+                                     "dateRange",
+                                     "dateRangeText",
+                                     "general",
+                                     "header",
+                                     "items",
+                                     "numericInputStyle",
+                                     "pendingChangesIcon",
+                                     "relativeText",
+                                     "searchBox",
+                                     "selection",
+                                     "selectionIcon",
+                                     "slider"
+                                 ]
+             }
+}

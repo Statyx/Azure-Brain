@@ -1,0 +1,9 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    }
+  }
+}

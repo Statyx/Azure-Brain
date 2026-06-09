@@ -1,0 +1,37 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default",
+      "hover",
+      "press",
+      "selected",
+      "mixed"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "position": {
+      "type": "enum",
+      "values": [
+        "Left",
+        "Right",
+        "Bottom",
+        "Top"
+      ],
+      "displayName": "Position"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "width": {
+      "type": "numeric",
+      "displayName": "Width"
+    }
+  }
+}

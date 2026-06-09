@@ -1,0 +1,37 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "general",
+                                 "goals",
+                                 "indicator",
+                                 "lastDate",
+                                 "status",
+                                 "trendline"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "general",
+                                     "goals",
+                                     "indicator",
+                                     "lastDate",
+                                     "status",
+                                     "trendline"
+                                 ]
+             }
+}

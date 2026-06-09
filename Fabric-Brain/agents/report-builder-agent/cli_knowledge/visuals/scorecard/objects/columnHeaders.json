@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "foregroundColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    }
+  }
+}

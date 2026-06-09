@@ -1,0 +1,100 @@
+﻿{
+  "data": {
+    "_selectorHint": [
+      "default"
+    ],
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "fillColor": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "image": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    },
+    "imageTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "imageSplitTransparency": {
+      "type": "bool"
+    },
+    "imageBlur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "imageContrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "imageData": {
+      "type": "text",
+      "displayName": "Data"
+    },
+    "imageEffects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "imageExposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "imageFit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "imageHeight": {
+      "type": "integer",
+      "displayName": "Image height"
+    },
+    "imageSaturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "imageShow": {
+      "type": "bool",
+      "displayName": "Add image"
+    },
+    "imageType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image source"
+    },
+    "imageUrl": {
+      "type": "unknown",
+      "displayName": "Image URL"
+    }
+  }
+}

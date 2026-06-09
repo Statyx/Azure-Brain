@@ -1,0 +1,20 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "color": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "shadowBlur": {
+      "type": "numeric",
+      "displayName": "Blur"
+    }
+  }
+}

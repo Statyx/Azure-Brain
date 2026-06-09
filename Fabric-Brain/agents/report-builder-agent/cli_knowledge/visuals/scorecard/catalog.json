@@ -1,0 +1,20 @@
+﻿{
+  "data": {
+    "visualType": "scorecard",
+    "capabilityKey": "scorecard",
+    "roles": {},
+    "requiredRoles": [],
+    "optionalRoles": [],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "columnHeaders",
+      "detailsPane",
+      "goals",
+      "header",
+      "scorecard",
+      "visualization"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

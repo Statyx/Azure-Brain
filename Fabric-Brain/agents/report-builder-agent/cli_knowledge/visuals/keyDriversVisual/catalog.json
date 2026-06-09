@@ -1,0 +1,42 @@
+﻿{
+  "data": {
+    "visualType": "keyDriversVisual",
+    "capabilityKey": "keyDriversVisual",
+    "roles": {
+      "Target": {
+        "name": "Target",
+        "kind": "GroupingOrMeasure",
+        "displayName": "Analyze",
+        "description": "A field you want to analyze. Summarized fields and measures are evaluated at the level set by the 'Explain by' and 'Expand by' fields."
+      },
+      "ExplainBy": {
+        "name": "ExplainBy",
+        "kind": "GroupingOrMeasure",
+        "displayName": "Explain by",
+        "description": "Fields to be considered as influencers for 'Analyze'."
+      },
+      "Details": {
+        "name": "Details",
+        "kind": "Grouping",
+        "displayName": "Expand by",
+        "description": "Refine the level at which measures are evaluated when 'Analyze' is a summarized field or a measure. 'Expand by' fields are never considered as influencers for 'Analyze'."
+      }
+    },
+    "requiredRoles": [],
+    "optionalRoles": [
+      "Target",
+      "ExplainBy",
+      "Details"
+    ],
+    "maxPerRole": {
+      "Target": 1
+    },
+    "formattingObjects": [
+      "keyDrivers",
+      "keyDriversDrillVisual",
+      "keyInfluencersVisual"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

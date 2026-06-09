@@ -1,0 +1,156 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "altText": {
+      "type": "formatting",
+      "displayName": "Alt text"
+    },
+    "addBackground": {
+      "type": "bool",
+      "displayName": "Add background"
+    },
+    "backgroundFillColor": {
+      "type": "fill",
+      "displayName": "Fill color"
+    },
+    "backgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "image": {
+      "type": "image",
+      "subProperties": {
+        "name": {
+          "type": "expr",
+          "required": true
+        },
+        "url": {
+          "type": "expr",
+          "required": true
+        },
+        "scaling": {
+          "type": "expr",
+          "required": false
+        }
+      }
+    },
+    "imageBlur": {
+      "type": "integer",
+      "displayName": "Blur"
+    },
+    "imageContrast": {
+      "type": "integer",
+      "displayName": "Contrast"
+    },
+    "imageData": {
+      "type": "text",
+      "displayName": "Data"
+    },
+    "imageDataFit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "imageEffects": {
+      "type": "bool",
+      "displayName": "Image effects"
+    },
+    "imageExposure": {
+      "type": "integer",
+      "displayName": "Exposure"
+    },
+    "imageHeight": {
+      "type": "integer",
+      "displayName": "Image height"
+    },
+    "imageSaturation": {
+      "type": "integer",
+      "displayName": "Saturation"
+    },
+    "imageTransparency": {
+      "type": "numeric",
+      "displayName": "Image transparency",
+      "description": "Background image transparency"
+    },
+    "imageType": {
+      "type": "enum",
+      "values": [
+        "image",
+        "imageUrl",
+        "imageData"
+      ],
+      "displayName": "Image source"
+    },
+    "imageUrl": {
+      "type": "unknown",
+      "displayName": "Image URL"
+    },
+    "imageUrlFit": {
+      "type": "enum",
+      "values": [
+        "Fit",
+        "Stretch",
+        "Fill",
+        "Normal"
+      ],
+      "displayName": "Image fit"
+    },
+    "paddingUniform": {
+      "type": "integer",
+      "displayName": "Uniform padding"
+    },
+    "paddingIndividual": {
+      "type": "bool",
+      "displayName": "Individual padding"
+    },
+    "paddingLeft": {
+      "type": "integer",
+      "displayName": "Left margin"
+    },
+    "paddingRight": {
+      "type": "integer",
+      "displayName": "Right margin"
+    },
+    "paddingTop": {
+      "type": "integer",
+      "displayName": "Top margin"
+    },
+    "paddingBottom": {
+      "type": "integer",
+      "displayName": "Bottom margin"
+    },
+    "rectangleRoundedCurve": {
+      "type": "integer",
+      "displayName": "Corner radius"
+    },
+    "rectangleRoundedCurveCustomStyle": {
+      "type": "bool",
+      "displayName": "Individual corners"
+    },
+    "rectangleRoundedCurveLeftBottom": {
+      "type": "integer",
+      "displayName": "Bottom left corner"
+    },
+    "rectangleRoundedCurveLeftTop": {
+      "type": "integer",
+      "displayName": "Top left corner"
+    },
+    "rectangleRoundedCurveRightBottom": {
+      "type": "integer",
+      "displayName": "Bottom right corner"
+    },
+    "rectangleRoundedCurveRightTop": {
+      "type": "integer",
+      "displayName": "Top right corner"
+    }
+  }
+}

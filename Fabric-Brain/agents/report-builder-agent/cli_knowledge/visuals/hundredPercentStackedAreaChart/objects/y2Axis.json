@@ -1,0 +1,107 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "secLogAxisScale": {
+      "type": "bool",
+      "displayName": "Logarithmic scale"
+    },
+    "secAxisLabel": {
+      "type": "unknown",
+      "displayName": "Y-Axis (Line)"
+    },
+    "secStart": {
+      "type": "numeric",
+      "displayName": "Start",
+      "description": "Enter a starting value (optional)"
+    },
+    "secEnd": {
+      "type": "numeric",
+      "displayName": "End",
+      "description": "Enter an ending value (optional)"
+    },
+    "secShowAxisTitle": {
+      "type": "bool",
+      "displayName": "Title",
+      "description": "Title for the Y-axis"
+    },
+    "secAxisStyle": {
+      "type": "enum",
+      "values": [
+        "showTitleOnly",
+        "showUnitOnly",
+        "showBoth"
+      ],
+      "displayName": "Style"
+    },
+    "secRoundRange": {
+      "type": "bool",
+      "displayName": "Round range",
+      "description": "Round range limits to the nearest multiple."
+    },
+    "secLabelColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "secFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "secFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "secBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "secItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "secUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "secLabelDisplayUnits": {
+      "type": "formatting",
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "secLabelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "secTitleColor": {
+      "type": "fill",
+      "displayName": "Title color"
+    },
+    "secTitleFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "secTitleFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "secTitleBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "secTitleItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "secTitleUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "secTitleText": {
+      "type": "text",
+      "displayName": "Axis title"
+    }
+  }
+}

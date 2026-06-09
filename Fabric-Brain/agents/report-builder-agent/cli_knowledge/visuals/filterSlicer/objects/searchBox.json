@@ -1,0 +1,17 @@
+﻿{
+  "data": {
+    "outlineStyle": {
+      "type": "unknown",
+      "displayName": "Outline"
+    },
+    "borderColor": {
+      "type": "fill",
+      "displayName": "Outline color",
+      "description": "Color of the outline"
+    },
+    "background": {
+      "type": "fill",
+      "displayName": "Background"
+    }
+  }
+}

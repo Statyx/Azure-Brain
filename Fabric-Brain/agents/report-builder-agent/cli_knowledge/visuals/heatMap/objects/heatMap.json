@@ -1,0 +1,37 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "filterRadius": {
+      "type": "numeric",
+      "displayName": "Radius"
+    },
+    "transparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "unit": {
+      "type": "enum",
+      "values": [
+        "pixels",
+        "meters"
+      ],
+      "displayName": "Units"
+    },
+    "color0": {
+      "type": "fill",
+      "displayName": "0% gradient stop"
+    },
+    "color50": {
+      "type": "fill",
+      "displayName": "50% gradient stop"
+    },
+    "color100": {
+      "type": "fill",
+      "displayName": "100% gradient stop"
+    }
+  }
+}

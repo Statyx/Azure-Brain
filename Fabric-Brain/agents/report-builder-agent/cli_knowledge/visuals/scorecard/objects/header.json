@@ -1,0 +1,29 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "showTitle": {
+      "type": "bool",
+      "displayName": "Show title and subtitle"
+    },
+    "showToolbar": {
+      "type": "bool",
+      "displayName": "Show toolbar"
+    },
+    "showCards": {
+      "type": "bool",
+      "displayName": "Cards"
+    },
+    "foregroundColor": {
+      "type": "fill",
+      "displayName": "Font color"
+    },
+    "backgroundColor": {
+      "type": "fill",
+      "displayName": "Background color",
+      "description": "Background color of the cells"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+﻿{
+  "data": {
+    "visualType": "ribbonChart",
+    "capabilityKey": "ribbonChart",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "X-axis",
+        "description": "Fields to place on the horizontal or vertical axis"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "Measure",
+        "displayName": "Y-axis",
+        "description": "The numeric amounts to plot"
+      },
+      "Rows": {
+        "name": "Rows",
+        "kind": "Grouping",
+        "displayName": "Small multiples",
+        "description": "Split your visual into multiple, smaller visuals based on your selected fields"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Category",
+      "Y"
+    ],
+    "optionalRoles": [
+      "Series",
+      "Rows",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Series": 1
+    },
+    "formattingObjects": [
+      "annotationTemplate",
+      "categoryAxis",
+      "dataPoint",
+      "error",
+      "filters",
+      "general",
+      "labels",
+      "layout",
+      "legend",
+      "plotArea",
+      "ribbonBands",
+      "smallMultiplesLayout",
+      "subheader",
+      "totals",
+      "trend",
+      "valueAxis",
+      "xAxisReferenceLine",
+      "y1AxisReferenceLine",
+      "zoom"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

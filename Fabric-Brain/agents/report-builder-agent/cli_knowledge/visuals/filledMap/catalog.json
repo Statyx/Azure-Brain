@@ -1,0 +1,66 @@
+﻿{
+  "data": {
+    "visualType": "filledMap",
+    "capabilityKey": "filledMap",
+    "roles": {
+      "Category": {
+        "name": "Category",
+        "kind": "Grouping",
+        "displayName": "Location",
+        "description": "The locations to plot"
+      },
+      "Series": {
+        "name": "Series",
+        "kind": "Grouping",
+        "displayName": "Legend",
+        "description": "The categorical field to show for color"
+      },
+      "Y": {
+        "name": "Y",
+        "kind": "Measure",
+        "displayName": "Latitude",
+        "description": "Use to override the latitude of locations"
+      },
+      "X": {
+        "name": "X",
+        "kind": "Measure",
+        "displayName": "Longitude",
+        "description": "Use to override the longitude of locations"
+      },
+      "Tooltips": {
+        "name": "Tooltips",
+        "kind": "Measure",
+        "displayName": "Tooltips",
+        "description": "Add additional data fields that people can see in the tooltip when they hover on part of this visualization."
+      }
+    },
+    "requiredRoles": [
+      "Category"
+    ],
+    "optionalRoles": [
+      "Series",
+      "Y",
+      "X",
+      "Tooltips"
+    ],
+    "maxPerRole": {
+      "Series": 1,
+      "Y": 1,
+      "X": 1
+    },
+    "formattingObjects": [
+      "categoryLabels",
+      "dataPoint",
+      "general",
+      "labels",
+      "legend",
+      "mapControls",
+      "mapStyles",
+      "stroke"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": true,
+    "deprecatedReason": "Legacy Bing Maps filled map visual - replaced by Azure Maps",
+    "preferredAlternative": "azureMap"
+  }
+}

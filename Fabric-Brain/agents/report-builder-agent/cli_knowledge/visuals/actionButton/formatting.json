@@ -1,0 +1,41 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "fill (selector: default|hover|selected|disabled)",
+                                 "glow (selector: default|hover|selected|disabled)",
+                                 "icon (selector: default|hover|selected|disabled)",
+                                 "outline (selector: default|hover|selected|disabled)",
+                                 "rotation",
+                                 "shadow (selector: default|hover|selected|disabled)",
+                                 "shape",
+                                 "text (selector: default|hover|selected|disabled)"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "fill",
+                                     "glow",
+                                     "icon",
+                                     "outline",
+                                     "rotation",
+                                     "shadow",
+                                     "shape",
+                                     "text"
+                                 ]
+             }
+}

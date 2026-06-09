@@ -1,0 +1,41 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "analysis",
+                                 "categoryLabels",
+                                 "dataBars",
+                                 "dataLabels",
+                                 "general",
+                                 "insights",
+                                 "levelHeader",
+                                 "tree"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "analysis",
+                                     "categoryLabels",
+                                     "dataBars",
+                                     "dataLabels",
+                                     "general",
+                                     "insights",
+                                     "levelHeader",
+                                     "tree"
+                                 ]
+             }
+}

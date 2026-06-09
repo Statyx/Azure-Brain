@@ -1,0 +1,31 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "keyDrivers",
+                                 "keyDriversDrillVisual",
+                                 "keyInfluencersVisual"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "keyDrivers",
+                                     "keyDriversDrillVisual",
+                                     "keyInfluencersVisual"
+                                 ]
+             }
+}

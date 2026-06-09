@@ -1,0 +1,183 @@
+﻿{
+  "data": {
+    "show": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "axisType": {
+      "type": "enum",
+      "values": [
+        "Scalar",
+        "Categorical"
+      ],
+      "displayName": "Type"
+    },
+    "preferredCategoryWidth": {
+      "type": "numeric",
+      "displayName": "Minimum category width"
+    },
+    "maxMarginFactor": {
+      "type": "integer",
+      "displayName": "Maximum size",
+      "description": "The maximum percent of the visual allowed for the axis"
+    },
+    "innerPadding": {
+      "type": "integer",
+      "displayName": "Space between categories",
+      "description": "Space between categories (inner padding) as a percentage of the total category width/height."
+    },
+    "concatenateLabels": {
+      "type": "bool",
+      "displayName": "Concatenate labels",
+      "description": "Always concatenate levels of the hierarchy instead of drawing the hierarchy"
+    },
+    "start": {
+      "type": "unknown",
+      "displayName": "Start",
+      "description": "Enter a starting value (optional)"
+    },
+    "end": {
+      "type": "unknown",
+      "displayName": "End",
+      "description": "Enter an ending value (optional)"
+    },
+    "invertAxis": {
+      "type": "bool",
+      "displayName": "Invert axis"
+    },
+    "logAxisScale": {
+      "type": "bool",
+      "displayName": "Logarithmic scale"
+    },
+    "roundRange": {
+      "type": "bool",
+      "displayName": "Round range",
+      "description": "Round range limits to the nearest multiple."
+    },
+    "fontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "fontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "bold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "italic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "underline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "labelColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "labelDisplayUnits": {
+      "type": "formatting",
+      "displayName": "Display units",
+      "description": "Select the units (millions, billions, etc.)"
+    },
+    "labelPrecision": {
+      "type": "integer",
+      "displayName": "Value decimal places",
+      "description": "Select the number of decimal places to display for the values"
+    },
+    "gridlineShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "gridlineThickness": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "gridlineColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "gridlineTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency"
+    },
+    "gridlineStyle": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted",
+        "custom"
+      ],
+      "displayName": "Line style"
+    },
+    "gridlineAutoScale": {
+      "type": "bool",
+      "displayName": "Scale by width",
+      "description": "Automatically adjust the spacing between dashes and dots based on line width."
+    },
+    "gridlineDashArray": {
+      "type": "formatting",
+      "displayName": "Dash array",
+      "description": "Space-separated values for dash and gap lengths in pixels, repeating in sequence."
+    },
+    "gridlineDashCap": {
+      "type": "enum",
+      "values": [
+        "none",
+        "round",
+        "square"
+      ],
+      "displayName": "Dash cap"
+    },
+    "showAxisTitle": {
+      "type": "bool",
+      "displayName": "Title",
+      "description": "Title for the X-axis"
+    },
+    "titleText": {
+      "type": "text",
+      "displayName": "Axis title"
+    },
+    "axisStyle": {
+      "type": "enum",
+      "values": [
+        "showTitleOnly",
+        "showUnitOnly",
+        "showBoth"
+      ],
+      "displayName": "Style"
+    },
+    "titleFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "titleFontSize": {
+      "type": "formatting",
+      "displayName": "Title text size"
+    },
+    "titleBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "titleItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "titleUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "titleColor": {
+      "type": "fill",
+      "displayName": "Title color"
+    },
+    "reverseStackOrder": {
+      "type": "bool",
+      "displayName": "Reverse stack order"
+    }
+  }
+}

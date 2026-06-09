@@ -1,0 +1,13 @@
+﻿{
+  "data": {
+    "defaultColor": {
+      "type": "fill",
+      "displayName": "Default color"
+    },
+    "referenceLineColor": {
+      "type": "fill",
+      "displayName": "Reference line color",
+      "description": "Set reference line color"
+    }
+  }
+}

@@ -1,0 +1,157 @@
+﻿{
+  "data": {
+    "enabled": {
+      "type": "bool",
+      "displayName": "Enabled"
+    },
+    "errorRange": {
+      "type": "unknown",
+      "displayName": "Options"
+    },
+    "barShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "barMatchSeriesColor": {
+      "type": "bool",
+      "displayName": "Match series color"
+    },
+    "barColor": {
+      "type": "fill",
+      "displayName": "Bar color"
+    },
+    "barWidth": {
+      "type": "numeric",
+      "displayName": "Width"
+    },
+    "barBorderColor": {
+      "type": "fill",
+      "displayName": "Border color"
+    },
+    "barBorderSize": {
+      "type": "integer",
+      "displayName": "Border size"
+    },
+    "shadeShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "shadeBandStyle": {
+      "type": "enum",
+      "values": [
+        "fill",
+        "line",
+        "fillLine"
+      ],
+      "displayName": "Style"
+    },
+    "shadeColor": {
+      "type": "fill",
+      "displayName": "Band color"
+    },
+    "shadeMatchSeriesColor": {
+      "type": "bool",
+      "displayName": "Match series color"
+    },
+    "shadeTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "markerShape": {
+      "type": "enum",
+      "values": [
+        "circle",
+        "square",
+        "diamond",
+        "triangle",
+        "x",
+        "shortDash",
+        "longDash",
+        "plus",
+        "none"
+      ],
+      "displayName": "Marker shape"
+    },
+    "showMarkerByDefault": {
+      "type": "bool"
+    },
+    "markerShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "markerSize": {
+      "type": "numeric",
+      "displayName": "Size"
+    },
+    "labelShow": {
+      "type": "bool",
+      "displayName": "Show"
+    },
+    "labelFontFamily": {
+      "type": "formatting",
+      "displayName": "Font family"
+    },
+    "labelFontSize": {
+      "type": "formatting",
+      "displayName": "Text size"
+    },
+    "labelBold": {
+      "type": "bool",
+      "displayName": "Bold"
+    },
+    "labelItalic": {
+      "type": "bool",
+      "displayName": "Italic"
+    },
+    "labelUnderline": {
+      "type": "bool",
+      "displayName": "Underline"
+    },
+    "labelColor": {
+      "type": "fill",
+      "displayName": "Color"
+    },
+    "labelMatchSeriesColor": {
+      "type": "bool",
+      "displayName": "Match series color"
+    },
+    "labelFormat": {
+      "type": "enum",
+      "values": [
+        "absolute",
+        "relativeNumeric",
+        "relativePercentage",
+        "range"
+      ],
+      "displayName": "Label format"
+    },
+    "labelBackground": {
+      "type": "bool",
+      "displayName": "Show background"
+    },
+    "labelBackgroundColor": {
+      "type": "fill",
+      "displayName": "Background color"
+    },
+    "labelBackgroundTransparency": {
+      "type": "numeric",
+      "displayName": "Transparency",
+      "description": "Background color transparency"
+    },
+    "tooltipShow": {
+      "type": "bool",
+      "displayName": "Show in tooltip"
+    },
+    "tooltipFormat": {
+      "type": "enum",
+      "values": [
+        "absolute",
+        "relativeNumeric",
+        "relativePercentage",
+        "range"
+      ],
+      "displayName": "Label format"
+    }
+  }
+}

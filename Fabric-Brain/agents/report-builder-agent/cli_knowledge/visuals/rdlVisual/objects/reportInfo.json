@@ -1,0 +1,13 @@
+﻿{
+  "data": {
+    "reportId": {
+      "type": "text"
+    },
+    "workspaceId": {
+      "type": "text"
+    },
+    "reference": {
+      "type": "unknown"
+    }
+  }
+}

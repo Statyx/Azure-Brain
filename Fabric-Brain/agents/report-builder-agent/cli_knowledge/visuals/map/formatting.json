@@ -1,0 +1,41 @@
+﻿{
+    "data":  {
+                 "objects":  [
+                                 "bubbles",
+                                 "categoryLabels",
+                                 "dataPoint",
+                                 "general",
+                                 "heatMap",
+                                 "legend",
+                                 "mapControls",
+                                 "mapStyles"
+                             ],
+                 "visualContainerObjects":  [
+                                                "background",
+                                                "border",
+                                                "divider",
+                                                "dropShadow",
+                                                "general",
+                                                "lockAspect",
+                                                "padding",
+                                                "spacing",
+                                                "stylePreset",
+                                                "subTitle",
+                                                "title",
+                                                "visualHeader",
+                                                "visualHeaderTooltip",
+                                                "visualLink",
+                                                "visualTooltip"
+                                            ],
+                 "objectsBase":  [
+                                     "bubbles",
+                                     "categoryLabels",
+                                     "dataPoint",
+                                     "general",
+                                     "heatMap",
+                                     "legend",
+                                     "mapControls",
+                                     "mapStyles"
+                                 ]
+             }
+}

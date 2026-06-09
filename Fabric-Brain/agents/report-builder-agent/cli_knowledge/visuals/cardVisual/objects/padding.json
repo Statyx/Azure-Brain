@@ -1,0 +1,24 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "_selectorHint": [
+      "default"
+    ],
+    "top": {
+      "type": "numeric",
+      "displayName": "Top padding"
+    },
+    "bottom": {
+      "type": "numeric",
+      "displayName": "Bottom padding"
+    },
+    "left": {
+      "type": "numeric",
+      "displayName": "Left padding"
+    },
+    "right": {
+      "type": "numeric",
+      "displayName": "Right padding"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+﻿{
+  "data": {
+    "visualType": "pivotTable",
+    "capabilityKey": "pivotTable",
+    "roles": {
+      "Rows": {
+        "name": "Rows",
+        "kind": "Grouping",
+        "displayName": "Rows",
+        "description": "The fields to use on rows"
+      },
+      "Columns": {
+        "name": "Columns",
+        "kind": "Grouping",
+        "displayName": "Columns",
+        "description": "The fields to use on columns"
+      },
+      "Values": {
+        "name": "Values",
+        "kind": "Measure",
+        "displayName": "Values"
+      }
+    },
+    "requiredRoles": [
+      "Values"
+    ],
+    "optionalRoles": [
+      "Rows",
+      "Columns"
+    ],
+    "maxPerRole": {},
+    "formattingObjects": [
+      "accessibility",
+      "annotationTemplate",
+      "blankRows",
+      "columnFormatting",
+      "columnHeaders",
+      "columnTotal",
+      "columnWidth",
+      "general",
+      "grid",
+      "rowHeaders",
+      "rowTotal",
+      "sparklines",
+      "subTotals",
+      "total",
+      "values"
+    ],
+    "sharedCapabilitiesWith": [],
+    "deprecated": false
+  }
+}

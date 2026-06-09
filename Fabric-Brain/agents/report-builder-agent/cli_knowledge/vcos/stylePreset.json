@@ -1,0 +1,9 @@
+﻿{
+  "data": {
+    "_source": "visualContainerObjects",
+    "name": {
+      "type": "formatting",
+      "displayName": "Style"
+    }
+  }
+}
