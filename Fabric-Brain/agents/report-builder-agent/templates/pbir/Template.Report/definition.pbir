@@ -3,12 +3,7 @@
   "version": "4.0",
   "datasetReference": {
     "byConnection": {
-      "connectionString": "Data Source=\"powerbi://api.powerbi.com/v1.0/myorg/<workspace_name>\";initial catalog=<semantic_model_name>;integrated security=ClaimsToken;semanticmodelid=<semantic_model_id>",
-      "pbiServiceModelId": null,
-      "pbiModelVirtualServerName": "sobe_wowvirtualserver",
-      "pbiModelDatabaseName": "<semantic_model_id>",
-      "name": "EntityDataSource",
-      "connectionType": "pbiServiceXmlaStyleLive"
+      "connectionString": "Data Source=\"powerbi://api.powerbi.com/v1.0/myorg/<workspace_name>\";initial catalog=<semantic_model_name>;integrated security=ClaimsToken;semanticmodelid=<semantic_model_id>"
     }
   }
 }
