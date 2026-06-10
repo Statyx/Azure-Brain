@@ -138,11 +138,39 @@ Enrichment steps (see prepare_data_for_ai.md):
 | Get definition | `SemanticModel.ReadWrite.All` or `Item.ReadWrite.All` |
 | Workspace read | `Workspace.Read.All` |
 
-## Error Recovery
+## Consumption / Query (read-only)
 
-| Error | Likely Cause | Fix |
-|-------|-------------|-----|
-| "Property is not defined in the metadata" | Bad definition.pbism | Use only `{"version": "1.0"}` |
+> The read-only counterpart of authoring: **run DAX against an existing model and inspect its
+> metadata** without changing the definition. Full query catalog is in `dax_queries.md`.
+
+### Read-only discipline
+- **Discover metadata first** with `INFO.VIEW.*`, then write data queries. No `updateDefinition` / model changes in a consumption task.
+- **Query progressively** — `SELECTCOLUMNS` + `FILTER` to fetch only the metadata you need, not the full schema.
+- Resolve the model `artifactId` dynamically; never hardcode it.
+
+### Metadata discovery (DAX INFO functions)
+```dax
+EVALUATE INFO.VIEW.TABLES()          -- fast table inventory
+EVALUATE INFO.VIEW.MEASURES()        -- measures + expressions
+EVALUATE INFO.VIEW.COLUMNS()         -- columns + data types
+EVALUATE INFO.VIEW.RELATIONSHIPS()   -- validate joins / filter direction
+```
+> Treat `INFO.VIEW.*` as available to any reader. Other `INFO.*` functions may need elevated permissions.
+
+### Execute a data query (REST)
+```python
+# executeQueries lives on api.powerbi.com, NOT api.fabric.microsoft.com
+resp = requests.post(
+    f"https://api.powerbi.com/v1.0/myorg/groups/{WS_ID}/datasets/{model_id}/executeQueries",
+    headers=headers,  # token resource: https://analysis.windows.net/powerbi/api
+    json={"queries": [{"query": "EVALUATE SUMMARIZECOLUMNS('Customer'[Name], \"Total\", [Total Sales])"}],
+          "serializerSettings": {"includeNulls": True}},
+)
+rows = resp.json()["results"][0]["tables"][0]["rows"]
+```
+> Measure names are case- and whitespace-sensitive. Validate exact names via `INFO.VIEW.MEASURES()` first.
+
+## Error Recovery
 | 404 on model | Capacity paused or wrong ID | Resume capacity, verify ID |
 | 202 → `Failed` | Invalid model.bim | Check TMSL structure, column types |
 | Blank visuals in report | Measure name mismatch | Verify exact names (case + spaces) |

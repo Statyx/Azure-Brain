@@ -201,6 +201,7 @@ class TestJsonTemplates:
 
     def test_parses(self, json_file):
         try:
-            json.loads(json_file.read_text(encoding="utf-8", errors="replace"))
+            # utf-8-sig tolerates a leading BOM (CLI oracle dumps carry one)
+            json.loads(json_file.read_text(encoding="utf-8-sig", errors="replace"))
         except json.JSONDecodeError as e:
             pytest.fail(f"{json_file.relative_to(ROOT)}: {e}")

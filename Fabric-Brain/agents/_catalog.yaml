@@ -1,5 +1,5 @@
 # Agent Catalog — Fabric-Brain
-# 20 agents organized into 7 domains
+# 23 agents organized into 7 domains
 # Part of Azure-Brain umbrella (see ../../README.md)
 # Last updated: 2026-05-20
 
@@ -15,7 +15,7 @@ domains:
       - name: fabric-cli-agent
         purpose: fab CLI, item management, OneLake file ops, CI/CD deploy, job execution
       - name: monitoring-agent
-        purpose: Admin APIs, audit events, capacity monitoring, KQL operational dashboards
+        purpose: Admin APIs, audit events, capacity monitoring, KQL operational dashboards, Spark/SQL operations triage (Spark Advisor, OOM/skew/spill, Livy session health, Warehouse query insights)
       - name: taskflow-agent
         purpose: Task Flow visual templates, task-to-item mapping, JSON import/export
       - name: extensibility-toolkit-agent
@@ -58,6 +58,8 @@ domains:
         purpose: Eventhouse, KQL databases, KQL dashboards, Operations Agent
       - name: rti-eventstream-agent
         purpose: EventStreams, real-time ingestion, CDC patterns, source routing
+      - name: data-activator-agent
+        purpose: Data Activator (Reflex) — real-time alerts/triggers, AttributeTrigger/EventTrigger rules, Teams/Email/Fabric item actions
 
   06-iq:
     description: Intelligence — Ontology, Graph models, GQL, entity reasoning
@@ -72,14 +74,22 @@ domains:
         purpose: Pre-deployment report validation — layout bounds, overlaps, font sizing
 
   08-migration:
-    description: BI platform migration to Fabric
+    description: Platform migration to Fabric — BI (BusinessObjects) and data platforms (Databricks, Synapse)
     agents:
       - name: migration-bo-agent
         purpose: BusinessObjects → Fabric migration — 5-stage framework, 119 BO→DAX mappings
+      - name: migration-databricks-agent
+        purpose: Databricks → Fabric migration — dbutils→notebookutils, Unity Catalog→Lakehouse schemas, DBFS→OneLake, Jobs→SJD, MLflow, Delta Sharing
+      - name: migration-synapse-agent
+        purpose: Synapse → Fabric migration — phased (Spark Pools/Lake DB/Notebooks/SJD), mssparkutils→notebookutils, Linked Services→Connections/Shortcuts, SQL Pool→Warehouse
 
 # Boundary clarifications:
 # - cicd-fabric vs fabric-cli: cicd owns Git+pipelines+stages; cli owns fab commands+job execution
 # - cicd-fabric vs workspace-admin: admin creates pipelines (REST POST); cicd manages pipeline stages
 # - ontology vs rti-kusto: ontology owns entity types+GQL; rti-kusto owns KQL DB+dashboards
+# - data-activator vs rti-eventstream: activator owns Reflex rules/alerts/actions; eventstream owns ingestion topology (create Eventstream w/ Activator destination first, then wire the rule)
+# - data-activator vs monitoring: activator owns real-time business alerts (Reflex); monitoring owns admin/capacity/audit operational dashboards
 # - orchestrator vs lakehouse: orchestrator owns scheduling+pipelines; lakehouse owns table ops+optimization
 # - pixel-design (Fabric-Brain) vs testing-agent (Meta-Brain): pixel owns visual-specific layout rules for Fabric reports; testing owns generic pytest framework
+# - migration-databricks/synapse vs lakehouse/orchestrator: migration agents own source-to-Fabric translation + mapping; lakehouse/orchestrator own the actual item creation (handoff target)
+# - migration-bo vs migration-databricks/synapse: bo owns BI/report migration (BO→DAX); databricks/synapse own data-engineering migration (Spark/SQL/catalog)

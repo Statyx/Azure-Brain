@@ -166,6 +166,59 @@ JOIN [LH_MyProject].[dbo].[dim_customers] l
     ON w.customer_id = l.customer_id
 ```
 
+## Consumption / Query (read-only)
+
+> The read-only counterpart of authoring: **explore and query an existing Warehouse** (or a
+> Lakehouse SQL Endpoint) without DDL/DML. Use this when the goal is to understand the schema
+> and answer questions from the data, not to build or modify objects.
+
+### Read-only discipline
+- **Discover schema first**, then query. Never run `CREATE`/`ALTER`/`INSERT`/`UPDATE`/`DELETE`/`MERGE` in a consumption task.
+- **Query progressively** — `TOP`/`WHERE`/projected columns to pull only what's needed, not `SELECT *` on large tables.
+- Resolve the connection string dynamically from the item; never hardcode it.
+- The Lakehouse SQL Endpoint is read-only by design — `SELECT` only.
+
+### Schema discovery (INFORMATION_SCHEMA / sys)
+```sql
+-- Tables and views
+SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE
+FROM INFORMATION_SCHEMA.TABLES
+ORDER BY TABLE_SCHEMA, TABLE_NAME;
+
+-- Columns for one table
+SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'fact_sales'
+ORDER BY ORDINAL_POSITION;
+
+-- Primary/foreign keys
+SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS;
+
+-- Row-count estimate without scanning (fast)
+SELECT t.name, SUM(p.rows) AS row_count
+FROM sys.tables t
+JOIN sys.partitions p ON t.object_id = p.object_id AND p.index_id IN (0,1)
+GROUP BY t.name ORDER BY row_count DESC;
+```
+
+### Progressive querying
+```sql
+-- Sample the data shape first
+SELECT TOP 20 * FROM dbo.fact_sales;
+
+-- Then the real question, projected + filtered + aggregated
+SELECT c.region, SUM(s.total_amount) AS total
+FROM dbo.fact_sales s
+JOIN dbo.dim_customers c ON s.customer_id = c.customer_id
+WHERE s.sale_date >= '2026-01-01'
+GROUP BY c.region
+ORDER BY total DESC;
+```
+
+Connect with the `sqlcmd` / `pyodbc` recipes in **## SQL Connection** above (token resource
+`https://database.windows.net`). For diagnostics of a *failing* query, defer to the operations
+workflow rather than this read-only path.
+
 ## Error Recovery
 
 | Error | Likely Cause | Fix |

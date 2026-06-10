@@ -416,11 +416,56 @@ resp = requests.post(
 
 ---
 
-## Cross-References
+## Consumption / Query (read-only)
 
-| Topic | Agent | File |
-|-------|-------|------|
-| Pipeline orchestration for Lakehouse loads | orchestrator-agent | `pipelines.md` |
+> The read-only counterpart of authoring: **explore and query an existing Lakehouse** without
+> writing Delta tables or running maintenance. Two surfaces — the **SQL Endpoint** (T-SQL,
+> read-only) and **Spark read** (PySpark, interactive).
+
+### Read-only discipline
+- **Discover schema first**, then query. No `write`, `saveAsTable`, `OPTIMIZE`, `VACUUM`, or `load` in a consumption task.
+- **Query progressively** — `limit`/`select`/`where` to pull only what's needed.
+- Resolve workspace/item IDs dynamically; the SQL Endpoint is read-only by design.
+
+### Discover tables (REST)
+```python
+# List Delta tables without Spark
+tables = requests.get(
+    f"{API}/workspaces/{WS_ID}/lakehouses/{LH_ID}/tables",
+    headers=headers
+).json()["value"]
+for t in tables:
+    print(t["name"], t["type"], t.get("location"))
+```
+
+### Spark exploration (read-only)
+```python
+# Inventory + schema, no writes
+spark.catalog.listTables()
+df = spark.read.format("delta").load("Tables/fact_sales")
+df.printSchema()
+df.limit(20).show()
+
+# The real question — projected + filtered + aggregated
+(df.join(spark.read.format("delta").load("Tables/dim_customers"), "customer_id")
+   .where("sale_date >= '2026-01-01'")
+   .groupBy("region").sum("total_amount")
+   .orderBy("sum(total_amount)", ascending=False)
+   .show())
+```
+
+### SQL Endpoint exploration (read-only T-SQL)
+```sql
+-- Schema discovery
+SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES;
+SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'fact_sales';
+
+-- Sample then aggregate
+SELECT TOP 20 * FROM dbo.fact_sales;
+```
+> Modifying Lakehouse data via SQL is **not** supported — for writes use a Spark notebook (authoring).
+
+## Cross-References
 | EventStream → Lakehouse destination | eventstream-agent | `sources_destinations.md` |
 | Semantic Model over Lakehouse (Direct Lake) | semantic-model-agent | `model_deployment.md` |
 | Ontology NonTimeSeries bindings | ontology-agent | `entity_types_bindings.md` |

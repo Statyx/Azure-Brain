@@ -187,4 +187,4 @@ Always prefix invocations in PowerShell with `Set-ExecutionPolicy -Scope Process
 - Known issues: [`known_issues.md`](known_issues.md)
 - Resource IDs: [`../../resource_ids.md`](../../resource_ids.md)
 - Fabric API basics: [`../../fabric_api.md`](../../fabric_api.md)
-- Global known issues: [`../../known_issues.md`](../../known_issues.md)
+- Global known issues: [`../../../known_issues.md`](../../../known_issues.md)

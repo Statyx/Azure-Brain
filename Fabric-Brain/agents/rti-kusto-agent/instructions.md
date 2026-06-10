@@ -109,9 +109,35 @@ credential = AzureCliCredential()
 token = credential.get_token("https://api.fabric.microsoft.com/.default").token
 ```
 
-## Reference Project
+## Consumption / Query (read-only)
 
-**Ontology-RTI** (https://github.com/cyphou/Ontology-RTI) — Oil & Gas Refinery accelerator demonstrating the full RTI stack:
+> The read-only counterpart of authoring: **query and explore an existing Eventhouse / KQL
+> database** without creating tables or ingesting. Full patterns are in `eventhouse_consumption.md`.
+
+### Read-only discipline
+- **Discover schema first** (`.show tables`, `getschema`), then query. No `.create`/`.ingest`/`.drop` in a consumption task.
+- **Query progressively** — `take`/`where`/`project` and time filters (`ago()`) to bound the scan.
+- Resolve the cluster `queryServiceUri` from the Eventhouse item; never hardcode it.
+
+### Schema discovery (KQL)
+```kql
+.show tables                      // table inventory
+SensorReading | getschema         // columns + types for one table
+.show table SensorReading details // size, retention, folder
+```
+
+### Progressive querying (KQL)
+```kql
+SensorReading | take 20                                  // sample shape first
+SensorReading
+| where Timestamp > ago(1h)
+| summarize avg(ReadingValue) by SensorId, bin(Timestamp, 5m)  // the real question
+```
+
+Use the REST / `az rest` query recipes in `eventhouse_consumption.md` (Kusto token resource
+`https://kusto.kusto.windows.net`). KQL with `|` needs a temp-file body when using `az rest`.
+
+## Reference Project
 - 10-step automated deployment (PowerShell)
 - 13 Lakehouse tables + 5 KQL tables
 - Ontology with 13 entity types, 15 relationships
