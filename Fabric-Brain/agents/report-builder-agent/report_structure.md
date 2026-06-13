@@ -49,7 +49,7 @@ Every JSON file in `definition/` declares a `$schema`. The schemas live under `h
 | `definition/report.json` | `.../report/3.3.0/schema.json` |
 | `definition/pages/pages.json` | `.../pagesMetadata/1.1.0/schema.json` |
 | `definition/pages/<id>/page.json` | `.../page/2.1.0/schema.json` |
-| `definition/pages/<id>/visuals/<vid>/visual.json` | `.../visualContainer/2.5.0/schema.json` |
+| `definition/pages/<id>/visuals/<vid>/visual.json` | `.../visualContainer/2.10.0/schema.json` |
 | `definition/**/filters.json` *(any filters.json)* | `.../filterConfiguration/1.2.0/schema.json` |
 | `definition.pbir` | `.../definitionProperties/2.0.0/schema.json` |
 | `StaticResources/SharedResources/BaseThemes/<t>.json` | `.../theme/2.140.0/schema.json` |
@@ -89,13 +89,36 @@ Shorthand `"semanticmodelid=<GUID>"` works but the full XMLA is preferred — it
 
 ## `report.json` — Top-Level Report
 
-Minimal viable shape:
+> ⚠️ **RENDERER-CRITICAL.** A report.json that VALIDATES 0/0 in the CLI can still freeze the web
+> renderer forever ("Loading your report...", F12 → HTTP 405 on access-request). The live service
+> requires `reportSource`, `settings`, `objects`, a real built-in `baseTheme`, AND `version.json`
+> = `2.0.0` (see below). Mirror a working QuickCreate report exactly.
+
+Renderer-safe shape:
 
 ```json
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
   "themeCollection": {
-    "baseTheme": { "name": "AzureBrainLight" }
+    "baseTheme": {
+      "name": "CY26SU05",
+      "reportVersionAtImport": { "visual": "2.9.0", "report": "3.3.0", "page": "2.3.1" },
+      "type": "SharedResources"
+    }
+  },
+  "objects": {
+    "section": [{ "properties": { "verticalAlignment": { "expr": { "Literal": { "Value": "'Top'" } } } } }],
+    "outspacePane": [{ "properties": { "expanded": { "expr": { "Literal": { "Value": "false" } } } } }]
+  },
+  "reportSource": "QuickCreate",
+  "resourcePackages": [
+    { "name": "SharedResources", "type": "SharedResources",
+      "items": [{ "name": "CY26SU05", "path": "BaseThemes/CY26SU05.json", "type": "BaseTheme" }] }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true, "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true, "allowChangeFilterTypes": true,
+    "allowInlineExploration": true, "useEnhancedTooltips": true, "useDefaultAggregateDisplayName": true
   },
   "publicCustomVisuals": []
 }
@@ -103,21 +126,22 @@ Minimal viable shape:
 
 `report.json` carries:
 
-- `themeCollection.baseTheme.name` — must match a `BaseThemes/<name>.json` file
-- optional `themeCollection.customTheme` for user-provided palettes
+- `themeCollection.baseTheme.name` — MUST be a REAL Power BI built-in theme (e.g. `CY26SU05`) with its
+  actual theme json under `BaseThemes/`. A custom theme name here, or a `customTheme`+`RegisteredResources`
+  layer, FREEZES the renderer. CY26SU05 already ships the standard 8 dataColors.
+- `reportSource` (`"QuickCreate"`/`"Default"`), `settings`, and `objects` — REQUIRED by the renderer.
 - `publicCustomVisuals[]` — IDs of marketplace visuals (usually empty)
-- `objects` / `pods` / etc. — rarely needed; let Fabric apply defaults
 
 ## `version.json` — Format Version
 
 ```json
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/versionMetadata/1.0.0/schema.json",
-  "version": "4.0.0"
+  "version": "2.0.0"
 }
 ```
 
-Version pattern: `major.minor.0`, major ≥ 1, patch is always `0`. Required.
+> ⚠️ Use `"2.0.0"`. `"4.0.0"` validates in the CLI but makes the live renderer hang forever.
 
 ---
 
@@ -171,7 +195,7 @@ Skeleton (cardVisual example):
 
 ```json
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "<uuid>",
   "position": { "x": 20, "y": 80, "z": 0, "width": 200, "height": 120, "tabOrder": 0 },
   "visual": {
@@ -223,7 +247,7 @@ When sending the report to Fabric REST, **every file under `<Report>.Report/`** 
       { "path": "definition/pages/pages.json", "payload": "<base64>", "payloadType": "InlineBase64" },
       { "path": "definition/pages/overview/page.json", "payload": "<base64>", "payloadType": "InlineBase64" },
       { "path": "definition/pages/overview/visuals/abc/visual.json", "payload": "<base64>", "payloadType": "InlineBase64" },
-      { "path": "StaticResources/SharedResources/BaseThemes/AzureBrainLight.json", "payload": "<base64>", "payloadType": "InlineBase64" }
+      { "path": "StaticResources/SharedResources/BaseThemes/CY26SU05.json", "payload": "<base64>", "payloadType": "InlineBase64" }
     ]
   }
 }

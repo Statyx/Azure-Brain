@@ -26,6 +26,8 @@ PBIR-specific gotchas, with detection and fix. For Legacy PBIX issues, see [`kno
 | 16 | Card callout height < 120 px clips numbers | MEDIUM | Always height ≥ 120 px AND set `value.fontSize` explicitly on cardVisual (NOT `cardCalloutArea.fontSize` — that property does not exist; `cardCalloutArea` only owns padding/background/cornerRadius) |
 | 17 | `displayName` differs from `name` in `page.json` | LOW | OK — `name` is the folder ID, `displayName` is the tab label |
 | 18 | Filter file (`filters.json`) at wrong scope | LOW | Report-scoped: `definition/filters.json`. Page-scoped: `pages/<id>/filters.json`. Visual-scoped: `pages/<id>/visuals/<vid>/filters.json` |
+| 19 | **Report freezes on "Loading your report..." forever (HTTP 405 access-request)** | **CRITICAL** | CLI validates 0/0 but the LIVE renderer hangs. Required: `version.json` = `"2.0.0"` (NOT `4.0.0`); `report.json` MUST have `reportSource` + `settings` + `objects`; `baseTheme` MUST be a real built-in (e.g. `CY26SU05`) with its theme json — no custom-name baseTheme, no `customTheme`+`RegisteredResources`; `visualContainer` schema `2.10.0` (not 2.5.0). Diagnose by `getDefinition` on a working QuickCreate report and diffing. |
+| 20 | "Cannot load model — CapacityNotActive" (report renders, model won't load) | HIGH | The Fabric capacity is **Paused**. Resume: `az fabric capacity resume --capacity-name <n> --resource-group <rg>`. Not a report bug. |
 
 ---
 
