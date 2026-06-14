@@ -6,6 +6,26 @@
 
 ## 1. PBIR Literal Expressions — Cheatsheet
 
+> 🎨 **COLOR RULE (renderer-critical, applies to ALL reports).** Use **literal hex** for every
+> visible color (card fontColor, `dataPoint.defaultColor`, bars, lines, scatter). `ThemeDataColor`
+> (`{"expr":{"ThemeDataColor":{"ColorId":N}}}`) does **NOT** resolve in the live web renderer — visuals
+> come out **black**. The CLI `validate` passes either way, so this is invisible until you open the
+> report. To get a varied, polished look: keep an 8-color palette and give each visual a **distinct**
+> literal hex (a simple trick: derive the palette index from the visual id, e.g. `c1`→1, `b3`→3).
+>
+> ```json
+> // ✅ renders — literal hex
+> "fontColor": { "solid": { "color": { "expr": { "Literal": { "Value": "'#118DFF'" }}}}}
+> // ❌ comes out black in the service
+> "fontColor": { "solid": { "color": { "expr": { "ThemeDataColor": { "ColorId": 1, "Percent": 0 }}}}}
+> ```
+> Standard palette: `#118DFF #12239E #E66C37 #6B007B #E044A7 #744EC2 #D9B300 #D64550`.
+>
+> **Multi-series charts (line/bar with a Series role): do NOT set `dataPoint.defaultColor`.** A single
+> default color forces every series to the same color (e.g. 4 scenarios all blue). Omit `dataPoint`
+> entirely → Power BI auto-cycles each series through the theme `dataColors[]`, and that auto-cycle
+> DOES render. Set a single literal-hex `defaultColor` only on **single-series** visuals.
+
 In `visual.json` / `page.json`, **every property value** is wrapped in an expression envelope. The CLI is the canonical encoder:
 
 ```powershell
@@ -20,8 +40,8 @@ powerbi-report-author expr encode --kind <kind> <value>
 | number (float / double) | `expr encode --kind number "100"` | `{"expr":{"Literal":{"Value":"100D"}}}` | Suffix `D` |
 | integer | `expr encode --kind integer "12"` | `{"expr":{"Literal":{"Value":"12L"}}}` | Suffix `L` |
 | bool | `expr encode --kind bool "true"` | `{"expr":{"Literal":{"Value":"true"}}}` | No quoting |
-| hex color | `expr encode --kind color "#118DFF"` | `{"solid":{"color":{"expr":{"Literal":{"Value":"'#118DFF'"}}}}}` | Wraps in `solid.color` |
-| theme color | `expr encode --kind themeColor "1" --percent -10` | `{"solid":{"color":{"expr":{"ThemeDataColor":{"ColorId":1,"Percent":-10}}}}}` | `ColorId` 1-based; `Percent` darkens/lightens |
+| hex color | `expr encode --kind color "#118DFF"` | `{"solid":{"color":{"expr":{"Literal":{"Value":"'#118DFF'"}}}}}` | Wraps in `solid.color`. **Use this for all visible colors.** |
+| theme color | `expr encode --kind themeColor "1" --percent -10` | `{"solid":{"color":{"expr":{"ThemeDataColor":{"ColorId":1,"Percent":-10}}}}}` | `ColorId` 1-based. ⚠️ **Does NOT render in the live service (black) — prefer literal hex above.** |
 
 ### Examples in context
 
@@ -41,15 +61,15 @@ powerbi-report-author expr encode --kind <kind> <value>
 }
 ```
 
-#### Bind a card's callout to a theme color
+#### Bind a card's callout to a color
 
-For `cardVisual`, the **callout text** (number/label) lives on the `value` object — not `cardCalloutArea` (which controls the surrounding rectangle: padding, background, corner radius).
+For `cardVisual`, the **callout text** (number/label) lives on the `value` object — not `cardCalloutArea` (which controls the surrounding rectangle: padding, background, corner radius). **Use a literal hex** (ThemeDataColor renders black in the service):
 
 ```json
 "objects": {
   "value": [{
     "properties": {
-      "fontColor": { "solid": { "color": { "expr": { "ThemeDataColor": { "ColorId": 1, "Percent": 0 }}}}}
+      "fontColor": { "solid": { "color": { "expr": { "Literal": { "Value": "'#118DFF'" }}}}}
     }
   }]
 }
@@ -131,7 +151,7 @@ StaticResources/SharedResources/BaseThemes/<themeName>.json
 | Field | Purpose |
 |---|---|
 | `name` | Referenced from `report.json.themeCollection.baseTheme.name` |
-| `dataColors[]` | The 8 colors used by `ThemeDataColor`. ColorId is **1-based** in PBIR. |
+| `dataColors[]` | The 8 palette colors. In PBIR, reference them as **literal hex** in each visual (ColorId/ThemeDataColor does NOT render in the live service — black). The `dataColors[]` list still defines the default series colors for multi-series charts. |
 | `background` / `foreground` | Page-level defaults |
 | `tableAccent` | Header tint for tables |
 | `visualStyles` | Per-visual-type overrides (advanced) |

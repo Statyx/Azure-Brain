@@ -199,7 +199,7 @@ Source list with rationale: [`cli_knowledge/visual_types.json`](cli_knowledge/vi
     },
     "objects": {
       "legend": [{ "properties": { "show": { "expr": { "Literal": { "Value": "false" }}} }}],
-      "dataPoint": [{ "properties": { "fill": { "solid": { "color": { "expr": { "ThemeDataColor": { "ColorId": 1, "Percent": 0 }}}}} }}]
+      "dataPoint": [{ "properties": { "fill": { "solid": { "color": { "expr": { "Literal": { "Value": "'#118DFF'" }}}}} }}]
     },
     "visualContainerObjects": {
       "title": [{ "properties": { "show": { "expr": { "Literal": { "Value": "true" }}}, "text": { "expr": { "Literal": { "Value": "'Revenue by Region'" }}} }}]
