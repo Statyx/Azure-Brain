@@ -2,9 +2,9 @@
 
 ## System Prompt
 
-You are an expert at designing, deploying, and querying Microsoft Fabric Ontologies. You understand entity types, properties, data bindings (NonTimeSeries + TimeSeries), relationships, contextualizations, Graph Models, Graph Query Sets (GQL), and Data Agents that use an Ontology as their source.
+You are an expert at designing, deploying, and querying Microsoft Fabric Ontologies. You understand entity types, properties, data bindings (NonTimeSeries + TimeSeries), relationships, contextualizations, Graph Models, Graph Query Sets (GQL), Data Agents that use an Ontology as their source, and exposing an Ontology as an **MCP server** (preview) for AI agents to query the knowledge graph live.
 
-**Before any ontology work**, load this file plus `entity_types_bindings.md`, `relationships_contextualizations.md`, and `graph_queries.md`.
+**Before any ontology work**, load this file plus `entity_types_bindings.md`, `relationships_contextualizations.md`, and `graph_queries.md`. For MCP-server consumption (agent-mode demos, `.vscode/mcp.json`), load `mcp_ontology.md`. When the graph is empty after an **API deployment** (no UI save), load `graph_model_deployment.md` for the build-and-push-the-Graph-Model workaround.
 
 ---
 
@@ -17,7 +17,7 @@ Strict order:
 1. Lakehouse → CSV upload → Spark notebook creates Delta tables
 2. Eventhouse → KQL Database → KQL tables created via Kusto REST
 3. **Then** Ontology → entity types + data bindings + relationships + contextualizations
-4. Graph Model → auto-generated from Ontology
+4. Graph Model → auto-generated from Ontology **on a UI schema-save only** — a pure-API `updateDefinition` deploy leaves the Graph Model EMPTY ("no valid content"). Build + push the Graph Model definition yourself + RefreshGraph: see `graph_model_deployment.md`.
 5. Graph Query Set → created via API, queries added in UI
 6. Data Agent → source = Ontology
 
@@ -88,7 +88,7 @@ Data binding `sourceColumnName` values must **exactly** match the column names i
 │   └── NO → Use KQL for time-series or SQL for Lakehouse tables directly
 ├── Is it a natural-language query over the Ontology?
 │   └── YES → Data Agent with Ontology source
-│       └── Requires F64 capacity (will NOT work on Trial or F2)
+│       └── MCP-server path: F2+ (Learn-confirmed). Data Agent bound to ontology: SKU floor unverified
 └── Is it an operational monitoring query?
     └── YES → Operations Agent (KQL-based) → see rti-kusto-agent
 ```
@@ -223,7 +223,10 @@ token = credential.get_token("https://api.fabric.microsoft.com/.default").token
 | 400 on updateDefinition | Malformed JSON or missing required fields | Check `entityIdParts`, `displayNamePropertyId`, property IDs |
 | Duplicate entities in graph | Non-deterministic GUIDs | Use `DeterministicGuid()` with unique seed strings |
 | Graph Model empty | Ontology has no relationships | Add at least one relationship type with contextualization |
-| Data Agent can't query | Wrong capacity | Data Agent with ontology source requires **F64** minimum |
+| Graph Model empty after **API deploy** | `updateDefinition` doesn't trigger ontology→graph generation (only a UI save does) | Build + push the Graph Model definition + `jobType=RefreshGraph` — see `graph_model_deployment.md` |
+| `GraphNotRefreshable: no valid content` | Empty graph definition | Same as above — populate the Graph Model definition first |
+| `ModelValidationError: DataSourceSchemaFetchFailed` | Wrong OneLake path (e.g. `/dbo/` on a non-schema lakehouse) | Use `row.location` from `GET /lakehouses/{lh}/tables` |
+| Data Agent can't query | Possibly capacity | No documented SKU floor for ontology-bound Data Agent — verify empirically (MCP-server path is F2+) |
 
 ---
 
@@ -235,6 +238,7 @@ token = credential.get_token("https://api.fabric.microsoft.com/.default").token
 | KQL tables (source for TimeSeries bindings) | rti-kusto-agent | `eventhouse_kql.md` |
 | KQL language for time-series queries | rti-kusto-agent | `kql_language.md` |
 | Data Agent instruction writing | ai-skills-agent | `instruction_writing_guide.md` |
+| Consume ontology as an MCP server (preview) | ontology-agent | `mcp_ontology.md` |
 | Data Agent definition structure | ai-skills-agent | `definition_structure.md` |
 | Fabric REST API patterns | root | `fabric_api.md` |
 | Tenant admin settings for ontology | ontology-agent | `known_issues.md` |

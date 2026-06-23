@@ -22,12 +22,13 @@ These must be enabled in **Fabric Admin Portal → Tenant settings** before onto
 
 | Feature | Minimum SKU | Notes |
 |---------|------------|-------|
-| Ontology | F2 | Preview feature |
+| Ontology | F2 | Preview feature ([Learn](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-use-ontology-mcp-server#prerequisites)) |
 | Graph Model | F2 | Preview feature |
 | Graph Query Set | F2 | Preview feature |
-| Data Agent (Ontology source) | **F64** | Will NOT work on Trial, F2, or lower |
+| Ontology MCP server | F2 | **Confirmed by Learn** — "a paid F2 or higher Fabric capacity" |
+| Data Agent (Ontology source) | *unverified* | A specific SKU floor for a Data Agent *bound to an ontology source* is **not documented on Learn**. Test on your capacity; do not assume F64. |
 
-> **Critical**: Data Agents with an Ontology source require F64 capacity. Plan for this — Trial and small SKUs will silently fail.
+> The MCP-server path (consuming the ontology from an agent) works on **F2+**. The capacity floor for a Data Agent item bound to an ontology source is unconfirmed — verify empirically rather than trusting a hard-coded number.
 
 ---
 
@@ -113,11 +114,11 @@ $bodyStr = '{"definition":{"parts":[' + $partsJson + ']}}'
 **Symptom**: Data Agent created with Ontology source but returns no results or errors.
 
 **Causes**:
-- Capacity is below F64 (silently fails)
+- Insufficient capacity (verify empirically — no documented SKU floor for this path)
 - Ontology bindings are invalid
 - Graph Model not generated
 
-**Fix**: Check capacity SKU first (must be F64+), then verify ontology bindings, then ensure Graph Model exists.
+**Fix**: Verify ontology bindings, ensure the Graph Model exists, then rule out capacity by testing on a larger SKU if the smaller one fails.
 
 ### 8. TimeSeries Binding Missing timestampColumnName
 
@@ -169,7 +170,7 @@ Always follow this sequence — ontology items depend on previous steps:
 3. Ontology → entity types + data bindings + relationships + contextualizations
 4. Graph Model → auto-generated from Ontology (refresh if needed)
 5. Graph Query Set → create via API → add queries in UI
-6. Data Agent → source = Ontology (requires F64)
+6. Data Agent → source = Ontology (capacity floor unverified — test on your SKU)
 ```
 
 > **Never skip steps.** Deploying step 3 before steps 1–2 causes binding validation errors.

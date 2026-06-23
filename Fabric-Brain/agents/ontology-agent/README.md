@@ -18,6 +18,7 @@
 | **Graph Model** | Graph Model (auto-generated from Ontology) | Fabric UI → "Refresh graph model" |
 | **Graph Query Set** | GQL queries (ISO/IEC 39075) | Fabric REST API (create) + UI (add queries) |
 | **Data Agent (ontology-bound)** | DataAgent with Ontology as source | Fabric REST API `POST /dataAgents` |
+| **MCP Server (preview)** | Ontology exposed as an MCP endpoint | `https://api.fabric.microsoft.com/v1/mcp/dataPlane/workspaces/<ws>/items/<ontology>/ontologyEndpoint` |
 
 ## What This Agent Does NOT Own
 
@@ -37,6 +38,8 @@
 | `entity_types_bindings.md` | Entity type definitions, properties, value types, ID allocation, NonTimeSeries & TimeSeries data bindings |
 | `relationships_contextualizations.md` | Relationship types, contextualizations (FK mapping), FK resolution strategies |
 | `graph_queries.md` | GQL language reference, graph model, 20 query examples, GQL vs KQL comparison |
+| `graph_model_deployment.md` | **API-only graph population** — when `updateDefinition` leaves the Graph Model empty: build + push the Graph Model definition (graphType/dataSources/graphDefinition), RefreshGraph job, GQL patterns, OneLake path gotcha |
+| `mcp_ontology.md` | Consume the ontology as an MCP server (preview) — endpoint URL, `.vscode/mcp.json`, agent mode, demo checklist |
 | `known_issues.md` | Ontology-specific gotchas, tenant settings, capacity requirements, binding validation |
 
 ## Quick Start (for a new session)

@@ -1,7 +1,7 @@
 # Agent Catalog — Fabric-Brain
-# 23 agents organized into 7 domains
+# 24 agents organized into 9 domains
 # Part of Azure-Brain umbrella (see ../../README.md)
-# Last updated: 2026-05-20
+# Last updated: 2026-06-18
 
 domains:
 
@@ -65,7 +65,7 @@ domains:
     description: Intelligence — Ontology, Graph models, GQL, entity reasoning
     agents:
       - name: ontology-agent
-        purpose: Entity types, graph models, GQL queries, data bindings, contextualizations
+        purpose: Entity types, graph models, GQL queries, data bindings, contextualizations, Ontology MCP server (preview)
 
   07-fabric-quality:
     description: Fabric-specific report validation
@@ -83,6 +83,12 @@ domains:
       - name: migration-synapse-agent
         purpose: Synapse → Fabric migration — phased (Spark Pools/Lake DB/Notebooks/SJD), mssparkutils→notebookutils, Linked Services→Connections/Shortcuts, SQL Pool→Warehouse
 
+  09-app-platform:
+    description: Application backends running inside Fabric (Rayfin BaaS, Replit × Fabric)
+    agents:
+      - name: fabric-apps-agent
+        purpose: Fabric Apps (preview) via Rayfin — scaffold/model/deploy app backends (DB, Entra auth, Data APIs, hosting), data in OneLake; Replit × Fabric vibe-coding path
+
 # Boundary clarifications:
 # - cicd-fabric vs fabric-cli: cicd owns Git+pipelines+stages; cli owns fab commands+job execution
 # - cicd-fabric vs workspace-admin: admin creates pipelines (REST POST); cicd manages pipeline stages
@@ -93,3 +99,4 @@ domains:
 # - pixel-design (Fabric-Brain) vs testing-agent (Meta-Brain): pixel owns visual-specific layout rules for Fabric reports; testing owns generic pytest framework
 # - migration-databricks/synapse vs lakehouse/orchestrator: migration agents own source-to-Fabric translation + mapping; lakehouse/orchestrator own the actual item creation (handoff target)
 # - migration-bo vs migration-databricks/synapse: bo owns BI/report migration (BO→DAX); databricks/synapse own data-engineering migration (Spark/SQL/catalog)
+# - fabric-apps vs extensibility-toolkit: fabric-apps owns app BACKENDS (Rayfin: DB+auth+APIs+hosting, data in OneLake); extensibility-toolkit owns custom WORKLOADS (iFrame SDK, React components, Workload Hub)
