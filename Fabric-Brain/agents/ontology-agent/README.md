@@ -37,9 +37,9 @@
 | `instructions.md` | **LOAD FIRST** — Mandatory rules, decision trees, deployment sequence, API reference |
 | `entity_types_bindings.md` | Entity type definitions, properties, value types, ID allocation, NonTimeSeries & TimeSeries data bindings |
 | `relationships_contextualizations.md` | Relationship types, contextualizations (FK mapping), FK resolution strategies |
-| `graph_queries.md` | GQL language reference, graph model, 20 query examples, GQL vs KQL comparison |
-| `graph_model_deployment.md` | **API-only graph population** — when `updateDefinition` leaves the Graph Model empty: build + push the Graph Model definition (graphType/dataSources/graphDefinition), RefreshGraph job, GQL patterns, OneLake path gotcha |
 | `mcp_ontology.md` | Consume the ontology as an MCP server (preview) — endpoint URL, `.vscode/mcp.json`, agent mode, demo checklist |
+
+> **Graph internals (GQL, building/refreshing the Graph Model, the empty-graph-after-API fix) moved to `graph-agent`** — see `../graph-agent/gql_reference.md` and `../graph-agent/graph_definition_api.md`.
 | `known_issues.md` | Ontology-specific gotchas, tenant settings, capacity requirements, binding validation |
 
 ## Quick Start (for a new session)
@@ -47,7 +47,7 @@
 1. Read `instructions.md` — mandatory ontology architecture context & rules
 2. Read `entity_types_bindings.md` — entity type schemas + data bindings
 3. Read `relationships_contextualizations.md` — relationships & FK mapping
-4. Read `graph_queries.md` — GQL queries for graph traversal
+4. Read `../graph-agent/gql_reference.md` (graph-agent) — GQL queries for graph traversal
 5. Reference `known_issues.md` when debugging
 
 ## Key Insight
