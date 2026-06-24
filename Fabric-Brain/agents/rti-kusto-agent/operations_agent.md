@@ -51,12 +51,20 @@ Invoke-FabricApi -Method Post `
 
 ## Configurations.json Schema
 
+> **VERIFIED 2026-06 via getDefinition readback.** `goals`/`instructions`/`dataSources`/`actions`
+> are NESTED under a `configuration` object, `$schema` is required, and `dataSources`/`actions`
+> are objects `{}` (NOT arrays `[]`). A FLAT `{goals, instructions, ...}` payload is silently
+> ignored — the service keeps its empty default and your text never lands.
+
 ```json
 {
-    "goals": "<goals_text>",
-    "instructions": "<instructions_text>",
-    "dataSources": [],
-    "actions": [],
+    "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/operationsAgents/definition/1.0.0/schema.json",
+    "configuration": {
+        "goals": "<goals_text>",
+        "instructions": "<instructions_text>",
+        "dataSources": {},
+        "actions": {}
+    },
     "shouldRun": false
 }
 ```
@@ -64,11 +72,11 @@ Invoke-FabricApi -Method Post `
 ### Fields
 | Field | Type | Description |
 |-------|------|-------------|
-| `goals` | string | What the agent should monitor (multi-line text) |
-| `instructions` | string | How the agent should analyze data and format responses |
-| `dataSources` | array | Usually empty — configured manually in UI |
-| `actions` | array | Usually empty — Teams action configured in UI |
-| `shouldRun` | boolean | Whether the agent schedule is active |
+| `configuration.goals` | string | What the agent should monitor (multi-line text) |
+| `configuration.instructions` | string | How the agent should analyze data and format responses |
+| `configuration.dataSources` | object | Usually `{}` — Knowledge Source (KQL DB) added manually in UI |
+| `configuration.actions` | object | Usually `{}` — Teams action configured in UI |
+| `shouldRun` | boolean | Whether the agent schedule is active (top-level, NOT inside configuration) |
 
 ## Goals Template
 
@@ -187,12 +195,15 @@ def create_operations_agent(token, workspace_id, agent_name, goals, instructions
     )
     agent_id = resp.json()["id"]
     
-    # Step 2: Push definition
+    # Step 2: Push definition (nested schema — verified via readback)
     config = {
-        "goals": goals,
-        "instructions": instructions,
-        "dataSources": [],
-        "actions": [],
+        "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/operationsAgents/definition/1.0.0/schema.json",
+        "configuration": {
+            "goals": goals,
+            "instructions": instructions,
+            "dataSources": {},
+            "actions": {}
+        },
         "shouldRun": False
     }
     config_b64 = base64.b64encode(json.dumps(config).encode()).decode()

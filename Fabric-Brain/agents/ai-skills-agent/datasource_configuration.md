@@ -12,7 +12,10 @@
 | Data Warehouse | `data_warehouse` | T-SQL | Enterprise DW, complex joins |
 | KQL Database | `kusto` | KQL | Log analytics, time series |
 | GraphQL | `graph` | GraphQL | Graph relationships |
+| **Ontology** | `ontology` | **GQL** | **Knowledge graph: entities + relationships, multi-hop RCA / impact** |
 | Mirrored Database | `mirrored_database` | SQL | External DB mirrors |
+
+> **Ontology source** (`type: "ontology"`, folder prefix `ontology-{name}`, `artifactId` = ontology item id): accepted by `updateDefinition` (202 Succeeded, no 400) as of 2026-06 — see `../ontology-agent/`. fewshots `query` = GQL strings. Owned by `ontology-agent`.
 
 ---
 

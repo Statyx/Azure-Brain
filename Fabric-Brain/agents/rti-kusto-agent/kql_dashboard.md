@@ -105,7 +105,7 @@ Each tile is an object with:
         "crossFilterDisabled": false,
         "hideTileTitle": false,
         "multipleYAxes": {
-            "base": { "id": "-1", "columns": [], "yAxisScale": "linear" },
+            "base": { "id": "-1", "columns": [], "label": "", "yAxisMinimumValue": null, "yAxisMaximumValue": null, "yAxisScale": "linear", "horizontalLines": [] },
             "additional": []
         }
     },
@@ -117,6 +117,7 @@ Each tile is an object with:
 
 | Type | Use Case | KQL Pattern |
 |------|----------|-------------|
+| `card` | Single KPI value (NOT `stat`) | `summarize X = count()` → `visualOptions.multiStat__valueColumn` |
 | `line` | Time-series trends | `summarize ... by bin(Timestamp, interval)` |
 | `bar` / `barchart` | Categorical comparison | `summarize ... by Category` |
 | `pie` | Distribution / proportion | `summarize count() by Category` |
@@ -132,14 +133,20 @@ The dashboard uses a 24-column grid:
 - `x`: Column position (0-23)
 - `y`: Row position (0+, each unit ~50px)
 - `width`: Columns wide (1-24)
-- `height`: Rows tall (typically 5-6)
+- `height`: Rows tall
 
-### Example 2x3 Layout
+> ⚠️ **Minimum tile size is `width 9 × height 7` (verified 2026-06, schema v20).**
+> Any tile smaller than (9,7) throws `An error occurred — Current tile size (w, h) is smaller than the minimum supported tile size (9, 7)`. This applies to EVERY visual type, including `stat` cards. Do NOT use the old (6,4) KPI-card pattern.
+> - Stat/KPI cards: use **12 × 7** → max **2 per row** on a 24-col grid.
+> - Charts/tables: width 12 or 24, height **8+**.
+
+### Example Layout (all tiles ≥ 9×7)
 ```
-Row 0:  [Tile 1: x=0  w=12 h=6] [Tile 2: x=12 w=6  h=6] [Tile 3: x=18 w=6  h=6]
-Row 6:  [Tile 4: x=0  w=8  h=6] [Tile 5: x=8  w=8  h=6] [Tile 6: x=16 w=8  h=6]
-Row 12: [Tile 7: x=0  w=8  h=5] [Tile 8: x=8  w=8  h=5] [Tile 9: x=16 w=8  h=5]
-Row 17: [Tile 10: x=0 w=12 h=5] [Tile 11: x=12 w=6 h=5] [Tile 12: x=18 w=6 h=5]
+Row 0:  [Card1: x=0 w=12 h=7] [Card2: x=12 w=12 h=7]
+Row 7:  [Card3: x=0 w=12 h=7] [Card4: x=12 w=12 h=7]
+Row 14: [Line:  x=0 w=24 h=8]
+Row 22: [Line:  x=0 w=12 h=8] [Bar: x=12 w=12 h=8]
+Row 30: [Table: x=0 w=24 h=8]
 ```
 
 ## Example Tiles (Oil & Gas Refinery)

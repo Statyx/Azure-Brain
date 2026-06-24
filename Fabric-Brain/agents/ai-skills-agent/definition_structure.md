@@ -137,6 +137,7 @@ Binds a Fabric item (semantic model, lakehouse, warehouse, etc.) to the agent.
 | `data_warehouse` | Synapse Data Warehouse |
 | `kusto` | KQL Database (Eventhouse) |
 | `graph` | GraphQL API |
+| `ontology` | Ontology (knowledge graph; folder `ontology-{name}`, fewshots = GQL) |
 | `mirrored_database` | Mirrored Database |
 
 ### Elements Array

@@ -44,6 +44,40 @@ These settings must be enabled in the **Fabric Admin Portal** → **Tenant setti
 | Operations Agent | ✅ | ✅ | **Knowledge Source must be added in UI** |
 | Semantic Model | ✅ (Fabric API) | ✅ | TMDL or TMSL definition |
 
+## KQL Dashboard Schema
+
+### Line tile `multipleYAxes.base` property set (verified 2026-06)
+**Problem 1**: Dashboard fails to load with `"...multipleYAxes.base" requires the following properties to be defined: ["id", "columns", "label", "yAxisMinimumValue", "yAxisMaximumValue", "yAxisScale", "horizontalLine", "horizontalLines"]` on every `line` tile when `base` is partial.
+
+**Problem 2 (trap)**: That "required" list is MISLEADING. Adding `horizontalLine` (singular) then fails with `horizontalLine ... must NOT have unevaluated properties`. The schema uses `unevaluatedProperties: false`, and `horizontalLine` is NOT an allowed key — only `horizontalLines` (plural) is.
+
+**Fix**: Emit exactly these 7 keys on every line tile (NO `horizontalLine` singular):
+```json
+"multipleYAxes": {
+  "base": { "id": "-1", "columns": [], "label": "", "yAxisMinimumValue": null, "yAxisMaximumValue": null, "yAxisScale": "linear", "horizontalLines": [] },
+  "additional": []
+}
+```
+Nullable fields just need to be *defined*. Alternatively omit `multipleYAxes` entirely — but if present, it must be exactly complete with no extra keys.
+
+### Minimum tile size is 9×7 (verified 2026-06)
+**Problem**: A tile renders an error card `An error occurred — Current tile size (6, 4) is smaller than the minimum supported tile size (9, 7)`. Hits small KPI/`stat` cards first.
+
+**Cause**: Schema v20 enforces a minimum tile `layout` of `width 9 × height 7` for every visual type.
+
+**Fix**: Make every tile at least 9 wide and 7 tall. Practical pattern on the 24-col grid: stat cards **12×7** (2 per row), charts/tables **width 12 or 24, height 8+**. The old (6,4) four-cards-in-a-row layout is invalid.
+
+### Single-value card is `visualType: "card"` NOT `"stat"` (verified 2026-06)
+**Problem**: KPI tiles render `Visual formatting issue — Visual type stat is not supported`.
+
+**Cause**: Schema v20 has no `stat` visual type. The single big-number visual is `card` and needs card-specific `visualOptions` (the line/bar `xColumn`/`yColumns`/`hideTileTitle` shape is wrong for it).
+
+**Fix**: Use `visualType: "card"` with:
+```json
+"visualOptions": { "yAxisRight": false, "multiStat__textSize": "auto", "multiStat__valueColumn": { "type": "infer" } }
+```
+The query should return a single scalar (e.g. `... | summarize Count = count()`). `| render card` in the query is optional once `visualType` is set. Verified against the schema-20 example tile "Stat, Numeric, Small".
+
 ## Common Issues
 
 ### 1. KQL Token Scope

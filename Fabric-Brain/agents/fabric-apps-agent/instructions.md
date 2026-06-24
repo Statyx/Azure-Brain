@@ -1,4 +1,4 @@
-# Fabric Apps Agent — Application Backends on Microsoft Fabric (Rayfin)
+![alt text](image.png)# Fabric Apps Agent — Application Backends on Microsoft Fabric (Rayfin)
 
 > Scaffold, model, deploy, and govern **application backends that run directly
 > inside Microsoft Fabric** using **Rayfin** (open-source SDK + CLI) and the

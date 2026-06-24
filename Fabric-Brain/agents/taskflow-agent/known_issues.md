@@ -10,6 +10,7 @@
 | **JSON import = portal only** | No API endpoint for import | Must use Fabric portal UI |
 | **JSON import fails with special chars** | Portal parser rejects Unicode chars (arrows, em-dashes, accented letters) | Use ASCII only in names/descriptions; save as UTF-8 without BOM |
 | **JSON schema undocumented** | MS Learn docs don't show the import/export JSON schema | Use `type`/`id`(GUID)/`edges`(`source`/`target`) — NOT `taskType`/`connectors`/`startTaskId`. Export a sample flow from portal to verify |
+| **Invalid task `type` value causes "Unable to parse the file" (root-caused 2026-06)** | Portal returns "Error importing your file — Unable to parse the file uploaded" even though the JSON is valid, ASCII, no BOM. Root cause: an unsupported `type` string. The schema shape (`{tasks:[{type,id,name,description}],edges:[{source,target}],name,description}`) IS correct — confirmed against a real portal export | Use ONLY the exact lowercase type values from a real export: `get data`, `store data`, `track data`, `analyze and train data` (NOT `analyze and train`), `visualize`. `general`/`mirror data`/`distribute`/`develop` were NOT seen in the RTI export — verify before use. Activator/alerting tasks export as `track data`. When in doubt, build a flow in the portal and **export** to read the current valid values |
 
 ## Design & Behavior
 

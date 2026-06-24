@@ -126,7 +126,7 @@ The export/import JSON uses this exact schema (reverse-engineered from portal ex
 | `mirror data` | Mirror data |
 | `store data` | Store data |
 | `prepare data` | Prepare data |
-| `analyze and train` | Analyze and train data |
+| `analyze and train data` | Analyze and train data |
 | `track data` | Track data |
 | `visualize` | Visualize data |
 | `distribute` | Distribute data |
