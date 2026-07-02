@@ -9,6 +9,8 @@
 ![Knowledge](https://img.shields.io/badge/knowledge_files-14-green?style=for-the-badge)
 ![Fabric](https://img.shields.io/badge/Microsoft_Fabric-REST_API-purple?style=for-the-badge&logo=microsoft)
 
+**Contents:** [Quick Start](#-quick-start) · [Pick Your Scenario](#-pick-your-scenario) · [Agents](#-agents-20--8-domains) · [Knowledge Files](#-knowledge-files) · [Architecture](#-architecture) · [Documentation](#-documentation)
+
 ---
 
 ## ⚡ Quick Start

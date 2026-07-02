@@ -146,6 +146,20 @@ SensorReading
 
 ## Manual Steps After API Deployment
 
+> **What IS / ISN'T settable via API (verified 2026-06 via getDefinition readback):**
+> The official schema (`operationsAgents/definition/1.0.0`) defines `configuration.{instructions,
+> dataSources, actions, messageDestination, identity}`, `playbook`, `shouldRun`. BUT a raw
+> `updateDefinition` push does NOT honor the bindings:
+> - `goals` + `instructions` → **persist via API** ✅
+> - `dataSources` (Knowledge Source, e.g. `{alias:{id,type:"KustoDatabase"|"Ontology",workspaceId}}`)
+>   → the service **zeroes the `id`** to `00000000-...` → NOT actually bound. **UI only.**
+> - `messageDestination` (`{kind:"Recipient",recipient:UPN}` or `{kind:"TeamsChannel",teamId,channelId}`)
+>   → stored as **null** (dropped). **UI only.**
+> - `playbook` → an empty `{}` returns **400 "No rule definitions available in the playbook"**; omit it
+>   entirely on the push (the service derives/holds the rules). Rules are authored in the **UI.**
+> So: push `goals`+`instructions` via API; do Knowledge Source + alert destination + rules + schedule
+> + enable (`shouldRun=true`) in the portal.
+
 The following CANNOT be done via API and must be configured in the Fabric portal:
 
 ### 1. Add Knowledge Source (KQL Database)

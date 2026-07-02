@@ -2,9 +2,11 @@
 
 **A modular knowledge base for building cloud data & AI solutions with GitHub Copilot — organized into specialized "brains" per technology, plus cross-cutting meta-tooling.**
 
-![Brains](https://img.shields.io/badge/brains-2-blue?style=for-the-badge)
-![Agents](https://img.shields.io/badge/agents-25-orange?style=for-the-badge)
+![Brains](https://img.shields.io/badge/brains-3_active-blue?style=for-the-badge)
+![Agents](https://img.shields.io/badge/agents-29_active-orange?style=for-the-badge)
 ![Knowledge](https://img.shields.io/badge/knowledge_files-20+-green?style=for-the-badge)
+
+**Contents:** [Vision](#vision) · [Brains](#-brains) · [Quick Start](#-quick-start) · [Umbrella Knowledge](#-umbrella-knowledge) · [Testing](#-testing) · [Add a Brain](#-adding-a-new-brain)
 
 ---
 
