@@ -157,6 +157,8 @@ Every visual config follows this pattern:
 
 **PITFALL**: Using `card` (old visual) instead of `cardVisual` (new visual) will cause rendering issues.
 
+> **EXCEPTION — hiding the category label**: `cardVisual` **ignores** `categoryLabel show=false`, so the measure's (often English) label stays and gets **truncated** in short cards. When you want value-only cards with a custom title (e.g. a French label via `vcObjects.title`), use the CLASSIC `visualType: "card"` with `categoryLabels` (plural) `show=false`, value styled via `labels`, and projection bucket **`Values`**. cardVisual = modern look; classic `card` = reliable label control.
+
 ### Projections
 
 Cards:
@@ -174,7 +176,14 @@ Charts:
 }
 ```
 
-**PITFALL**: Cards use `Data` bucket (not `Values`).
+**PITFALL**: Cards use `Data` bucket (not `Values`). *(Classic `card` uses `Values` — see the label-hiding exception above.)*
+
+### Visual gotchas (learned from deploys)
+
+- **Textbox over a colored band (persona banner)**: a legacy `textbox` has an OPAQUE white background by default → white/light title becomes invisible **and** shows a vertical scrollbar. Fix: `vcObjects.background show=false` (transparent) + `border show=false` + textbox `z` ABOVE the band shape.
+- **Textbox scrollbar**: appears when text height ≈ container. Fix: put title+subtitle in **ONE** textbox as 2 paragraphs with GENEROUS height (~58px), not two tight stacked textboxes (each adds its own scrollbar).
+- **Table `CouldNotResolveSemanticQueryDefinition`** — *"two expressions in its select clause with identical native reference name"*: two columns share a property name (e.g. two `name` columns). Fix: make **`NativeReferenceName` UNIQUE** per column (pass a caption e.g. `Sponsor` / `Zone`); the `Name` (`{table}.{prop}`) is already unique.
+- **Deploy LRO looks hung but isn't**: `poll_operation` sleeps silently up to 120s → a sync terminal backgrounds before the `✅`. Redirect deploy output to a file (`python -u deploy_report.py *> _out.txt`) and read it; `state.json` `report_id` is written only on success. After a redeploy, **fully reopen** the report (or a private window) to bust the Fabric render cache.
 
 ## prototypeQuery — Required for All Data Visuals
 
