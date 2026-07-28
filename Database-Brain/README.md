@@ -7,7 +7,7 @@
 ![Status](https://img.shields.io/badge/status-active-brightgreen?style=for-the-badge)
 ![Brain](https://img.shields.io/badge/brain-Database-blue?style=for-the-badge&logo=azuredatastudio)
 ![Scope](https://img.shields.io/badge/scope-OLTP_%7C_NoSQL_%7C_Migration-orange?style=for-the-badge)
-![Agents](https://img.shields.io/badge/agents-4_active_%2F_18_total-blue?style=for-the-badge)
+![Agents](https://img.shields.io/badge/agents-4_active_%2F_22_catalogued-blue?style=for-the-badge)
 
 ---
 
@@ -67,16 +67,20 @@ Target scenarios:
 
 ## Knowledge Files (planned)
 
+## Knowledge Files
+
+Status legend: 🟢 available · 🟡 planned
+
 | File | Purpose |
 | --- | --- |
-| `azuresql_essentials.md` | Tiers (DTU vs vCore vs Hyperscale), networking, auth, HA/DR |
-| `postgres_essentials.md` | Flexible Server tiers, HA modes, extensions allow-list, version policy |
-| `cosmos_essentials.md` | Partition key, RU/s, consistency, multi-region, change feed |
-| `oracle_to_postgres.md` | Ora2Pg workflow, PL/SQL → PL/pgSQL patterns, DMS Oracle source config |
-| `migration_tooling.md` | DMS vs SSMA vs DMA vs Ora2Pg vs MongoShake — decision matrix |
-| `database_security.md` | Entra-only auth, private endpoints, TDE/CMK, network isolation |
-| `database_cost.md` | Sizing methodology, reserved capacity vs autoscale, dev/test discounts |
-| `vector_workloads.md` | pgvector vs Cosmos DB DiskANN vs AI Search — when to use which |
+| 🟢 [`oracle_to_postgres.md`](oracle_to_postgres.md) | Dialect & type reference: platform constraints, type mapping, SQL divergences, PL/SQL → PL/pgSQL |
+| 🟢 [`migration_tooling.md`](migration_tooling.md) | DMS vs SSMA vs DMA vs Ora2Pg — decision matrix + standard sequence |
+| 🟡 `azuresql_essentials.md` | Tiers (DTU vs vCore vs Hyperscale), networking, auth, HA/DR |
+| 🟡 `postgres_essentials.md` | Flexible Server tiers, HA modes, extensions allow-list, version policy |
+| 🟡 `cosmos_essentials.md` | Partition key, RU/s, consistency, multi-region, change feed |
+| 🟡 `database_security.md` | Entra-only auth, private endpoints, TDE/CMK, network isolation |
+| 🟡 `database_cost.md` | Sizing methodology, reserved capacity vs autoscale, dev/test discounts |
+| 🟡 `vector_workloads.md` | pgvector vs Cosmos DB DiskANN vs AI Search — when to use which |
 
 ---
 
@@ -100,14 +104,16 @@ Demo workflow — pick the path based on audience:
 
 When adding the next agent:
 1. Create folder `agents/{domain}/{agent-name}/` with `instructions.md` + `README.md`
-2. Flip status to `active` in [`agents/_catalog.yaml`](agents/_catalog.yaml)
+2. Flip status to `active` in [`agents/_catalog.yaml`](agents/_catalog.yaml) — only `active` entries are required to exist on disk
 3. Update the agent list above
-4. Update `Meta-Brain/tests/test_smoke.py` `BRAINS = [...]` constant to include `"Database-Brain"` (if not already done)
-5. Run umbrella tests from `Meta-Brain/`:
+4. Run umbrella tests from `Meta-Brain/`:
    ```bash
    cd ../Meta-Brain
    python -m pytest tests/ -v --tb=short
    ```
+
+> Database-Brain is already covered by the umbrella suite (`BRAINS` in
+> `Meta-Brain/tests/conftest.py`), including its **nested** `agents/<domain>/<agent>/` layout.
 
 ---
 

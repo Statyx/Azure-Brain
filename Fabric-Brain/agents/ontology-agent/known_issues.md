@@ -137,6 +137,29 @@ $bodyStr = '{"definition":{"parts":[' + $partsJson + ']}}'
 }
 ```
 
+### 8b. TimeSeries Values Never Come Back Through the Ontology (CRITICAL)
+
+**Symptom**: a Data Agent whose only source is the Ontology answers *"no data"* to **any question
+asking for a telemetry NUMBER** (average, max, latest value), while topology questions work.
+
+**Trace signature** — this is how you recognise it in the run steps:
+```
+analyze.database.execute   -> (empty)
+trace.analyze_ontology     -> "All variations in attempt 1 failed, and no retryable
+                              errors were found to guide regeneration."
+```
+The generated query shows the split: `entitySelector` (GQL half) resolves correctly,
+`timeSeriesSelector` returns 0 rows.
+
+**Cause + reusable fix**: platform behaviour of the Fabric IQ TimeSeries query path. Re-pointing the
+binding (`KustoTable` ↔ `LakehouseTable`) and `RefreshGraph` do **not** help.
+→ **Full write-up and the dual-source fix: [`../rti-kusto-agent/ontology.md`](../rti-kusto-agent/ontology.md)**
+and [`../ai-skills-agent/datasource_configuration.md`](../ai-skills-agent/datasource_configuration.md).
+
+**Rule for agent authors**: never state "TimeSeries bindings verified" in `aiInstructions` unless you
+have actually seen values in a trace — asserting it makes the agent confidently retry a dead path.
+Confirmed independently on two projects (2026-07).
+
 ### 9. Contextualization FK Column Not Found
 
 **Symptom**: Relationship created but contextualization fails validation.

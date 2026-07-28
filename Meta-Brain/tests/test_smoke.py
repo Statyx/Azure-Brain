@@ -1,57 +1,30 @@
-"""Smoke tests for Azure-Brain knowledge base (Fabric-Brain + Meta-Brain).
+"""Smoke tests for the Azure-Brain knowledge base (every brain in `conftest.BRAINS`).
 
 Validates structural integrity: catalogs parse, agent folders match catalogs,
 instructions.md exists per agent, Python files compile, JSON parses.
+
+Brain list and agent discovery live in `conftest.py` (single source of truth,
+depth-aware so both flat and domain-nested brains are covered).
 """
 import ast
 import json
 import pathlib
 
 import pytest
-import yaml
 
-# ROOT = Azure-Brain umbrella (parent of Fabric-Brain and Meta-Brain)
-ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
-BRAINS = ["Fabric-Brain", "Meta-Brain"]
+from conftest import (
+    ROOT,
+    BRAINS,
+    agent_id,
+    all_agent_dirs,
+    catalog_agent_names,
+    catalog_entries,
+    catalog_path,
+    folder_agent_names,
+    load_catalog,
+)
 
-
-def _agents_dir(brain_name: str) -> pathlib.Path:
-    return ROOT / brain_name / "agents"
-
-
-def _catalog_path(brain_name: str) -> pathlib.Path:
-    return _agents_dir(brain_name) / "_catalog.yaml"
-
-
-def _load_catalog(brain_name: str) -> dict:
-    return yaml.safe_load(_catalog_path(brain_name).read_text(encoding="utf-8"))
-
-
-def _catalog_agent_names(brain_name: str) -> set[str]:
-    cat = _load_catalog(brain_name)
-    names = set()
-    for domain in cat.get("domains", {}).values():
-        for agent in domain.get("agents", []):
-            names.add(agent["name"])
-    return names
-
-
-def _folder_agent_names(brain_name: str) -> set[str]:
-    ad = _agents_dir(brain_name)
-    if not ad.exists():
-        return set()
-    return {d.name for d in ad.iterdir()
-            if d.is_dir() and not d.name.startswith("_")}
-
-
-def _all_agent_dirs() -> list[pathlib.Path]:
-    out = []
-    for b in BRAINS:
-        ad = _agents_dir(b)
-        if ad.exists():
-            out.extend(sorted(d for d in ad.iterdir()
-                              if d.is_dir() and not d.name.startswith("_")))
-    return out
+_ALL_AGENT_DIRS = all_agent_dirs()
 
 
 # ── Catalog tests (one per brain) ───────────────────────────────
@@ -60,27 +33,31 @@ def _all_agent_dirs() -> list[pathlib.Path]:
 @pytest.mark.parametrize("brain", BRAINS)
 class TestCatalog:
     def test_catalog_exists(self, brain):
-        assert _catalog_path(brain).exists(), f"{brain}/agents/_catalog.yaml missing"
+        assert catalog_path(brain).exists(), f"{brain}/agents/_catalog.yaml missing"
 
     def test_catalog_parses(self, brain):
-        assert "domains" in _load_catalog(brain)
+        assert "domains" in load_catalog(brain)
 
     def test_catalog_has_domains(self, brain):
-        assert len(_load_catalog(brain)["domains"]) >= 1
+        assert len(load_catalog(brain)["domains"]) >= 1
 
     def test_every_agent_has_name_and_purpose(self, brain):
-        for domain_key, domain in _load_catalog(brain)["domains"].items():
+        for domain_key, domain in load_catalog(brain)["domains"].items():
             for agent in domain.get("agents", []):
                 assert "name" in agent, f"{brain}/{domain_key} agent missing 'name'"
                 assert "purpose" in agent, f"{brain}/{agent.get('name')} missing 'purpose'"
 
     def test_no_duplicate_agent_names(self, brain):
-        names = []
-        for domain in _load_catalog(brain)["domains"].values():
-            for agent in domain.get("agents", []):
-                names.append(agent["name"])
+        names = [a["name"] for a in catalog_entries(brain)]
         dups = [n for n in names if names.count(n) > 1]
         assert not dups, f"{brain} duplicate agent names: {dups}"
+
+    def test_status_values_are_known(self, brain):
+        allowed = {"active", "planned", "deprecated"}
+        for agent in catalog_entries(brain):
+            status = agent.get("status")
+            assert status is None or status in allowed, \
+                f"{brain}/{agent['name']} has unknown status '{status}'"
 
 
 # ── Folder ↔ Catalog sync ──────────────────────────────────────
@@ -89,28 +66,29 @@ class TestCatalog:
 @pytest.mark.parametrize("brain", BRAINS)
 class TestCatalogSync:
     def test_every_folder_in_catalog(self, brain):
-        orphans = _folder_agent_names(brain) - _catalog_agent_names(brain)
+        orphans = folder_agent_names(brain) - catalog_agent_names(brain, implemented_only=False)
         assert not orphans, f"{brain} folders not in catalog: {orphans}"
 
-    def test_every_catalog_entry_on_disk(self, brain):
-        missing = _catalog_agent_names(brain) - _folder_agent_names(brain)
-        assert not missing, f"{brain} catalog entries with no folder: {missing}"
+    def test_every_implemented_catalog_entry_on_disk(self, brain):
+        missing = catalog_agent_names(brain) - folder_agent_names(brain)
+        assert not missing, \
+            f"{brain} catalog entries marked implemented but with no folder: {missing}"
 
 
 # ── Agent structure ─────────────────────────────────────────────
 
 
 class TestAgentStructure:
-    """Every agent folder (across both brains) must contain instructions.md."""
+    """Every agent folder (across every brain) must contain instructions.md."""
 
-    @pytest.fixture(params=_all_agent_dirs(),
-                    ids=[f"{d.parent.parent.name}/{d.name}" for d in _all_agent_dirs()])
+    @pytest.fixture(params=_ALL_AGENT_DIRS,
+                    ids=[agent_id(d) for d in _ALL_AGENT_DIRS])
     def agent_dir(self, request):
         return request.param
 
     def test_has_instructions(self, agent_dir):
         assert (agent_dir / "instructions.md").exists(), \
-            f"{agent_dir}/instructions.md missing"
+            f"{agent_id(agent_dir)}/instructions.md missing"
 
     def test_instructions_not_empty(self, agent_dir):
         path = agent_dir / "instructions.md"

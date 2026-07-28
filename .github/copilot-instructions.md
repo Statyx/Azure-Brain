@@ -4,10 +4,15 @@
 
 This repository is a **multi-brain knowledge base** for building cloud data & AI solutions with GitHub Copilot.
 
-Two brains live at the root:
+Three brains live at the root:
 
-- [`Fabric-Brain/`](../Fabric-Brain/) — 20 agents + 14 knowledge files for Microsoft Fabric (Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology).
+- [`Fabric-Brain/`](../Fabric-Brain/) — 26 agents + 14 knowledge files for Microsoft Fabric (Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology).
+- [`Database-Brain/`](../Database-Brain/) — 4 active agents (of 22 catalogued) for Azure databases: Azure SQL, PostgreSQL, Cosmos DB, MySQL and cross-engine migration (Oracle → PostgreSQL track is live).
 - [`Meta-Brain/`](../Meta-Brain/) — 5 cross-cutting agents + shared infrastructure (testing, PPTX, HTML diagrams, project orchestration, README authoring).
+
+> **Agent folder layout differs per brain.** Fabric-Brain and Meta-Brain are flat
+> (`agents/<agent>/`). Database-Brain is nested by domain (`agents/<NN-domain>/<agent>/`).
+> Tooling that walks agents must handle both depths.
 
 ## How to Use
 
@@ -21,6 +26,8 @@ Two brains live at the root:
 - **Read [`resource_ids.md`](../Fabric-Brain/resource_ids.md)** before any deployment.
 - **Read [`known_issues.md`](../known_issues.md)** at umbrella root before debugging — most errors are already documented.
 - **Follow [`agent_principles.md`](../agent_principles.md)** — config-driven, idempotent, async-first. Applies to every brain.
+- **Never claim a capability is "verified"** in agent instructions unless a trace or test output
+  proves it. A false "verified" makes downstream agents retry a path that cannot work.
 
 ## Setup for New Users
 
@@ -40,13 +47,13 @@ cd Meta-Brain
 python -m pytest tests/ -v --tb=short
 ```
 
-Tests parametrize over both brains' catalogs, agent folders, instructions, internal links, Python syntax, and JSON parsing.
+Tests parametrize over every brain's catalog, agent folders, instructions, internal links, Python syntax, and JSON parsing. `BRAINS` in `tests/conftest.py` is the single source of truth for which brains are covered.
 
-## Adding a Third Brain
+## Adding a New Brain
 
 When you add a new brain (e.g. `Databricks-Brain/`):
 
 1. Create the folder + `README.md` + `agents/_catalog.yaml`
-2. Add it to `Meta-Brain/tests/test_smoke.py` `BRAINS = [...]` constant
-3. Update `README.md` brain table at umbrella root
+2. Add it to the `BRAINS` list in `Meta-Brain/tests/conftest.py` (covers **all** test modules)
+3. Update the brain table in `README.md` **and** the brain list at the top of this file
 4. Re-run umbrella tests

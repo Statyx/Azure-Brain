@@ -1,29 +1,20 @@
-"""Cross-reference tests for Azure-Brain (Fabric-Brain + Meta-Brain).
+"""Cross-reference tests for Azure-Brain (every brain in `conftest.BRAINS`).
 
 Validates that internal links between agent instructions and root docs
 resolve correctly, and that catalogs are consistent with disk.
 """
-import pathlib
 import re
 
 import pytest
-import yaml
 
-# ROOT = Azure-Brain umbrella
-ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
-BRAINS = ["Fabric-Brain", "Meta-Brain"]
-
-
-def _agents_dir(brain_name: str) -> pathlib.Path:
-    return ROOT / brain_name / "agents"
-
-
-def _catalog_path(brain_name: str) -> pathlib.Path:
-    return _agents_dir(brain_name) / "_catalog.yaml"
-
-
-def _load_catalog(brain_name: str) -> dict:
-    return yaml.safe_load(_catalog_path(brain_name).read_text(encoding="utf-8"))
+from conftest import (
+    BRAINS,
+    agent_dirs,
+    agent_id,
+    catalog_agent_names,
+    folder_agent_names,
+    load_catalog,
+)
 
 
 # ── Internal link resolution ────────────────────────────────────
@@ -34,19 +25,22 @@ LINK_RE = re.compile(r'\[([^\]]*)\]\(([^)]+\.md)\)')
 
 def _all_instruction_files():
     out = []
-    for b in BRAINS:
-        ad = _agents_dir(b)
-        if ad.exists():
-            out.extend(sorted(ad.rglob("instructions.md")))
+    for brain in BRAINS:
+        for d in agent_dirs(brain):
+            f = d / "instructions.md"
+            if f.exists():
+                out.append(f)
     return out
+
+
+_INSTRUCTION_FILES = _all_instruction_files()
 
 
 class TestInternalLinks:
     """All relative markdown links in instructions.md must resolve."""
 
-    @pytest.fixture(params=_all_instruction_files(),
-                    ids=[f"{f.parent.parent.parent.name}/{f.parent.name}"
-                         for f in _all_instruction_files()])
+    @pytest.fixture(params=_INSTRUCTION_FILES,
+                    ids=[agent_id(f.parent) for f in _INSTRUCTION_FILES])
     def instruction_file(self, request):
         return request.param
 
@@ -63,7 +57,7 @@ class TestInternalLinks:
                 broken.append(f"  [{link_text}]({link_target}) → {resolved}")
         if broken:
             pytest.fail(
-                f"{instruction_file.parent.name}/instructions.md broken links:\n"
+                f"{agent_id(instruction_file.parent)}/instructions.md broken links:\n"
                 + "\n".join(broken)
             )
 
@@ -74,41 +68,38 @@ class TestInternalLinks:
 @pytest.mark.parametrize("brain", BRAINS)
 class TestCatalogDomains:
     def test_domain_descriptions(self, brain):
-        for key, domain in _load_catalog(brain)["domains"].items():
+        for key, domain in load_catalog(brain)["domains"].items():
             assert "description" in domain, f"{brain}/{key} missing description"
             assert len(domain["description"]) > 5, f"{brain}/{key} trivial description"
 
-    def test_agent_count_matches_folders(self, brain):
-        catalog_count = sum(
-            len(d.get("agents", []))
-            for d in _load_catalog(brain)["domains"].values()
-        )
-        ad = _agents_dir(brain)
-        folder_count = len([
-            d for d in ad.iterdir()
-            if d.is_dir() and not d.name.startswith("_")
-        ])
+    def test_implemented_agent_count_matches_folders(self, brain):
+        catalog_count = len(catalog_agent_names(brain))
+        folder_count = len(folder_agent_names(brain))
         assert catalog_count == folder_count, \
-            f"{brain} catalog has {catalog_count} agents, disk has {folder_count}"
+            (f"{brain} catalog lists {catalog_count} implemented agents, "
+             f"disk has {folder_count}")
 
 
 # ── Known issues files ──────────────────────────────────────────
 
 def _agent_known_issues():
     out = []
-    for b in BRAINS:
-        ad = _agents_dir(b)
-        if ad.exists():
-            out.extend(sorted(ad.rglob("known_issues.md")))
+    for brain in BRAINS:
+        for d in agent_dirs(brain):
+            f = d / "known_issues.md"
+            if f.exists():
+                out.append(f)
     return out
+
+
+_KNOWN_ISSUES = _agent_known_issues()
 
 
 class TestKnownIssues:
     """known_issues.md files should have real content."""
 
-    @pytest.fixture(params=_agent_known_issues(),
-                    ids=[f"{f.parent.parent.parent.name}/{f.parent.name}"
-                         for f in _agent_known_issues()])
+    @pytest.fixture(params=_KNOWN_ISSUES,
+                    ids=[agent_id(f.parent) for f in _KNOWN_ISSUES])
     def ki_file(self, request):
         return request.param
 

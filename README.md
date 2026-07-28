@@ -3,7 +3,7 @@
 **A modular knowledge base for building cloud data & AI solutions with GitHub Copilot — organized into specialized "brains" per technology, plus cross-cutting meta-tooling.**
 
 ![Brains](https://img.shields.io/badge/brains-3_active-blue?style=for-the-badge)
-![Agents](https://img.shields.io/badge/agents-29_active-orange?style=for-the-badge)
+![Agents](https://img.shields.io/badge/agents-35_active-orange?style=for-the-badge)
 ![Knowledge](https://img.shields.io/badge/knowledge_files-20+-green?style=for-the-badge)
 
 **Contents:** [Vision](#vision) · [Brains](#-brains) · [Quick Start](#-quick-start) · [Umbrella Knowledge](#-umbrella-knowledge) · [Testing](#-testing) · [Add a Brain](#-adding-a-new-brain)
@@ -16,11 +16,15 @@ Azure-Brain is a **multi-brain knowledge architecture**. Each brain is a self-co
 
 ```
 Azure-Brain/                  ← umbrella (this repo)
-├── Fabric-Brain/             ← Microsoft Fabric (20 agents, 8 domains)
-├── Database-Brain/           ← Azure databases (Azure SQL, PostgreSQL, Cosmos DB, migrations)
+├── Fabric-Brain/             ← Microsoft Fabric (26 agents, flat layout)
+├── Database-Brain/           ← Azure databases (4 active agents, nested by domain)
 ├── Meta-Brain/               ← cross-cutting (5 agents — testing, PPTX, etc.)
 └── (future brains)           ← Synapse-Brain, Databricks-Brain, Foundry-Brain, ...
 ```
+
+> **Layout note.** Fabric-Brain and Meta-Brain keep agents flat (`agents/<agent>/`).
+> Database-Brain nests them by domain (`agents/<NN-domain>/<agent>/`). Tooling that walks
+> agents must handle both depths — see `Meta-Brain/tests/conftest.py`.
 
 ---
 
@@ -28,9 +32,9 @@ Azure-Brain/                  ← umbrella (this repo)
 
 | Brain | Scope | Agents | Status |
 | --- | --- | --- | --- |
-| [**Fabric-Brain**](Fabric-Brain/README.md) | Microsoft Fabric — Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology | 20 | ✅ Active |
+| [**Fabric-Brain**](Fabric-Brain/README.md) | Microsoft Fabric — Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology | 26 | ✅ Active |
 | [**Meta-Brain**](Meta-Brain/README.md) | Cross-cutting — testing, PowerPoint, HTML diagrams, README authoring, project orchestration | 5 | ✅ Active |
-| [**Database-Brain**](Database-Brain/README.md) | Azure databases — Azure SQL, PostgreSQL, Cosmos DB, MySQL, cross-engine migration (Oracle → PG, SQL Server → Azure SQL, Mongo → Cosmos DB) | 4 active / 18 total (Oracle→PG track live, CLI + Copilot paths) | 🟢 Active |
+| [**Database-Brain**](Database-Brain/README.md) | Azure databases — Azure SQL, PostgreSQL, Cosmos DB, MySQL, cross-engine migration (Oracle → PG, SQL Server → Azure SQL, Mongo → Cosmos DB) | 4 active / 22 catalogued (Oracle→PG track live, CLI + Copilot paths) | 🟢 Active |
 | _Synapse-Brain_ | Azure Synapse legacy | — | 📋 Planned |
 | _Databricks-Brain_ | Databricks on Azure | — | 📋 Planned |
 | _Foundry-Brain_ | Microsoft AI Foundry (multi-agent orchestration) | — | 📋 Planned |
@@ -79,7 +83,7 @@ cd Meta-Brain
 python -m pytest tests/ -v --tb=short
 ```
 
-Validates: catalogs match disk in both brains, every agent has `instructions.md`, internal markdown links resolve, Python compiles, JSON parses.
+Validates: catalogs match disk in every brain, every agent has `instructions.md`, internal markdown links resolve, Python compiles, JSON parses. The `BRAINS` list in `Meta-Brain/tests/conftest.py` controls which brains are covered.
 
 ---
 
@@ -87,8 +91,8 @@ Validates: catalogs match disk in both brains, every agent has `instructions.md`
 
 1. Create a new top-level folder (e.g. `Databricks-Brain/`)
 2. Add `Databricks-Brain/README.md`, `agents/`, `agents/_catalog.yaml`
-3. Update `Meta-Brain/tests/test_smoke.py` `BRAINS = [...]` to include the new brain
-4. Update this README's brain table
+3. Add the brain to the `BRAINS` list in `Meta-Brain/tests/conftest.py` (single source of truth — covers every test module)
+4. Update this README's brain table **and** the brain list in `.github/copilot-instructions.md`
 5. Re-run umbrella tests to confirm nothing broke
 
 ---
