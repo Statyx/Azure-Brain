@@ -35,6 +35,7 @@
 | `eventhouse_consumption.md` | **NEW** — Performance best practices, string matching matrix, monitoring, consumption patterns |
 | `kql_language.md` | KQL query language reference — operators, functions, timeseries, renderoperators |
 | `kql_dashboard.md` | RTI Dashboard creation, tile definitions, RealTimeDashboard.json schema |
+| `kql_onelake_directlake.md` | **NEW** — Expose KQL telemetry to Direct Lake via the mirroring policy + OneLake shortcut (no gold notebook) |
 | `ontology.md` | Ontology item: entity types, properties, relationships, data bindings, contextualizations |
 | `graph_queries.md` | GQL language reference, graph traversal patterns, query examples |
 | `operations_agent.md` | Operations Agent: creation, goals, instructions, Knowledge Source, Teams integration |

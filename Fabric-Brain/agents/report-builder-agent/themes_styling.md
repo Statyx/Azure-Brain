@@ -244,6 +244,36 @@ Use a thin rectangle visual (`shape` of `rectangle` type), `height: 1`, fill `#E
 
 ---
 
+## 5b. Accessible, reusable persona theme (Fluent 2)
+
+For **branded, multi-persona operational reports** (one page per audience: Direction / Production /
+Project / Client), ship a **single standalone JSON theme file** and load it from the report build so
+it is reusable across reports and projects. Proven on the RTI Operations / Digital Twin pattern
+(Template 8) — a WCAG / colorblind-checked theme applied once via a `visualStyles` wildcard.
+
+**Theme file = one source of truth** — `theme/Accessible_Fluent2_Theme.json`, containing:
+
+| Block | Purpose |
+|-------|---------|
+| `dataColors[]` | 8-color colorblind-safe palette (verify each meets WCAG AA on the page canvas) |
+| `good` / `neutral` / `bad` | sentiment colors for KPI values (e.g. `#58C645` / `#FDCC39` / `#FF4E56`) |
+| `divergent` max/center/min | for heat / gradient encodings |
+| `visualStyles: { "*": { "*": { … } } }` | **wildcard** applying background + border (radius 10) + dropShadow + title to *every* visual at once → a consistent Fluent-2 look with no per-visual styling |
+
+**Load pattern**: the report build reads the theme JSON, overrides `name` = `"theme"`, and **drops
+`$schema`** before sending it via `updateDefinition`. Fabric accepts `visualStyles` as an **object**
+map `{"*":{"*":{card:[{…}]}}}` — **not** a list.
+
+**Persona bands** — one dark brand color per persona page, always with white text at AAA/AA contrast
+(e.g. `#00008F` / `#027180` / `#896610` / `#863C41`). **Page canvas** = a light grey
+(`#F5F4F2`) via the section `objects.background` + `outspace` so white visuals pop.
+
+> Fluent 2 as a *base theme* is Desktop-preview only — for the **service**, emulate it with this JSON
+> theme. Legacy-format persona reports have specific banner/card/table pitfalls — see
+> [`known_issues.legacy.md`](known_issues.legacy.md).
+
+---
+
 ## 6. Cross-References
 
 - Property catalog → [`cli_knowledge/vcos/`](cli_knowledge/vcos/), [`cli_knowledge/visuals/<type>/objects/`](cli_knowledge/visuals/)

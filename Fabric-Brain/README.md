@@ -40,6 +40,7 @@ cp environment.example.md environment.md      # Fill with your env paths
 | **Build a BI dashboard** (Lakehouse → Model → Report) | Standard BI Demo | 2–3h | [../Meta-Brain/TEMPLATES.md](../Meta-Brain/TEMPLATES.md#template-1) |
 | **Set up real-time analytics** (EventStream → Eventhouse → KQL) | Real-Time IoT | 3–4h | [../Meta-Brain/TEMPLATES.md](../Meta-Brain/TEMPLATES.md#template-2) |
 | **Build a full Smart Factory demo** (Batch + RT + Ontology + AI) | Smart Factory | 4–6h | [../Meta-Brain/TEMPLATES.md](../Meta-Brain/TEMPLATES.md#template-3) |
+| **Build a Real-Time Operations / Digital Twin** (Topology + Telemetry + Ontology + Graph + dual-source Agent + Portal) | RTI Operations | 1–2d | [../Meta-Brain/TEMPLATES.md](../Meta-Brain/TEMPLATES.md#template-8-real-time-operations--digital-twin-12-days) |
 | **Add AI Q&A to existing data** (Data Agent + Instructions) | Data Agent Add-On | 45min | [../Meta-Brain/TEMPLATES.md](../Meta-Brain/TEMPLATES.md#template-4) |
 | **Migrate from SAP BusinessObjects** (Assessment → Migration Waves) | BO Migration | 4–6w | [migration-bo-agent](agents/migration-bo-agent/) |
 
@@ -108,6 +109,12 @@ cp environment.example.md environment.md      # Fill with your env paths
 | Agent | What it does |
 | --- | --- |
 | [migration-bo](agents/migration-bo-agent/) | BusinessObjects → Fabric migration — 5-stage framework, 119 BO→DAX mappings |
+
+### 🖥️ Experience (1)
+
+| Agent | What it does |
+| --- | --- |
+| [operations-portal](agents/operations-portal-agent/) | External operations portal (FastAPI + frontend) — Data Agent chat proxy, Power BI + RTI dashboard embed, live SVG views; the last-mile UI of the RTI Operations / Digital Twin pattern |
 
 > Cross-cutting agents (testing, PPTX, architecture diagrams, project orchestrator, project presentation) live in [`../Meta-Brain/agents/`](../Meta-Brain/README.md).
 >

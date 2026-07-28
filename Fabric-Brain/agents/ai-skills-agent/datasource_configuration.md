@@ -250,7 +250,72 @@ Files/Config/draft/
 
 ---
 
+## Pattern — Dual-source: Ontology (GQL) + Semantic Model (DAX)
+
+This is the reusable **RTI Operations / Digital Twin** Data Agent: one agent answers both
+*"how do things connect / who is impacted"* (topology, root-cause, impact) **and**
+*"what is the number"* (live telemetry metrics), by combining **two** sources with an explicit
+routing rule. Proven on Publicis LEC and Network Operations — see Template 8 in
+`../../../Meta-Brain/TEMPLATES.md`.
+
+**Why two sources?** The ontology is unbeatable for multi-hop RCA/impact via GQL, but the Fabric
+IQ TimeSeries selector may return empty telemetry *values* in a Data Agent (see
+`../rti-kusto-agent/ontology.md`). So topology → ontology (GQL), numbers → semantic model (DAX)
+over the telemetry (mirrored to Direct Lake via `../rti-kusto-agent/kql_onelake_directlake.md`).
+
+| Source | `type` | Query lang | Answers |
+|--------|--------|-----------|---------|
+| Ontology (knowledge graph) | `ontology` | GQL | topology, relationships, root-cause, **impact** (who/what is affected) |
+| Semantic model (Direct Lake) | `semantic_model` | DAX | **live telemetry numbers**: occupancy, wait, density, counts, rankings |
+
+### Folder layout (each source = its own folder, in both draft + published)
+
+```
+Files/Config/{draft,published}/
+├── ontology-<OntologyName>/
+│   ├── datasource.json      (type "ontology", artifactId = ontology id, fewshots = GQL)
+│   └── fewshots.json
+└── semantic-model-<ModelName>/
+    ├── datasource.json      (type "semantic_model", artifactId = model id, elements = table/column/measure tree)
+    └── fewshots.json        (fewshots = EVALUATE DAX)
+```
+
+### The routing rule (put it in BOTH `aiInstructions` and each `dataSourceInstructions`)
+
+Top-level `aiInstructions` must state the split plainly, e.g.:
+
+> *"Answer by querying a source, never from general knowledge. If the question asks for a
+> **number / metric / ranking** (occupancy, wait, density, comfort, counts, capacities) →
+> use the **Semantic Model (DAX)** and reuse the existing measures. If it asks **how things
+> connect or who is impacted** → use the **Ontology (GQL)**. For 'detect then impact'
+> questions: get the number from the Semantic Model, then traverse impact in the Ontology."*
+
+Then reinforce per source with `dataSourceInstructions`:
+
+- **Ontology source**: *"Use for TOPOLOGY, RELATIONSHIPS, ROOT-CAUSE and IMPACT (GQL). Node
+  label = entity name, edge label = relationship name. Do NOT use for telemetry numbers — use
+  the semantic model."*
+- **Semantic model source**: *"Use for ALL live telemetry numbers and aggregates. ALWAYS reuse
+  the existing DAX measures; NEVER recompute from raw columns or filter the KPI column (the
+  measures already filter it). Group with `dim_*[name]`."*
+
+### Reusable rules
+
+1. **List the key DAX measures by name** in `aiInstructions` — the orchestrator uses them when
+   reformulating the question. Without the list it may recompute from raw columns.
+2. **Remove telemetry few-shots from the ontology source** — keep the ontology few-shots pure
+   topology GQL; put all number few-shots on the semantic model as `EVALUATE` DAX.
+3. **Both sources must be emitted in draft AND published** — draft-only agents are invisible in
+   the portal.
+4. **`elements` tree** on the semantic model source = `semantic_model.table` →
+   `semantic_model.column` / `semantic_model.measure` (see the multi-source folder layout below).
+5. Validate the routing end-to-end: one number question (must trace `analyze_semantic_model`,
+   DAX) and one impact question (must trace `analyze_ontology`, GQL).
+
+---
+
 ## Getting the artifactId
+
 
 To find a data source's ID:
 

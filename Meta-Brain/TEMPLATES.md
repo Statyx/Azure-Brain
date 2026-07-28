@@ -237,6 +237,116 @@ Before Step 5:
 
 ---
 
+## Template 8: Real-Time Operations / Digital Twin (1–2 Days)
+
+**Scenario**: A **control-room** solution over a physical or logical network of things
+(sites, zones, gates, devices, links…) with **live telemetry**. It answers two operator
+questions: *what is happening right now* (numbers) and *why + who is impacted* (root-cause &
+impact across the topology). This is the fully-assembled, reusable pattern behind the most
+complete demos (Publicis Live Event Center, Network Operations) — **build it from the brain,
+no project cloning required.**
+
+**Output**: Workspace + Lakehouse (topology) + Eventhouse (telemetry) + Ontology + Graph +
+Operations Agent + dual-source Data Agent + KQL Dashboard (persona pages) + Data Activator +
+Direct-Lake Semantic Model + persona Power BI report + external Operations Portal.
+
+### The pattern in one picture
+
+```
+Topology (nouns) ──► Lakehouse Delta        ┐
+                                            ├─► Ontology ──► Graph  ──► RCA / impact (GQL)
+Telemetry (verbs) ─► Eventhouse / KQL  ─────┘         │
+        │                                            └─► Operations Agent (proactive alerts)
+        ├─ mirroring policy ─► OneLake ─► Lakehouse shortcut ─► Direct Lake Semantic Model (DAX numbers)
+        │                                                              │
+        └─ KQL Dashboard (persona pages, 30s refresh)                  ├─► Dual-source Data Agent
+                                                                       │     (ontology GQL + model DAX, routed)
+                                                              Data Activator (Reflex alerts)
+                                                                       │
+                                            External Operations Portal (chat + embeds + live SVG)
+```
+
+### Design rules (decide these first)
+
+1. **Split the domain**: *nouns* (things that exist) → **Lakehouse** topology (NonTimeSeries);
+   *verbs* (measurements over time) → **Eventhouse** telemetry (TimeSeries). The **Ontology** binds
+   both; the **Graph** enables multi-hop RCA + impact.
+2. **One culprit storyline**: pick a single root cause (e.g. one gate / one device) that propagates
+   to a saturated resource and impacts named high-value entities. Everything (data, dashboard,
+   agent few-shots) tells that one story.
+3. **Numbers vs. connections**: telemetry *numbers* come from a **Direct Lake semantic model (DAX)**;
+   topology / RCA / *impact* come from the **ontology (GQL)**. The Data Agent has **both** sources
+   with an explicit routing rule.
+
+### Step-by-Step
+
+| # | Agent | Task | Knowledge |
+|---|-------|------|-----------|
+| 1 | workspace-admin | Workspace + capacity (F2+; Ontology/Graph/Operations Agent need F2+) | — |
+| 2 | domain-modeler | Model split: topology entities (dims) + telemetry tables (TimeSeries) + the culprit storyline | `domain-modeler-agent/` |
+| 3 | lakehouse | Lakehouse + load topology dims → Delta | `lakehouse-agent/` |
+| 4 | rti-kusto | Eventhouse + KQL DB + telemetry tables + preload | `../Fabric-Brain/agents/rti-kusto-agent/eventhouse_kql.md` |
+| 5 | ontology | Ontology: entity types + NonTimeSeries (Lakehouse) + TimeSeries (KQL) bindings + relationships | `../Fabric-Brain/agents/rti-kusto-agent/ontology.md` (+ Template 7) |
+| 6 | graph | Build + **RefreshGraph** (deploying the ontology does NOT populate the graph) | `graph-agent/` |
+| 7 | rti-kusto | **KQL → OneLake mirroring policy + Lakehouse shortcut**, then **re-load telemetry** | `../Fabric-Brain/agents/rti-kusto-agent/kql_onelake_directlake.md` |
+| 8 | semantic-model | Direct Lake model over topology Delta **+** telemetry shortcuts; DAX measures; Prep-for-AI | `semantic-model-agent/` |
+| 9 | rti-kusto | KQL Dashboard — one page per persona (30s refresh) | `../Fabric-Brain/agents/rti-kusto-agent/kql_dashboard.md` |
+| 10 | ai-skills | **Dual-source Data Agent** (ontology GQL + semantic model DAX) with routing rule; publish | `../Fabric-Brain/agents/ai-skills-agent/datasource_configuration.md` |
+| 11 | rti-kusto | Operations Agent (proactive alerts) + **manual Knowledge Source** in portal | `../Fabric-Brain/agents/rti-kusto-agent/operations_agent.md` |
+| 12 | data-activator | Reflex alert on the culprit threshold (Teams/email) | `data-activator-agent/` |
+| 13 | report-builder | Persona Power BI report (Legacy PBIX) + accessible reusable theme | `../Fabric-Brain/agents/report-builder-agent/themes_styling.md` |
+| 14 | operations-portal | External portal: Data Agent chat + report/dashboard embed + live SVG | `operations-portal-agent/` |
+| 15 | testing | Smoke tests (structure, storyline metrics, Direct Lake counts) | `agents/testing-agent/` |
+
+### Strict deploy order
+
+```
+workspace → lakehouse (topology) → eventhouse + KQL tables → preload telemetry →
+ontology (NonTimeSeries + TimeSeries) → graph (build + RefreshGraph) →
+kql mirroring + shortcut → RE-load telemetry → semantic model (Direct Lake) →
+kql dashboard → data agent (dual-source; needs the model id) → operations agent →
+data activator → report → portal
+```
+
+### Decision Points
+
+```
+Numbers come back blank in Direct Lake after mirroring?
+  └─ RE-load telemetry AFTER enabling the mirroring policy (pre-existing extents don't backfill)
+     + refresh the Lakehouse SQL endpoint metadata. See kql_onelake_directlake.md.
+
+Data Agent says "no data" for telemetry values?
+  └─ Fabric IQ TimeSeries selector can return empty → route numbers to the semantic model (DAX),
+     keep the ontology for topology/RCA/impact. See ai-skills-agent dual-source pattern.
+
+Need proactive alerts vs. on-demand Q&A?
+  ├─ Proactive (push, scheduled)  → Operations Agent + Data Activator
+  └─ On-demand (pull, NL Q&A)     → Data Agent (dual-source)
+
+Persona reports: separate reports or one multi-page?
+  └─ One multi-page report, one page per persona + the KQL dashboard persona pages.
+     No RLS / per-client workspace needed for a demo.
+```
+
+### Manual (UI / admin) steps — cannot be scripted
+
+- **Operations Agent Knowledge Source** — attach the KQL DB in the portal (no API).
+- **Fabric Embed** — Entra SPA app registration (redirect = portal origin), delegated
+  `Fabric.Embed` + `KQLDashboard.Read.All` + Azure Data Explorer `user_impersonation`, admin consent.
+
+### Success Criteria
+
+- [ ] Graph returns entities + relationships; multi-hop impact query works (culprit → saturated
+      resource → impacted high-value entities)
+- [ ] Direct Lake telemetry measures return the storyline numbers (peak/avg, saturated count)
+- [ ] Data Agent: a *number* question traces `analyze_semantic_model` (DAX); an *impact* question
+      traces `analyze_ontology` (GQL)
+- [ ] KQL Dashboard persona pages refresh live; Operations Agent fires on the culprit threshold
+- [ ] Portal: persona chat answers, report/dashboard embed, and the live SVG view all render
+- [ ] Smoke tests pass
+
+---
+
 ## Industry-Specific Starter Kits
 
 These combine Template 1 or 2 with pre-built domain models from `domain-modeler-agent/industry_templates.md`.

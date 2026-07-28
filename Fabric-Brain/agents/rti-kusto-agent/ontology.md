@@ -152,6 +152,18 @@ $ctxGuid = DeterministicGuid "Ctx-3001"
 }
 ```
 
+> **⚠️ Fabric IQ TimeSeries selector may return empty for a Data Agent.** In some environments the
+> ontology's `timeSeriesSelector` (the query path a Data Agent uses to read telemetry *values*)
+> resolves the entity via GQL correctly but returns `(empty)` for the metric values — whether the
+> binding points to a `KustoTable` or a Lakehouse shortcut table, and even after a graph
+> `RefreshGraph`. Topology/relationship/RCA queries work perfectly; only the telemetry *values*
+> come back empty. This is an IQ platform behavior, not a latency or binding-config bug (the query
+> resolves cleanly to 0 rows).
+> **Reusable fix**: don't rely on the ontology for telemetry numbers in a Data Agent. Add a
+> **second Data Agent source** = a Direct Lake **semantic model** (DAX) over the telemetry
+> (mirrored via `kql_onelake_directlake.md`) and route number questions there. See the dual-source
+> routing pattern in `../ai-skills-agent/datasource_configuration.md`.
+
 ## Relationships
 
 ### Relationship Type Definition

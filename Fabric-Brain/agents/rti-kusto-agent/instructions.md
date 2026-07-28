@@ -11,7 +11,8 @@ Items have dependencies. Always deploy in this order:
 1. **Lakehouse** → CSV data upload → Spark notebook to create Delta tables
 2. **Eventhouse** → KQL Database → KQL tables
 3. **EventStream** → Custom Endpoint source → KQL Database destinations (one per table)
-4. **Semantic Model** (TMDL/Direct Lake) → references Lakehouse SQL endpoint
+3b. **(Optional) KQL → OneLake mirroring + Lakehouse shortcut** so Direct Lake can read telemetry — see `kql_onelake_directlake.md` (no gold notebook)
+4. **Semantic Model** (TMDL/Direct Lake) → references Lakehouse SQL endpoint (topology Delta + telemetry shortcuts)
 5. **Ontology** → entity types + data bindings (Lakehouse + KQL)
 6. **Graph Model** → auto-generated from Ontology
 7. **KQL Dashboard** → references KQL Database

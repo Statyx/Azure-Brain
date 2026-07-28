@@ -26,6 +26,9 @@ All report-related gotchas discovered during this project, with fixes.
 | 16 | Card height inconsistent across pages | **HIGH** | ALL cards must be 120px — even on slicer pages |
 | 17 | Separator overlaps card bottom | MEDIUM | Gap formula: `separator_y = card_y + card_h + 8` |
 | 18 | Slicer missing styling (no shadow) | MEDIUM | Add vcObjects: background, dropShadow, border=false |
+| 19 | Persona banner textbox = opaque white bg (title invisible + scrollbar) | **HIGH** | `vcObjects.background show=false` + textbox `z` above the band; one textbox, generous height |
+| 20 | `cardVisual` ignores `categoryLabel show=false` (English label persists/truncates) | **HIGH** | For a hidden measure label + custom title, use CLASSIC `card` + `categoryLabels` (plural) `show=false` |
+| 21 | Table `CouldNotResolveSemanticQueryDefinition` ("identical native reference name") | **HIGH** | Make `NativeReferenceName` UNIQUE per column when two dims share a property name |
 
 ---
 
@@ -194,6 +197,41 @@ All report-related gotchas discovered during this project, with fixes.
   }
   ```
 - **Visual impact**: Dramatic — slicers now look like integrated dashboard elements instead of floating orphans
+
+---
+
+## Persona / branded operational reports (multi-page, one page per audience)
+
+The RTI Operations / Digital Twin pattern (Template 8) ships **one page per persona**
+(Direction / Production / Project / Client) with a colored brand band per page. Three pitfalls
+specific to that layout:
+
+### 19. Persona banner textbox has an OPAQUE white background
+- **Symptom**: a legacy `textbox` placed over a colored `basicShape` band renders with a white
+  fill → white/light title becomes invisible **and** a vertical scrollbar appears.
+- **Fix**: set the textbox `vcObjects.background` `show=false` (transparent) and give the textbox a
+  `z` **above** the band shape. Put title + subtitle in **one** textbox (two paragraphs) with
+  generous height (~58px) — two tight stacked textboxes each add a scrollbar.
+
+### 20. `cardVisual` ignores `categoryLabel show=false`
+- **Symptom**: the new `cardVisual` keeps showing the (English) measure name under the value, which
+  then truncates — you cannot hide it, and you want a custom localized title instead.
+- **Fix (exception to Issue #3)**: for persona cards that need a **hidden measure label + a custom
+  title**, use the CLASSIC `card` (`visualType: "card"`) with `categoryLabels` (**plural**)
+  `show=false`; style the value via the `labels` object; projection role is `Values` (not `Data`);
+  keep the localized label as the container `vcObjects.title`. (Default reports still use
+  `cardVisual` per Issue #3 — this is the narrow persona-report exception.)
+
+### 21. Table `CouldNotResolveSemanticQueryDefinition`
+- **Symptom**: *"two expressions with identical native reference name 'name'"* — two columns from
+  different dims share a property name (e.g. `dim_customers[name]` + `dim_zones[name]`).
+- **Fix**: give each column a **UNIQUE** `NativeReferenceName` (pass a caption, e.g. `Sponsor` /
+  `Zone`).
+
+> **Deploy looks hung but isn't**: the update LRO is silent up to ~120s → a sync terminal
+> backgrounds before the ✅. Redirect output to a file (`python -u deploy_report.py *> _out.txt`)
+> and read it; `state.json` `report_id` is written only on success. Reopen the report fully (or a
+> private window) to bust the Fabric render cache after a redeploy.
 
 ---
 
