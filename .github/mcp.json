@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "azure": { "tools": ["*"], "type": "local", "command": "npx", "args": ["-y", "@azure/mcp@latest", "server", "start"] },
+    "fabric": { "tools": ["*"], "type": "local", "command": "npx", "args": ["-y", "@microsoft/fabric-mcp@latest", "server", "start"] },
+    "powerbi-modeling": { "tools": ["*"], "type": "local", "command": "npx", "args": ["-y", "@microsoft/powerbi-modeling-mcp@latest", "--start"] }
+  }
+}

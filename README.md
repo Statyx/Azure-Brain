@@ -16,11 +16,17 @@ Azure-Brain is a **multi-brain knowledge architecture**. Each brain is a self-co
 
 ```
 Azure-Brain/                  ← umbrella (this repo)
+├── AGENTS.md                 ← entry point — routing table + full agent index
 ├── Fabric-Brain/             ← Microsoft Fabric (26 agents, flat layout)
 ├── Database-Brain/           ← Azure databases (4 active agents, nested by domain)
 ├── Meta-Brain/               ← cross-cutting (5 agents — testing, PPTX, etc.)
 └── (future brains)           ← Synapse-Brain, Databricks-Brain, Foundry-Brain, ...
 ```
+
+> **Entry point.** [`AGENTS.md`](AGENTS.md) is the single door into the brain: it routes a
+> request to the right agent and indexes all 35 `instructions.md`. It is auto-loaded by the
+> GitHub Copilot CLI / Copilot app; [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
+> is its VS Code counterpart. Both point at the same agent tree — no content is duplicated.
 
 > **Layout note.** Fabric-Brain and Meta-Brain keep agents flat (`agents/<agent>/`).
 > Database-Brain nests them by domain (`agents/<NN-domain>/<agent>/`). Tooling that walks
@@ -54,9 +60,15 @@ cd Azure-Brain
 cp Fabric-Brain/resource_ids.example.md Fabric-Brain/resource_ids.md
 cp Fabric-Brain/environment.example.md  Fabric-Brain/environment.md
 
-# 3. Open in VS Code with Copilot — .github/copilot-instructions.md auto-loads
-# Agents and knowledge files are discovered automatically.
+# 3a. GitHub Copilot CLI / Copilot app — AGENTS.md auto-loads
+# 3b. VS Code with Copilot        — .github/copilot-instructions.md auto-loads
+# Either way, agents and knowledge files are discovered from AGENTS.md.
 ```
+
+**Working from another repository?** Keep Azure-Brain checked out alongside your project and
+point the agent at the relevant `instructions.md` by path — see
+[Using this brain from another working directory](AGENTS.md#using-this-brain-from-another-working-directory).
+Never copy `instructions.md` into the consuming repo; the brain stays the single source of truth.
 
 ---
 
@@ -66,6 +78,7 @@ Cross-brain principles and references that apply to **every** brain:
 
 | File | Purpose |
 | --- | --- |
+| [AGENTS.md](AGENTS.md) | **Entry point** — routing table + index of all 35 agents (auto-loaded by Copilot CLI / Copilot app) |
 | [agent_principles.md](agent_principles.md) | **Mandatory** — Operating principles, task management, quality standards every agent follows |
 | [shared_constraints.md](shared_constraints.md) | 8 hard rules across all brains (config-driven, idempotent, async-first) |
 | [known_issues.md](known_issues.md) | Cross-cutting gotchas & workarounds |
@@ -92,7 +105,7 @@ Validates: catalogs match disk in every brain, every agent has `instructions.md`
 1. Create a new top-level folder (e.g. `Databricks-Brain/`)
 2. Add `Databricks-Brain/README.md`, `agents/`, `agents/_catalog.yaml`
 3. Add the brain to the `BRAINS` list in `Meta-Brain/tests/conftest.py` (single source of truth — covers every test module)
-4. Update this README's brain table **and** the brain list in `.github/copilot-instructions.md`
+4. Update this README's brain table, the brain list in `.github/copilot-instructions.md`, **and** the layout + agent index in [`AGENTS.md`](AGENTS.md)
 5. Re-run umbrella tests to confirm nothing broke
 
 ---
