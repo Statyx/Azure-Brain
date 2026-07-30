@@ -1,10 +1,25 @@
 # MCP Server Registry
 
-Central catalog of all MCP servers available in the VS Code / Copilot environment.  
+Central catalog of the MCP servers this brain expects to have available.  
 Each entry documents: purpose, tool prefix, key tools, and usage examples.
 
-> **Rule**: Before calling any MCP tool, use `tool_search_tool_regex` to load it.  
-> MCP tools are deferred — calling them without loading first will fail.
+> **Rule**: MCP tools are **host-provided** — this repository does not ship or start them.
+> Only the servers your host has actually configured are callable. Before assuming a server
+> is present, check the tools exposed in your current session; if the prefix below is absent,
+> fall back to the REST API path documented in the relevant agent's `instructions.md`.
+
+### Configuring MCP servers
+
+MCP configuration lives with the **host**, not in this repository:
+
+| Host | Where servers are declared |
+|------|----------------------------|
+| GitHub Copilot CLI / Copilot app | Copilot CLI MCP configuration (`/mcp` command, or the CLI config file) |
+| VS Code | `.vscode/mcp.json` (workspace) or user settings |
+
+The tool prefixes listed here (`mcp_azure_mcp_*`, `mcp_fabric_mcp_*`, …) reflect one common
+naming scheme. **Prefixes vary by host and by server name** — treat them as identifiers for
+*which server* to reach for, and use the tool names your session actually exposes.
 
 ---
 
@@ -14,8 +29,8 @@ Each entry documents: purpose, tool prefix, key tools, and usage examples.
 |--------|--------|--------|-------|-----------|
 | **Azure** | `mcp_azure_mcp_*` | Azure resource management | 50+ | — |
 | **Fabric** | `mcp_fabric_mcp_*` | Fabric items, OneLake, tables | 20+ | — |
-| **Power BI Model** | `mcp_powerbi-model_*` | Semantic model CRUD, DAX, TMDL | 21 | [`mcp_powerbi.md`](mcp_powerbi.md) |
-| **Kusto** | `mcp_azure_mcp_kusto` | KQL queries, schema, clusters | 8 | [`agents/rti-kusto-agent/mcp_kusto.md`](agents/rti-kusto-agent/mcp_kusto.md) |
+| **Power BI Model** | `mcp_powerbi-model_*` | Semantic model CRUD, DAX, TMDL | 21 | [`mcp_powerbi.md`](../Fabric-Brain/mcp_powerbi.md) |
+| **Kusto** | `mcp_azure_mcp_kusto` | KQL queries, schema, clusters | 8 | [`Fabric-Brain/agents/rti-kusto-agent/mcp_kusto.md`](../Fabric-Brain/agents/rti-kusto-agent/mcp_kusto.md) |
 | **MCP Engine** | `mcp_mcp_engine_*` | Model management, dependencies | 15 | — |
 | **GitKraken** | `mcp_gitkraken_*` | Git ops, issues, PRs | 20+ | — |
 | **Pylance** | `mcp_pylance_*` | Python analysis, imports | 12 | — |
@@ -25,7 +40,7 @@ Each entry documents: purpose, tool prefix, key tools, and usage examples.
 ## 1. MCP Azure — Azure Resource Management
 
 > **Prefix**: `mcp_azure_mcp_*`  
-> **Source**: Built-in VS Code Azure extension  
+> **Source**: Azure MCP server (`azure-mcp` / Azure extension, depending on host)  
 > **Auth**: Azure CLI (`az login`)
 
 The largest MCP server — covers nearly all Azure services. Each service has its own tool.
@@ -45,7 +60,7 @@ The largest MCP server — covers nearly all Azure services. Each service has it
 | `mcp_azure_mcp_functionapp` | Functions | Function app management |
 | `mcp_azure_mcp_aks` | AKS | Kubernetes cluster management |
 | `mcp_azure_mcp_acr` | Container Registry | Image management |
-| `mcp_azure_mcp_kusto` | Azure Data Explorer | KQL queries, schema — see [mcp_kusto.md](agents/rti-kusto-agent/mcp_kusto.md) |
+| `mcp_azure_mcp_kusto` | Azure Data Explorer | KQL queries, schema — see [mcp_kusto.md](../Fabric-Brain/agents/rti-kusto-agent/mcp_kusto.md) |
 | `mcp_azure_mcp_eventgrid` | Event Grid | Event subscriptions |
 | `mcp_azure_mcp_eventhubs` | Event Hubs | Namespace/hub management |
 | `mcp_azure_mcp_servicebus` | Service Bus | Queues, topics |
@@ -206,7 +221,7 @@ mcp_fabric_mcp_onelake_upload_file(
 > **Prefix**: `mcp_powerbi-model_*`  
 > **Source**: [powerbi-modeling-mcp](https://github.com/microsoft/powerbi-modeling-mcp)  
 > **Auth**: Fabric XML/A endpoint or Power BI Desktop local  
-> **Full reference**: [`mcp_powerbi.md`](mcp_powerbi.md)
+> **Full reference**: [`mcp_powerbi.md`](../Fabric-Brain/mcp_powerbi.md)
 
 21 tools for complete semantic model management. The most powerful MCP server for data modeling.
 
@@ -243,7 +258,7 @@ mcp_powerbi-model_dax_query_operations(operation: "Execute", query: "EVALUATE RO
 > **Prefix**: `mcp_azure_mcp_kusto`  
 > **Part of**: MCP Azure server  
 > **Auth**: Azure CLI  
-> **Full reference**: [`agents/rti-kusto-agent/mcp_kusto.md`](agents/rti-kusto-agent/mcp_kusto.md)
+> **Full reference**: [`Fabric-Brain/agents/rti-kusto-agent/mcp_kusto.md`](../Fabric-Brain/agents/rti-kusto-agent/mcp_kusto.md)
 
 8 tools for read-only Kusto/Eventhouse access. Works with both Azure Data Explorer and Fabric Eventhouse.
 
