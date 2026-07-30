@@ -30,6 +30,12 @@ Direct Lake mode requires Delta tables to exist. Deploying the model before the 
 causes: `"Direct Lake mode requires a Direct Lake data source"`. The notebook converts CSVs to
 Delta tables and must fully execute (Spark cold start ~60-90s) before the model can bind.
 
+> **This order is a dependency graph, not a mandatory sequence.** Only a few edges are real
+> (`RUN → semantic model` is one of them). The numbered list above is the *safe* serialisation,
+> not the fast one — several steps are independent and the Spark cold start is often avoidable
+> entirely. If a deployment feels slow, read [`deployment_performance.md`](deployment_performance.md)
+> **before** accepting the wait as normal.
+
 ## Export Reports (Steps 8-9)
 
 Every project should include offline export capability for stakeholders without Fabric access.
@@ -223,4 +229,5 @@ project/
 | Notebook `format: ipynb` → silent job failure | Always use .py format via `notebook_utils` |
 | Report PBIR format → renders blank | Always use legacy PBIX (report.json + sections) |
 | Data Agent draft-only → invisible | Include `published/` parts + `publish_info.json` |
-| Spark notebook cold start → 60-90s | Normal — poll until Completed |
+| Spark notebook cold start → 60-90s | Expected on a warm Starter Pool — poll until Completed. **Not** normal at 3-5 min: that means a custom Environment/Pool is attached, or the capacity is F2/F4. See [`deployment_performance.md`](deployment_performance.md) §2 — for demo-sized data the Spark step can usually be removed altogether |
+| Deploy takes 15+ min and "Fabric is slow" | Measure first — the usual causes are fixed `sleep()` in the poll loop, `az` re-auth per step, and serial uploads, not Fabric. [`deployment_performance.md`](deployment_performance.md) |

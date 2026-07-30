@@ -417,22 +417,42 @@ def list_all_items(workspace_id, item_type, headers):
 ## LRO Polling Helper (Reusable)
 
 ```python
-def poll_operation(op_id, headers, timeout_seconds=300, fetch_result=True):
-    """Poll a Fabric LRO until completion. Returns result if fetch_result=True."""
+# Adaptive schedule: most item creations finish in <1s — don't pay a flat 3s for them.
+# The tail stays at 5s so long operations aren't hammered.
+POLL_SCHEDULE = [0, 0.4, 0.4, 0.8, 0.8, 1.5, 1.5, 3, 3] + [5] * 120
+
+def poll_operation(op_id, headers, timeout_seconds=300, fetch_result=True, session=requests):
+    """Poll a Fabric LRO until completion. Returns result if fetch_result=True.
+
+    Checks BEFORE sleeping, then backs off. Pass a `requests.Session` to reuse the
+    TLS connection across calls.
+    """
     import time
     start = time.time()
-    while time.time() - start < timeout_seconds:
-        op = requests.get(f"{API}/operations/{op_id}", headers=headers).json()
+    for delay in POLL_SCHEDULE:
+        if delay:
+            time.sleep(delay)
+        if time.time() - start > timeout_seconds:
+            break
+        op = session.get(f"{API}/operations/{op_id}", headers=headers, timeout=30).json()
         status = op.get("status")
         if status == "Succeeded":
             if fetch_result:
-                return requests.get(f"{API}/operations/{op_id}/result", headers=headers).json()
+                return session.get(f"{API}/operations/{op_id}/result",
+                                   headers=headers, timeout=30).json()
             return op
         if status in ("Failed", "Cancelled"):
             raise RuntimeError(f"Operation {op_id} {status}: {op.get('error', {})}")
-        time.sleep(3)
     raise TimeoutError(f"Operation {op_id} did not complete in {timeout_seconds}s")
 ```
+
+> **Use `fetch_result=False` for `updateDefinition`** — that `/result` endpoint can hang.
+> Confirming `status == "Succeeded"` is enough.
+>
+> **Deployment scripts:** the same optimisations documented above for the Data Agent chat path
+> (adaptive polling, `requests.Session`, parallel reads — **measured** 251.9s → 117.5s) apply
+> just as well to deployment, where they were historically never used. See
+> `agents/orchestrator-agent/deployment_performance.md` for the full deployment timing budget.
 
 ## CLI Templates (`az rest`)
 
