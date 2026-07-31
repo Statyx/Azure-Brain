@@ -255,9 +255,15 @@ It validates, for every brain in `BRAINS` (`Meta-Brain/tests/conftest.py` — si
 truth): catalogs parse and match disk, every agent folder has a non-trivial `instructions.md`,
 internal markdown links resolve, Python compiles, JSON parses, root markdown is non-empty.
 
-> Known local-only failures: `test_links_resolve` fails for the agents that link to
-> `Fabric-Brain/resource_ids.md` when that gitignored file has not been created yet. Create it
-> from the example (see [Setup](#setup)) to clear them.
+> **The suite is green on a fresh clone — it must stay that way.** `test_links_resolve` used to
+> fail for the four agents linking to `Fabric-Brain/resource_ids.md`, because that file is
+> gitignored (it holds tenant / subscription GUIDs) and ships only as `resource_ids.example.md`.
+> Those four failures were expected, permanent, and therefore indistinguishable from a real
+> regression — a suite that is never green gives no signal. Fixed 2026-07-31: a link may resolve
+> to a missing file **only** when that filename is listed in `.gitignore` *and* a committed
+> `<name>.example.md` sits beside it. Both conditions are required, and
+> `TestLocalOnlyLinkExemption` locks that — a merely missing file, or a gitignored one with no
+> template, is still reported broken. If you see failures here now, they are real.
 
 ---
 
