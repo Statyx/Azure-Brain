@@ -157,6 +157,39 @@ y=229    charts/tables
 Gap between slicer bottom (83) and cards (93) = 10px ✔️
 Gap between card bottom (213) and separator (221) = 8px ✔️
 
+### Rule 14: Size for What Is Rendered, Never for What Is Declared
+
+Added 2026-07-31 after a live observation, see `known_issues.md` §8.
+
+A `cardVisual` was shipped with `objects.categoryLabel.show = false` so its stack would fit a
+112px box. **Power BI ignored the toggle and drew the label anyway**, clipped. The definition read
+back from Fabric still carried `show: false`, so the report JSON and the rendered page disagreed.
+
+**Rule**: a hide toggle must never be the reason a box fits. Compute the minimum height from
+**every text the visual declares**, regardless of `show`. If a toggle does work, the freed space is
+a bonus, not budget.
+
+```
+card_min_height = sum over each stacked text of (pt × 1.8 + 8) + 24
+                  # title + callout value + category label — charge all three
+                  # 11 + 24 + 9pt -> 128px
+```
+
+This does not contradict Rule 1 or Rule 11, it removes the escape hatch from them: Rule 1 already
+charges for the category label, and hiding it was the loophole that let a card be undersized while
+still passing validation.
+
+**Consequence — growing a card is a grid change.** 112 → 128 moved the card row's bottom edge from
+200 to 216, which forced the content row below from `y=208 h=242` to `y=224 h=226`. Check the whole
+vertical chain (Rule 13) before changing any card height, and bind call sites to named constants
+(`CARD_Y`, `CARD_H`, `ROW1_Y`, `ROW1_H`, …) — constants that exist while call sites still hard-code
+the same numbers are how a grid silently drifts from the model that validates it.
+
+**Mutation-test the guard.** A rule that has never failed proves nothing. Re-inject the geometry
+that clipped and confirm the suite turns red; here 112px turned 6 tests red, re-hiding the label 1,
+and restoring the old row position 3.
+
+
 ---
 
 ## Validation Script

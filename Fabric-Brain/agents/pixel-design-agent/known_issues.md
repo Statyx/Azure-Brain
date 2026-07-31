@@ -92,3 +92,53 @@ python validate_report.py --fix    # auto-fix what's mechanically fixable
 
 Related: report structure and visual rules live in
 [`../report-builder-agent/`](../report-builder-agent/).
+
+---
+
+## 8. `show: false` Is a Request, Not a Guarantee — the Renderer Ignored It
+
+**Context**: Fabric / Power BI legacy report definition (`report.json`, `sections[].visualContainers[]`),
+`visualType: "cardVisual"`, observed 2026-07-31.
+
+**Symptom**: the bottom category label of every KPI card renders **and is clipped** on screen
+("Sends per Customer", "Unsubscribe Rate", "Open Rate"…), even though the report JSON declares that
+label hidden. Deploy returns success, the layout validator reports zero defects, and the defect is
+visible only to a human looking at the rendered page.
+
+**Root cause**: the card carried
+`objects.categoryLabel = [{"properties": {"show": {"expr": {"Literal": {"Value": "false"}}}}}]`
+and **Power BI drew the label anyway**. The card had been sized for the two texts that were
+believed to render (title 11pt + callout 24pt = 103px in a 112px box), while three were actually
+drawn (needing 128px). The validator was not wrong: it faithfully modelled what the definition
+*declared*, and the engine did not honour the declaration.
+
+**Fix**: never let a hide toggle be what makes a box fit. Size every visual for **all the texts it
+declares**, and treat any space a working toggle frees as a bonus, never as budget. Concretely:
+declare the label visible, and grow the card to the full stack.
+
+```python
+# sizing must ignore `show` entirely
+need = card_height(title_pt, callout_pt, category_pt)   # 11, 24, 9 -> 128px
+```
+
+Growing a card is then a **grid** change, not a card change: 112 → 128 pushed the cards from
+y=88..200 to y=88..216, so the content row below had to move (208 → 224) and shrink (242 → 226) to
+keep its bottom edge. Budget for that before changing a card height.
+
+Two guards, both mutation-tested (a guard that has never failed proves nothing):
+- size the stack ignoring `show` → putting the card back to 112px must turn the suite red
+- assert the label stays **declared** visible → satisfying a requirement by relying on a renderer
+  bug is not satisfying it, and a future Power BI build may start honouring the toggle
+
+**Evidence**:
+- Live definition read back from Fabric (`POST /reports/{id}/getDefinition`, 202 → poll → result)
+  before the fix: 20 `cardVisual`, `y: [88.0]`, `h: [112.0]`, `categoryLabel … "show": "false"`.
+- Rendered page at that same version showed the label drawn and cut off (user screenshot).
+- After the fix, live read-back: 20 cards `h: [128.0]`, `categoryLabel` `"show": "true"`, `9D`;
+  rows at `(224.0, 226.0)` and `(462.0, 246.0)`; DAX replay of all visual queries 35/35 clean;
+  test gate 111 green. Clipping confirmed gone on screen by the user.
+
+**Generalisation**: this applies to any property whose effect you cannot read back from the render —
+`show`, `wordWrap`, `labelDisplayUnits`, auto-fit behaviours. A validator models what is
+**rendered**, not what is **declared**. Where the two can diverge, size for the worst case.
+
