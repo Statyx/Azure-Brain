@@ -261,3 +261,25 @@ Score your README (1 point each):
 | README.md is the only doc | Overloaded, hard to maintain | Split into docs/ folder |
 | "See wiki for docs" (empty wiki) | Broken promise | Keep docs in-repo |
 | Massive code blocks without context | Reader doesn't know why | Add a one-line comment before each block |
+
+---
+
+## Accuracy Gate (run before publishing)
+
+The 12-point checklist above scores **presentation**. It does not score **truth** — a README can
+pass it 12/12 while stating numbers the code disproves. Run this second, smaller gate on every
+figure the README asserts:
+
+| # | Check | How |
+|---|-------|-----|
+| A1 | Every stated count was re-derived **in this session**, not copied from the previous README | Run the command / import the builder and count |
+| A2 | Every figure names a command a reader could run to reproduce it | If none exists, delete the figure |
+| A3 | Every quantitative block states which **environment and data draw** it came from | Label local vs deployed explicitly |
+| A4 | Divergences between environments are stated, not hidden behind the more flattering number | Add a note saying what re-syncs them |
+| A5 | Hand-typed status counts replaced by live badges wherever a live badge exists | `shields.io/github/actions/workflow/status` |
+
+**Rule of thumb:** prefer publishing the *command* over the *result*. A command stays true;
+a number starts ageing the moment it is typed.
+
+Anti-pattern: a badge such as `![Tests](.../badge/tests-39_passing-brightgreen)` is a hard-coded
+string dressed up as a live metric. It will keep reading `39` forever.
