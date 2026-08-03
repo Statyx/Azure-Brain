@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import importlib.util
 import pathlib
+import subprocess
 import sys
 
 import pytest
@@ -84,6 +85,27 @@ def test_no_warning_findings(findings):
      "sas-token"),
     ("workspace = 3f2a91cd-77bd-4e0a-9f31-2c5d8ab41e77", "real-guid"),
     (r'$root = "D:\Users\someone\repo"', "windows-user-path"),
+    # ── the four classes the 2026-08-03 audit found and the scanner missed ──
+    #
+    # Every value below is FABRICATED. A detection test must exercise the
+    # mechanism, never real data: writing a customer name here would leak it
+    # into this public repo — which is the very thing the rule forbids.
+    # Real terms reach the scanner through CLIENT_DENYLIST / .publicsafety-deny,
+    # covered by test_denylist_adds_repo_specific_terms below.
+    ("demos (the Live Event Center, Network Operations)", "client-name"),
+    ("Proven on the LEC and Network Operations", "client-acronym"),
+    ('  workspaceName: "ABC - Demo Marketing"', "personal-workspace-prefix"),
+    ("### Pattern: Full Platform (as deployed in ABC - Financial Platform)",
+     "personal-workspace-prefix"),
+    ("- **ABC - Fabric RTI Demo** (IoT sensor monitoring)",
+     "personal-workspace-prefix"),
+    ('  workspace: "ABC \u2013 Financial Platform"',
+     "personal-workspace-prefix"),   # en dash — how this one hid for 73 commits
+    ('db = Sql.Database("abcdefghijklmnopqrstuvwxyz-0123456789abcdefghijklmno'
+     '.datawarehouse.fabric.microsoft.com", "LH_Finance")',
+     "fabric-sql-endpoint"),
+    ('server = "abc123def456.datawarehouse.pbidedicated.windows.net"',
+     "fabric-sql-endpoint"),
 ])
 def test_scanner_detects(scanner, tmp_path, line, rule):
     f = tmp_path / "sample.md"
@@ -108,6 +130,29 @@ def test_scanner_detects(scanner, tmp_path, line, rule):
     ('Password=${DB_PASSWORD}', "environment expansion, not a literal"),
     ('tenant = "zava.onmicrosoft.com"', "the prescribed fictional tenant"),
     (r'$here = "C:\Users\<user>\repo"', "explicit placeholder"),
+    # ── cry-wolf protection for the rules added 2026-08-03 ──
+    ("| SQL Analytics Endpoint | `*.datawarehouse.fabric.microsoft.com` |",
+     "the wildcard form is how the brain documents the host"),
+    ('Source = Sql.Database("<sql_endpoint>.datawarehouse.fabric.microsoft.com", '
+     '"<lakehouse_name>"),',
+     "the placeholder form is the shape we teach"),
+    ('workspaceName: "Zava - Retail Analytics"',
+     "the prescribed workspace prefix is not all-caps initials"),
+    ("SELECT COUNT(*) FROM fact_sales", "'SELECT' contains the letters l-e-c"),
+    ("- **EBITDA**: Revenue - COGS - Operating Expenses",
+     "a subtraction chain, not a workspace name"),
+    ("FAB_W   = SLIDE_W - FAB_L - USR_W - GAP - M",
+     "a formula, not a workspace name"),
+    ("# Fabric API \u2014 REST Reference",
+     "an em dash is this brain's title separator, not a workspace prefix"),
+    ("## Ontology \u2014 Graph Model Deployment",
+     "same, and 15 headings like it exist in the tree"),
+    ("ACCENT3    = RGBColor(0xF7, 0x63, 0x0C)   # orange",
+     "'orange' is a colour here, and colours are never a finding"),
+    ("![build](https://img.shields.io/badge/status-beta-orange)",
+     "shields.io colour token"),
+    ("Proven on the Live Event Operations and Network Operations demos",
+     "the sanitised label must not itself be a finding"),
 ])
 def test_scanner_stays_quiet(scanner, tmp_path, line, why):
     """Cry-wolf protection.
@@ -119,6 +164,67 @@ def test_scanner_stays_quiet(scanner, tmp_path, line, why):
     f.write_text(line, encoding="utf-8")
     hits = scanner.scan_file(f, tmp_path, scanner.load_allowlist(tmp_path))
     assert not hits, f"false positive ({why}): {hits}"
+
+
+def test_denylist_adds_repo_specific_terms(scanner, tmp_path, monkeypatch):
+    """Real customer names reach the scanner WITHOUT being committed.
+
+    Both sources are tested with a fabricated term. That is the point: the tool
+    must never contain the names it forbids, so the rule is verified on its
+    mechanism, not on real data (`known_issues.md` #47).
+    """
+    monkeypatch.delenv("CLIENT_DENYLIST", raising=False)
+    f = tmp_path / "sample.md"
+    f.write_text("Delivered for Acmecorp Utilities in Q3.", encoding="utf-8")
+    allowed = scanner.load_allowlist(tmp_path)
+
+    def hits():
+        return scanner.scan_file(f, tmp_path, allowed,
+                                 scanner.RULES + scanner.denylist_rules(tmp_path))
+
+    # Nothing forbids it yet — so any finding below is the denylist's doing.
+    assert not hits()
+
+    # Source 1: the env var (a repository secret in CI).
+    monkeypatch.setenv("CLIENT_DENYLIST", "acmecorp")
+    assert {h["rule"] for h in hits()} == {"denylisted-term"}
+    monkeypatch.delenv("CLIENT_DENYLIST")
+
+    # Source 2: the gitignored file.
+    deny = tmp_path / ".publicsafety-deny"
+    deny.write_text("# the customer this repo was built for\nAcmecorp Utilities\n",
+                    encoding="utf-8")
+    assert {h["rule"] for h in hits()} == {"denylisted-term"}
+
+
+def test_tool_hardcodes_no_customer_name(scanner):
+    """The scanner must not be the leak.
+
+    A sibling repo shipped its entire client portfolio inside the very tool
+    meant to catch it. `CLIENT_NAMES` may hold generic English phrases only;
+    anything customer-specific goes through the denylist.
+    """
+    for pattern in scanner.CLIENT_NAMES:
+        assert " " in pattern or pattern.islower(), pattern
+        assert "live event cent" in pattern, (
+            f"{pattern!r} looks like a customer name hardcoded into the tool — "
+            "use CLIENT_DENYLIST or .publicsafety-deny instead.")
+
+
+def test_no_powerpoint_is_tracked():
+    """Ship the generator, never the binary.
+
+    A `.pptx` round-tripped through a rights-protected tenant comes back as an
+    OLE/MIP container whose *unencrypted* envelope still carries tenant GUIDs —
+    the content is unreadable outside the tenant, the metadata is not.
+    See `Fabric-Brain/agents/migration-bo-agent/README.md`.
+    """
+    out = subprocess.run(["git", "-C", str(ROOT), "ls-files", "*.pptx", "*.ppt"],
+                         capture_output=True, text=True)
+    tracked = [line for line in out.stdout.splitlines() if line.strip()]
+    assert not tracked, (
+        "PowerPoint decks must not be committed:\n  " + "\n  ".join(tracked) +
+        "\nRun `git rm --cached <file>` and regenerate them from their script.")
 
 
 def test_repo_allowlist_entries_are_explained():

@@ -52,3 +52,8 @@ reference/
 /_tmp_*
 /_tmp_*.ps1
 /_tmp_*.out
+
+# Real customer names for the public-safety scanner. Supplying them through a
+# gitignored file (or the CLIENT_DENYLIST secret in CI) is the point: a scanner
+# that commits the names it forbids is the leak. See known_issues.md #47.
+.publicsafety-deny
