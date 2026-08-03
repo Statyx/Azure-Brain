@@ -256,3 +256,17 @@ When `report-builder-agent` generates visuals, `pixel-design-agent` should:
 2. Run all 10 rules
 3. Auto-fix what can be fixed (heights, border properties)
 4. Report what needs manual decision (overlaps, layout reflow)
+
+---
+
+## The height model is not Power BI-specific (3 Aug 2026)
+
+Raising the font size of an HTML demo portal hit the identical failure: a browser clips text in a
+fixed-height box without shrinking the font and without warning. Rule 1's arithmetic
+(`font * 1.35 + 8` — proportional line box, constant chrome) transferred unchanged to CSS, audited
+over `height: Npx` declarations only.
+
+The rule itself lives with the surface that applies it — see
+[`../operations-portal-agent/instructions.md`](../operations-portal-agent/instructions.md),
+section "Typography — one root scale, never px" — so it is stated once, not twice.
+

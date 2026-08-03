@@ -98,6 +98,55 @@ degrades (skips the DAX/GQL pipeline, returns stale answers, or 400s). In the pr
 - A healthy run traces 6 steps; if you only see `fewshots.loading`, the thread is polluted — recycle.
 - Chat DAX `executeQueries` must go to `api.powerbi.com`, not `api.fabric.microsoft.com`.
 
+**Correction, 3 Aug 2026 — do NOT delete the thread before *each* question.** Two failures look
+identical from the proxy (`status=failed`, no answer) and need opposite cures:
+
+| `last_error` on the run | Cause | Cure |
+|---|---|---|
+| `already in progress` | run lock, held **per AGENT** (not per thread, despite the wording) | **wait** and re-run on the same thread |
+| `server_error` / empty | polluted sticky thread | `DELETE /threads/{id}`, retry once |
+
+Measured: a **brand-new** thread was refused 45s after the previous question and the same question
+answered at 150s. Purging on that path is not merely useless — with N personas on ONE agent (see
+"Personas backed by ONE Data Agent" above), a pre-emptive DELETE can kill a run another persona is
+mid-way through. So purge as a **recovery path**, not as a routine, and budget the wait from
+measurement (6 × 25s covered the case above).
+
+This also matters for triage: a throwaway agent built from the **same definition** answers in 2s
+while production fails, because it has no run in flight. That reads as proof the production item is
+damaged when it is healthy — do not recreate an item on that evidence alone.
+
+Poll `last_error` alongside `status`; status alone collapses both failures into "no answer" and the
+wait can never be chosen.
+
+## Typography — one root scale, never px
+
+Reported 3 Aug 2026, two days before a customer demo: *"la police est un peu petite"*. Body text was
+13.5px, read from several metres on a projector.
+
+- Put **every** `font-size` in `rem` and set one knob: `html { font-size: 115%; }`. A percentage on
+  `html` also respects a user who changed their browser default; a px base does not.
+- **Never leave a `font-size` in px.** The page had 71, from 8 to 38 — scaling those by hand is 71
+  chances to miss one, and a missed one is invisible until someone reads the screen from the back of
+  the room, which is the only place it matters. Assert in CI that no px font-size exists.
+- SVG `font-size="24"` **attributes** are the exception: user units inside a `viewBox`, already
+  scaled by the drawing. Don't convert them, and don't let the CI check flag them.
+- A demo portal's default is not a web app's default. Below ~1.10 the body text falls back under
+  15px, which is what was reported as unreadable.
+
+**Growing text inside a fixed-height box is the Power BI clipping bug, in CSS** — the browser will
+neither shrink the font nor warn. Guard it with the same arithmetic the report validator uses, and
+evaluate it at the *current* scale so raising the knob later fails a test instead of clipping on
+stage:
+
+```
+min_height = font_px * 1.35 + 8      # line box proportional, chrome constant
+```
+
+Two terms, kept separate: a single multiplier cannot express a constant and under-sizes small text.
+Audit `height: Npx` only — `min-height` grows and `max-height` pairs with `overflow`. Also check for
+`em` units, which ride on the same knob invisibly.
+
 ## Portal-native live views
 
 Don't rely only on the embedded dashboard — a **portal-native** SVG floor plan / heat view reads the
