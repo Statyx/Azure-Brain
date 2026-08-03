@@ -189,3 +189,39 @@ rule shipped (13 parts, 83 802 chars).
 **Why this one is dangerous:** an empty result is indistinguishable from a real answer. It
 does not fail, it does not warn, and it is most likely to hit precisely the domain terms a
 demo is built around.
+### Two questions asked at once come back with each other's answers
+
+**Context:** Fabric Data Agent, OpenAI-compatible assistants API
+(`/v1/workspaces/{ws}/dataAgents/{id}/aiassistant/openai`), 3 Aug 2026. A portal with four
+personas, all backed by ONE data agent.
+
+**Symptom:** two questions posted 0.4s apart both return **HTTP 200**, both complete, and
+**both answers are about the second question**. Nothing reports an error. The first
+question, asked on its own, answers correctly.
+
+**Root cause:** `POST /threads` is **sticky** - it hands back the same thread id to every
+caller until that thread is DELETEd. Both user messages therefore land in the same thread
+*before* either run starts, and each run answers the newest message it finds there. The
+run then also picks its datasource for that other question: a counting question that
+answers from the semantic model when asked alone was routed to the ontology when it
+overlapped a graph question.
+
+**Fix:** serialise. Admit one question at a time per agent, with a lock held across the
+whole exchange (post message -> create run -> poll -> read messages). This costs nothing
+real: the service already refuses concurrent runs on one agent
+("A run is already in progress for this thread"), so the wait happens either way.
+
+**Does NOT fix it:** matching the assistant reply by `run_id`. That correctly attributes
+the reply to your run - but your run was fed the wrong prompt, so the attribution is right
+and the answer is wrong. Per-caller threads do not help either while `POST /threads` stays
+sticky.
+
+**Evidence:** both calls HTTP 200 at 54.6s with answers about question 2; question 1 alone
+-> "Il y a 825 clients a risque de churn." Server log shows the overlapping run using
+`trace.analyze_ontology` where the solo run used `trace.analyze_semantic_model`. After
+serialising, same input: Q1 correct at 12.8s, Q2 queues and answers its own question at
+48.9s.
+
+**Why this one is dangerous:** it is not an outage. The caller gets a confident,
+well-formed, plausible answer to a question nobody asked, and every status code says
+success. On stage it is indistinguishable from a correct answer.
