@@ -1,0 +1,9 @@
+# Dependencies for the umbrella test suite.
+#
+#     pip install -r Meta-Brain/requirements.txt
+#     cd Meta-Brain && python -m pytest tests/ -v --tb=short
+#
+# The public-safety scanner (tools/scan_public_safety.py) deliberately uses only
+# the standard library: it must run in any repo, before anything is installed.
+pytest>=8.0
+PyYAML>=6.0
