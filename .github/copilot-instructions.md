@@ -58,8 +58,12 @@ When modifying agent instructions or shared patterns, validate from `Meta-Brain/
 
 ```bash
 cd Meta-Brain
+pip install -r requirements.txt      # pytest + PyYAML, first run only
 python -m pytest tests/ -v --tb=short
 ```
+
+The same suite, plus `python Meta-Brain/tools/scan_public_safety.py .`, runs in CI
+(`.github/workflows/no-client-leak.yml`) on every push and pull request.
 
 Tests parametrize over every brain's catalog, agent folders, instructions, internal links, Python syntax, and JSON parsing. `BRAINS` in `tests/conftest.py` is the single source of truth for which brains are covered.
 

@@ -254,8 +254,15 @@ Any change to agent instructions, catalogs or shared docs must keep the umbrella
 
 ```bash
 cd Meta-Brain
+pip install -r requirements.txt      # pytest + PyYAML, first run only
 python -m pytest tests/ -v --tb=short
 ```
+
+CI (`.github/workflows/no-client-leak.yml`, job **CI / pytest**) runs exactly this on
+every push and PR, alongside the public-safety scanner
+(`python Meta-Brain/tools/scan_public_safety.py .`, job **CI / No client leak**).
+Run both locally before pushing — the scanner is what stops a customer name or a
+real endpoint reaching a public repo, and it only works if something runs it.
 
 It validates, for every brain in `BRAINS` (`Meta-Brain/tests/conftest.py` — single source of
 truth): catalogs parse and match disk, every agent folder has a non-trivial `instructions.md`,
