@@ -167,7 +167,7 @@ After Step 10:
 - [ ] BO report analyzed (formulas, visuals, parameters)
 - [ ] All formulas mapped to DAX (using 119-formula mapping)
 - [ ] All visuals mapped to PBI (using 78-visual mapping)
-- [ ] Report built in Legacy PBIX format
+- [ ] Report built in **PBIR folder format** (Legacy PBIX only when maintaining an existing legacy report)
 - [ ] Data reconciliation passes (±1% tolerance)
 - [ ] Page load time < 5 seconds
 - [ ] Stakeholder sign-off

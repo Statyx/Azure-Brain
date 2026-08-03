@@ -69,7 +69,7 @@ Each workflow specifies the exact agent sequence, inputs/outputs between agents,
 **Output**: Published report with working visuals
 
 1. Design 2–3 page layout (Overview, Details, Trends)
-2. Build `report.json` in Legacy PBIX format
+2. Build the report in **PBIR folder format** (`definition/pages/{page}/visuals/{vis}/visual.json`) — see `../Fabric-Brain/agents/report-builder-agent/`. Legacy PBIX (`report.json` + `sections`) only when maintaining a report already shipped in it.
 3. Create visuals with `prototypeQuery` referencing exact measure names
 4. Include base theme
 5. Deploy via `POST /items`
@@ -208,7 +208,7 @@ Week 6:    Validation + UAT (monitoring-agent)
 
 ### Phase 3: Report Conversion (report-builder-agent)
 
-1. Convert each BO report → Legacy PBIX format
+1. Convert each BO report → **PBIR folder format** (target format for new reports)
 2. Map BO visuals → Power BI visuals (using 78-mapping table)
 3. Recreate filters, parameters, prompts
 4. Build drill-through and navigation

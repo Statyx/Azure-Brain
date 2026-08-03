@@ -165,7 +165,7 @@
 **Output**: Power BI report(s) deployed to workspace  
 
 **What happens**:
-- Generate report using **Legacy PBIX format** (NEVER PBIR)
+- Generate report in **PBIR folder format** — `report-builder-agent` owns the format and is authoritative
 - Create pages with KPI cards, charts, tables, maps
 - Apply industry-specific theme (colors, fonts)
 - Configure filter panes and bookmarks

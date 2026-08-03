@@ -28,8 +28,13 @@ cp environment.example.md environment.md      # Fill with your env paths
 # See ../Meta-Brain/TEMPLATES.md for step-by-step checklists
 ```
 
-> **Key Rule** — The Fabric REST API accepts two report formats. Only one renders visuals.
-> Always use the **Legacy PBIX format** (`report.json` with `sections[].visualContainers[]`). Never PBIR.
+> **Key Rule** — New reports use the **PBIR folder format**
+> (`definition/pages/{page}/visuals/{vis}/visual.json`), per
+> [`agents/report-builder-agent/instructions.md`](agents/report-builder-agent/instructions.md),
+> which is authoritative on report format.
+> Legacy PBIX (`report.json` + `sections[].visualContainers[]`) stays valid for **maintaining
+> reports already shipped in it** — see [`report_format.md`](report_format.md).
+> Both render; PBIR requires the v2.0 rules (known_issues #19).
 
 ---
 
@@ -143,7 +148,7 @@ cp environment.example.md environment.md      # Fill with your env paths
 
 | File | Purpose |
 | --- | --- |
-| [`report_format.md`](report_format.md) | **Critical** — Legacy PBIX format spec (the only format that renders) |
+| [`report_format.md`](report_format.md) | Legacy PBIX format spec — **maintenance of pre-v2.0 reports only**; new reports use PBIR (`agents/report-builder-agent/`) |
 | [`visual_builders.md`](visual_builders.md) | Visual config, expression language, vcObjects |
 | [`semantic_model.md`](semantic_model.md) | model.bim deployment, Direct Lake, TMDL |
 | [`onelake.md`](onelake.md) | DFS API 3-step upload protocol |

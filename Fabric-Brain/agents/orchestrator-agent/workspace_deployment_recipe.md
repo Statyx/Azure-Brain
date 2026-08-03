@@ -17,7 +17,7 @@ Each step is a separate `deploy_*.py` script. All idempotent via `state.json`.
 3. deploy_lakehouse.py       → Create Lakehouse + upload CSVs via OneLake DFS API
 4. deploy_setup_notebook.py  → Deploy notebook (CSV→Delta) + RUN it via Jobs API
 5. deploy_semantic_model.py  → Deploy Direct Lake model (AFTER Delta tables exist)
-6. deploy_report.py          → Deploy Power BI report (legacy PBIX format)
+6. deploy_report.py          → Deploy Power BI report (PBIR; see report-builder-agent)
 7. deploy_data_agent.py      → Deploy Data Agent with instructions + fewshots
 8. export_pptx.py            → Generate PPTX report (dated: {Name}_{YYYYMMDD}.pptx)
 9. export_xlsx.py            → Generate Excel report (dated: {Name}_{YYYYMMDD}.xlsx)
@@ -178,11 +178,17 @@ Without Prep for AI:
 # Cold start: ~60-90s before Spark starts executing
 ```
 
-### 4. Power BI Report (Legacy PBIX Only)
+### 4. Power BI Report
 ```python
-# Three parts: report.json + definition.pbir + BaseTheme
-# definition.pbir uses V2 schema with connectionString
-# NEVER use PBIR folder format (renders blank)
+# Format is owned by report-builder-agent — it is authoritative. Read its instructions.md.
+# New report      -> PBIR folder format (definition/pages/{page}/visuals/{vis}/visual.json)
+# Existing legacy -> Legacy PBIX (report.json + definition.pbir + BaseTheme), see report_format.md
+#
+# PBIR renders ONLY if the v2.0 metadata rules hold (known_issues.md #19):
+#   version.json = "2.0.0"  (NOT 4.0.0)
+#   report.json  carries reportSource + settings + objects
+#   baseTheme    is a real built-in (e.g. CY26SU05) shipped with its theme json
+#   visualContainer schema = 2.10.0  (NOT 2.5.0)
 # Every data visual MUST have prototypeQuery (no error, just blank)
 ```
 
@@ -227,7 +233,7 @@ project/
 | OneLake path with display name → 400 | Use GUID IDs for both workspace and lakehouse |
 | Partition `"type": "none"` → no data | Use `"type": "entity"` with `expressionSource` for Direct Lake |
 | Notebook `format: ipynb` → silent job failure | Always use .py format via `notebook_utils` |
-| Report PBIR format → renders blank | Always use legacy PBIX (report.json + sections) |
+| Report renders blank / freezes on "Loading your report…" | Not a format problem — apply the PBIR v2.0 rules: `version.json`=`2.0.0`, `report.json` with `reportSource`+`settings`+`objects`, real built-in `baseTheme`, `visualContainer` schema `2.10.0`. See `../report-builder-agent/known_issues.md` #19 |
 | Data Agent draft-only → invisible | Include `published/` parts + `publish_info.json` |
 | Spark notebook cold start → 60-90s | Expected on a warm Starter Pool — poll until Completed. **Not** normal at 3-5 min: that means a custom Environment/Pool is attached, or the capacity is F2/F4. See [`deployment_performance.md`](deployment_performance.md) §2 — for demo-sized data the Spark step can usually be removed altogether |
 | Deploy takes 15+ min and "Fabric is slow" | Measure first — the usual causes are fixed `sleep()` in the poll loop, `az` re-auth per step, and serial uploads, not Fabric. [`deployment_performance.md`](deployment_performance.md) |

@@ -1,21 +1,42 @@
-# Report Format — Legacy PBIX (THE Critical Knowledge)
+# Report Format — Legacy PBIX (maintenance reference)
 
-> **This is the single most important file in this brain.**
-> Getting the report format wrong means visuals will never render,
-> and the API will happily accept the broken definition without any error.
+> **Scope — read this first.**
+> This file documents the **Legacy PBIX** format (`report.json` + `sections[].visualContainers[]`).
+> It is **not** the default for new work.
+>
+> | Situation | Format | Source of truth |
+> |---|---|---|
+> | **New report** | **PBIR folder** | [`agents/report-builder-agent/instructions.md`](agents/report-builder-agent/instructions.md) — authoritative |
+> | Maintaining a pre-v2.0 report already shipped in Legacy | Legacy PBIX | this file + [`agents/report-builder-agent/known_issues.legacy.md`](agents/report-builder-agent/known_issues.legacy.md) |
+>
+> Do not start a new report from this file.
 
 ## The Two Formats
 
 | Format | Structure | API Accepts? | Renders in Portal? |
 |--------|-----------|:---:|:---:|
-| **PBIR Folder** | `definition/pages/{page}/visuals/{vis}/visual.json` | YES | **NO** |
+| **PBIR Folder** | `definition/pages/{page}/visuals/{vis}/visual.json` | YES | **YES — once the v2.0 rules are followed** |
 | **Legacy PBIX** | `report.json` at root with `sections[].visualContainers[]` | YES | **YES** |
 
-**Always use the Legacy PBIX format.**
+### Historical note — why this file used to say "never PBIR"
 
-The PBIR folder format is a trap — the API accepts it, `getDefinition` returns all the parts,
-the report item appears in the workspace, but the visuals are **blank** when you open it.
-There is no error message. Hours of debugging led to this discovery.
+PBIR reports really did render blank, and this file carried an absolute prohibition for it.
+**That failure was diagnosed and fixed on 2026-06-13.** The cause was never the format itself:
+
+- `version.json` must be `"2.0.0"` (**not** `4.0.0`)
+- `report.json` must carry `reportSource` + `settings` + `objects`
+- `baseTheme` must be a real built-in (e.g. `CY26SU05`) with its theme json — no custom-name
+  `baseTheme`, no `customTheme` + `RegisteredResources`
+- `visualContainer` schema must be `2.10.0` (not `2.5.0`)
+
+Full detail: `agents/report-builder-agent/known_issues.md` **issue 19**.
+
+The prohibition outlived the bug it protected against and was propagated to a dozen files.
+If you find a document still asserting *"PBIR renders blank"* or *"never PBIR"*, it is stale —
+fix it, and keep `Meta-Brain/tests/test_consistency.py` green.
+
+Both formats render. Legacy remains valid and is still maintained (see the persona / Template 8
+notes of 2026-07-28) — it is simply no longer the default.
 
 ## Required Parts
 

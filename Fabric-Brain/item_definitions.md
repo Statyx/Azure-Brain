@@ -117,7 +117,12 @@ Activity types include: `Copy`, `ForEach`, `IfCondition`, `SetVariable`, `Wait`,
 | `pages/{pageId}/page.json` | Per-page definition |
 | `pages/{pageId}/visuals/{visualId}/visual.json` | Per-visual definition |
 
-> ⚠️ **Always use PBIR-Legacy**. PBIR folder format is accepted by the API but renders blank.
+> **PBIR is the default for new reports.** It renders correctly provided the v2.0 metadata rules
+> are applied (`version.json` = `2.0.0`, `report.json` with `reportSource` + `settings` + `objects`,
+> a real built-in `baseTheme`, `visualContainer` schema `2.10.0`) — see
+> [`agents/report-builder-agent/known_issues.md`](agents/report-builder-agent/known_issues.md) #19.
+> Legacy PBIX (`report.json` + `sections[].visualContainers[]`) remains valid for maintaining
+> reports already shipped in it — [`report_format.md`](report_format.md).
 
 ### Lakehouse
 

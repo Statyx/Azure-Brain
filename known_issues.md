@@ -10,8 +10,9 @@ Comprehensive list of every issue encountered and resolved during this project.
 
 | Approach | Result |
 |----------|--------|
-| PBIR folder format (`visual.json` per visual) | ❌ API accepts, **never renders** |
-| Legacy PBIX format (`report.json` + `sections`) | ✅ Renders correctly |
+| PBIR folder format, v2.0 rules **not** applied | ❌ API accepts, renders blank / freezes on load |
+| PBIR folder format, v2.0 rules applied | ✅ Renders — **default for new reports** (see `report-builder-agent/known_issues.md` #19) |
+| Legacy PBIX format (`report.json` + `sections`) | ✅ Renders — keep for maintaining reports already shipped in it |
 | `definition.pbism` with `datasetReference` | ❌ Rejected by API |
 | `definition.pbism` with `{"version": "1.0"}` only | ✅ Works |
 | `calloutValue` default font size (cards) | ❌ Clips in cards |
@@ -153,11 +154,19 @@ while True:
 
 ## Report Issues (THE BIG ONES)
 
-### 10. ⚠️ PBIR Folder Format Does NOT Render
-- **THE single biggest issue in this project**
-- **Symptom**: Report created, getDefinition returns all parts, but **BLANK** in portal
-- **Cause**: PBIR folder format is accepted by API but not rendered by Fabric viewer
-- **Fix**: Use **Legacy PBIX format** EXCLUSIVELY. See `report_format.md` for full specification.
+### 10. ⚠️ PBIR Folder Format Renders Blank — **SOLVED 2026-06-13**
+- **Symptom**: Report created, `getDefinition` returns all parts, but **BLANK** in portal
+  (or freezes forever on *"Loading your report…"* with an HTTP 405 access-request)
+- **Cause**: *not* the format. Four specific metadata defects:
+  - `version.json` set to `4.0.0` instead of **`2.0.0`**
+  - `report.json` missing `reportSource` / `settings` / `objects`
+  - `baseTheme` pointing at a custom name instead of a real built-in (e.g. `CY26SU05`) with its theme json
+  - `visualContainer` schema `2.5.0` instead of **`2.10.0`**
+- **Fix**: apply the four rules above — see `Fabric-Brain/agents/report-builder-agent/known_issues.md`
+  **issue 19** for the full diagnosis procedure (`getDefinition` on a working QuickCreate report and diff).
+- **Historical note**: this entry used to read *"use Legacy PBIX EXCLUSIVELY"*. That prohibition
+  outlived the bug and spread to ~11 files. PBIR is the default for new reports; Legacy PBIX
+  remains valid for maintaining reports already shipped in it.
 
 ### 11. Visual Type Must Be `cardVisual` (not `card`)
 - **Symptom**: Card visuals don't render

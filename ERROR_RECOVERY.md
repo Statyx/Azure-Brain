@@ -296,7 +296,7 @@ The most dangerous category — no error code, but things don't work.
 
 | Symptom | Root Cause | Detection | Fix |
 |---------|-----------|-----------|-----|
-| Blank visuals in report | PBIR format used | Check for `sections[]` in report.json | Rebuild in Legacy PBIX format |
+| Blank visuals / freeze on "Loading your report…" (PBIR) | v2.0 metadata rules not applied | Check `version.json`, `baseTheme`, `visualContainer` schema | `version.json`=`2.0.0`, `report.json` with `reportSource`+`settings`+`objects`, real built-in `baseTheme`, schema `2.10.0` — `report-builder-agent/known_issues.md` #19. **Do not "rebuild in Legacy"** |
 | Blank visuals in report | Missing `prototypeQuery` | Check `dataTransforms` in visual config | Add prototypeQuery with correct measure refs |
 | Blank visuals in report | Measure name mismatch | Compare visual refs vs model.bim | Fix case/whitespace in measure names |
 | Data Agent invisible | Only draft parts deployed | Check for `published/` in definition | Deploy with published/ + publish_info |
