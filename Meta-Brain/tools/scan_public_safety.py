@@ -21,11 +21,15 @@ the same failure the umbrella test suite already suffered from and fixed.
 
 So: every allowlisted value carries a reason, and a repo can add its own in a
 `.publicsafety-allow` file (one token per line, `#` comments allowed).
+
+The mirror image exists too: `.publicsafety-deny` adds repo-specific forbidden
+terms on top of the shared `CLIENT_NAMES` baseline.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -68,15 +72,44 @@ SCAN_SUFFIXES = {".md", ".py", ".json", ".yaml", ".yml", ".ps1", ".bicep",
 
 # Never scan our own definitions — they contain every pattern by construction.
 SELF = {"scan_public_safety.py", "PUBLIC_SAFETY.md", "test_public_safety.py",
-        ".publicsafety-allow"}
+        ".publicsafety-allow", ".publicsafety-deny"}
+
+# ── Names that identify a real engagement ───────────────────────
+#
+# Added 2026-08-03 after an external audit found a customer name in three files
+# that had survived 73 commits.
+#
+# THE LIST IS DELIBERATELY EMPTY HERE. Writing a customer name into a public
+# repo to prove it must not appear in that repo is the leak it is meant to
+# prevent — and a sibling repo shipped its whole client portfolio that way.
+# Real terms are supplied at run time, never committed:
+#
+#   * `CLIENT_DENYLIST` env var, comma-separated  (CI: a repository secret)
+#   * `.publicsafety-deny`, one term per line     (gitignored, local use)
+#
+# `live event cent(er|re)` stays hardcoded: it is a generic English phrase, not
+# a customer name, and it is what the audited files actually contained.
+CLIENT_NAMES = [r"live event cent(?:er|re)"]
+
+# An acronym is a client name with the letters filed off. Case-SENSITIVE on
+# purpose: a lowercase token in prose is noise, and an acronym only leaks when
+# written in capitals. Supply real ones through the denylist too.
+CLIENT_ACRONYMS: list[str] = [r"LEC"]
+
+# Left-hand sides that mark a Fabric SQL endpoint as documentation, not a host.
+_HOST_PLACEHOLDER_CHARS = set("<{$%*")
+_HOST_PLACEHOLDER_WORDS = re.compile(
+    r"^(?:your|my|xxx+|host|server|endpoint|sql[_-]?endpoint|placeholder|"
+    r"workspace|lakehouse|warehouse)$", re.I)
 
 
 class Rule:
     __slots__ = ("name", "rx", "severity", "hint")
 
-    def __init__(self, name: str, pattern: str, severity: str, hint: str):
+    def __init__(self, name: str, pattern: str, severity: str, hint: str,
+                 flags: int = re.I):
         self.name = name
-        self.rx = re.compile(pattern, re.I)
+        self.rx = re.compile(pattern, flags)
         self.severity = severity
         self.hint = hint
 
@@ -116,6 +149,32 @@ RULES: list[Rule] = [
          GUID_RE,
          "WARN", "Tenant / subscription / workspace / item ID. Use a "
                  "placeholder GUID, or allowlist it if it is a public constant."),
+    # ── added 2026-08-03 after the external audit ────────────────
+    Rule("client-name",
+         r"\b(?:" + "|".join(CLIENT_NAMES) + r")\b",
+         "BLOCK", "Names a real engagement. Use Zava, or an undeducible "
+                  "generic label ('a live-event control-room demo')."),
+    Rule("client-acronym",
+         r"\b(?:" + "|".join(CLIENT_ACRONYMS) + r")\b",
+         "BLOCK", "An acronym is a client name with the letters filed off. "
+                  "Remove it.", flags=0),
+    # Hyphen and EN DASH only. The en dash is how one of the audited names hid
+    # (`ABC – Financial Platform` does not match a plain `-` grep). The EM DASH
+    # is deliberately excluded: this brain uses it as a title separator
+    # (`# Fabric API — REST Reference`, `## Ontology — GQL`), so including it
+    # produced 15 false positives on a clean tree — and a scanner that cries
+    # wolf gets switched off.
+    Rule("personal-workspace-prefix",
+         r"(?<![A-Za-z0-9_])[A-Z]{2,4} [-\u2013] (?=[A-Z][a-z])",
+         "BLOCK", "Initials in a workspace name publish their owner into every "
+                  "screenshot and API response. Use the 'Zava - ' prefix "
+                  "(PUBLIC_SAFETY.md).", flags=0),
+    Rule("fabric-sql-endpoint",
+         r"[A-Za-z0-9_<>{}$%*.\-]+\."
+         r"(?:datawarehouse\.fabric\.microsoft\.com"
+         r"|datawarehouse\.pbidedicated\.windows\.net)",
+         "BLOCK", "A real SQL analytics endpoint identifies the workspace and "
+                  "the tenant. Use <sql_endpoint>.datawarehouse.fabric.microsoft.com."),
 ]
 
 
@@ -154,6 +213,45 @@ def load_allowlist(root: pathlib.Path) -> dict[str, str]:
     return allowed
 
 
+def load_denylist(root: pathlib.Path) -> list[str]:
+    """Extra forbidden terms for this repo, supplied WITHOUT committing them.
+
+    Two sources, both deliberately outside version control:
+
+      * `CLIENT_DENYLIST` — comma-separated env var. In CI this is a repository
+        secret, so the real customer names never appear in the repo, the logs
+        or a pull request.
+      * `.publicsafety-deny` — one term per line, `#` comments. Gitignored;
+        for local runs.
+
+    This indirection is the whole point. A scanner that hardcodes the names it
+    forbids publishes them — see `known_issues.md` #47.
+    """
+    terms: list[str] = []
+
+    env = os.environ.get("CLIENT_DENYLIST", "")
+    terms += [t.strip() for t in env.split(",") if t.strip()]
+
+    f = root / ".publicsafety-deny"
+    if f.exists():
+        for raw in f.read_text(encoding="utf-8", errors="ignore").splitlines():
+            line = raw.split("#", 1)[0].strip()
+            if line:
+                terms.append(line)
+    return terms
+
+
+def denylist_rules(root: pathlib.Path) -> list[Rule]:
+    terms = load_denylist(root)
+    if not terms:
+        return []
+    return [Rule("denylisted-term",
+                 r"\b(?:" + "|".join(re.escape(t) for t in terms) + r")\b",
+                 "BLOCK",
+                 "Listed in this repo's denylist (CLIENT_DENYLIST or "
+                 ".publicsafety-deny). Remove it.")]
+
+
 def _is_secret_read(line: str, match: re.Match) -> bool:
     """True when the value is fetched at runtime rather than hardcoded.
 
@@ -166,8 +264,34 @@ def _is_secret_read(line: str, match: re.Match) -> bool:
                                         "getenv", "<", "{{"))
 
 
+def _is_arithmetic(line: str, match: re.Match) -> bool:
+    """True when `ABC - ` is a subtraction, not a workspace prefix.
+
+    `Revenue - COGS - Operating Expenses` and `SLIDE_W - FAB_L - GAP - M` are
+    formulas that happen to spell capitals. A name never follows an operator.
+    """
+    before = line[:match.start()].rstrip()
+    return before.endswith(("-", "\u2013", "\u2014", "+", "/", "="))
+
+
+def _is_placeholder_host(match: re.Match) -> bool:
+    """True when the SQL endpoint is documentation rather than a real host.
+
+    `*.datawarehouse.fabric.microsoft.com` and
+    `<sql_endpoint>.datawarehouse.fabric.microsoft.com` are the shapes the brain
+    teaches; flagging them would make the rule unusable in the very files that
+    explain the format.
+    """
+    value = match.group(0)
+    left = value[:value.lower().index(".datawarehouse")]
+    if any(c in _HOST_PLACEHOLDER_CHARS for c in left):
+        return True
+    return bool(_HOST_PLACEHOLDER_WORDS.match(left))
+
+
 def scan_file(path: pathlib.Path, root: pathlib.Path,
-              allowed: dict[str, str]) -> list[dict]:
+              allowed: dict[str, str],
+              rules: list[Rule] | None = None) -> list[dict]:
     try:
         text = path.read_text(encoding="utf-8", errors="ignore")
     except OSError:
@@ -175,7 +299,7 @@ def scan_file(path: pathlib.Path, root: pathlib.Path,
 
     findings = []
     for lineno, line in enumerate(text.splitlines(), 1):
-        for rule in RULES:
+        for rule in (rules or RULES):
             for m in rule.rx.finditer(line):
                 value = m.group(0)
                 if value.lower() in allowed:
@@ -183,6 +307,10 @@ def scan_file(path: pathlib.Path, root: pathlib.Path,
                 if rule.name == "real-guid" and PLACEHOLDER_GUID.match(value):
                     continue
                 if rule.name == "connection-string-secret" and _is_secret_read(line, m):
+                    continue
+                if rule.name == "personal-workspace-prefix" and _is_arithmetic(line, m):
+                    continue
+                if rule.name == "fabric-sql-endpoint" and _is_placeholder_host(m):
                     continue
                 findings.append({
                     "file": str(path.relative_to(root)).replace("\\", "/"),
@@ -197,13 +325,14 @@ def scan_file(path: pathlib.Path, root: pathlib.Path,
 
 def scan(root: pathlib.Path) -> list[dict]:
     allowed = load_allowlist(root)
+    rules = RULES + denylist_rules(root)
     out: list[dict] = []
     for path in repo_files(root):
         if not path.is_file() or path.name in SELF:
             continue
         if path.suffix.lower() not in SCAN_SUFFIXES:
             continue
-        out.extend(scan_file(path, root, allowed))
+        out.extend(scan_file(path, root, allowed, rules))
     return out
 
 

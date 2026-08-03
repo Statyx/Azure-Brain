@@ -25,7 +25,7 @@ The MCP Power BI Model server provides **direct programmatic access** to semanti
 ```
 mcp_powerbi-model_connection_operations
   operation: "ConnectFabric"
-  workspaceName: "CDR - Demo Marketing"        # exact match
+  workspaceName: "Zava - Demo Marketing"       # exact match
   semanticModelName: "Marketing360_Model"       # exact match
 ```
 
@@ -272,7 +272,7 @@ mcp_powerbi-model_database_operations
 mcp_powerbi-model_database_operations
   operation: "DeployToFabric"
   deployToFabricRequest:
-    targetWorkspaceName: "CDR - Demo Marketing"
+    targetWorkspaceName: "Zava - Demo Marketing"
     newDatabaseName: "Marketing360_Model_v2"
 ```
 

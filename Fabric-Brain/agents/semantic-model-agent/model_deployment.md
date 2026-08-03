@@ -216,7 +216,7 @@ For Direct Lake, every table needs one partition with `type: "entity"`:
   "kind": "m",
   "expression": [
     "let",
-    "    database = Sql.Database(\"eenhbexk3uueboufjqpzd6vyqe-obwdyezgf2lu3kwbr3kchw57gq.datawarehouse.fabric.microsoft.com\", \"LH_Finance\")",
+    "    database = Sql.Database(\"<sql_endpoint>.datawarehouse.fabric.microsoft.com\", \"LH_Finance\")",
     "in",
     "    database"
   ]

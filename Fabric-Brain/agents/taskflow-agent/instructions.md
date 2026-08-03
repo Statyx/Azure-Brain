@@ -158,7 +158,7 @@ Get data → Store data → Prepare data → Analyze data → Visualize data
 ```
 Items: Copy/Pipeline → Lakehouse → Notebook → Semantic Model → Report + Data Agent
 
-### Pattern: Full Platform (as deployed in CDR - Financial Platform)
+### Pattern: Full Platform (as deployed in Zava - Financial Platform)
 ```
 Ingest → Store → Transform → Orchestrate → Model → Report + AI Agent
 ```

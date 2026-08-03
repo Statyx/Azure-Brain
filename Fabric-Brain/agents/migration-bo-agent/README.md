@@ -15,6 +15,24 @@ Agent specialized in SAP BusinessObjects (BO) to Microsoft Fabric migration proj
 | [bo_migration_assessment.md](bo_migration_assessment.md) | Pre-migration readiness scoring (8 categories, GREEN/YELLOW/RED), fidelity classification, strategy advisor matrix |
 | [post_migration_checklist.md](post_migration_checklist.md) | 91-item post-migration validation checklist (12 sections) with summary tracker |
 | [connector_mapping.md](connector_mapping.md) | BO data connector → Power Query M mapping (17 RDBMS + SAP + file + cloud), migration architecture patterns, gateway planning |
+| [generate_pptx.py](generate_pptx.py) | Builds the 27-slide `BO_to_Fabric_Migration.pptx` customer deck |
+
+## Regenerating the customer deck
+
+The deck is **not committed** — `.gitignore` excludes `*.pptx`. Build it locally:
+
+```bash
+pip install python-pptx
+python generate_pptx.py        # writes BO_to_Fabric_Migration.pptx next to the script
+```
+
+The script is the source of truth: it is self-contained (output path resolved from
+`__file__`, no external asset) and idempotent — re-running it replaces the file.
+
+> Why it is not committed: a `.pptx` opened once in a rights-protected tenant comes
+> back as an OLE/MIP container whose **unencrypted** envelope carries tenant GUIDs.
+> The content is unreadable outside the tenant, the metadata is not. Ship the
+> generator, never the binary. The CI job `no-client-leak` fails if a deck is tracked.
 
 ## When to use this agent
 

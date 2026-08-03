@@ -243,7 +243,7 @@ Before Step 5:
 (sites, zones, gates, devices, links…) with **live telemetry**. It answers two operator
 questions: *what is happening right now* (numbers) and *why + who is impacted* (root-cause &
 impact across the topology). This is the fully-assembled, reusable pattern behind the most
-complete demos (Publicis Live Event Center, Network Operations) — **build it from the brain,
+complete demos (Live Event Operations, Network Operations) — **build it from the brain,
 no project cloning required.**
 
 **Output**: Workspace + Lakehouse (topology) + Eventhouse (telemetry) + Ontology + Graph +

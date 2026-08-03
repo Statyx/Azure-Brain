@@ -413,3 +413,61 @@ POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
 - **Symptom**: `az rest --body '{"csl":"T | count"}'` fails or misparses
 - **Cause**: Shell interprets `|` as pipe operator
 - **Fix**: Write the JSON body to a temp file and use `--body @/tmp/q.json`.
+
+---
+
+## Public Safety / Publication
+
+### 45. A Scanner That CI Never Runs Protects Nothing
+- **Symptom**: An external audit found a customer name, a real SQL analytics
+  endpoint, a personal name and nine personal-prefix workspace names in the
+  tracked tree — after 73 commits — even though this repo already shipped
+  `PUBLIC_SAFETY.md`, `Meta-Brain/tools/scan_public_safety.py` and
+  `Meta-Brain/tests/test_public_safety.py`.
+- **Cause**: Two independent failures, and both were needed.
+  1. **No `.github/workflows/`** — the scanner and the test suite were never
+     executed by anything except a human remembering to type the command.
+  2. **The rules did not cover these classes** — the scanner looked for keys,
+     tokens, tenant domains, home paths and GUIDs. A customer name, an owner's
+     initials and a Fabric SQL endpoint hostname were simply not patterns it
+     knew, so it reported `clean` on a leaking tree. That "clean" is worse than
+     no scanner: it is a false assurance.
+- **Fix**: `.github/workflows/no-client-leak.yml` (same shape as the sibling
+  demo repos) runs the scanner **and** pytest on every push and PR, plus a guard
+  that fails if any `.pptx` is tracked. Rules added: `client-name`,
+  `client-acronym`, `personal-workspace-prefix`, `fabric-sql-endpoint`, and an
+  optional repo-level `.publicsafety-deny`.
+- **Lesson**: When a leak survives, ask two questions — *would the tool have
+  caught it?* and *would anything have run the tool?* Fixing only one of them
+  leaves the same hole.
+
+### 46. A Committed `.pptx` Leaks Tenant GUIDs Even When Encrypted
+- **Symptom**: `Fabric-Brain/agents/migration-bo-agent/BO_to_Fabric_Migration.pptx`
+  started with `D0 CF 11 E0` (OLE compound file) instead of `50 4B` (OOXML zip):
+  the deck had been opened in a rights-protected tenant and saved back as a
+  MIP/IRM container.
+- **Cause**: The *content* is encrypted and unreadable outside the tenant, but
+  the rights-management **envelope is not** — it carries the licensing GUIDs,
+  including the corporate tenant.
+- **Fix**: `git rm --cached` the deck (`.gitignore` already had `*.pptx`),
+  regenerate it locally with `python generate_pptx.py`, and let CI fail if a
+  deck is ever tracked again. Ship the generator, never the binary.
+
+### 47. A Scanner That Hardcodes the Names It Forbids Is the Leak
+
+- **Symptom**: the public-safety tool and its tests are clean-looking Python,
+  the working tree scans green — and the repo still publishes the customer
+  list, because it sits in `CLIENT_NAMES` and in the detection fixtures.
+- **Cause**: the obvious way to test "this name must not appear" is to write
+  the name down. A sibling repo shipped its whole client portfolio that way,
+  inside the very tool meant to catch it.
+- **Fix**: the tool holds generic phrases only. Real terms arrive at run time
+  via the `CLIENT_DENYLIST` env var (a repository secret in CI) or the
+  gitignored `.publicsafety-deny`. Detection tests use **fabricated** values
+  of the right shape and exercise the *mechanism* (see
+  `test_denylist_adds_repo_specific_terms`); `test_tool_hardcodes_no_customer_name`
+  keeps the tool honest.
+- **Corollary**: judge the branch, not the working tree. A committed value is
+  permanent on a public repo — `git push --force` does not remove it, the old
+  SHA still resolves. Before handing work over:
+  `git grep -niE "<terms>" \02e4baf2aa206b6f43f0c394a98fb43b0077b1f3 4812d4c0636c233b89f85e09f0879eb25c13281e e392bc680c45cebb624a6da823e6f4b52e1fd8f7 ea81c73925b128ddddd3fc6aec7591817746d285 12d711166ca874a204d8f780ebd0d028d48b445f 775247163369a09f028c8a0a02a64bfa25b1b6e0` must be empty.

@@ -39,7 +39,7 @@ The approved pattern uses a full-bleed background image with dark overlay, NOT s
 │    Subtitle · Describes what it does (14pt light blue)       │
 │    ───── accent bar (3.0" × 0.04") ─────                    │
 │                                                              │
-│    Clément Droinat (14pt bold white)                         │
+│    Presenter Name (14pt bold white)                          │
 │    Solution Engineer, Data & Analytics (11pt gray)           │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -82,7 +82,7 @@ Use when no background image available. Navy `#0F172A`, NOT black.
 │    Project Name — Subtitle (18pt teal)                      │
 │    ───── teal bar (2.5" × 0.04") ─────                     │
 │                                                              │
-│    Clément Droinat (14pt bold white)                        │
+│    Presenter Name (14pt bold white)                         │
 │    Solution Engineer, Data & Analytics (11pt gray)          │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -219,7 +219,7 @@ The title must describe the **project or analysis** — NEVER use generic slogan
 GOOD:  "Use case presentation"  +  "Architecture vision"
 GOOD:  "Validation des Estimations de Coûts de Construction"
 BAD:   "Bring your data into the era of AI"
-BAD:   "CDR Financial Platform — CCE Validation" (internal codename)
+BAD:   "Zava Financial Platform — CCE Validation" (internal codename)
 ```
 
 ### Pattern: Hero text with subtitle

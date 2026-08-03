@@ -647,5 +647,5 @@ import os
 output_dir = os.path.dirname(os.path.abspath(__file__))
 output_path = os.path.join(output_dir, "BO_to_Fabric_Migration.pptx")
 prs.save(output_path)
-print(f"✅ Presentation saved to: {output_path}")
+print(f"OK - presentation saved to: {output_path}")
 print(f"   Slides: {len(prs.slides)}")

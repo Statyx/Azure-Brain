@@ -5,7 +5,8 @@
 Kusto-Spark connector. This is the reusable path that lets one Direct Lake model sit over
 **both** the batch topology Delta tables **and** the streaming telemetry.
 
-> Proven on the RTI Operations / Digital Twin pattern (Publicis LEC, Network Operations).
+> Proven on the RTI Operations / Digital Twin pattern (a live-event control-room demo,
+> Network Operations).
 > See the blueprint in `../../../Meta-Brain/TEMPLATES.md` (Template 8).
 
 ---

@@ -255,7 +255,7 @@ Files/Config/draft/
 This is the reusable **RTI Operations / Digital Twin** Data Agent: one agent answers both
 *"how do things connect / who is impacted"* (topology, root-cause, impact) **and**
 *"what is the number"* (live telemetry metrics), by combining **two** sources with an explicit
-routing rule. Proven on Publicis LEC and Network Operations — see Template 8 in
+routing rule. Proven on the Live Event Operations and Network Operations demos — see Template 8 in
 `../../../Meta-Brain/TEMPLATES.md`.
 
 **Why two sources?** The ontology is unbeatable for multi-hop RCA/impact via GQL, but the Fabric
