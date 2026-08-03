@@ -32,7 +32,7 @@ convention failed — fix the convention, not just the file.
 | Storage / short names | `zava<workload>` | lowercase, no separators |
 | Project repo | `Zava-<Domain>` | e.g. `Zava-Retail`, `Zava-Energy` |
 
-**Do not use a personal prefix.** A workspace called `CDR - Retail` publishes
+**Do not use a personal prefix.** A workspace called `ABC - Retail` publishes
 the author's initials into every screenshot, every API response and every
 sample JSON in the repo. Use `Zava - Retail`.
 
@@ -179,6 +179,34 @@ is wrong on a clean repo gets ignored, and then it protects nothing — the same
 failure a permanently-red test suite causes. Either fix the rule or record the
 value in `.publicsafety-allow` **with a reason**.
 
+The mirror image exists too, and it is where **real** customer names go —
+never into the tool itself:
+
+* `CLIENT_DENYLIST`, a comma-separated env var. In CI it is a **repository
+  secret**, so the names never reach the repo, the logs or a PR diff.
+* `.publicsafety-deny`, one term per line, `#` comments. **Gitignored**, for
+  local runs.
+
+`CLIENT_NAMES` in the tool holds generic English phrases only. Writing a
+customer name into a public repo to prove it must not appear there is the leak
+it is meant to prevent — see `known_issues.md` #47. The same rule governs
+tests: a detection fixture uses a **fabricated** value of the right shape,
+never a real one.
+
+What it blocks beyond secrets, since the 2026-08-03 audit:
+
+| Rule | Fires on |
+|---|---|
+| `client-name` | a generic engagement/event phrase; real names come from `CLIENT_DENYLIST` |
+| `client-acronym` | the same name with the letters filed off — case-sensitive |
+| `personal-workspace-prefix` | `XX - Something`, i.e. initials instead of `Zava - ` (hyphen or en dash; the em dash is this brain's title separator and is excluded) |
+| `fabric-sql-endpoint` | a real `*.datawarehouse.fabric.microsoft.com` host (placeholders and the `*` form stay quiet) |
+| `denylisted-term` | anything listed in this repo's `.publicsafety-deny` |
+
+One class stays **human-reviewed**: a person's real name. A scanner can only
+match names it already contains, and writing them down republishes them. Use
+`<presenter name>` / `Presenter Name` in templates and check by eye.
+
 `Meta-Brain/tests/test_public_safety.py` runs it against this repo on every
 test run, so the brain cannot drift back.
 
@@ -209,3 +237,11 @@ test run, so the brain cannot drift back.
 | `Meta-Brain/tests/test_public_safety.py` | drift in this brain |
 | `Meta-Brain/tests/test_crossref.py` | a local-only file shipped without its template |
 | `.gitignore` + `*.example.*` | real values reaching git at all |
+| `.github/workflows/no-client-leak.yml` | **runs the two above on every push and PR**, plus a guard that fails if any `.pptx` is tracked |
+
+> The workflow is not a nicety. Until 2026-08-03 this repo had the scanner, the
+> tests and this document — and **no CI at all**. Nothing ever ran them, so a
+> customer name, a real SQL endpoint and nine personal-prefix workspace names
+> survived 73 commits. See `known_issues.md` #45. A convention nobody executes
+> is a comment.
+

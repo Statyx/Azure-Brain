@@ -115,7 +115,7 @@ Keyed by the data source artifact ID. Each entry contains:
   "semantic_model_id": "<guid>",
   "semantic_model_name": "Marketing360_Model",
   "workspace_id": "<guid>",
-  "workspace_name": "CDR - Demo CRM Fabric",
+  "workspace_name": "Zava - Demo CRM Fabric",
   "display_name": "Marketing360_Model",
   "user_description": null,
   "additional_instructions": null
