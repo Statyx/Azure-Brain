@@ -285,7 +285,7 @@ Both HTML and PPTX architecture diagrams must use the **same visual language**:
 
 | Element | HTML (CSS) | PPTX (python-pptx) |
 |---------|-----------|-------------------|
-| Zone colors | CSS class + inline style | Tailwind 50/200/700 RGBColor constants |
+| Zone colors | CSS class + inline style | Zava 50/200/700 RGBColor constants |
 | Step circles | `.step` circle + number | `step_circle()` helper |
 | Component cards | `.comp` flexbox | `component()` helper |
 | Summary text | `<div>` paragraph | `text()` helper |

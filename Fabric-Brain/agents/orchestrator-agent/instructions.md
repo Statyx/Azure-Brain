@@ -103,7 +103,7 @@ PL_<CompanyName>_Orchestration
   └── NB05_TransactionalAnalytics (optional)
 ```
 
-**Naming**: `PL_<CompanyName>_Orchestration` (e.g., `PL_ContosoEnergy_Orchestration`)
+**Naming**: `PL_<CompanyName>_Orchestration` (e.g., `PL_ZavaEnergy_Orchestration`)
 
 See `../project-orchestrator-agent/project_pipeline.md` for the full 12-step project pipeline.
 

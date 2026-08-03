@@ -29,9 +29,9 @@ Each phase has a **quality gate** — never skip to the next phase until the gat
 | PPTX generation | `_build_pptx.py`, output `.pptx` | python-pptx, widescreen layout, multi-slide decks |
 | Helper functions | `rect`, `text`, `multitext`, `component`, `info_card`, etc. | See `helper_reference.md` for full catalog |
 | Icon pipeline | `_convert_icons.py`, `_icon_pngs/` | Playwright SVG→PNG, FabricToolset, auto-crop |
-| Color system | Tailwind-inspired 50/200/700 triads | 8 color families + special colors |
+| Color system | Zava-inspired 50/200/700 triads | 8 color families + special colors |
 | Quality assurance | Automated checks, visual checklist, QA report | Severity triage (🔴🟠🟡), completeness validation |
-| Layout system | Component cards, badges, pills, arrows | Tailwind colors, Segoe UI, step circles |
+| Layout system | Component cards, badges, pills, arrows | Zava colors, Segoe UI, step circles |
 
 ## What This Agent Does NOT Own
 - Fabric API deployment → defer to agents/workspace-admin-agent/

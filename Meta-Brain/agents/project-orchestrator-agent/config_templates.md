@@ -28,9 +28,9 @@ Defines the project identity, business domains, and Fabric artifact naming.
 ```json
 {
   "industry": {
-    "id": "contoso-energy",
-    "name": "Contoso Energy",
-    "displayName": "Contoso Energy & Utilities",
+    "id": "zava-energy",
+    "name": "Zava Energy",
+    "displayName": "Zava Energy & Utilities",
     "description": "Regional energy provider serving 2.4M customers across 5 states",
     "domains": ["Generation", "Grid", "Billing", "Sustainability", "FieldOps"],
     "dataYears": ["FY2024", "FY2025", "FY2026"],
@@ -43,7 +43,7 @@ Defines the project identity, business domains, and Fabric artifact naming.
     }
   },
   "fabricArtifacts": {
-    "workspacePrefix": "ContosoEnergy",
+    "workspacePrefix": "ZavaEnergy",
     "lakehouses": {
       "bronze": "BronzeLH",
       "silver": "SilverLH",
@@ -56,7 +56,7 @@ Defines the project identity, business domains, and Fabric artifact naming.
     "notebooks": 6,
     "dataflows": 5,
     "reports": 3,
-    "dataPipeline": "PL_ContosoEnergy_Orchestration"
+    "dataPipeline": "PL_ZavaEnergy_Orchestration"
   },
   "features": {
     "forecasting": true,
@@ -115,7 +115,7 @@ Defines tables, DAX measures, and relationships for the semantic model.
 ```json
 {
   "model": {
-    "name": "SM_ContosoEnergy",
+    "name": "SM_ZavaEnergy",
     "mode": "DirectLake",
     "lakehouse": "GoldLH"
   },
@@ -156,7 +156,7 @@ Defines report pages, visual types, and KPI mappings.
 {
   "reports": [
     {
-      "name": "ContosoEnergyAnalytics",
+      "name": "ZavaEnergyAnalytics",
       "type": "analytics",
       "pageCount": 12,
       "pages": [
@@ -239,7 +239,7 @@ Defines AI agent instructions and few-shot examples.
 {
   "agent": {
     "name": "Energy_Analyst",
-    "semanticModel": "SM_ContosoEnergy",
+    "semanticModel": "SM_ZavaEnergy",
     "instructions": "You are an Energy Analyst AI. ALWAYS query the semantic model using DAX before answering...",
     "fewShotExamples": [
       {

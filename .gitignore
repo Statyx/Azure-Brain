@@ -1,4 +1,4 @@
-﻿__pycache__/
+__pycache__/
 *.pyc
 .venv/
 *.pptx
@@ -6,23 +6,43 @@
 *.bak
 _sdk_out.txt
 
-# Personal config (copy .example files to get started)
+# ---------------------------------------------------------------
+# Public-safety: real values stay local, templates get committed.
+# Every entry below has a committed *.example.* counterpart, or is
+# generated at runtime. See PUBLIC_SAFETY.md.
+# ---------------------------------------------------------------
+
+# Personal config (copy the .example files to get started)
 resource_ids.md
 environment.md
 
-# External reference repos — cloned locally for learning, NEVER commit
-# (may be private repos belonging to third parties)
-reference/
+# Deployment state written on first run - contains REAL workspace
+# and item IDs. The single most common tenant-ID leak.
+state.json
+**/state.json
+src/config.yaml
+!src/config.example.yaml
+*.local.*
 
-# Secrets
+# Environment / credentials
+.env
+.env.*
+!.env.example
+.azure/
+.fabric/
+*.publishsettings
 .oracle-syspw.txt
 *.syspw.txt
 **/.azure-credentials*
 
+# External reference repos - cloned locally for learning, NEVER commit
+# (may be private repos belonging to third parties)
+reference/
+
 # VS Code Migration extension generated artifacts (regenerable, huge)
 .github/postgres-migrations/
 
-# Run Command outputs (transient)
+# Run Command outputs (transient, echo tenant data back)
 **/*.out.json
 **/*.sh.out
 **/diag-out.json
@@ -32,4 +52,3 @@ reference/
 /_tmp_*
 /_tmp_*.ps1
 /_tmp_*.out
-

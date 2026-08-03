@@ -35,6 +35,7 @@ Azure-Brain/                       ← umbrella (this repo)
 ├── shared_constraints.md          ← 8 hard rules, all brains
 ├── known_issues.md                ← cross-cutting gotchas
 ├── ERROR_RECOVERY.md              ← decision trees by HTTP status
+├── PUBLIC_SAFETY.md               ← Zava identity + publish-by-default rules
 ├── GETTING_STARTED.md             ← 15-min setup
 ├── Fabric-Brain/                  ← Microsoft Fabric      — 26 agents  (flat)
 │   ├── agents/_catalog.yaml
@@ -200,6 +201,11 @@ its own domain**.
    proves it. A false "verified" makes downstream agents retry a path that cannot work.
 10. **Follow `agent_principles.md`** — plan first, verify before done, capture lessons in
     `known_issues.md` after any correction.
+11. **Write as if already public.** The company is always **Zava**; GUIDs in docs and samples are
+    visibly fake (`a0000000-0000-4000-a000-00000000000a`); no path contains your account name;
+    secrets are read at runtime; real values live in a gitignored file with a committed
+    `.example` twin. See **`PUBLIC_SAFETY.md`**, verify with
+    `python Meta-Brain/tools/scan_public_safety.py <repo>`.
 
 Conventions: Python 3.12+ with `pathlib` and type hints · UTF-8 everywhere, **no BOM**
 (`[System.IO.File]::WriteAllText()` in PowerShell, never `Out-File` for JSON) · conventional

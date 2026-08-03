@@ -53,7 +53,7 @@ Every item directory contains a `.platform` file — the system metadata file.
   "version": "2.0",
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/platform/platformProperties.json",
   "config": {
-    "logicalId": "e553e3b0-0260-4141-a42a-70a24872f88d"
+    "logicalId": "e0000000-0000-4000-a000-00000000000e"
   },
   "metadata": {
     "type": "Report",

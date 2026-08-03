@@ -340,7 +340,7 @@ df.write.format("delta").mode("overwrite").saveAsTable("dim_customers")
 
 ## Existing Notebook Reference
 
-**NB_Load_CSV_to_Delta** (`86729c39-33a4-454a-8170-0ac363ee809c`)
+**NB_Load_CSV_to_Delta** (`a0000000-0000-4000-a000-00000000000a`)
 - Reads CSVs from `Files/raw/` subfolders
 - Writes Delta tables to `Tables/`
 - 11 tables: dim_* and fact_*

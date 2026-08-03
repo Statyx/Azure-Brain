@@ -196,7 +196,7 @@ Runs a Spark notebook.
         "retry": 0
     },
     "typeProperties": {
-        "notebookId": "86729c39-33a4-454a-8170-0ac363ee809c",
+        "notebookId": "a0000000-0000-4000-a000-00000000000a",
         "parameters": {
             "input_path": {
                 "value": "Files/raw/sales",
@@ -328,7 +328,7 @@ Access in expressions: `@pipeline().parameters.source_folder`
 
 ## Existing Pipeline Reference
 
-**PL_Load_Finance_Data** (`7fdd5622-9313-4a5f-a769-dccef65a5015`)
-- Runs notebook `NB_Load_CSV_to_Delta` (`86729c39-33a4-454a-8170-0ac363ee809c`)
+**PL_Load_Finance_Data** (`b0000000-0000-4000-a000-00000000000b`)
+- Runs notebook `NB_Load_CSV_to_Delta` (`a0000000-0000-4000-a000-00000000000a`)
 - Cold start on F16: ~2 min `NotStarted`, total ~4 min
 - Triggered via API: `POST /items/{id}/jobs/instances?jobType=Pipeline`

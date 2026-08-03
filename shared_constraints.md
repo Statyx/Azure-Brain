@@ -4,7 +4,7 @@ Hard rules that apply to **all** Brain agents. Inspired by multi-agent architect
 
 ---
 
-## 8 Hard Rules
+## 9 Hard Rules
 
 ### 1. Configuration-Driven
 All industry-specific behavior comes from JSON configuration files, never hard-coded. Adding a new industry/domain means writing configs — not changing agent logic.
@@ -36,6 +36,29 @@ Every Fabric REST API creation and execution call returns HTTP 202. Always:
 - Use `allow_redirects=False` on POST requests
 - Poll via `x-ms-operation-id` header
 - Handle transient failures with exponential backoff (3s × 2^attempt, max 2 retries)
+
+### 9. Write As If Already Public
+Everything produced with this brain is authored so it can be published without a
+redaction pass. There is no anonymisation step before sharing — get it right the
+first time.
+
+- **The company is always `Zava`.** Never a real customer, never your employer,
+  never your own initials as a prefix. Derived names: `zava.com`,
+  `zava.onmicrosoft.com`, workspace `Zava - <Domain>`, resource group
+  `rg-zava-<workload>`, repo `Zava-<Domain>`.
+- **GUIDs in docs and samples must be visibly fake** —
+  `a0000000-0000-4000-a000-00000000000a`. Never paste a workspace, capacity,
+  item, subscription or tenant ID copied from a real tenant. Documented public
+  Azure constants (built-in role IDs, first-party appIds) are the exception and
+  must stay real.
+- **Never hardcode a path containing your account name.** Use `$PSScriptRoot`,
+  `%USERPROFILE%`, `$HOME`.
+- **Secrets are read at runtime**, never written as literals.
+- **Real values live in a gitignored file with a committed `.example` twin.**
+
+Full conventions, the `.gitignore` block for consuming repos, and the
+pre-publication checklist: **`PUBLIC_SAFETY.md`**.
+Verify with `python Meta-Brain/tools/scan_public_safety.py <repo>`.
 
 ---
 

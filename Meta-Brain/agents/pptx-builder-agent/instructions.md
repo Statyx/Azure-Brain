@@ -59,7 +59,7 @@ Each phase produces a deliverable. Each has a gate. Never proceed to the next ph
   - Zones connected by step circles (①②③④) and arrow labels
   - Each zone has a header color, component cards, and optional detail pills
 
-### Rule 4: Follow the Tailwind-inspired color system
+### Rule 4: Follow the Zava-inspired color system
 All colors are defined as 50/200/700 triads (background/border/text):
 - **PURPLE** (Ingest & Transform): `#FAF5FF` / `#E9D5FF` / `#7C3AED`
 - **GREEN** (Store / Data Engineering): `#F0FDF4` / `#BBF7D0` / `#15803D`

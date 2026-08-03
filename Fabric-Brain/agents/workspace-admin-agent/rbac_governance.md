@@ -90,9 +90,9 @@ Filter based on the logged-in user's email, matched against a security table.
 
 ```csv
 user_email,region,cost_center
-alice@contoso.com,Europe,CC100
-bob@contoso.com,Americas,CC200
-carol@contoso.com,APAC,CC300
+alice@zava.com,Europe,CC100
+bob@zava.com,Americas,CC200
+carol@zava.com,APAC,CC300
 ```
 
 **Step 2**: Create DAX filter expression:
@@ -150,7 +150,7 @@ RETURN
 def assign_rls_role(ws_id: str, model_id: str, role_name: str, members: list, headers: dict):
     """
     Assign users/groups to an RLS role in a semantic model.
-    members: [{"identityType": "User", "identifier": "alice@contoso.com"}, ...]
+    members: [{"identityType": "User", "identifier": "alice@zava.com"}, ...]
     """
     # Use XMLA endpoint or Fabric API for role management
     body = {
@@ -272,7 +272,7 @@ def set_workspace_description_with_cost_center(ws_id: str, cost_center: str, hea
     Use description field for cost tracking metadata.
     """
     body = {
-        "description": f"Cost Center: {cost_center} | Domain: Finance | Owner: finance-team@contoso.com"
+        "description": f"Cost Center: {cost_center} | Domain: Finance | Owner: finance-team@zava.com"
     }
     resp = requests.patch(f"{API}/workspaces/{ws_id}", headers=headers, json=body)
     return resp

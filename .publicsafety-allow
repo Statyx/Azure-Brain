@@ -1,0 +1,14 @@
+# Values this repository has declared safe to publish.
+# One token per line, matched case-insensitively against the exact text the
+# scanner flagged. `#` starts a comment. Every entry MUST carry a reason —
+# an unexplained allowlist entry is indistinguishable from a mistake.
+#
+#   python Meta-Brain/tools/scan_public_safety.py .
+
+# Throwaway password for the ephemeral Oracle XE demo container. It is
+# published deliberately so the Oracle->PostgreSQL walkthrough is reproducible
+# by anyone; the container is local to a demo VM, holds only the HR/PetClinic
+# sample schemas, and is destroyed after the demo. Rotate nothing — there is
+# nothing to rotate. If port 1521 is ever exposed publicly, this becomes a
+# real finding again: parameterise the scripts instead of extending this note.
+PASSWORD=Demo_Ora2Pg_2026!

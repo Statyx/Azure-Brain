@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Continue"
 $az = "C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin\az.cmd"
-$here = "C:\Users\cdroinat\OneDrive - Microsoft\1 - Microsoft\01 - Architecture\-- 001 - Azure-Brain\Azure-Brain\Database-Brain\agents\03-oracle-to-postgres\oracle-source-vm-agent"
+$here = $PSScriptRoot
 $scriptFile = Join-Path $here "install-oracle-docker.sh"
 $outFile = Join-Path $here "install-oracle-docker.sh.out.json"
 Write-Host "[$(Get-Date -Format HH:mm:ss)] Launching Run Command on VM..."

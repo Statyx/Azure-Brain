@@ -93,15 +93,15 @@ The export/import JSON uses this exact schema (reverse-engineered from portal ex
   "tasks": [
     {
       "type": "get data",
-      "id": "baa71671-4633-44b6-846c-b54834d871d3",
+      "id": "c0000000-0000-4000-a000-00000000000c",
       "name": "Task Name",
       "description": "What this task does"
     }
   ],
   "edges": [
     {
-      "source": "baa71671-4633-44b6-846c-b54834d871d3",
-      "target": "f57677fe-d7b5-46dc-97f7-5fbf5ce827cb"
+      "source": "c0000000-0000-4000-a000-00000000000c",
+      "target": "d0000000-0000-4000-a000-00000000000d"
     }
   ],
   "name": "Flow Name",
