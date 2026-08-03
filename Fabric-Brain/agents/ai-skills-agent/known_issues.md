@@ -115,3 +115,77 @@ A healthy Data Agent run produces **6 tool_calls steps**:
 - `nl2code` output empty → Question too ambiguous or no matching fewshots
 - `execute` output has error → DAX syntax error (check `==` vs `=`, measure names)
 - Run status `failed` with `server_error` → Thread has too many messages
+
+---
+
+## The run lock is per AGENT, not per thread (3 Aug 2026)
+
+**Context:** Fabric Data Agent, `POST /threads/{id}/runs`, api-version `2024-05-01-preview`.
+
+**Symptom:** A run is created and immediately fails with
+`{"code":"invalid_prompt","message":"Status code BadRequest: A run is already in progress
+for this thread. Please wait for it to complete before starting a new one."}`
+— **on a thread that was just created and has never had a run**.
+
+**Root cause:** the agent serialises runs across the whole item. The message names the
+thread, which is misleading: creating a fresh thread does not obtain a fresh lock.
+
+**Fix:** wait and re-run. Do **not** purge the thread — the block is not on it, and
+`DELETE /threads/{id}` can kill a run another caller is mid-way through. Budget the wait
+from measurement, not from the message: 6 attempts × 25 s covered the case below.
+
+**Evidence:** same question, same agent, three consecutive attempts —
+`t+0s` refused (thread A), `t+45s` refused on **thread B, brand new**, `t+150s` answered
+normally. Deleting threads in between changed nothing.
+
+**Correction to the "Red flags" entry above (`server_error` → thread has too many
+messages):** that is one cause, not the only one, and the two need opposite cures. A run
+that holds this lock makes *every* subsequent question fail with no answer, which looks
+identical to thread pollution from the outside. They are separable only by reading
+`last_error` on the run:
+
+| `last_error` contains | Cause | Cure |
+|---|---|---|
+| `already in progress` | per-agent run lock | **wait**, same thread |
+| `server_error` / empty | polluted sticky thread | `DELETE /threads/{id}`, retry once |
+
+Polling only `status` collapses both into "failed, no answer" and the wait can never be
+chosen. Fetch `last_error` in the same poll.
+
+**Cost of not knowing this:** a cascade of failures across every question was diagnosed as
+a *damaged agent item*, on the strength of a control that seemed decisive — a throwaway
+agent built from the **same definition** answered in 2 s. It answered because it had no run
+in flight, not because the production item was broken. A delete-and-recreate of a healthy
+item was attempted on that basis. **Before concluding an item is damaged, confirm no run
+is in flight on it.**
+
+## The agent invents enum values it reads in the question (3 Aug 2026)
+
+**Context:** Data Agent over an Ontology (GQL) and a semantic model (DAX). Applies to both.
+
+**Symptom:** a valid query returns zero rows and the agent reports it as a finding —
+*"no customer is at risk"*, *"no support interaction was recorded"*. Nothing in the run
+looks wrong: routing is correct, traversal is correct, status is `completed`.
+
+**Root cause:** the generated filter uses a literal **borrowed from the question**, not one
+that exists in the data. Observed twice in one session:
+`LOWER(lifecycle_stage) = LOWER("at risk")` where the stored value is `at_risk`, and
+`interaction_type = "support"` where the column only holds call/email/chat/ticket/meeting —
+"support" appeared in the user's phrasing and was treated as data.
+
+**Fix:** state the domain of every enumerated column in `aiInstructions` — the exact
+values, and explicitly **deny** the plausible-but-absent ones by name. Also resolve
+homonyms: "customers at risk" matched both a lifecycle state and a segment *named* "At
+Risk", and the agent silently answered on the segment for one question and the state for
+another. Add: if a filter on an enumeration returns zero rows, re-run once without the
+filter before reporting an absence. Generate the value lists from the source of truth
+(config / generator) so the instructions cannot drift from the data.
+
+**Evidence:** the exact failing question ("quels comptes B2B concentrent le plus
+d'interactions **support** négatives") returned "aucune interaction de ce type" before the
+rule and a ranked list of accounts after it, definition re-read from Fabric to confirm the
+rule shipped (13 parts, 83 802 chars).
+
+**Why this one is dangerous:** an empty result is indistinguishable from a real answer. It
+does not fail, it does not warn, and it is most likely to hit precisely the domain terms a
+demo is built around.
