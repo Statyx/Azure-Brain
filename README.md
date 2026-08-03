@@ -1,4 +1,4 @@
-# Azure-Brain
+# Azure Brain
 
 **A modular knowledge base for building cloud data & AI solutions with GitHub Copilot — organized into specialized "brains" per technology, plus cross-cutting meta-tooling.**
 
