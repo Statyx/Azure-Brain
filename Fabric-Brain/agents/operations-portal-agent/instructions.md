@@ -147,6 +147,44 @@ Two terms, kept separate: a single multiplier cannot express a constant and unde
 Audit `height: Npx` only — `min-height` grows and `max-height` pairs with `overflow`. Also check for
 `em` units, which ride on the same knob invisibly.
 
+### Perceived size is not font-size (4 Aug 2026, same demo, judged on a big screen)
+
+The knob was already right for the body copy, and the suggestion chips *still* read as
+smaller than the answers they sit under. They were not smaller: at 15.5px they matched the
+body text exactly. They were **weight 500 in the secondary grey**, against near-black body
+copy. At projector distance the eye reads lighter-and-paler as smaller, and no amount of
+`rem` fixes that.
+
+- Before changing a size, check **weight and contrast**. Fixing only the size makes the
+  text bigger and still faint, so the report comes back a second time.
+- The demo chrome is not secondary. The suggestion row, its source pill and the legend
+  under it are **the most-read pixels on screen** during an agent demo, and they had ended
+  up the smallest text in the UI at 12.1-13.2px. Size that row **with** the answer text,
+  not below it, and give it the primary colour.
+- Raise the specific rules, not the global knob, once the rest of the page is judged right.
+  The knob is for "everything is too small"; a single faint row is a local problem.
+- The header band is what says "this is an application, not a web page". 60px with a 17px
+  title did not; 84px with a 25px title, a larger logo and a less washed-out subtitle did.
+
+### The fit guard is blind to a band that stacks two texts
+
+`.header` declares `height` and no `font-size`; `.header-brand h1` and `.header-sub`
+declare `font-size` and no height. A rule-by-rule fit check needs both in the same rule, so
+it walks straight past **the one box the audience sees first** ? every ingredient present,
+no rule holding two of them. Same shape as the Power BI `cardVisual` that shipped clipped
+because it was sized for fewer texts than it draws.
+
+Model the stack explicitly, each text keeping its own line box **and** its own chrome:
+
+```
+need = sum(font_px * 1.35 + 8 for each text the box stacks)
+```
+
+Assert the container still declares a fixed height, so removing it cannot make the guard
+pass on nothing. Mutation-test it: a guard nobody has watched fail is not a guard. The one
+written here rejects the old 60px band, an oversized title, an oversized subtitle, and a
+return to px ? 4/4.
+
 ## Portal-native live views
 
 Don't rely only on the embedded dashboard — a **portal-native** SVG floor plan / heat view reads the
