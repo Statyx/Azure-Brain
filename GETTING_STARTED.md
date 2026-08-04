@@ -19,13 +19,26 @@ az login
 
 ## 2. Configure Your Environment (5 min)
 
+Config lives **per brain**, not at the root. Copy only what you need — each pair is gitignored
+and ships with a committed `.example` twin:
+
 ```bash
-# Copy the template files
-cp resource_ids.example.md resource_ids.md
-cp environment.example.md environment.md
+# Fabric work
+cp Fabric-Brain/resource_ids.example.md    Fabric-Brain/resource_ids.md
+cp Fabric-Brain/environment.example.md     Fabric-Brain/environment.md
+
+# Foundry work
+cp Foundry-Brain/resource_ids.example.md   Foundry-Brain/resource_ids.md
+cp Foundry-Brain/environment.example.md    Foundry-Brain/environment.md
+
+# Database work
+cp Database-Brain/resource_ids.example.md  Database-Brain/resource_ids.md
+cp Database-Brain/environment.example.md   Database-Brain/environment.md
 ```
 
-Edit `resource_ids.md` with your values:
+Apps-Brain and Meta-Brain need no local config.
+
+Edit `Fabric-Brain/resource_ids.md` with your values:
 
 | What | Where to find it |
 |------|------------------|
@@ -48,15 +61,17 @@ If you get a token, you're ready.
 
 | I want to... | Template | Time |
 |--------------|----------|------|
-| Build a BI dashboard | [Template 1](TEMPLATES.md#template-1-standard-bi-demo-23-hours) | 2–3h |
-| Set up real-time analytics | [Template 2](TEMPLATES.md#template-2-real-time-iot-dashboard-34-hours) | 3–4h |
-| Add AI Q&A to existing data | [Template 4](TEMPLATES.md#template-4-data-agent-add-on-45-min) | 45min |
+| Build a BI dashboard | [Template 1](Meta-Brain/TEMPLATES.md#template-1-standard-bi-demo-23-hours) | 2–3h |
+| Set up real-time analytics | [Template 2](Meta-Brain/TEMPLATES.md#template-2-real-time-iot-dashboard-34-hours) | 3–4h |
+| Add AI Q&A to existing data | [Template 4](Meta-Brain/TEMPLATES.md#template-4-data-agent-add-on-45-min) | 45min |
 
 Each template has a step-by-step checklist with agent assignments.
 
 ## 5. Start Working
 
-Open your project in VS Code with Copilot. The agents auto-load via `.github/copilot-instructions.md`.
+Open your project in VS Code with Copilot, or the Copilot CLI / Copilot app. The agents auto-load
+via `.github/copilot-instructions.md` (VS Code) or `AGENTS.md` (CLI / app) — both point at the
+same agent tree.
 
 Tell Copilot what you want to build:
 - _"Create a Fabric workspace and lakehouse for a finance demo"_
@@ -71,7 +86,9 @@ Copilot reads the relevant agent instructions and guides you.
 
 ```
 Azure-Brain/                       Umbrella repo
-├── Fabric-Brain/                  20 Fabric-specific agents + 14 knowledge files
+├── AGENTS.md                      Routing table + index of all 42 agents (start here)
+│
+├── Fabric-Brain/                  24 Fabric agents + domain knowledge files
 │   ├── agents/
 │   │   ├── _catalog.yaml
 │   │   └── {agent-name}/
@@ -81,14 +98,20 @@ Azure-Brain/                       Umbrella repo
 │   ├── environment.md             YOUR environment setup (gitignored, private)
 │   └── *.md                       Fabric API, OneLake, report_format, semantic_model, etc.
 │
+├── Foundry-Brain/                 7 Microsoft Foundry agents (+ generation_map.md — read first)
+├── Apps-Brain/                    2 application-layer agents
+├── Database-Brain/                4 Azure database agents (nested by domain)
+│
 ├── Meta-Brain/                    5 cross-cutting agents + shared infrastructure
 │   ├── agents/                    testing, pptx-builder, architecture-design, etc.
-│   ├── tests/                     Cross-brain validation (171 tests)
-│   ├── TEMPLATES.md               5 project templates with checklists
+│   ├── tests/                     Cross-brain validation suite
+│   ├── tools/scan_public_safety.py  Leak scanner (second CI gate)
+│   ├── TEMPLATES.md               Project templates with checklists
 │   ├── WORKFLOWS.md               Cross-agent orchestration sequences
 │   └── mcp_registry.md            MCP server registry
 │
 ├── agent_principles.md            Operating principles (umbrella)
+├── PUBLIC_SAFETY.md               Write-as-if-public rules (Zava, fake GUIDs, no secrets)
 ├── known_issues.md                Cross-cutting gotchas
 ├── shared_constraints.md          8 hard rules every agent follows
 └── ERROR_RECOVERY.md              HTTP error decision trees
@@ -103,7 +126,7 @@ Azure-Brain/                       Umbrella repo
 | Problem | Solution |
 |---------|----------|
 | `az account get-access-token` fails | Run `az login` first |
-| Report visuals are blank | You're using PBIR format. Switch to Legacy PBIX (see `report_format.md`) |
+| Report visuals are blank | You're using PBIR format. Switch to Legacy PBIX (see [`Fabric-Brain/report_format.md`](Fabric-Brain/report_format.md)) |
 | API returns 401 | Token expired. Get a fresh one: `az account get-access-token --resource https://api.fabric.microsoft.com` |
 | Capacity not found | Check it's running: Fabric Admin Portal → Capacities |
 | SQL Endpoint not ready | Wait 2-3 min after lakehouse creation, then poll |

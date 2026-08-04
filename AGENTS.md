@@ -302,10 +302,15 @@ cp Fabric-Brain/environment.example.md  Fabric-Brain/environment.md
 # Foundry work only:
 cp Foundry-Brain/resource_ids.example.md Foundry-Brain/resource_ids.md
 cp Foundry-Brain/environment.example.md  Foundry-Brain/environment.md
+
+# Database work only:
+cp Database-Brain/resource_ids.example.md Database-Brain/resource_ids.md
+cp Database-Brain/environment.example.md  Database-Brain/environment.md
 ```
 
 Then fill in the Azure subscription, Fabric workspace and item IDs.
-Both files are gitignored. Full walkthrough: `GETTING_STARTED.md`.
+Apps-Brain and Meta-Brain need no local config.
+All copies are gitignored. Full walkthrough: `GETTING_STARTED.md`.
 
 MCP servers available to this workspace are catalogued in `Meta-Brain/mcp_registry.md`.
 

@@ -611,7 +611,7 @@ The Workspace ID is the string that appears between groups/ and /aiskills. It sh
 
 Artifact ID  Artifact ID
 
-The Artifact ID is the string that appears between aiskills/ and ? (do not include the ?). It should look similar to b0000000-0000-4000-b000-00000000000b
+The Artifact ID is the string that appears between aiskills/ and ? (do not include the ?). It should look similar to b0000000-0000-4000-a000-00000000000b
 
 Return to the Microsoft Foundry browser tab.
 
