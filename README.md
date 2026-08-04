@@ -2,7 +2,7 @@
 
 **A modular knowledge base for building cloud data & AI solutions with GitHub Copilot — organized into specialized "brains" per technology, plus cross-cutting meta-tooling.**
 
-![Brains](https://img.shields.io/badge/brains-3_active-blue?style=for-the-badge)
+![Brains](https://img.shields.io/badge/brains-4_active-blue?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/agents-35_active-orange?style=for-the-badge)
 ![Knowledge](https://img.shields.io/badge/knowledge_files-20+-green?style=for-the-badge)
 
@@ -19,8 +19,9 @@ Azure-Brain/                  ← umbrella (this repo)
 ├── AGENTS.md                 ← entry point — routing table + full agent index
 ├── Fabric-Brain/             ← Microsoft Fabric (26 agents, flat layout)
 ├── Database-Brain/           ← Azure databases (4 active agents, nested by domain)
+├── Foundry-Brain/            ← Microsoft Foundry (bootstrap — 7 active / 11 catalogued, flat layout)
 ├── Meta-Brain/               ← cross-cutting (5 agents — testing, PPTX, etc.)
-└── (future brains)           ← Synapse-Brain, Databricks-Brain, Foundry-Brain, ...
+└── (future brains)           ← Synapse-Brain, Databricks-Brain, ...
 ```
 
 > **Entry point.** [`AGENTS.md`](AGENTS.md) is the single door into the brain: it routes a
@@ -28,7 +29,7 @@ Azure-Brain/                  ← umbrella (this repo)
 > GitHub Copilot CLI / Copilot app; [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
 > is its VS Code counterpart. Both point at the same agent tree — no content is duplicated.
 
-> **Layout note.** Fabric-Brain and Meta-Brain keep agents flat (`agents/<agent>/`).
+> **Layout note.** Fabric-Brain, Meta-Brain and Foundry-Brain keep agents flat (`agents/<agent>/`).
 > Database-Brain nests them by domain (`agents/<NN-domain>/<agent>/`). Tooling that walks
 > agents must handle both depths — see `Meta-Brain/tests/conftest.py`.
 
@@ -41,9 +42,9 @@ Azure-Brain/                  ← umbrella (this repo)
 | [**Fabric-Brain**](Fabric-Brain/README.md) | Microsoft Fabric — Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology | 26 | ✅ Active |
 | [**Meta-Brain**](Meta-Brain/README.md) | Cross-cutting — testing, PowerPoint, HTML diagrams, README authoring, project orchestration | 5 | ✅ Active |
 | [**Database-Brain**](Database-Brain/README.md) | Azure databases — Azure SQL, PostgreSQL, Cosmos DB, MySQL, cross-engine migration (Oracle → PG, SQL Server → Azure SQL, Mongo → Cosmos DB) | 4 active / 22 catalogued (Oracle→PG track live, CLI + Copilot paths) | 🟢 Active |
+| [**Foundry-Brain**](Foundry-Brain/README.md) | Microsoft Foundry — agent service, tool catalog, multi-agent orchestration, Fabric bridge (Fabric data agent + Fabric IQ) | 7 active / 11 catalogued | 🟡 Bootstrap |
 | _Synapse-Brain_ | Azure Synapse legacy | — | 📋 Planned |
 | _Databricks-Brain_ | Databricks on Azure | — | 📋 Planned |
-| _Foundry-Brain_ | Microsoft AI Foundry (multi-agent orchestration) | — | 📋 Planned |
 
 ---
 

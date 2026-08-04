@@ -1,0 +1,86 @@
+# Agent Catalog — Foundry-Brain
+# Microsoft Foundry agents — agent service, tools, multi-agent orchestration
+# Part of Azure-Brain umbrella (see ../../README.md)
+# Status: 7 active of 11 — remaining agents declared as planned, implemented on demand
+# Layout: FLAT (agents/<agent>/) like Fabric-Brain and Meta-Brain
+# Last updated: 2026-08-04
+
+domains:
+
+  01-platform:
+    description: Foundry account and project, resource topology, identity, model deployments and quota
+    agents:
+      - name: foundry-project-agent
+        purpose: Foundry resource + project provisioning, RBAC and managed identity, connections, networking, capability hosts
+        status: planned
+      - name: foundry-model-catalog-agent
+        purpose: Model catalog, deployments, TPM quota, model routing and fallback, cost/latency trade-offs
+        status: planned
+
+  02-agent-service:
+    description: Creating and running individual agents — instructions, tools, threads, runs
+    agents:
+      - name: foundry-agent-service-agent
+        purpose: "Agent authoring: the five agent roles (router/wrapper/action/synthesizer/resolver), prompt-as-interface rules, tool attachment and approval posture, versioning and Save-vs-Publish"
+        status: active
+      - name: foundry-tools-agent
+        purpose: "Tool catalog — function calling, OpenAPI, MCP, code interpreter, file search; the three-layer control model (prompt / tool set / approval), connection-by-name discipline"
+        status: active
+
+  03-orchestration:
+    description: Multi-agent systems — supervisor patterns, connected agents, durable workflows
+    agents:
+      - name: foundry-orchestration-agent
+        purpose: Supervisor/orchestrator patterns — A2A sub-agent delegation, toolbox vs direct tools, routing contracts, anti-loop guardrails, identity across the hop
+        status: active
+      - name: foundry-agent-framework-agent
+        purpose: Microsoft Agent Framework — workflow authoring, durable execution, local-to-Foundry promotion path
+        status: planned
+
+  04-knowledge-grounding:
+    description: Grounding agents in enterprise data — Fabric bridge, search indexes, vector stores
+    agents:
+      - name: foundry-fabric-bridge-agent
+        purpose: "The Fabric bridge: Microsoft Fabric data agent tool + Fabric IQ (incl. background mode), portal-then-SDK binding by connection name, identity passthrough, handoff to Fabric-Brain ai-skills-agent"
+        status: active
+      - name: foundry-knowledge-agent
+        purpose: "Foundry IQ knowledge bases — indexed vs federated sources, cross-service RBAC, consumption by agents as an MCP tool, retrieval strategy for grounding"
+        status: active
+
+  05-quality:
+    description: Proving an agent works — tracing, evidence discipline, regression detection
+    agents:
+      - name: foundry-observability-agent
+        purpose: "Tracing and Application Insights — the trace-reading playbook, what a trace settles vs what it cannot, evidence discipline for the whole brain"
+        status: active
+
+  06-governance:
+    description: Is the system behaving — guardrails, evaluation, and repeatable deployment
+    agents:
+      - name: foundry-governance-agent
+        purpose: "Guardrails + evaluations — the two answers to 'is the system behaving?': policy applied to live traffic (layer 4 of the control model) and scoring applied to a sample; per-role evaluator choice, and the multi-agent seam neither surface covers"
+        status: active
+      - name: foundry-deploy-agent
+        purpose: Infrastructure as code (Bicep / azd) for Foundry resources and agents, environment promotion, CI/CD
+        status: planned
+
+# Boundary clarifications:
+# - foundry-fabric-bridge-agent (Foundry-Brain) vs ai-skills-agent (Fabric-Brain):
+#   Fabric-Brain CREATES and publishes the Fabric Data Agent; Foundry-Brain CONSUMES it as a
+#   tool from a Foundry agent. Foundry-Brain never modifies a Fabric artifact — it hands off.
+# - foundry-orchestration-agent (Foundry-Brain) vs project-orchestrator-agent (Meta-Brain):
+#   Foundry one orchestrates AGENTS AT RUNTIME inside Foundry; Meta one orchestrates the
+#   BUILD of a project across brains at authoring time.
+# - foundry-orchestration-agent vs foundry-agent-framework-agent:
+#   orchestration owns the pattern and the service-side wiring; agent-framework owns the
+#   Microsoft Agent Framework SDK, workflow code and durable execution.
+# - foundry-tools-agent vs foundry-fabric-bridge-agent:
+#   tools owns the generic tool mechanics; fabric-bridge owns the Fabric-specific tools and
+#   everything that makes them work against a real Fabric tenant.
+# - foundry-governance-agent vs foundry-observability-agent:
+#   governance answers "may this happen?" (guardrails, before) and "was it any good?"
+#   (evaluations, after); observability answers "what actually happened?" (traces). The
+#   multi-agent hop is covered by observability only — neither governance surface sees it.
+# - foundry-deploy-agent (Foundry-Brain) vs cicd-fabric-agent (Fabric-Brain):
+#   Foundry one deploys Foundry resources/agents; Fabric one owns Fabric Git integration and
+#   deployment pipelines.

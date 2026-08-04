@@ -43,6 +43,11 @@ Azure-Brain/                       ← umbrella (this repo)
 ├── Database-Brain/                ← Azure databases       — 4 active   (nested by domain)
 │   ├── agents/_catalog.yaml
 │   └── agents/<NN-domain>/<agent>/instructions.md
+├── Foundry-Brain/                 ← Microsoft Foundry     — 7 active / 11 catalogued (flat)
+│   ├── generation_map.md          ← ⚠ classic vs current + 3 retirement clocks — read first
+│   ├── orchestration_patterns.md  ← supervisor pattern: A2A vs Toolbox vs Workflows
+│   ├── agents/_catalog.yaml
+│   └── agents/<agent>/instructions.md
 └── Meta-Brain/                    ← cross-cutting         — 5 agents   (flat)
     ├── agents/_catalog.yaml
     ├── agents/<agent>/instructions.md
@@ -51,7 +56,7 @@ Azure-Brain/                       ← umbrella (this repo)
 ```
 
 > ### ⚠ Folder depth differs per brain
-> - **Fabric-Brain** and **Meta-Brain** are **flat**: `agents/<agent>/instructions.md`
+> - **Fabric-Brain**, **Meta-Brain** and **Foundry-Brain** are **flat**: `agents/<agent>/instructions.md`
 > - **Database-Brain** is **nested by domain**: `agents/<NN-domain>/<agent>/instructions.md`
 >
 > Any tooling that walks agents must handle **both depths** — see the depth-aware
@@ -96,6 +101,14 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | Oracle 21c XE source VM on Azure | `oracle-source-vm-agent` | Database |
 | Oracle → PostgreSQL via **Ora2Pg / DMS** (CLI, scriptable) | `oracle-to-postgres-migration-agent` | Database |
 | Oracle → PostgreSQL via **VS Code PG ext. + Copilot App Modernization** (Java) | `oracle-to-postgres-copilot-modernization-agent` | Database |
+| Foundry resource / project, model deployments, quota | `foundry-project-agent` 🟡 | Foundry |
+| Create a **Foundry** agent, its instructions, tools, threads | `foundry-agent-service-agent` 🟢 | Foundry |
+| **Supervisor / orchestrator over several Foundry agents** | `foundry-orchestration-agent` 🟢 | Foundry |
+| Call a **Fabric** Data Agent *from* Foundry (Fabric tool, Fabric IQ) | `foundry-fabric-bridge-agent` 🟢 | Foundry |
+| Ground a Foundry agent in enterprise data (**Foundry IQ** knowledge base, sources) | `foundry-knowledge-agent` 🟢 | Foundry |
+| Attach a **tool** to a Foundry agent — MCP, OpenAPI, function calling, approvals | `foundry-tools-agent` 🟢 | Foundry |
+| **Why did it do that?** — Foundry traces, App Insights, reading the execution path | `foundry-observability-agent` 🟢 | Foundry |
+| Guardrails / content safety / **evaluating** a Foundry agent | `foundry-governance-agent` 🟢 | Foundry |
 | Write or run tests, quality gate before deploy | `testing-agent` | Meta |
 | Generate a PowerPoint deck | `pptx-builder-agent` | Meta |
 | HTML architecture diagram with Fabric/Azure icons | `architecture-design-agent` | Meta |
@@ -116,6 +129,9 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | `fabric-apps-agent` vs `extensibility-toolkit-agent` | Apps = backends **inside** Fabric on OneLake; toolkit = custom **workloads** |
 | `fabric-apps-agent` vs `operations-portal-agent` | Apps run **inside** Fabric; portal is an **external** app that embeds/proxies Fabric |
 | Migration agents vs `lakehouse`/`orchestrator` | Migration agents own **source→Fabric translation**; the others own the actual item creation |
+| `foundry-orchestration-agent` (Foundry) vs `project-orchestrator-agent` (Meta) | Foundry one orchestrates **agents at runtime**; Meta one orchestrates the **build** of a project across brains |
+| `foundry-fabric-bridge-agent` (Foundry) vs `ai-skills-agent` (Fabric) | Fabric **creates/publishes** the Data Agent; Foundry **consumes** it as a tool and never mutates it |
+| `foundry-governance-agent` vs `foundry-observability-agent` | Governance = *may this happen?* (guardrails) and *was it good?* (evaluations); observability = *what actually happened?* (traces). The multi-agent hop is seen only by traces |
 
 Full boundary notes live in each brain's `agents/_catalog.yaml`.
 
@@ -167,6 +183,38 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 | `03-oracle-to-postgres` | `oracle-source-vm-agent` | Oracle 21c XE on Azure VM (Oracle Linux 8), sample schemas, listener 1521 |
 | `03-oracle-to-postgres` | `oracle-to-postgres-migration-agent` | Ora2Pg assessment + schema conversion + data export, Azure DMS cutover |
 | `03-oracle-to-postgres` | `oracle-to-postgres-copilot-modernization-agent` | PG VS Code extension + Copilot App Modernization for Java (SQL + Managed Identity) |
+
+### Foundry-Brain — 7 active / 11 catalogued · `Foundry-Brain/agents/<agent>/instructions.md`
+
+> ⚠️ **Read [`Foundry-Brain/generation_map.md`](Foundry-Brain/generation_map.md) and
+> [`Foundry-Brain/orchestration_patterns.md`](Foundry-Brain/orchestration_patterns.md) before
+> any Foundry work.** Two agent generations ship side by side —
+> `azure/foundry-classic/agents/*` (deprecated, retires **2027-03-31**) and
+> `azure/foundry/agents/*` (current, GA) — plus a third clock: portal **Workflows** retire
+> **2026-12-01** despite living on the current tree. The classic `agent.as_tool` /
+> **Connected Agents** pattern **does not exist** in the new service: a supervisor attaches
+> sub-agents via the **A2A tool** (preview) and capabilities via a **Toolbox** (GA).
+>
+> Five agents exist on disk. Their **behavioural** content is grounded in two complete
+> multi-agent systems observed in Microsoft training labs
+> (`Foundry-Brain/reference_workflow.md`, `Foundry-Brain/reference_foundry_iq.md`); the
+> **SDK shapes** are tenant-verified by the second lab's working `agents.py`. No system here
+> has been re-run end to end against your own tenant. Everything else is `status: planned`.
+> See `Foundry-Brain/agents/_catalog.yaml`.
+
+| Domain | Agent | Purpose |
+|---|---|---|
+| 01-platform | `foundry-project-agent` | Resource + project, RBAC, managed identity, connections, networking |
+| 01-platform | `foundry-model-catalog-agent` | Deployments, TPM quota, model routing, cost/latency trade-offs |
+| 02-agent-service | `foundry-agent-service-agent` | **The five agent roles**, prompt-as-interface rules, tool attachment + approval posture, versioning, Save vs Publish |
+| 02-agent-service | `foundry-tools-agent` | Function calling, OpenAPI, MCP, code interpreter, file search; prompt/tool-set/approval control layers |
+| 03-orchestration | `foundry-orchestration-agent` | Supervisor patterns, connected agents, routing, anti-loop guardrails |
+| 03-orchestration | `foundry-agent-framework-agent` | Microsoft Agent Framework, workflows, durable execution |
+| 04-knowledge-grounding | `foundry-fabric-bridge-agent` | Fabric data agent tool + Fabric IQ, identity passthrough → hands off to `ai-skills-agent` |
+| 04-knowledge-grounding | `foundry-knowledge-agent` | Foundry IQ knowledge bases — indexed vs federated sources, cross-service RBAC, MCP consumption |
+| 05-quality | `foundry-observability-agent` | Tracing, Application Insights, **the trace-reading playbook** — what a trace settles and what it cannot |
+| 06-governance | `foundry-governance-agent` | Guardrails (policy on live traffic) + evaluations (scoring a sample) — per-role evaluator choice, the seam neither covers |
+| 06-governance | `foundry-deploy-agent` | Bicep / azd, environment promotion, CI/CD |
 
 ### Meta-Brain — 5 agents · `Meta-Brain/agents/<agent>/instructions.md`
 
@@ -223,6 +271,10 @@ If `Fabric-Brain/resource_ids.md` is missing, the brain has no environment bound
 ```bash
 cp Fabric-Brain/resource_ids.example.md Fabric-Brain/resource_ids.md
 cp Fabric-Brain/environment.example.md  Fabric-Brain/environment.md
+
+# Foundry work only:
+cp Foundry-Brain/resource_ids.example.md Foundry-Brain/resource_ids.md
+cp Foundry-Brain/environment.example.md  Foundry-Brain/environment.md
 ```
 
 Then fill in the Azure subscription, Fabric workspace and item IDs.

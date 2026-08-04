@@ -4,13 +4,14 @@
 
 This repository is a **multi-brain knowledge base** for building cloud data & AI solutions with GitHub Copilot.
 
-Three brains live at the root:
+Four brains live at the root:
 
 - [`Fabric-Brain/`](../Fabric-Brain/) — 26 agents + 14 knowledge files for Microsoft Fabric (Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology).
 - [`Database-Brain/`](../Database-Brain/) — 4 active agents (of 22 catalogued) for Azure databases: Azure SQL, PostgreSQL, Cosmos DB, MySQL and cross-engine migration (Oracle → PostgreSQL track is live).
+- [`Foundry-Brain/`](../Foundry-Brain/) — 7 active of 11 catalogued agents for Microsoft Foundry: agent service, tool catalog, knowledge (Foundry IQ), observability, governance (guardrails + evaluations), multi-agent orchestration, and the Fabric bridge (Fabric data agent + Fabric IQ). **Read [`Foundry-Brain/generation_map.md`](../Foundry-Brain/generation_map.md) first** — two agent generations ship side by side and the older one retires 2027-03-31.
 - [`Meta-Brain/`](../Meta-Brain/) — 5 cross-cutting agents + shared infrastructure (testing, PPTX, HTML diagrams, project orchestration, README authoring).
 
-> **Agent folder layout differs per brain.** Fabric-Brain and Meta-Brain are flat
+> **Agent folder layout differs per brain.** Fabric-Brain, Meta-Brain and Foundry-Brain are flat
 > (`agents/<agent>/`). Database-Brain is nested by domain (`agents/<NN-domain>/<agent>/`).
 > Tooling that walks agents must handle both depths.
 

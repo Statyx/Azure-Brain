@@ -1,0 +1,117 @@
+# Agent Catalog — Apps-Brain
+# The application layer that CONSUMES the platform brains — runtime, identity, embedding,
+# in-app intelligence, frontend, operations.
+# Part of Azure-Brain umbrella (see ../../README.md)
+# Status: 2 active of 8 — remaining agents declared as planned, implemented on demand
+# Layout: FLAT (agents/<agent>/) like Fabric-Brain, Meta-Brain and Foundry-Brain
+# Last updated: 2026-08-04
+
+# ---------------------------------------------------------------------------
+# THE CUT
+# ---------------------------------------------------------------------------
+# The question this brain answers is "I am building an application".
+# The runtime (inside Fabric / external / Azure-hosted) is the FIRST ROUTING
+# DECISION INSIDE this brain — it is not a brain boundary. That is why
+# fabric-apps-agent lives here and not in Fabric-Brain: a Fabric App item is a
+# hosting choice for an app, the same way Container Apps is.
+#
+# ---------------------------------------------------------------------------
+# NON-GOALS — this brain is a magnet domain, these lines are load-bearing
+# ---------------------------------------------------------------------------
+# "App" appears in every conversation, so without an explicit stop list this
+# brain becomes the repo's dumping ground. It does NOT own:
+#
+#   - Data logic, pipelines, Lakehouse/Warehouse/Delta, semantic models, reports
+#       -> Fabric-Brain. The app READS what those agents produce.
+#   - Fabric WORKLOADS (iFrame SDK, React workload components, Workload Hub)
+#       -> Fabric-Brain/extensibility-toolkit-agent. A workload extends the Fabric
+#          PORTAL ITSELF and ships to other tenants — it is platform surface, not
+#          an application of ours.
+#   - Foundry agent DEFINITION (instructions, tools, orchestration, evaluation)
+#       -> Foundry-Brain. This brain only CONSUMES a deployed agent endpoint and
+#          owns the app-side surface around it (proxy, streaming, citations, UX).
+#   - Application DATABASE schema/tuning (PostgreSQL, Azure SQL, Cosmos DB)
+#       -> Database-Brain. This brain owns the app's access path, not the engine.
+#   - Testing framework, PPTX, HTML diagrams, project build orchestration
+#       -> Meta-Brain.
+#
+# Rule of thumb: if removing the UI/API surface makes the problem disappear, it
+# belongs here. If the problem survives without any app, it belongs to a platform
+# brain.
+
+domains:
+
+  01-runtime:
+    description: Where the application actually runs — the hosting model and its deployment path
+    agents:
+      - name: fabric-apps-agent
+        purpose: "Fabric Apps (preview) via Rayfin — scaffold/model/deploy app backends (DB, Entra auth, Data APIs, hosting), data in OneLake in place; Replit x Fabric vibe-coding path"
+        status: active
+      - name: operations-portal-agent
+        purpose: "External operations portal (FastAPI + static frontend) — proxies a Data Agent (NL Q&A), embeds Power BI reports (app-owns-data) + RTI/KQL dashboards (MSAL delegated + ADX user_impersonation), portal-native live SVG views from direct Kusto queries; the last-mile UI of the RTI Operations / Digital Twin pattern"
+        status: active
+      - name: app-hosting-azure-agent
+        purpose: "Azure hosting paths for an app — Container Apps, Static Web Apps, App Service: choosing between them, ingress and networking, scale-to-zero and cost, container build and revision strategy"
+        status: planned
+
+  02-identity:
+    description: Who is calling, and with which token — the single biggest source of app-layer failure
+    agents:
+      - name: app-identity-agent
+        purpose: "The auth models an app must hold at once — app/service token vs delegated MSAL user token vs managed identity, Entra app registration and consent, on-behalf-of, per-resource scopes, token cache and refresh, identity passthrough across a proxy hop"
+        status: planned
+
+  03-embedding:
+    description: Surfacing platform artifacts inside the app's own UI
+    agents:
+      - name: app-embedding-agent
+        purpose: "Embedding Power BI reports (app-owns-data, embed tokens, RLS), Fabric Embed for RTI/KQL dashboard tiles, direct Kusto queries for portal-native visuals, iframe/CSP/CORS constraints, token lifetime and silent renewal"
+        status: planned
+
+  04-intelligence:
+    description: The AI surface of the app — this is the seam with Foundry-Brain and Fabric-Brain
+    agents:
+      - name: app-intelligence-agent
+        purpose: "Wiring intelligence into an app WITHOUT owning the agent — chat proxy to a Fabric Data Agent or a Foundry agent endpoint, thread/session model, streaming, citations and source rendering, tool-call surfacing, MCP consumed from the app, graceful degradation and cost control"
+        status: planned
+
+  05-frontend:
+    description: The human-facing surface — layout, live views, accessibility, branding
+    agents:
+      - name: app-frontend-agent
+        purpose: "App frontend conventions — persona-aware navigation, live/streaming views, SVG and canvas visuals fed by direct queries, design system and theming, accessibility and contrast, responsive behaviour"
+        status: planned
+
+  06-operations:
+    description: Running the app after it ships
+    agents:
+      - name: app-observability-agent
+        purpose: "Application Insights instrumentation for an app front-and-back, correlating a user action through the proxy to the platform call, latency and cost per conversation, error budgets and alerting"
+        status: planned
+      - name: app-delivery-agent
+        purpose: "CI/CD for an application — build and container pipelines, environment promotion and configuration, secrets at runtime, IaC (Bicep/azd) for the app's own resources"
+        status: planned
+
+# Boundary clarifications:
+# - fabric-apps-agent vs operations-portal-agent: the runtime split INSIDE this brain.
+#   fabric-apps runs INSIDE Fabric as an App item on OneLake (Rayfin: DB + Entra auth + Data
+#   APIs + hosting); operations-portal is an EXTERNAL app (FastAPI + static) that embeds and
+#   proxies Fabric. Same brain, opposite hosting models — pick by where the code executes and
+#   who owns the identity.
+# - Apps-Brain vs Fabric-Brain/extensibility-toolkit-agent: this brain builds OUR applications;
+#   extensibility-toolkit builds a Fabric WORKLOAD that extends the Fabric portal itself and is
+#   published to the Workload Hub. Different consumer, different lifecycle, different tenant.
+# - Apps-Brain vs Foundry-Brain: Foundry DEFINES the agent (instructions, tools, orchestration,
+#   guardrails, evaluation); Apps-Brain CONSUMES a deployed agent endpoint from an app surface.
+#   Apps-Brain never mutates a Foundry artifact — it hands off.
+# - Apps-Brain vs Fabric-Brain/ai-skills-agent: ai-skills CREATES and publishes the Fabric Data
+#   Agent; app-intelligence-agent proxies it and owns the chat UX around it.
+# - operations-portal-agent vs report-builder / rti-kusto / ai-skills (Fabric-Brain): the portal
+#   owns the end-user WIRING only; the report, KQL dashboard and Data Agent it surfaces are owned
+#   by their respective Fabric-Brain agents.
+# - app-identity-agent vs foundry-security-agent / workspace-admin-agent: this brain owns the
+#   token the APP holds and how it reaches a resource; the platform brains own the RBAC on the
+#   resource itself.
+# - app-delivery-agent vs cicd-fabric-agent (Fabric-Brain): app-delivery ships the APPLICATION
+#   and its own Azure resources; cicd-fabric owns Fabric Git integration and deployment pipelines
+#   for Fabric items (including the App item's Fabric-side lifecycle).
