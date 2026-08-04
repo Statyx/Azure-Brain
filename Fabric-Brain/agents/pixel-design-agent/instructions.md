@@ -267,6 +267,6 @@ fixed-height box without shrinking the font and without warning. Rule 1's arithm
 over `height: Npx` declarations only.
 
 The rule itself lives with the surface that applies it — see
-[`../operations-portal-agent/instructions.md`](../operations-portal-agent/instructions.md),
+[`../../../Apps-Brain/agents/operations-portal-agent/instructions.md`](../../../Apps-Brain/agents/operations-portal-agent/instructions.md),
 section "Typography — one root scale, never px" — so it is stated once, not twice.
 

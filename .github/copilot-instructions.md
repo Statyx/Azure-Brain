@@ -4,21 +4,22 @@
 
 This repository is a **multi-brain knowledge base** for building cloud data & AI solutions with GitHub Copilot.
 
-Four brains live at the root:
+Five brains live at the root:
 
-- [`Fabric-Brain/`](../Fabric-Brain/) — 26 agents + 14 knowledge files for Microsoft Fabric (Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology).
+- [`Fabric-Brain/`](../Fabric-Brain/) — 24 agents + 14 knowledge files for Microsoft Fabric (Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology).
+- [`Apps-Brain/`](../Apps-Brain/) — 2 active of 8 catalogued agents for the **application layer that consumes the platform brains**: runtime (Fabric App / external portal / Azure hosting), identity, embedding, in-app intelligence, frontend, operations. The cut is *"I am building an app"* — the runtime is a decision **inside** this brain. **Read its [non-goals](../Apps-Brain/agents/_catalog.yaml) before adding anything**: "app" is a magnet domain.
 - [`Database-Brain/`](../Database-Brain/) — 4 active agents (of 22 catalogued) for Azure databases: Azure SQL, PostgreSQL, Cosmos DB, MySQL and cross-engine migration (Oracle → PostgreSQL track is live).
 - [`Foundry-Brain/`](../Foundry-Brain/) — 7 active of 11 catalogued agents for Microsoft Foundry: agent service, tool catalog, knowledge (Foundry IQ), observability, governance (guardrails + evaluations), multi-agent orchestration, and the Fabric bridge (Fabric data agent + Fabric IQ). **Read [`Foundry-Brain/generation_map.md`](../Foundry-Brain/generation_map.md) first** — two agent generations ship side by side and the older one retires 2027-03-31.
 - [`Meta-Brain/`](../Meta-Brain/) — 5 cross-cutting agents + shared infrastructure (testing, PPTX, HTML diagrams, project orchestration, README authoring).
 
-> **Agent folder layout differs per brain.** Fabric-Brain, Meta-Brain and Foundry-Brain are flat
-> (`agents/<agent>/`). Database-Brain is nested by domain (`agents/<NN-domain>/<agent>/`).
-> Tooling that walks agents must handle both depths.
+> **Agent folder layout differs per brain.** Fabric-Brain, Meta-Brain, Foundry-Brain and
+> Apps-Brain are flat (`agents/<agent>/`). Database-Brain is nested by domain
+> (`agents/<NN-domain>/<agent>/`). Tooling that walks agents must handle both depths.
 
 ## How to Use
 
 > **Entry point.** [`AGENTS.md`](../AGENTS.md) at the repo root is the routing table and full
-> index of all 35 agents. It is auto-loaded by the GitHub Copilot CLI / Copilot app; this file
+> index of all 42 agents. It is auto-loaded by the GitHub Copilot CLI / Copilot app; this file
 > is its VS Code counterpart. Both point at the same agent tree — read `AGENTS.md` to route,
 > then read the agent's own `instructions.md`.
 

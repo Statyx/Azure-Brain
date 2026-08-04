@@ -24,13 +24,13 @@ read/write **OneLake in place**, and inherit Entra auth + Purview governance.
 
 ## What This Agent Does NOT Own
 
-- Custom **workloads** / iFrame SDK / Workload Hub publishing → `agents/extensibility-toolkit-agent/`
-- Lakehouse / Delta tables / OneLake file ops → `agents/lakehouse-agent/`
-- Data Pipelines / scheduling / ingestion → `agents/orchestrator-agent/`
-- Semantic model + Power BI report over the app data → `agents/semantic-model-agent/`, `agents/report-builder-agent/`
-- Data Agent over the app data → `agents/ai-skills-agent/`
-- Ontology / graph over the app data → `agents/ontology-agent/`
-- Git integration / deployment pipelines for the App item → `agents/cicd-fabric-agent/`
+- Custom **workloads** / iFrame SDK / Workload Hub publishing → `../../../Fabric-Brain/agents/extensibility-toolkit-agent/`
+- Lakehouse / Delta tables / OneLake file ops → `../../../Fabric-Brain/agents/lakehouse-agent/`
+- Data Pipelines / scheduling / ingestion → `../../../Fabric-Brain/agents/orchestrator-agent/`
+- Semantic model + Power BI report over the app data → `../../../Fabric-Brain/agents/semantic-model-agent/`, `../../../Fabric-Brain/agents/report-builder-agent/`
+- Data Agent over the app data → `../../../Fabric-Brain/agents/ai-skills-agent/`
+- Ontology / graph over the app data → `../../../Fabric-Brain/agents/ontology-agent/`
+- Git integration / deployment pipelines for the App item → `../../../Fabric-Brain/agents/cicd-fabric-agent/`
 
 > The app **produces governed OneLake data**; the downstream wins (Power BI, notebooks,
 > data agents, ontology) are owned by their respective agents. This agent stops at a
@@ -71,8 +71,8 @@ read/write **OneLake in place**, and inherit Entra auth + Purview governance.
 
 ## Cross-References
 
-- `agents/extensibility-toolkit-agent/` — custom workloads / iFrame SDK (different from app backends)
-- `agents/lakehouse-agent/` — the OneLake tables the app reads/writes
-- `agents/semantic-model-agent/`, `agents/report-builder-agent/` — downstream Power BI win
-- `agents/ai-skills-agent/`, `agents/ontology-agent/` — AI over the app's OneLake data
-- `agents/cicd-fabric-agent/` — Git + deployment pipelines for the App item
+- `../../../Fabric-Brain/agents/extensibility-toolkit-agent/` — custom workloads / iFrame SDK (different from app backends)
+- `../../../Fabric-Brain/agents/lakehouse-agent/` — the OneLake tables the app reads/writes
+- `../../../Fabric-Brain/agents/semantic-model-agent/`, `../../../Fabric-Brain/agents/report-builder-agent/` — downstream Power BI win
+- `../../../Fabric-Brain/agents/ai-skills-agent/`, `../../../Fabric-Brain/agents/ontology-agent/` — AI over the app's OneLake data
+- `../../../Fabric-Brain/agents/cicd-fabric-agent/` — Git + deployment pipelines for the App item

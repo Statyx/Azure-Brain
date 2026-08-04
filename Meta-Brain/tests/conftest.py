@@ -6,8 +6,8 @@ This module is the SINGLE SOURCE OF TRUTH for:
   * which catalog entries are expected to exist on disk (`catalog_agent_names`)
 
 Agent folder layout differs per brain:
-  Fabric-Brain / Meta-Brain / Foundry-Brain : agents/<agent>/             (flat)
-  Database-Brain                            : agents/<NN-domain>/<agent>/ (nested by domain)
+  Fabric-Brain / Meta-Brain / Foundry-Brain / Apps-Brain : agents/<agent>/             (flat)
+  Database-Brain                                         : agents/<NN-domain>/<agent>/ (nested by domain)
 
 `agent_dirs()` handles both: a directory directly under `agents/` is treated as an
 agent when it contains `instructions.md`, otherwise as a domain folder whose
@@ -24,7 +24,7 @@ import yaml
 # ROOT = Azure-Brain umbrella (parent of every brain)
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 
-BRAINS = ["Fabric-Brain", "Meta-Brain", "Database-Brain", "Foundry-Brain"]
+BRAINS = ["Fabric-Brain", "Meta-Brain", "Database-Brain", "Foundry-Brain", "Apps-Brain"]
 
 # Catalog statuses that must have a matching folder on disk.
 IMPLEMENTED_STATUSES = {"active"}

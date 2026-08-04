@@ -1,7 +1,13 @@
 # Agent Catalog — Fabric-Brain
-# 26 agents organized into 10 domains
+# 24 agents organized into 8 domains
 # Part of Azure-Brain umbrella (see ../../README.md)
-# Last updated: 2026-06-23
+# Last updated: 2026-08-04
+#
+# Note: the former domains 09-app-platform (fabric-apps-agent) and 10-experience
+# (operations-portal-agent) moved to ../../Apps-Brain/ on 2026-08-04. Applications
+# are cut by "I am building an app", with the runtime (inside Fabric vs external)
+# as a decision INSIDE that brain. Fabric-Brain keeps extensibility-toolkit-agent,
+# which extends the Fabric portal itself rather than being an application of ours.
 
 domains:
 
@@ -85,18 +91,6 @@ domains:
       - name: migration-synapse-agent
         purpose: Synapse → Fabric migration — phased (Spark Pools/Lake DB/Notebooks/SJD), mssparkutils→notebookutils, Linked Services→Connections/Shortcuts, SQL Pool→Warehouse
 
-  09-app-platform:
-    description: Application backends running inside Fabric (Rayfin BaaS, Replit × Fabric)
-    agents:
-      - name: fabric-apps-agent
-        purpose: Fabric Apps (preview) via Rayfin — scaffold/model/deploy app backends (DB, Entra auth, Data APIs, hosting), data in OneLake; Replit × Fabric vibe-coding path
-
-  10-experience:
-    description: External end-user experiences over Fabric — custom operations portals + embedding (outside Fabric)
-    agents:
-      - name: operations-portal-agent
-        purpose: External operations portal (FastAPI + static frontend) — proxies a Data Agent (NL Q&A), embeds Power BI reports (app-owns-data) + RTI/KQL dashboards (MSAL delegated + ADX user_impersonation), portal-native live SVG views from direct Kusto queries; the last-mile UI of the RTI Operations / Digital Twin pattern
-
 # Boundary clarifications:
 # - cicd-fabric vs fabric-cli: cicd owns Git+pipelines+stages; cli owns fab commands+job execution
 # - cicd-fabric vs workspace-admin: admin creates pipelines (REST POST); cicd manages pipeline stages
@@ -108,6 +102,5 @@ domains:
 # - pixel-design (Fabric-Brain) vs testing-agent (Meta-Brain): pixel owns visual-specific layout rules for Fabric reports; testing owns generic pytest framework
 # - migration-databricks/synapse vs lakehouse/orchestrator: migration agents own source-to-Fabric translation + mapping; lakehouse/orchestrator own the actual item creation (handoff target)
 # - migration-bo vs migration-databricks/synapse: bo owns BI/report migration (BO→DAX); databricks/synapse own data-engineering migration (Spark/SQL/catalog)
-# - fabric-apps vs extensibility-toolkit: fabric-apps owns app BACKENDS (Rayfin: DB+auth+APIs+hosting, data in OneLake); extensibility-toolkit owns custom WORKLOADS (iFrame SDK, React components, Workload Hub)
-# - operations-portal vs fabric-apps: operations-portal owns an EXTERNAL app (FastAPI+static) that EMBEDS/PROXIES Fabric (Data Agent chat, Power BI + RTI dashboard embed); fabric-apps owns app backends that run INSIDE Fabric on OneLake
-# - operations-portal vs report-builder/rti-kusto/ai-skills: operations-portal owns the end-user PORTAL wiring only; the report, KQL dashboard, and Data Agent it surfaces are owned by their respective agents
+# - extensibility-toolkit (Fabric-Brain) vs Apps-Brain: extensibility-toolkit owns custom WORKLOADS (iFrame SDK, React components, Workload Hub) that extend the Fabric PORTAL ITSELF and ship to other tenants; every application of ours — Fabric App item, external portal, Azure-hosted — belongs to ../../Apps-Brain/
+# - Fabric-Brain agents vs Apps-Brain: Fabric-Brain OWNS the artifacts (report, KQL dashboard, Data Agent, lakehouse); Apps-Brain only SURFACES them (embed, proxy, chat UX) and hands off any change back here

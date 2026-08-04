@@ -115,11 +115,13 @@ cp environment.example.md environment.md      # Fill with your env paths
 | --- | --- |
 | [migration-bo](agents/migration-bo-agent/) | BusinessObjects → Fabric migration — 5-stage framework, 119 BO→DAX mappings |
 
-### 🖥️ Experience (1)
+### 🖥️ Experience
 
-| Agent | What it does |
-| --- | --- |
-| [operations-portal](agents/operations-portal-agent/) | External operations portal (FastAPI + frontend) — Data Agent chat proxy, Power BI + RTI dashboard embed, live SVG views; the last-mile UI of the RTI Operations / Digital Twin pattern |
+> Moved. The external operations portal and Fabric Apps (Rayfin) now live in
+> [`../Apps-Brain/`](../Apps-Brain/README.md) — applications are cut by *"I am building an app"*,
+> with the runtime (inside Fabric vs external) as a decision inside that brain.
+> Fabric-Brain keeps [`extensibility-toolkit`](agents/extensibility-toolkit-agent/), which extends
+> the Fabric **portal itself** and ships to the Workload Hub.
 
 > Cross-cutting agents (testing, PPTX, architecture diagrams, project orchestrator, project presentation) live in [`../Meta-Brain/agents/`](../Meta-Brain/README.md).
 >

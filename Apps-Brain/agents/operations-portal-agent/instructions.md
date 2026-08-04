@@ -10,7 +10,7 @@ live views** (e.g. an SVG floor plan) from direct Eventhouse queries. This is th
 of the RTI Operations / Digital Twin pattern (Template 8).
 **Version**: 1.0
 
-> **Not** Fabric-native apps. Apps that run *inside* Fabric on OneLake (Rayfin) → `agents/fabric-apps-agent/`.
+> **Not** Fabric-native apps. Apps that run *inside* Fabric on OneLake (Rayfin) → `../fabric-apps-agent/`.
 > This agent is about an **external** app (FastAPI + static frontend) that consumes Fabric via REST + embedding.
 
 ## What This Agent Owns
@@ -25,9 +25,9 @@ of the RTI Operations / Digital Twin pattern (Template 8).
 
 ## What This Agent Does NOT Own
 
-- The Data Agent itself (definition, sources, few-shots, routing) → `agents/ai-skills-agent/`
-- The Eventhouse / KQL dashboard / Operations Agent → `agents/rti-kusto-agent/`
-- The Power BI report + accessible theme → `agents/report-builder-agent/`
+- The Data Agent itself (definition, sources, few-shots, routing) → `../../../Fabric-Brain/agents/ai-skills-agent/`
+- The Eventhouse / KQL dashboard / Operations Agent → `../../../Fabric-Brain/agents/rti-kusto-agent/`
+- The Power BI report + accessible theme → `../../../Fabric-Brain/agents/report-builder-agent/`
 - The Entra **app registration** steps (SPA redirect, delegated perms, admin consent) → out of Fabric
   scope; documented here only as a prerequisite checklist.
 
@@ -86,7 +86,7 @@ Register N personas, all pointing at the **same** `data_agent_id`, each with its
 `reportPages` (which Power BI pages to embed), suggestion chips, follow-up templates, and accent
 color. The frontend matches embedded report pages to a persona by `displayName` substring. The Data
 Agent's dual-source routing (topology vs numbers) is owned by
-[`../ai-skills-agent/datasource_configuration.md`](../ai-skills-agent/datasource_configuration.md).
+[`../../../Fabric-Brain/agents/ai-skills-agent/datasource_configuration.md`](../../../Fabric-Brain/agents/ai-skills-agent/datasource_configuration.md).
 
 ## Data Agent chat proxy (thread hygiene)
 
@@ -217,8 +217,8 @@ See [`known_issues.md`](known_issues.md) for the full embed/token triage.
 
 ## Cross-references
 
-- Data Agent + dual-source routing → [`../ai-skills-agent/datasource_configuration.md`](../ai-skills-agent/datasource_configuration.md)
-- RTI dashboard + Operations Agent → [`../rti-kusto-agent/kql_dashboard.md`](../rti-kusto-agent/kql_dashboard.md), [`../rti-kusto-agent/operations_agent.md`](../rti-kusto-agent/operations_agent.md)
-- Telemetry → Direct Lake (for embedded Power BI) → [`../rti-kusto-agent/kql_onelake_directlake.md`](../rti-kusto-agent/kql_onelake_directlake.md)
-- Accessible persona theme → [`../report-builder-agent/themes_styling.md`](../report-builder-agent/themes_styling.md)
+- Data Agent + dual-source routing → [`../../../Fabric-Brain/agents/ai-skills-agent/datasource_configuration.md`](../../../Fabric-Brain/agents/ai-skills-agent/datasource_configuration.md)
+- RTI dashboard + Operations Agent → [`../../../Fabric-Brain/agents/rti-kusto-agent/kql_dashboard.md`](../../../Fabric-Brain/agents/rti-kusto-agent/kql_dashboard.md), [`../../../Fabric-Brain/agents/rti-kusto-agent/operations_agent.md`](../../../Fabric-Brain/agents/rti-kusto-agent/operations_agent.md)
+- Telemetry → Direct Lake (for embedded Power BI) → [`../../../Fabric-Brain/agents/rti-kusto-agent/kql_onelake_directlake.md`](../../../Fabric-Brain/agents/rti-kusto-agent/kql_onelake_directlake.md)
+- Accessible persona theme → [`../../../Fabric-Brain/agents/report-builder-agent/themes_styling.md`](../../../Fabric-Brain/agents/report-builder-agent/themes_styling.md)
 - Full blueprint → [`../../../Meta-Brain/TEMPLATES.md`](../../../Meta-Brain/TEMPLATES.md) (Template 8)

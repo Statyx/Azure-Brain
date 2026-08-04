@@ -2,8 +2,8 @@
 
 **A modular knowledge base for building cloud data & AI solutions with GitHub Copilot — organized into specialized "brains" per technology, plus cross-cutting meta-tooling.**
 
-![Brains](https://img.shields.io/badge/brains-4_active-blue?style=for-the-badge)
-![Agents](https://img.shields.io/badge/agents-35_active-orange?style=for-the-badge)
+![Brains](https://img.shields.io/badge/brains-5_active-blue?style=for-the-badge)
+![Agents](https://img.shields.io/badge/agents-42_active-orange?style=for-the-badge)
 ![Knowledge](https://img.shields.io/badge/knowledge_files-20+-green?style=for-the-badge)
 
 **Contents:** [Vision](#vision) · [Brains](#-brains) · [Quick Start](#-quick-start) · [Umbrella Knowledge](#-umbrella-knowledge) · [Testing](#-testing) · [Add a Brain](#-adding-a-new-brain)
@@ -17,7 +17,8 @@ Azure-Brain is a **multi-brain knowledge architecture**. Each brain is a self-co
 ```
 Azure-Brain/                  ← umbrella (this repo)
 ├── AGENTS.md                 ← entry point — routing table + full agent index
-├── Fabric-Brain/             ← Microsoft Fabric (26 agents, flat layout)
+├── Fabric-Brain/             ← Microsoft Fabric (24 agents, flat layout)
+├── Apps-Brain/               ← Applications — runtime, identity, embedding, intelligence (2 active / 8, flat)
 ├── Database-Brain/           ← Azure databases (4 active agents, nested by domain)
 ├── Foundry-Brain/            ← Microsoft Foundry (bootstrap — 7 active / 11 catalogued, flat layout)
 ├── Meta-Brain/               ← cross-cutting (5 agents — testing, PPTX, etc.)
@@ -25,13 +26,13 @@ Azure-Brain/                  ← umbrella (this repo)
 ```
 
 > **Entry point.** [`AGENTS.md`](AGENTS.md) is the single door into the brain: it routes a
-> request to the right agent and indexes all 35 `instructions.md`. It is auto-loaded by the
+> request to the right agent and indexes all 42 `instructions.md`. It is auto-loaded by the
 > GitHub Copilot CLI / Copilot app; [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
 > is its VS Code counterpart. Both point at the same agent tree — no content is duplicated.
 
-> **Layout note.** Fabric-Brain, Meta-Brain and Foundry-Brain keep agents flat (`agents/<agent>/`).
-> Database-Brain nests them by domain (`agents/<NN-domain>/<agent>/`). Tooling that walks
-> agents must handle both depths — see `Meta-Brain/tests/conftest.py`.
+> **Layout note.** Fabric-Brain, Meta-Brain, Foundry-Brain and Apps-Brain keep agents flat
+> (`agents/<agent>/`). Database-Brain nests them by domain (`agents/<NN-domain>/<agent>/`).
+> Tooling that walks agents must handle both depths — see `Meta-Brain/tests/conftest.py`.
 
 ---
 
@@ -39,8 +40,9 @@ Azure-Brain/                  ← umbrella (this repo)
 
 | Brain | Scope | Agents | Status |
 | --- | --- | --- | --- |
-| [**Fabric-Brain**](Fabric-Brain/README.md) | Microsoft Fabric — Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology | 26 | ✅ Active |
+| [**Fabric-Brain**](Fabric-Brain/README.md) | Microsoft Fabric — Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology | 24 | ✅ Active |
 | [**Meta-Brain**](Meta-Brain/README.md) | Cross-cutting — testing, PowerPoint, HTML diagrams, README authoring, project orchestration | 5 | ✅ Active |
+| [**Apps-Brain**](Apps-Brain/README.md) | Applications — the layer that *consumes* the platform brains: runtime (Fabric App / external portal / Azure hosting), identity, embedding, in-app intelligence, frontend, operations | 2 active / 8 catalogued | 🟡 Bootstrap |
 | [**Database-Brain**](Database-Brain/README.md) | Azure databases — Azure SQL, PostgreSQL, Cosmos DB, MySQL, cross-engine migration (Oracle → PG, SQL Server → Azure SQL, Mongo → Cosmos DB) | 4 active / 22 catalogued (Oracle→PG track live, CLI + Copilot paths) | 🟢 Active |
 | [**Foundry-Brain**](Foundry-Brain/README.md) | Microsoft Foundry — agent service, tool catalog, multi-agent orchestration, Fabric bridge (Fabric data agent + Fabric IQ) | 7 active / 11 catalogued | 🟡 Bootstrap |
 | _Synapse-Brain_ | Azure Synapse legacy | — | 📋 Planned |
@@ -79,7 +81,7 @@ Cross-brain principles and references that apply to **every** brain:
 
 | File | Purpose |
 | --- | --- |
-| [AGENTS.md](AGENTS.md) | **Entry point** — routing table + index of all 35 agents (auto-loaded by Copilot CLI / Copilot app) |
+| [AGENTS.md](AGENTS.md) | **Entry point** — routing table + index of all 42 agents (auto-loaded by Copilot CLI / Copilot app) |
 | [agent_principles.md](agent_principles.md) | **Mandatory** — Operating principles, task management, quality standards every agent follows |
 | [shared_constraints.md](shared_constraints.md) | 8 hard rules across all brains (config-driven, idempotent, async-first) |
 | [known_issues.md](known_issues.md) | Cross-cutting gotchas & workarounds |

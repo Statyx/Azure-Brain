@@ -295,7 +295,7 @@ Telemetry (verbs) ─► Eventhouse / KQL  ─────┘         │
 | 11 | rti-kusto | Operations Agent (proactive alerts) + **manual Knowledge Source** in portal | `../Fabric-Brain/agents/rti-kusto-agent/operations_agent.md` |
 | 12 | data-activator | Reflex alert on the culprit threshold (Teams/email) | `data-activator-agent/` |
 | 13 | report-builder | Persona Power BI report (Legacy PBIX) + accessible reusable theme | `../Fabric-Brain/agents/report-builder-agent/themes_styling.md` |
-| 14 | operations-portal | External portal: Data Agent chat + report/dashboard embed + live SVG | `operations-portal-agent/` |
+| 14 | operations-portal | External portal: Data Agent chat + report/dashboard embed + live SVG | `../Apps-Brain/agents/operations-portal-agent/` |
 | 15 | testing | Smoke tests (structure, storyline metrics, Direct Lake counts) | `agents/testing-agent/` |
 
 ### Strict deploy order

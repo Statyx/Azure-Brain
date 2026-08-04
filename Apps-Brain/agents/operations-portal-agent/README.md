@@ -23,9 +23,9 @@ portal-native live views. The "last mile" UI of the RTI Operations / Digital Twi
 | Owned here | Deferred to |
 |------------|-------------|
 | Portal backend + frontend + embedding wiring | — |
-| Data Agent definition / sources / routing | `../ai-skills-agent/` |
-| Eventhouse / KQL dashboard / Operations Agent | `../rti-kusto-agent/` |
-| Power BI report + accessible theme | `../report-builder-agent/` |
+| Data Agent definition / sources / routing | `../../../Fabric-Brain/agents/ai-skills-agent/` |
+| Eventhouse / KQL dashboard / Operations Agent | `../../../Fabric-Brain/agents/rti-kusto-agent/` |
+| Power BI report + accessible theme | `../../../Fabric-Brain/agents/report-builder-agent/` |
 | Fabric-native app on OneLake (Rayfin) | `../fabric-apps-agent/` |
 
 ## Key insight

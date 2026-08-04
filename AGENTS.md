@@ -37,8 +37,11 @@ Azure-Brain/                       ← umbrella (this repo)
 ├── ERROR_RECOVERY.md              ← decision trees by HTTP status
 ├── PUBLIC_SAFETY.md               ← Zava identity + publish-by-default rules
 ├── GETTING_STARTED.md             ← 15-min setup
-├── Fabric-Brain/                  ← Microsoft Fabric      — 26 agents  (flat)
+├── Fabric-Brain/                  ← Microsoft Fabric      — 24 agents  (flat)
 │   ├── agents/_catalog.yaml
+│   └── agents/<agent>/instructions.md
+├── Apps-Brain/                    ← Applications          — 2 active / 8 catalogued (flat)
+│   ├── agents/_catalog.yaml       ← ⚠ non-goals live here — "app" is a magnet domain
 │   └── agents/<agent>/instructions.md
 ├── Database-Brain/                ← Azure databases       — 4 active   (nested by domain)
 │   ├── agents/_catalog.yaml
@@ -56,7 +59,7 @@ Azure-Brain/                       ← umbrella (this repo)
 ```
 
 > ### ⚠ Folder depth differs per brain
-> - **Fabric-Brain**, **Meta-Brain** and **Foundry-Brain** are **flat**: `agents/<agent>/instructions.md`
+> - **Fabric-Brain**, **Meta-Brain**, **Foundry-Brain** and **Apps-Brain** are **flat**: `agents/<agent>/instructions.md`
 > - **Database-Brain** is **nested by domain**: `agents/<NN-domain>/<agent>/instructions.md`
 >
 > Any tooling that walks agents must handle **both depths** — see the depth-aware
@@ -95,8 +98,8 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | BusinessObjects → Fabric migration | `migration-bo-agent` | Fabric |
 | Databricks → Fabric migration | `migration-databricks-agent` | Fabric |
 | Synapse → Fabric migration | `migration-synapse-agent` | Fabric |
-| App **backend running inside Fabric** (Rayfin, Replit × Fabric) | `fabric-apps-agent` | Fabric |
-| **External** portal embedding Fabric (FastAPI + Power BI/RTI embed) | `operations-portal-agent` | Fabric |
+| App **backend running inside Fabric** (Rayfin, Replit × Fabric) | `fabric-apps-agent` | **Apps** |
+| **External** portal embedding Fabric (FastAPI + Power BI/RTI embed) | `operations-portal-agent` | **Apps** |
 | Deploy Azure DB for PostgreSQL Flexible Server | `postgres-deploy-agent` | Database |
 | Oracle 21c XE source VM on Azure | `oracle-source-vm-agent` | Database |
 | Oracle → PostgreSQL via **Ora2Pg / DMS** (CLI, scriptable) | `oracle-to-postgres-migration-agent` | Database |
@@ -126,8 +129,9 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | `data-activator-agent` vs `rti-eventstream-agent` | Activator owns rules/alerts/actions; EventStream owns the **ingestion topology** |
 | `data-activator-agent` vs `monitoring-agent` | Activator = real-time **business** alerts; monitoring = **admin/capacity/audit** |
 | `pixel-design-agent` vs `testing-agent` | Pixel = Fabric-report layout rules; testing = generic pytest framework |
-| `fabric-apps-agent` vs `extensibility-toolkit-agent` | Apps = backends **inside** Fabric on OneLake; toolkit = custom **workloads** |
-| `fabric-apps-agent` vs `operations-portal-agent` | Apps run **inside** Fabric; portal is an **external** app that embeds/proxies Fabric |
+| `fabric-apps-agent` vs `extensibility-toolkit-agent` | Both build UI-ish things, different consumer: `fabric-apps` (Apps) is **our application**; `extensibility-toolkit` (Fabric) is a **workload extending the Fabric portal itself**, published to the Workload Hub |
+| `fabric-apps-agent` vs `operations-portal-agent` | Same brain, opposite runtime: apps run **inside** Fabric on OneLake; portal is an **external** app that embeds/proxies Fabric |
+| Apps-Brain vs Fabric-Brain / Foundry-Brain | Apps **consumes** — it embeds a report, proxies a Data Agent, calls a Foundry endpoint. It never mutates their artifacts; any change is a handoff to the owning agent |
 | Migration agents vs `lakehouse`/`orchestrator` | Migration agents own **source→Fabric translation**; the others own the actual item creation |
 | `foundry-orchestration-agent` (Foundry) vs `project-orchestrator-agent` (Meta) | Foundry one orchestrates **agents at runtime**; Meta one orchestrates the **build** of a project across brains |
 | `foundry-fabric-bridge-agent` (Foundry) vs `ai-skills-agent` (Fabric) | Fabric **creates/publishes** the Data Agent; Foundry **consumes** it as a tool and never mutates it |
@@ -141,7 +145,7 @@ Full boundary notes live in each brain's `agents/_catalog.yaml`.
 
 Paths are relative to the repo root. Read `instructions.md`; it names its own companion files.
 
-### Fabric-Brain — 26 agents · `Fabric-Brain/agents/<agent>/instructions.md`
+### Fabric-Brain — 24 agents · `Fabric-Brain/agents/<agent>/instructions.md`
 
 | Domain | Agent | Purpose |
 |---|---|---|
@@ -169,8 +173,31 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 | 08-migration | `migration-bo-agent` | BusinessObjects → Fabric — 5-stage framework, 119 BO→DAX mappings |
 | 08-migration | `migration-databricks-agent` | Databricks → Fabric — `dbutils`→`notebookutils`, UC→Lakehouse, DBFS→OneLake |
 | 08-migration | `migration-synapse-agent` | Synapse → Fabric — phased, `mssparkutils`→`notebookutils`, SQL Pool→Warehouse |
-| 09-app-platform | `fabric-apps-agent` | Fabric Apps (preview) via Rayfin — scaffold/model/deploy backends; Replit × Fabric |
-| 10-experience | `operations-portal-agent` | External ops portal (FastAPI + static) — Data Agent proxy, Power BI + RTI embed |
+
+### Apps-Brain — 2 active / 8 catalogued · `Apps-Brain/agents/<agent>/instructions.md`
+
+> **The cut:** the question is *"I am building an application"*. The **runtime** — Fabric App item,
+> external portal, Azure-hosted — is the first routing decision **inside** this brain, not a brain
+> boundary. That is why `fabric-apps-agent` lives here: a Fabric App item is a hosting choice for
+> an app, the same way Container Apps is.
+>
+> ⚠️ **"App" is a magnet domain.** The **non-goals** in
+> [`Apps-Brain/agents/_catalog.yaml`](Apps-Brain/agents/_catalog.yaml) are load-bearing — data
+> logic → Fabric-Brain, Fabric **workloads** → `extensibility-toolkit-agent`, agent **definition**
+> → Foundry-Brain, DB engine → Database-Brain. Rule of thumb: if removing the UI/API surface makes
+> the problem disappear, it belongs here; if the problem survives without any app, it does not.
+
+| Domain | Agent | Purpose |
+|---|---|---|
+| 01-runtime | `fabric-apps-agent` | Fabric Apps (preview) via Rayfin — scaffold/model/deploy backends, data in OneLake; Replit × Fabric |
+| 01-runtime | `operations-portal-agent` | External ops portal (FastAPI + static) — Data Agent proxy, Power BI + RTI embed, live SVG views |
+| 01-runtime | `app-hosting-azure-agent` 🟡 | Container Apps / Static Web Apps / App Service — choosing, ingress, scale-to-zero, revisions |
+| 02-identity | `app-identity-agent` 🟡 | App vs delegated vs managed identity, Entra registration + consent, OBO, token cache, passthrough |
+| 03-embedding | `app-embedding-agent` 🟡 | Power BI app-owns-data + RLS, Fabric Embed for RTI tiles, direct Kusto, CSP/CORS, silent renewal |
+| 04-intelligence | `app-intelligence-agent` 🟡 | Chat proxy to a Fabric Data Agent **or** a Foundry agent — threads, streaming, citations, MCP in-app |
+| 05-frontend | `app-frontend-agent` 🟡 | Persona-aware navigation, live views, design system + theming, accessibility |
+| 06-operations | `app-observability-agent` 🟡 | App Insights front-to-back, correlating a user action through the proxy to the platform call |
+| 06-operations | `app-delivery-agent` 🟡 | Build/container pipelines, environment promotion, secrets at runtime, IaC for the app's resources |
 
 ### Database-Brain — 4 active · `Database-Brain/agents/<NN-domain>/<agent>/instructions.md`
 
