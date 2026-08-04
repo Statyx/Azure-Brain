@@ -252,6 +252,13 @@ def denylist_rules(root: pathlib.Path) -> list[Rule]:
                  ".publicsafety-deny). Remove it.")]
 
 
+# Rules whose match IS a client name. Reprinting it would republish the very
+# thing this scanner exists to remove, into a public Actions log. GitHub secret
+# masking does not cover it: these rules are case-insensitive and report the
+# text as written in the file, not the secret's own spelling.
+NAME_BASED_RULES = frozenset({"client-name", "client-acronym", "denylisted-term"})
+
+
 def _is_secret_read(line: str, match: re.Match) -> bool:
     """True when the value is fetched at runtime rather than hardcoded.
 
@@ -317,7 +324,9 @@ def scan_file(path: pathlib.Path, root: pathlib.Path,
                     "line": lineno,
                     "rule": rule.name,
                     "severity": rule.severity,
-                    "match": value if len(value) <= 60 else value[:57] + "...",
+                    "match": ("[redacted]" if rule.name in NAME_BASED_RULES
+                              else (value if len(value) <= 60
+                                    else value[:57] + "...")),
                     "hint": rule.hint,
                 })
     return findings
