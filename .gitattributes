@@ -1,0 +1,39 @@
+# Line-ending policy — this repo is edited on Windows, macOS and Linux.
+# Without this file, each contributor's local core.autocrlf decides what lands
+# in the index, and a single edit shows up as "whole file changed".
+
+# Normalize every text file to LF in the repository; check out native on Windows.
+* text=auto
+
+# Scripts must keep the line endings their interpreter expects, on every OS.
+*.sh    text eol=lf
+*.bash  text eol=lf
+*.ps1   text eol=crlf
+*.psm1  text eol=crlf
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+
+# Explicit text types (protects them if a heuristic ever guesses wrong).
+*.md    text
+*.py    text
+*.json  text
+*.yaml  text
+*.yml   text
+*.bicep text
+*.sql   text
+*.tmdl  text
+*.dax   text
+
+# Binary — never diff, never normalize.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.svg   text
+*.ico   binary
+*.pbix  binary
+*.pptx  binary
+*.xlsx  binary
+*.docx  binary
+*.pdf   binary
+*.zip   binary
