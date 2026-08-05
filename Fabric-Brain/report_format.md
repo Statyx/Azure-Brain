@@ -35,7 +35,7 @@ The prohibition outlived the bug it protected against and was propagated to a do
 If you find a document still asserting *"PBIR renders blank"* or *"never PBIR"*, it is stale —
 fix it, and keep `Meta-Brain/tests/test_consistency.py` green.
 
-Both formats render. Legacy remains valid and is still maintained (see the persona / Template 8
+Both formats render. Legacy remains valid and is still maintained (see the persona / `digital-twin`
 notes of 2026-07-28) — it is simply no longer the default.
 
 ## Required Parts

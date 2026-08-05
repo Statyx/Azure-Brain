@@ -249,7 +249,7 @@ Use a thin rectangle visual (`shape` of `rectangle` type), `height: 1`, fill `#E
 For **branded, multi-persona operational reports** (one page per audience: Direction / Production /
 Project / Client), ship a **single standalone JSON theme file** and load it from the report build so
 it is reusable across reports and projects. Proven on the RTI Operations / Digital Twin pattern
-(Template 8) — a WCAG / colorblind-checked theme applied once via a `visualStyles` wildcard.
+(preset `digital-twin`) — a WCAG / colorblind-checked theme applied once via a `visualStyles` wildcard.
 
 **Theme file = one source of truth** — `theme/Accessible_Fluent2_Theme.json`, containing:
 

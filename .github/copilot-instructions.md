@@ -29,6 +29,13 @@ Five brains live at the root:
    plus the companion files it names in its own load order.
 4. Follow the agent's rules — they exist because of real failures.
 
+> **Building a whole solution, not a single task?** Start from
+> [`Meta-Brain/SCENARIOS.md`](../Meta-Brain/SCENARIOS.md) instead — the composed demo model
+> (`preset = base + modules + axes`): 3 bases, 10 modules, named presets, and a documented
+> custom path when none of them fits. Each step names an agent; you then rejoin the loop above.
+> Track a run with [`run_sheet.example.md`](../Meta-Brain/run_sheet.example.md), and never fork
+> a base to make a variant — add an axis, a module, or a preset.
+
 ## Key Rules
 
 - **Report format is owned by [`report-builder-agent/instructions.md`](../Fabric-Brain/agents/report-builder-agent/instructions.md).**

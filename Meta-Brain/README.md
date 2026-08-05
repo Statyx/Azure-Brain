@@ -45,8 +45,8 @@ Some agents and knowledge are **not Fabric-specific** — they help build, test,
 
 | File | Purpose |
 | --- | --- |
-| [TEMPLATES.md](TEMPLATES.md) | 5 end-to-end project templates with checklists and time budgets |
-| [WORKFLOWS.md](WORKFLOWS.md) | 5 cross-agent workflows with phases & gates |
+| [SCENARIOS.md](SCENARIOS.md) | **The demo model** — presets, 3 bases, 10 modules, variation axes, and the rules for evolving it |
+| [run_sheet.example.md](run_sheet.example.md) | Per-demo run sheet — copy to `RUN.md` in the demo repo, then promote what you learned back into the brain |
 | [mcp_registry.md](mcp_registry.md) | **MCP Server Registry** — central catalog of all MCP servers (Azure, Fabric, Power BI, Kusto, Engine, GitKraken, Pylance) |
 | [pytest.ini](pytest.ini) | Test runner configuration |
 | [run_all_tests.py](run_all_tests.py) | Cross-project test runner (Azure-Brain + sibling projects) |

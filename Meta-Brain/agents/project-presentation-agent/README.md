@@ -33,7 +33,7 @@
 ## Quick Start (for a new session)
 1. Read `instructions.md` — mandatory behavioral context
 2. Read the relevant knowledge file for the task
-3. For Fabric projects, reference `../../TEMPLATES.md` for standard project shapes
+3. For Fabric projects, reference `../../SCENARIOS.md` for standard project shapes
 
 ## Key Insight (TL;DR)
 > A README has 7 seconds to convince someone your project is worth their time. Lead with **what it does**, not how it works.

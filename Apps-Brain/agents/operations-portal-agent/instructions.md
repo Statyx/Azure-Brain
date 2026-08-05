@@ -7,7 +7,7 @@
 **outside** Fabric and surfaces Fabric assets to end users: it **proxies a Fabric Data Agent**
 (NL Q&A), **embeds** Power BI reports and Real-Time (KQL) dashboards, and renders **portal-native
 live views** (e.g. an SVG floor plan) from direct Eventhouse queries. This is the "last mile" UI
-of the RTI Operations / Digital Twin pattern (Template 8).
+of the RTI Operations / Digital Twin pattern (preset `digital-twin`, module `M-PORTAL`).
 **Version**: 1.0
 
 > **Not** Fabric-native apps. Apps that run *inside* Fabric on OneLake (Rayfin) → `../fabric-apps-agent/`.
@@ -221,4 +221,4 @@ See [`known_issues.md`](known_issues.md) for the full embed/token triage.
 - RTI dashboard + Operations Agent → [`../../../Fabric-Brain/agents/rti-kusto-agent/kql_dashboard.md`](../../../Fabric-Brain/agents/rti-kusto-agent/kql_dashboard.md), [`../../../Fabric-Brain/agents/rti-kusto-agent/operations_agent.md`](../../../Fabric-Brain/agents/rti-kusto-agent/operations_agent.md)
 - Telemetry → Direct Lake (for embedded Power BI) → [`../../../Fabric-Brain/agents/rti-kusto-agent/kql_onelake_directlake.md`](../../../Fabric-Brain/agents/rti-kusto-agent/kql_onelake_directlake.md)
 - Accessible persona theme → [`../../../Fabric-Brain/agents/report-builder-agent/themes_styling.md`](../../../Fabric-Brain/agents/report-builder-agent/themes_styling.md)
-- Full blueprint → [`../../../Meta-Brain/TEMPLATES.md`](../../../Meta-Brain/TEMPLATES.md) (Template 8)
+- Full blueprint → [`../../../Meta-Brain/SCENARIOS.md`](../../../Meta-Brain/SCENARIOS.md) (preset `digital-twin`; this agent is module `M-PORTAL`)

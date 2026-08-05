@@ -49,7 +49,7 @@ If you'd rather be pointed straight at a starting file:
 | Deploy or **migrate a database** | Database | [`postgres-deploy-agent`](Database-Brain/agents/02-postgres/postgres-deploy-agent/instructions.md) · Oracle → PG track under `03-oracle-to-postgres/` |
 | Ask a **question over data** in natural language | Fabric → Foundry | [`ai-skills-agent`](Fabric-Brain/agents/ai-skills-agent/instructions.md) creates the Data Agent; [`foundry-fabric-bridge-agent`](Foundry-Brain/agents/foundry-fabric-bridge-agent/instructions.md) consumes it |
 | Find out **why it did that** | Foundry | [`foundry-observability-agent`](Foundry-Brain/agents/foundry-observability-agent/instructions.md) — a trace is the only place a multi-agent system is legible |
-| Build a whole project **end to end** | Meta | [`project-orchestrator-agent`](Meta-Brain/agents/project-orchestrator-agent/instructions.md) — 12 steps across brains |
+| Build a whole project **end to end** | Meta | [`SCENARIOS.md`](Meta-Brain/SCENARIOS.md) — pick a preset (`base + modules`), or compose your own; [`project-orchestrator-agent`](Meta-Brain/agents/project-orchestrator-agent/instructions.md) drives the 12 steps |
 | Write tests, a deck, a diagram, a README | Meta | [`Meta-Brain/README.md`](Meta-Brain/README.md) |
 
 **Something broke?** [`known_issues.md`](known_issues.md), then

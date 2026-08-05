@@ -57,15 +57,21 @@ az account get-access-token --resource https://api.fabric.microsoft.com --query 
 
 If you get a token, you're ready.
 
-## 4. Pick a Template (3 min)
+## 4. Pick a Scenario (3 min)
 
-| I want to... | Template | Time |
-|--------------|----------|------|
-| Build a BI dashboard | [Template 1](Meta-Brain/TEMPLATES.md#template-1-standard-bi-demo-23-hours) | 2–3h |
-| Set up real-time analytics | [Template 2](Meta-Brain/TEMPLATES.md#template-2-real-time-iot-dashboard-34-hours) | 3–4h |
-| Add AI Q&A to existing data | [Template 4](Meta-Brain/TEMPLATES.md#template-4-data-agent-add-on-45-min) | 45min |
+A demo is composed, not copied: `preset = base + modules`. Full model in
+[`Meta-Brain/SCENARIOS.md`](Meta-Brain/SCENARIOS.md).
 
-Each template has a step-by-step checklist with agent assignments.
+| I want to... | Preset | Formula | Time |
+|--------------|--------|---------|------|
+| Build a BI dashboard | `bi-dashboard` | `B1` | 2–3h |
+| Set up real-time analytics | `real-time-dashboard` | `B1(1–6) + B2` | 3–4h |
+| Add AI Q&A to existing data | `data-agent-addon` | `M-AGENT` | 45min |
+| Build a control-room / digital twin | `digital-twin` | `B1 + B2 + M-ONTO + M-DL + M-AGENT + …` | 1–2d |
+
+Each base and module has a step-by-step checklist with agent assignments and a gate per step.
+Copy [`Meta-Brain/run_sheet.example.md`](Meta-Brain/run_sheet.example.md) into your demo repo as
+`RUN.md` to track the run — and to feed what you learn back into the brain.
 
 ## 5. Start Working
 
@@ -106,8 +112,8 @@ Azure-Brain/                       Umbrella repo
 │   ├── agents/                    testing, pptx-builder, architecture-design, etc.
 │   ├── tests/                     Cross-brain validation suite
 │   ├── tools/scan_public_safety.py  Leak scanner (second CI gate)
-│   ├── TEMPLATES.md               Project templates with checklists
-│   ├── WORKFLOWS.md               Cross-agent orchestration sequences
+│   ├── SCENARIOS.md               Demo model — presets, bases, modules, axes
+│   ├── run_sheet.example.md       Per-demo run sheet to copy into a demo repo
 │   └── mcp_registry.md            MCP server registry
 │
 ├── agent_principles.md            Operating principles (umbrella)

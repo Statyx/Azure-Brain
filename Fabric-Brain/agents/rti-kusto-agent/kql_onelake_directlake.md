@@ -7,7 +7,8 @@ Kusto-Spark connector. This is the reusable path that lets one Direct Lake model
 
 > Proven on the RTI Operations / Digital Twin pattern (a live-event control-room demo,
 > Network Operations).
-> See the blueprint in `../../../Meta-Brain/TEMPLATES.md` (Template 8).
+> See the blueprint in `../../../Meta-Brain/SCENARIOS.md` — preset `digital-twin`;
+> this file is module `M-DL`.
 
 ---
 

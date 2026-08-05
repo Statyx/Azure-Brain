@@ -50,4 +50,4 @@ This lets a brain declare a roadmap without breaking the disk-sync test.
 
 - [instructions.md](instructions.md) — full 3-tier taxonomy and per-project scope
 - [known_issues.md](known_issues.md) — gotchas hit while building and running the suite
-- [../../WORKFLOWS.md](../../WORKFLOWS.md) — where the gate sits in the delivery flow
+- [../../SCENARIOS.md](../../SCENARIOS.md) — where the gate sits in the delivery flow (module `M-TEST`)

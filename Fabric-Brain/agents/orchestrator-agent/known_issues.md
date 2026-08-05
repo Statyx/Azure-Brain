@@ -41,7 +41,7 @@ def poll_with_fallback(op_id, ws_id, item_name, item_type, headers, timeout=120)
 1. Always deploy in dependency order: Lakehouse → Notebooks → Pipelines
 2. Parameterize item IDs in pipeline definitions
 3. After re-creating items, update pipeline references
-4. See `../../WORKFLOWS.md` for correct deployment sequences
+4. See `../../../Meta-Brain/SCENARIOS.md` (§2.4 attach graph + strict deploy order) for correct deployment sequences
 
 ---
 

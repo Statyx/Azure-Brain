@@ -3,7 +3,7 @@
 **External operations portal over Microsoft Fabric** — a FastAPI + static-frontend control room that
 proxies a Fabric Data Agent (NL Q&A), embeds Power BI reports and RTI (KQL) dashboards, and renders
 portal-native live views. The "last mile" UI of the RTI Operations / Digital Twin pattern
-([Template 8](../../../Meta-Brain/TEMPLATES.md)).
+(module `M-PORTAL` of preset [`digital-twin`](../../../Meta-Brain/SCENARIOS.md)).
 
 ## When to use
 

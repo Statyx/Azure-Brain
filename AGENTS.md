@@ -24,6 +24,29 @@ because of real production failures — do not improvise around them.
 > If a request spans several agents, chain them and state each handoff:
 > what was produced, which agent is next, which files/IDs are affected.
 
+### Building a whole solution, not a single task
+
+If the request is *"build me a demo / a project"* rather than *"do this one thing"*, start from
+[`Meta-Brain/SCENARIOS.md`](Meta-Brain/SCENARIOS.md) **before** the routing table. It is the
+composed model of every demo this brain knows how to build:
+
+```
+preset  =  base  +  modules          … with the axes applied
+```
+
+- **3 bases** — `B1` Batch BI · `B2` Real-Time · `B3` Migration. Each is a spine of steps
+  (agent + task + gate) ending in a documented **exit state**.
+- **10 modules** — `M-ONTO`, `M-DL`, `M-AGENT`, `M-OPS`, `M-ALERT`, `M-CICD`, `M-FLOW`,
+  `M-PORTAL`, `M-TEST`, `M-MON` — each attaches to an exit state.
+- **Presets** — named combinations already run end to end (`bi-dashboard`, `smart-factory`,
+  `digital-twin`…). No preset fits → §2.5 builds a custom one from the same pieces.
+
+Every step still names an agent: resolve it here, then follow the loop above. The scenario says
+*what and in which order*; the agent's `instructions.md` says *how* and wins on its domain.
+
+**Never fork a base or a preset to make a variant** — add an axis value, a module, or a preset
+line. Same rule as the instruction files: a copy goes stale.
+
 ---
 
 ## Repository layout
@@ -54,6 +77,8 @@ Azure-Brain/                       ← umbrella (this repo)
 └── Meta-Brain/                    ← cross-cutting         — 5 agents   (flat)
     ├── agents/_catalog.yaml
     ├── agents/<agent>/instructions.md
+    ├── SCENARIOS.md               ← the demo model: presets = base + modules + axes
+    ├── run_sheet.example.md       ← copy per demo into the demo repo as RUN.md
     ├── mcp_registry.md            ← MCP server catalog
     └── tests/                     ← umbrella test suite
 ```

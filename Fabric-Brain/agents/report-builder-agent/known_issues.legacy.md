@@ -202,7 +202,7 @@ All report-related gotchas discovered during this project, with fixes.
 
 ## Persona / branded operational reports (multi-page, one page per audience)
 
-The RTI Operations / Digital Twin pattern (Template 8) ships **one page per persona**
+The RTI Operations / Digital Twin pattern (preset `digital-twin`) ships **one page per persona**
 (Direction / Production / Project / Client) with a colored brand band per page. Three pitfalls
 specific to that layout:
 
