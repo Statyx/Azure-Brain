@@ -415,5 +415,5 @@ def auto_scale_capacity(subscription_id: str, resource_group: str, capacity_name
 ## Cross-References
 
 - [Workspace Admin CU Budgeting](../workspace-admin-agent/cu_budgeting.md) — CU benchmarks and cost optimization
-- [Error Recovery Playbook](../../ERROR_RECOVERY.md) — General error recovery decision trees
+- [Error Recovery Playbook](../../../ERROR_RECOVERY.md) — General error recovery decision trees
 - [RTI EventStream Agent](../rti-eventstream-agent/instructions.md) — EventStream-specific monitoring

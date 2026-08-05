@@ -57,7 +57,7 @@ Default profile: demo-ready, secure-by-default, single AZ. HA / read replicas ad
 
 - [instructions.md](instructions.md) — this file
 - [postgres-flex.bicep](postgres-flex.bicep) — main template
-- [scripts/post-deploy.sh](scripts/post-deploy.sh) — psql commands: CREATE EXTENSION, create migration schema, grants
+- [scripts/post-deploy.sql](scripts/post-deploy.sql) — psql commands: CREATE EXTENSION, create migration schema, grants
 - [README.md](README.md) — quickstart
 
 ## Server parameters set automatically

@@ -40,11 +40,11 @@ Expect zero errors. Warnings about missing measures are normal if the semantic m
 
 ## Deploy
 
-Use the reference uploader at [`../../deploy_report.py`](../../deploy_report.py).
+Use the reference uploader at [`../deploy_report.py`](../deploy_report.py).
 
 ## References
 
-- Folder anatomy → [`../../../report_structure.md`](../../../report_structure.md)
-- Expression encoding → [`../../../themes_styling.md`](../../../themes_styling.md)
-- Visual selection → [`../../../visual_catalog.md`](../../../visual_catalog.md)
-- Property lookups → [`../../../cli_knowledge/`](../../../cli_knowledge/)
+- Folder anatomy → [`../../report_structure.md`](../../report_structure.md)
+- Expression encoding → [`../../themes_styling.md`](../../themes_styling.md)
+- Visual selection → [`../../visual_catalog.md`](../../visual_catalog.md)
+- Property lookups → [`../../cli_knowledge/`](../../cli_knowledge/)

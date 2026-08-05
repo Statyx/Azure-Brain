@@ -65,7 +65,8 @@ were not the model's fault — it was queue, cold start, or LLM planning latency
 | `getschema` / `EVALUATE TOPN(1, X)` called | **≥ 2×** in same run | Info | Schema re-discovery — cache the schema in instructions |
 | Thread messages | **≥ 50** | Warning | Thread pollution — delete and recreate the thread |
 
-These are encoded in [`analyzer/diagnose.py`](../../../The_AI_Skill_Analyzer/analyzer/diagnose.py)
+These are encoded in `analyzer/diagnose.py` of the companion **AI Skill Analyzer** toolkit
+(external to this repository)
 (`_compute_latency_breakdown`, `_detect_anomalies`).
 
 ---
@@ -136,7 +137,7 @@ chained from `runs[].created_at`.
 
 ## Reference Tools
 
-- **CLI**: [`The_AI_Skill_Analyzer/analyzer/diagnose.py`](../../../The_AI_Skill_Analyzer/analyzer/diagnose.py) — `analyze_diagnostic()` returns a structured `latency` dict; `format_report()` prints the breakdown section above; `diff_diagnostics()` compares before/after.
+- **CLI**: `analyzer/diagnose.py` in the companion **AI Skill Analyzer** toolkit (external to this repository) — `analyze_diagnostic()` returns a structured `latency` dict; `format_report()` prints the breakdown section above; `diff_diagnostics()` compares before/after.
 - **Streamlit UI**: [pawarbi/data-agent-inspector](https://github.com/pawarbi/data-agent-inspector) — interactive visual inspector with Gantt timelines, per-turn drill-down, ERD view for semantic models. Same underlying logic; useful when sharing findings with non-technical stakeholders.
 
 ---

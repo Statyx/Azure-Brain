@@ -574,5 +574,5 @@ DIVIDE(MaleAvg - FemaleAvg, MaleAvg)
 ## Cross-References
 
 - [Semantic Model Agent Instructions](instructions.md) — Naming conventions, star schema patterns
-- [Report Builder Performance](../report-builder-agent/performance.md) — DAX performance optimization
+- [Report Builder Performance](../report-builder-agent/performance.legacy.md) — DAX performance optimization
 - [Domain Modeler Agent](../domain-modeler-agent/instructions.md) — Dimensional modeling for each domain

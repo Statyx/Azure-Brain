@@ -86,7 +86,7 @@ Status legend: 🟢 available · 🟡 planned
 
 ## Status
 
-� **Active** — 3 agents implemented end-to-end for the **Oracle→PostgreSQL demo track**: Oracle source VM, PostgreSQL target, and the Ora2Pg migration pipeline. Other domains remain planned and are added on demand.
+🟢 **Active** — 4 agents implemented end-to-end for the **Oracle→PostgreSQL demo track**: Oracle source VM, PostgreSQL target, and the two migration paths (Ora2Pg/DMS and Copilot App Modernization). Other domains remain planned and are added on demand.
 
 Demo workflow — pick the path based on audience:
 

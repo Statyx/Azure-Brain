@@ -176,4 +176,4 @@ When a report misbehaves, walk this list in order:
 - Expression encoding → [`themes_styling.md`](themes_styling.md)
 - Property catalog → [`cli_knowledge/`](cli_knowledge/)
 - Legacy issues (kept for migration only) → [`known_issues.legacy.md`](known_issues.legacy.md)
-- Global brain known issues → [`../../known_issues.md`](../../known_issues.md)
+- Global brain known issues → [`../../../known_issues.md`](../../../known_issues.md)

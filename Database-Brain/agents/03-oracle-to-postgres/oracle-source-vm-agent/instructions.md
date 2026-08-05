@@ -59,8 +59,11 @@ Not for production. XE is free, install is fully scripted, no licence to manage.
 - [instructions.md](instructions.md) — this file
 - [oracle-vm.bicep](oracle-vm.bicep) — main deployment template
 - [cloud-init.yaml](cloud-init.yaml) — VM init: install Oracle XE + load sample schemas
-- [scripts/install-oracle-xe.sh](scripts/install-oracle-xe.sh) — silent install steps invoked by cloud-init
-- [scripts/load-sample-schemas.sh](scripts/load-sample-schemas.sh) — clone `oracle/db-sample-schemas` and load HR / SH / OE
+- [install-oracle-docker.sh](install-oracle-docker.sh) — container-based install path invoked by cloud-init
+- [load-demo-schema.sh](load-demo-schema.sh) · [load-petclinic-schema.sh](load-petclinic-schema.sh) — load the demo / PetClinic sample schemas
+- [grant-catalog.sh](grant-catalog.sh) — catalog grants required by Ora2Pg
+- [deploy.ps1](deploy.ps1) · [check.ps1](check.ps1) · [poll.ps1](poll.ps1) · [cleanup.ps1](cleanup.ps1) — deploy, verify, poll, tear down
+- [diag.sh](diag.sh) · [diag.ps1](diag.ps1) · [run-diag.ps1](run-diag.ps1) — diagnostics on the VM
 - [README.md](README.md) — quickstart deployment guide
 
 ## Deployment workflow
@@ -102,7 +105,8 @@ ssh oracleadmin@<vmFqdn> 'sqlplus system/$SYSPW@localhost:1521/XEPDB1 <<< "selec
 ## Lessons from production (Statyx field experience)
 
 These patterns come from a tested Oracle 19c EE deployment on Azure (PowerShell-based, different toolchain but
-same target). Source: [`reference/Tools_for_orcl_to_pg`](../../../../reference/Tools_for_orcl_to_pg) by Emmanuel Deletang.
+same target). Source: `reference/Tools_for_orcl_to_pg` by Emmanuel Deletang — an internal toolkit,
+not part of this repository.
 We reuse the **bug taxonomy and gotchas** even though our scaffold uses XE 21c + Bicep instead of EE 19c + PowerShell.
 
 | Symptom client | Root cause | Fix in this agent |
