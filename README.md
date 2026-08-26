@@ -8,7 +8,8 @@ specialised "brains", one per technology domain, plus cross-cutting meta-tooling
 ![Version](https://img.shields.io/github/v/tag/Statyx/Azure-Brain?style=for-the-badge&label=version&color=purple)
 ![Tests](https://img.shields.io/badge/tests-green_on_a_fresh_clone-brightgreen?style=for-the-badge)
 
-**Contents:** [What this is](#what-this-is) · [Take only what you need](#-take-only-what-you-need) ·
+**Contents:** [What this is](#what-this-is) · [What it produces](#-what-it-produces) ·
+[Take only what you need](#-take-only-what-you-need) ·
 [Start here](#-start-here) · [Brains](#-brains) ·
 [Layout](#-layout) · [Setup](#-setup) · [Use it from another repo](#-use-it-from-another-repo) ·
 [Umbrella knowledge](#-umbrella-knowledge) · [Testing](#-testing) · [Add a brain](#-adding-a-brain) ·
@@ -33,12 +34,33 @@ Two things worth internalising before you use it:
   labelled "verified" without a trace or a test output behind it — that discipline is the whole
   value of the repo, and it degrades the moment someone writes down something merely plausible.
 
-<img width="1021" height="1087" alt="image" src="https://github.com/user-attachments/assets/57a87324-ec5d-4bcf-af7d-ab9d0a62fe32" />
-<img width="2471" height="1206" alt="image" src="https://github.com/user-attachments/assets/0807484d-a087-4ed0-a79b-8e6d15fc89a4" />
-<img width="2552" height="1114" alt="image" src="https://github.com/user-attachments/assets/92ba506e-724b-49f5-a607-e64ee2ac9337" />
-<img width="737" height="800" alt="image" src="https://github.com/user-attachments/assets/3a7c823d-f77e-4d7f-8739-6e35e96a723c" />
-<img width="2540" height="1252" alt="image" src="https://github.com/user-attachments/assets/6ec198d5-c633-4e29-9bab-7ddb400cf645" />
+---
 
+## 📸 What it produces
+
+Four moments from one run — a customer-360 build on Fabric, driven end to end by the agents in
+this repo.
+
+**A question in plain language, and the DAX it actually ran.** The Data Agent answers *"how much
+customer lifetime value is exposed to churn?"*, shows the query it generated and names its source —
+next to the report that number comes from.
+
+![Data Agent answering in natural language, showing its generated DAX query, beside the Power BI report it draws from](docs/proof/01-agent-and-report.png)
+
+**What an agent reads before it touches anything.** Rule 2 is the three-call OneLake DFS protocol;
+rule 3 is the polling loop that exists because the SQL endpoint is not ready when creation returns.
+Both are there because they failed first.
+
+![The lakehouse-agent instruction file open in an editor, showing its mandatory rules](docs/proof/02-instructions.png)
+
+**The semantic layer underneath.** Eight entity types bound to lakehouse tables, nine relations —
+the model answers the numbers, the ontology answers the links, and both are queryable.
+
+![The Customer 360 ontology: eight entities, nine relations, shown as a graph](docs/proof/03-ontology.png)
+
+**Served as an application.** One entrance per persona, over the same Fabric artifacts.
+
+![The Customer 360 operations portal landing page with one card per persona](docs/proof/04-portal.png)
 
 ---
 

@@ -59,74 +59,49 @@ data.
 
 ---
 
-## The four shots
+## What is in here
 
-Ordered by what they buy you. If you only do two, do 1 and 3.
+| File | Shows | Why it earns its place |
+| --- | --- | --- |
+| `01-agent-and-report.png` | A Data Agent answering a natural-language question, the DAX it generated, and the report beside it | The whole chain in one frame. Lead with it. |
+| `02-instructions.png` | `lakehouse-agent/instructions.md` open in an editor | Explains the mechanism — an agent reads this, then acts |
+| `03-ontology.png` | The Customer 360 ontology, 8 entities and 9 relations | The semantic layer the numbers sit on |
+| `04-portal.png` | The operations portal landing page | The same artifacts served as an application |
 
-### 1. `01-agent-loop.png` — the mechanism
+A Foundry trace of a supervisor calling its sub-agents is still missing. It is the one shot almost
+nobody else can produce, and it would back the brain's own claim that *a trace is the only place a
+multi-agent system is legible*. Crop project and resource names, endpoint URLs, thread and run IDs.
 
-**Proves:** an agent read an instruction file and then acted on it. This is the part nobody
-understands from a description, and it is the whole pitch.
+---
 
-**Frame:** a terminal where Copilot reads
-`Fabric-Brain/agents/lakehouse-agent/instructions.md`, then performs the action — ideally showing
-the async pattern the brain insists on (HTTP 202, then the poll).
+## What went wrong the first time
 
-**Highest risk shot:** the prompt shows your working directory. Crop the prompt or run from a short
-neutral path. Also scrub the scrollback for tokens.
+Five shots were uploaded through the GitHub web editor. One of them had to be pulled:
 
-### 2. `02-workspace-items.png` — it deploys real things
+- The workspace was named with the author's **initials** followed by the project name, instead of
+  the `Zava - ` prefix. This is the exact pattern the `personal-workspace-prefix` scanner rule
+  exists to catch, and the scanner never saw it, because it was pixels.
+- The item list underneath carried a **real 32-character tenant GUID**, repeated three times, as the
+  auto-generated suffix on ontology child items (`ONT_..._graph_<guid>`).
 
-**Proves:** these are not suggestions, items exist in a workspace.
+Both gates were green while that image was live on a public repo. Two lessons, both now rules above:
 
-**Frame:** the Fabric workspace list showing several item types together — lakehouse, semantic
-model, report, pipeline or eventhouse. The variety is the point.
+1. **A leak in an image passes every automated check you have.** The only control is a human reading
+   the picture before it is committed.
+2. **Auto-generated item names carry GUIDs.** Ontology and graph child items append the workspace or
+   item id to their display name, so a workspace item list is one of the most leak-prone screens in
+   Fabric. Crop it, or capture the task flow view instead.
 
-**Crop:** URL bar, tenant label, avatar, and the capacity name if it carries anything real.
-
-### 3. `03-report.png` — the recognisable end of the chain
-
-**Proves:** the chain completes into something a business person would accept.
-
-**Frame:** the deployed Power BI report, several visuals, page tabs visible so it reads as a real
-report rather than one lucky chart.
-
-**Crop:** URL, tenant, avatar. **And read the data**: every label, legend and filter value must be
-Zava.
-
-### 4. `04-foundry-trace.png` — the differentiator
-
-**Proves:** the multi-agent claim, and it is the shot almost nobody else can produce.
-
-**Frame:** a Foundry trace showing the supervisor calling sub-agents — the hops, the tool calls,
-the timings. It backs the brain's own line that *a trace is the only place a multi-agent system is
-legible*.
-
-**Crop:** project and resource names unless they are Zava-prefixed, endpoint URLs, thread and run
-IDs.
+The image was only ever an `<img src>` pointing at GitHub's `user-attachments` CDN, so nothing
+entered git history and no rewrite was needed. Had it been committed, it would have been permanent.
 
 ---
 
 ## Conventions
 
-- PNG, max ~1600 px wide, under 500 KB each. Compress before committing.
-- Names exactly as above — the root `README.md` will reference them by path.
-- One commit for all four: `docs(brain): add proof shots`.
-
-## Once the files are here
-
-Add this to the root [`README.md`](../../README.md), right after the **What this is** section:
-
-```markdown
-## 📸 What it produces
-
-| | |
-| --- | --- |
-| ![The loop](docs/proof/01-agent-loop.png) | **The loop.** An agent reads the instruction file, then acts on it — async-first, HTTP 202 then poll, because that is what the brain mandates. |
-| ![Workspace](docs/proof/02-workspace-items.png) | **Real items.** Lakehouse, semantic model, report, pipeline — deployed, not described. |
-| ![Report](docs/proof/03-report.png) | **The end of the chain.** A deployed Power BI report over Zava data. |
-| ![Trace](docs/proof/04-foundry-trace.png) | **Why it did that.** A Foundry trace of a supervisor calling its sub-agents. |
-```
-
-Do not add that block before the images exist — a broken image on the front page of a repo people
-are arriving at from a link is worse than no image at all.
+- PNG. Compress before committing; crop dead space rather than shipping a mostly-empty frame.
+- Files live **in the repo**, under `docs/proof/`, referenced by relative path. Images pasted into
+  the GitHub web editor land on the `user-attachments` CDN instead: they render on github.com but
+  are absent from a clone, outside version control, and cannot be reviewed in a diff. For a repo
+  whose whole instruction is *pin a tag and clone it*, that is the wrong place.
+- Names carry their order — the root `README.md` references them by path.
