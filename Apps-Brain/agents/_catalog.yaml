@@ -2,7 +2,7 @@
 # The application layer that CONSUMES the platform brains — runtime, identity, embedding,
 # in-app intelligence, frontend, operations.
 # Part of Azure-Brain umbrella (see ../../README.md)
-# Status: 2 active of 8 — remaining agents declared as planned, implemented on demand
+# Status: 2 active of 9 — remaining agents declared as planned, implemented on demand
 # Layout: FLAT (agents/<agent>/) like Fabric-Brain, Meta-Brain and Foundry-Brain
 # Last updated: 2026-08-04
 

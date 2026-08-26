@@ -63,7 +63,7 @@ Azure-Brain/                       ← umbrella (this repo)
 ├── Fabric-Brain/                  ← Microsoft Fabric      — 24 agents  (flat)
 │   ├── agents/_catalog.yaml
 │   └── agents/<agent>/instructions.md
-├── Apps-Brain/                    ← Applications          — 2 active / 8 catalogued (flat)
+├── Apps-Brain/                    ← Applications          — 2 active / 9 catalogued (flat)
 │   ├── agents/_catalog.yaml       ← ⚠ non-goals live here — "app" is a magnet domain
 │   └── agents/<agent>/instructions.md
 ├── Database-Brain/                ← Azure databases       — 4 active   (nested by domain)
@@ -81,6 +81,7 @@ Azure-Brain/                       ← umbrella (this repo)
     ├── SCENARIOS.md               ← the demo model: presets = base + modules + axes
     ├── run_sheet.example.md       ← copy per demo into the demo repo as RUN.md
     ├── mcp_registry.md            ← MCP server catalog
+    ├── clocks.yaml                ← expiry clocks — CI fails 30 days before a date comes due
     └── tests/                     ← umbrella test suite
 ```
 
@@ -200,7 +201,7 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 | 08-migration | `migration-databricks-agent` | Databricks → Fabric — `dbutils`→`notebookutils`, UC→Lakehouse, DBFS→OneLake |
 | 08-migration | `migration-synapse-agent` | Synapse → Fabric — phased, `mssparkutils`→`notebookutils`, SQL Pool→Warehouse |
 
-### Apps-Brain — 2 active / 8 catalogued · `Apps-Brain/agents/<agent>/instructions.md`
+### Apps-Brain — 2 active / 9 catalogued · `Apps-Brain/agents/<agent>/instructions.md`
 
 > **The cut:** the question is *"I am building an application"*. The **runtime** — Fabric App item,
 > external portal, Azure-hosted — is the first routing decision **inside** this brain, not a brain
@@ -380,7 +381,18 @@ real endpoint reaching a public repo, and it only works if something runs it.
 
 It validates, for every brain in `BRAINS` (`Meta-Brain/tests/conftest.py` — single source of
 truth): catalogs parse and match disk, every agent folder has a non-trivial `instructions.md`,
-internal markdown links resolve, Python compiles, JSON parses, root markdown is non-empty.
+internal markdown links resolve **in every `.md` file**, Python compiles, JSON parses, root
+markdown is non-empty.
+
+Two guards are worth knowing about because they fail on things no reviewer would catch:
+
+- **`instructions.md` must stay under 20 KB.** The `view` tool truncates there, so a longer file
+  is *silently* cut and the agent acts on half a framework. The fix is never to trim content —
+  move the trailing sections into a companion file and name it in the load order at the top.
+- **Expiry clocks.** `Meta-Brain/clocks.yaml` registers dates the brain states as future facts
+  (a retirement, an end-of-support). CI fails once a clock is within 30 days, so the prose gets
+  rewritten *before* it turns false rather than after someone follows it. The registry stores no
+  file list — the test scans the repo live and names the files in the failure.
 
 > **The suite is green on a fresh clone — it must stay that way.** `test_links_resolve` used to
 > fail for the four agents linking to `Fabric-Brain/resource_ids.md`, because that file is

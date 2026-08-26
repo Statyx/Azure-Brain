@@ -7,7 +7,7 @@ This repository is a **multi-brain knowledge base** for building cloud data & AI
 Five brains live at the root:
 
 - [`Fabric-Brain/`](../Fabric-Brain/) — 24 agents + 14 knowledge files for Microsoft Fabric (Lakehouse, Warehouse, Semantic Model, RTI, Data Agents, Ontology).
-- [`Apps-Brain/`](../Apps-Brain/) — 2 active of 8 catalogued agents for the **application layer that consumes the platform brains**: runtime (Fabric App / external portal / Azure hosting), identity, embedding, in-app intelligence, frontend, operations. The cut is *"I am building an app"* — the runtime is a decision **inside** this brain. **Read its [non-goals](../Apps-Brain/agents/_catalog.yaml) before adding anything**: "app" is a magnet domain.
+- [`Apps-Brain/`](../Apps-Brain/) — 2 active of 9 catalogued agents for the **application layer that consumes the platform brains**: runtime (Fabric App / external portal / Azure hosting), identity, embedding, in-app intelligence, frontend, operations. The cut is *"I am building an app"* — the runtime is a decision **inside** this brain. **Read its [non-goals](../Apps-Brain/agents/_catalog.yaml) before adding anything**: "app" is a magnet domain.
 - [`Database-Brain/`](../Database-Brain/) — 4 active agents (of 22 catalogued) for Azure databases: Azure SQL, PostgreSQL, Cosmos DB, MySQL and cross-engine migration (Oracle → PostgreSQL track is live).
 - [`Foundry-Brain/`](../Foundry-Brain/) — 7 active of 11 catalogued agents for Microsoft Foundry: agent service, tool catalog, knowledge (Foundry IQ), observability, governance (guardrails + evaluations), multi-agent orchestration, and the Fabric bridge (Fabric data agent + Fabric IQ). **Read [`Foundry-Brain/generation_map.md`](../Foundry-Brain/generation_map.md) first** — two agent generations ship side by side and the older one retires 2027-03-31.
 - [`Meta-Brain/`](../Meta-Brain/) — 5 cross-cutting agents + shared infrastructure (testing, PPTX, HTML diagrams, project orchestration, README authoring).
@@ -74,7 +74,9 @@ python -m pytest tests/ -v --tb=short
 The same suite, plus `python Meta-Brain/tools/scan_public_safety.py .`, runs in CI
 (`.github/workflows/no-client-leak.yml`) on every push and pull request.
 
-Tests parametrize over every brain's catalog, agent folders, instructions, internal links, Python syntax, and JSON parsing. `BRAINS` in `tests/conftest.py` is the single source of truth for which brains are covered.
+Tests parametrize over every brain's catalog, agent folders, instructions, internal links (in **every** `.md` file), Python syntax, and JSON parsing. `BRAINS` in `tests/conftest.py` is the single source of truth for which brains are covered.
+
+Two guards fail on things a reviewer cannot see: **`instructions.md` must stay under 20 KB** (the read tool truncates there — fix by moving trailing sections to a companion file, never by trimming), and **expiry clocks** in [`Meta-Brain/clocks.yaml`](../Meta-Brain/clocks.yaml) fail CI 30 days before a documented retirement date makes the prose wrong.
 
 ## Adding a New Brain
 

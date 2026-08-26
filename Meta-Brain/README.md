@@ -45,9 +45,10 @@ Some agents and knowledge are **not Fabric-specific** — they help build, test,
 
 | File | Purpose |
 | --- | --- |
-| [SCENARIOS.md](SCENARIOS.md) | **The demo model** — presets, 3 bases, 10 modules, variation axes, and the rules for evolving it |
+| [SCENARIOS.md](SCENARIOS.md) | **The demo model** — presets, 3 bases, 11 modules, variation axes, and the rules for evolving it |
 | [run_sheet.example.md](run_sheet.example.md) | Per-demo run sheet — copy to `RUN.md` in the demo repo, then promote what you learned back into the brain |
 | [mcp_registry.md](mcp_registry.md) | **MCP Server Registry** — central catalog of all MCP servers (Azure, Fabric, Power BI, Kusto, Engine, GitKraken, Pylance) |
+| [clocks.yaml](clocks.yaml) | **Expiry clocks** — dates the brain states as future facts; CI fails 30 days before one comes due |
 | [pytest.ini](pytest.ini) | Test runner configuration |
 | [run_all_tests.py](run_all_tests.py) | Cross-project test runner (Azure-Brain + sibling projects) |
 | [tests/](tests/) | Smoke + cross-reference tests for the whole Azure-Brain |

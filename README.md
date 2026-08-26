@@ -64,7 +64,7 @@ are already written down.
 | --- | --- | --- | --- |
 | [**Fabric-Brain**](Fabric-Brain/README.md) | Microsoft Fabric — Lakehouse, Warehouse, semantic models, reports, Real-Time Intelligence, Data Agents, Ontology, migrations | 24 | ✅ Active |
 | [**Foundry-Brain**](Foundry-Brain/README.md) | Microsoft Foundry — agent service, tools, knowledge (Foundry IQ), orchestration, observability, governance, the Fabric bridge | 7 active / 11 catalogued | 🟡 Bootstrap |
-| [**Apps-Brain**](Apps-Brain/README.md) | Applications — the layer that *consumes* the platform brains: runtime, identity, embedding, in-app intelligence, frontend, operations | 2 active / 8 catalogued | 🟡 Bootstrap |
+| [**Apps-Brain**](Apps-Brain/README.md) | Applications — the layer that *consumes* the platform brains: runtime, identity, embedding, in-app intelligence, frontend, operations | 2 active / 9 catalogued | 🟡 Bootstrap |
 | [**Database-Brain**](Database-Brain/README.md) | Azure databases — Azure SQL, PostgreSQL, Cosmos DB, MySQL, cross-engine migration (Oracle → PostgreSQL track live) | 4 active / 22 catalogued | ✅ Active |
 | [**Meta-Brain**](Meta-Brain/README.md) | Cross-cutting — testing, PowerPoint, HTML diagrams, README authoring, project orchestration | 5 | ✅ Active |
 | _Databricks-Brain_ | Databricks on Azure | — | 📋 Planned |
@@ -84,7 +84,7 @@ Azure-Brain/                  ← umbrella (this repo)
 ├── AGENTS.md                 ← entry point: routing table + index of all 42 agents
 ├── Fabric-Brain/             ← Microsoft Fabric        (24 agents, flat)
 ├── Foundry-Brain/            ← Microsoft Foundry       (7 active / 11 catalogued, flat)
-├── Apps-Brain/               ← Applications            (2 active / 8 catalogued, flat)
+├── Apps-Brain/               ← Applications            (2 active / 9 catalogued, flat)
 ├── Database-Brain/           ← Azure databases         (4 active / 22 catalogued, nested)
 ├── Meta-Brain/               ← cross-cutting + tests   (5 agents, flat)
 └── (future brains)           ← Databricks-Brain, Synapse-Brain, …
