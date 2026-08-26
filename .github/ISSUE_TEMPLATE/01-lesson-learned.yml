@@ -1,0 +1,95 @@
+name: A lesson learned the hard way
+description: An error and its real cause, an API that behaves differently from its docs, a workaround that actually held.
+title: "[lesson] "
+labels: ["lesson-learned"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the most valuable thing you can send. The brain is made of these.
+
+        You do not need to open a pull request — a good issue is enough for the rule to be
+        written correctly by someone who knows where it belongs.
+
+        **Before you type:** no customer name, no real tenant/subscription/workspace GUID, no
+        path containing your account name. This repo is public and the CI scanner cannot read
+        the screenshots you attach.
+
+  - type: dropdown
+    id: brain
+    attributes:
+      label: Which brain
+      options:
+        - Fabric
+        - Foundry
+        - Database
+        - Apps
+        - Meta
+        - Not sure / spans several
+    validations:
+      required: true
+
+  - type: input
+    id: agent
+    attributes:
+      label: Owning agent
+      description: "The routing table is in AGENTS.md. Leave blank if you are not sure."
+      placeholder: lakehouse-agent
+
+  - type: textarea
+    id: doing
+    attributes:
+      label: What you were doing
+      placeholder: Creating a lakehouse, then immediately querying its SQL endpoint.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What the brain (or the documentation) told you would happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+      description: Paste the error message or the response body. Redact GUIDs as `a0000000-...`.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: cause
+    attributes:
+      label: The real cause, and the fix that held
+      description: If you found it. "Still unknown" is a legitimate answer and still useful.
+
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Evidence level
+      description: "If you are unsure, it is doc. A false verified makes a downstream agent retry a path that cannot work."
+      options:
+        - observed — seen in a real tenant, with a trace, a response body or a test output
+        - doc — from Microsoft Learn or a product announcement
+    validations:
+      required: true
+
+  - type: input
+    id: date
+    attributes:
+      label: Date observed
+      description: Behaviour changes between service versions. An undated claim cannot be aged out.
+      placeholder: "2026-08-14"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Before submitting
+      options:
+        - label: No customer name, no real GUID, no account-name path — including in anything I attached.
+          required: true

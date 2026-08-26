@@ -297,10 +297,10 @@ request — run them locally first anyway.
 > is real. (Narrow exemption: a link may resolve to a missing file *only* when that filename is
 > gitignored **and** a committed `<name>.example.md` sits beside it — both conditions required.)
 
-For reference, `v1.0.0` runs **1776 passed, 6 skipped**, and the scanner prints `clean`. The count
-grows as agents and documents are added — that is expected. A count that *drops* is not: it means
-assertions stopped being collected. The badge at the top of this page reports the same two gates as
-CI last ran them on `main`.
+For reference, on `main` at **2026-08-26** both gates give **1777 passed, 6 skipped** and `clean`.
+The count grows as agents and documents are added — that is expected. A count that *drops* is not:
+it means assertions stopped being collected. The badge at the top of this page reports the same two
+gates as CI last ran them on `main`.
 
 ---
 

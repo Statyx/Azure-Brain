@@ -1,0 +1,84 @@
+name: A rule in the brain is wrong
+description: The brain says one thing, your tenant does another. Being contradicted by a tenant is the point.
+title: "[wrong] "
+labels: ["rule-is-wrong"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A rule that is wrong is worse than a rule that is missing: an agent will follow it
+        confidently. Reporting one is a first-class contribution, not a complaint.
+
+        **This repo is public.** No customer name, no real GUID, no account-name path.
+
+  - type: input
+    id: where
+    attributes:
+      label: Where the rule lives
+      description: File path, and the rule number or heading if it has one.
+      placeholder: Fabric-Brain/agents/lakehouse-agent/instructions.md — Mandatory rule 3
+    validations:
+      required: true
+
+  - type: textarea
+    id: says
+    attributes:
+      label: What it says today
+      description: Quote it. A paraphrase makes it hard to find the exact line to change.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: reality
+    attributes:
+      label: What your tenant actually does
+      description: The response, the error, the timing — whatever contradicts it.
+      render: text
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: How wrong is it
+      options:
+        - Wrong — following it fails
+        - Incomplete — it works, but not in my case, and the exception is not stated
+        - Stale — it was right before a service change
+        - Ambiguous — two readings, and the wrong one is easy to pick
+    validations:
+      required: true
+
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Evidence level
+      options:
+        - observed — seen in a real tenant, with a trace, a response body or a test output
+        - doc — Microsoft Learn or an announcement now says otherwise
+    validations:
+      required: true
+
+  - type: input
+    id: date
+    attributes:
+      label: Date observed
+      placeholder: "2026-08-14"
+    validations:
+      required: true
+
+  - type: input
+    id: context
+    attributes:
+      label: Environment, if it matters
+      description: Capacity SKU, region, API version, SDK version, agent generation.
+      placeholder: F2, West Europe, API 2023-11-01
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Before submitting
+      options:
+        - label: No customer name, no real GUID, no account-name path — including in anything I attached.
+          required: true

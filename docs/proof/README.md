@@ -67,6 +67,12 @@ data.
 | `02-instructions.png` | `lakehouse-agent/instructions.md` open in an editor | Explains the mechanism — an agent reads this, then acts |
 | `03-ontology.png` | The Customer 360 ontology, 8 entities and 9 relations | The semantic layer the numbers sit on |
 | `04-portal.png` | The operations portal landing page | The same artifacts served as an application |
+| `social-card.png` | `01` under a scrim, with the title and the counts | The repo's social preview — the link card on LinkedIn, X, Slack |
+
+`social-card.png` is generated, not captured: it composes `01-agent-and-report.png` at 1280 × 640,
+the size GitHub expects under **Settings → General → Social preview**. Regenerate it rather than
+editing it by hand, and re-upload it there if the counts change — nothing tests that the card and
+the badges agree.
 
 A Foundry trace of a supervisor calling its sub-agents is still missing. It is the one shot almost
 nobody else can produce, and it would back the brain's own claim that *a trace is the only place a

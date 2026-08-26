@@ -1,0 +1,56 @@
+name: Something is not covered
+description: You went looking for guidance and there was none — a service, a scenario, or a routing decision the brain does not answer.
+title: "[gap] "
+labels: ["coverage-gap"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Useful even when you already solved it yourself. What matters is *what you searched for
+        and did not find* — that is the shape of the hole.
+
+        Some agents are catalogued as `status: planned`, which means the folder does not exist
+        yet. Check the brain's `agents/_catalog.yaml` before opening this; if it is already
+        planned, say so and tell us what you needed it for. That is what moves it up.
+
+  - type: textarea
+    id: looking
+    attributes:
+      label: What you were trying to do
+    validations:
+      required: true
+
+  - type: textarea
+    id: searched
+    attributes:
+      label: Where you looked
+      description: Which agent you routed to, and why it turned out not to be the right one.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of gap
+      options:
+        - No agent owns this — nothing in the routing table fits
+        - The agent exists but is silent on my case
+        - The agent is catalogued as planned and has no instructions.md yet
+        - Two agents both look right and the boundary is unclear
+        - A whole technology is missing — this would be a new brain
+    validations:
+      required: true
+
+  - type: textarea
+    id: solved
+    attributes:
+      label: How you solved it in the end
+      description: If you did. This is often the fastest path to the rule that should exist.
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Before submitting
+      options:
+        - label: No customer name, no real GUID, no account-name path — including in anything I attached.
+          required: true
