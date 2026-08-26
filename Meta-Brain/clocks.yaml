@@ -1,0 +1,41 @@
+# Expiry clocks — dates this brain has written down as future facts
+#
+# Some statements in the brain are true only until a date: a retirement, an
+# end-of-support, a preview that becomes GA. Written in the future tense, they
+# turn silently false the morning after. Nothing in a markdown file notices.
+#
+# This registry is the alarm. `Meta-Brain/tests/test_clocks.py` fails when a
+# clock is due within `warn_days` or already passed, so the repo gets a heads-up
+# window instead of quietly shipping a wrong instruction.
+#
+# It deliberately does NOT list the files that mention each date — that list
+# would rot. The test discovers them live and prints them in the failure.
+#
+# To add a clock: append an entry. To retire one: remove it *after* the prose it
+# guards has been rewritten in the past tense, and the test will confirm the
+# date is gone from the repo.
+
+warn_days: 30
+
+clocks:
+  - date: 2026-12-01
+    aliases: ["December 1, 2026"]
+    what: "Microsoft Foundry portal Workflows retire"
+    why_it_matters: >
+      Foundry-Brain routes multi-agent orchestration through Workflows in
+      several places. Past this date the guidance sends an agent to a surface
+      that no longer exists.
+    when_due: >
+      Rewrite the Workflows guidance in the past tense, point orchestration at
+      the A2A tool / Toolbox path, and update Foundry-Brain/generation_map.md.
+
+  - date: 2027-03-31
+    aliases: ["March 31, 2027"]
+    what: "Foundry classic agents (azure/foundry-classic/agents/*) retire"
+    why_it_matters: >
+      generation_map.md exists because two generations ship side by side. Past
+      this date there is only one, and every "classic vs current" caveat becomes
+      noise that makes the brain harder to read, not safer.
+    when_due: >
+      Collapse generation_map.md to a short historical note, drop the classic
+      branches from the Foundry agent instructions, and remove this clock.
