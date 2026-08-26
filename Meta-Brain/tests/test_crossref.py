@@ -1,7 +1,7 @@
 """Cross-reference tests for Azure-Brain (every brain in `conftest.BRAINS`).
 
-Validates that internal links between agent instructions and root docs
-resolve correctly, and that catalogs are consistent with disk.
+Validates that internal links in **every** markdown file resolve, and that
+catalogs are consistent with disk.
 """
 import re
 
@@ -64,42 +64,66 @@ def _is_local_only_target(resolved):
     return resolved.with_name(f"{resolved.stem}.example{resolved.suffix}").exists()
 
 
-def _all_instruction_files():
-    out = []
-    for brain in BRAINS:
-        for d in agent_dirs(brain):
-            f = d / "instructions.md"
-            if f.exists():
-                out.append(f)
-    return out
+def _all_markdown_files():
+    """Every markdown file in the repo, excluding vendored / generated trees.
+
+    The check used to cover `instructions.md` only. That left companion files,
+    known_issues.md and every README unguarded — exactly the files a reader is
+    sent to *from* a working link, so a rot there is invisible until someone
+    follows the trail and lands nowhere.
+    """
+    excluded = {".venv", ".git", "__pycache__", ".pytest_cache", "node_modules"}
+    return sorted(
+        p for p in ROOT.rglob("*.md")
+        if not any(part in excluded for part in p.relative_to(ROOT).parts)
+    )
 
 
-_INSTRUCTION_FILES = _all_instruction_files()
+_FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+_INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
+
+
+def _prose_only(content: str) -> str:
+    """Drop fenced blocks and inline code spans.
+
+    Sample commands and file trees routinely contain link-shaped text that
+    points nowhere on purpose. Checking them produces failures no one can fix,
+    which trains people to ignore the suite.
+    """
+    return _INLINE_CODE_RE.sub("", _FENCE_RE.sub("", content))
+
+
+def _broken_links(md_file):
+    content = _prose_only(md_file.read_text(encoding="utf-8", errors="ignore"))
+    broken = []
+    for match in LINK_RE.finditer(content):
+        link_text, link_target = match.groups()
+        if link_target.startswith(("http://", "https://", "#", "mailto:")):
+            continue
+        target_path = link_target.split("#")[0]
+        resolved = (md_file.parent / target_path).resolve()
+        if resolved.exists() or _is_local_only_target(resolved):
+            continue
+        broken.append(f"  [{link_text}]({link_target}) → {resolved}")
+    return broken
+
+
+_MD_FILES = _all_markdown_files()
 
 
 class TestInternalLinks:
-    """All relative markdown links in instructions.md must resolve."""
+    """All relative markdown links, in every markdown file, must resolve."""
 
-    @pytest.fixture(params=_INSTRUCTION_FILES,
-                    ids=[agent_id(f.parent) for f in _INSTRUCTION_FILES])
-    def instruction_file(self, request):
+    @pytest.fixture(params=_MD_FILES,
+                    ids=[str(f.relative_to(ROOT)).replace("\\", "/") for f in _MD_FILES])
+    def md_file(self, request):
         return request.param
 
-    def test_links_resolve(self, instruction_file):
-        content = instruction_file.read_text(encoding="utf-8", errors="ignore")
-        broken = []
-        for match in LINK_RE.finditer(content):
-            link_text, link_target = match.groups()
-            if link_target.startswith(("http://", "https://", "#")):
-                continue
-            target_path = link_target.split("#")[0]
-            resolved = (instruction_file.parent / target_path).resolve()
-            if resolved.exists() or _is_local_only_target(resolved):
-                continue
-            broken.append(f"  [{link_text}]({link_target}) → {resolved}")
+    def test_links_resolve(self, md_file):
+        broken = _broken_links(md_file)
         if broken:
             pytest.fail(
-                f"{agent_id(instruction_file.parent)}/instructions.md broken links:\n"
+                f"{str(md_file.relative_to(ROOT)).replace(chr(92), '/')} broken links:\n"
                 + "\n".join(broken)
             )
 
