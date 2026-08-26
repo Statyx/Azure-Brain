@@ -33,6 +33,13 @@ Two things worth internalising before you use it:
   labelled "verified" without a trace or a test output behind it — that discipline is the whole
   value of the repo, and it degrades the moment someone writes down something merely plausible.
 
+<img width="1021" height="1087" alt="image" src="https://github.com/user-attachments/assets/57a87324-ec5d-4bcf-af7d-ab9d0a62fe32" />
+<img width="2471" height="1206" alt="image" src="https://github.com/user-attachments/assets/0807484d-a087-4ed0-a79b-8e6d15fc89a4" />
+<img width="2552" height="1114" alt="image" src="https://github.com/user-attachments/assets/92ba506e-724b-49f5-a607-e64ee2ac9337" />
+<img width="737" height="800" alt="image" src="https://github.com/user-attachments/assets/3a7c823d-f77e-4d7f-8739-6e35e96a723c" />
+<img width="2540" height="1252" alt="image" src="https://github.com/user-attachments/assets/6ec198d5-c633-4e29-9bab-7ddb400cf645" />
+
+
 ---
 
 ## 🧩 Take only what you need
@@ -53,6 +60,7 @@ at all, and each technology brain resolves the large majority of its links inter
 **The exception is [`Apps-Brain`](Apps-Brain/README.md)** — 16 % internal, deliberately: it is the
 layer that *consumes* the others, so it points at them constantly. Take it together with the
 brains it references, not on its own.
+
 
 ---
 
