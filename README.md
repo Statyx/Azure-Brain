@@ -38,8 +38,15 @@ Two things worth internalising before you use it:
 
 ## 📸 What it produces
 
-Four moments from one run — a customer-360 build on Fabric, driven end to end by the agents in
-this repo.
+**These are examples, not the product.** They come from one build — a customer 360 on retail data —
+but nothing in it is bespoke. The same agents, reading the same instruction files, produce the
+equivalent for manufacturing, energy, supply chain, healthcare or finance: the industry is an
+*axis*, the tables change, the guidelines do not.
+
+This particular build is `B1 + M-ONTO + M-AGENT` — the retail starter kit (`B1 + M-AGENT`) with the
+ontology module bolted on. That is the whole idea: **a named recipe when one fits, a composition
+when none does.** The six starter kits and the ten modules are in
+[`Meta-Brain/SCENARIOS.md`](Meta-Brain/SCENARIOS.md).
 
 **A question in plain language, and the DAX it actually ran.** The Data Agent answers *"how much
 customer lifetime value is exposed to churn?"*, shows the query it generated and names its source —
@@ -47,14 +54,16 @@ next to the report that number comes from.
 
 ![Data Agent answering in natural language, showing its generated DAX query, beside the Power BI report it draws from](docs/proof/01-agent-and-report.png)
 
-**What an agent reads before it touches anything.** Rule 2 is the three-call OneLake DFS protocol;
-rule 3 is the polling loop that exists because the SQL endpoint is not ready when creation returns.
-Both are there because they failed first.
+**What an agent reads before it touches anything.** This is the part that transfers between
+domains. Rule 2 is the three-call OneLake DFS protocol; rule 3 is the polling loop that exists
+because the SQL endpoint is not ready when creation returns. Both are there because they failed
+first, and both apply whatever you are modelling.
 
 ![The lakehouse-agent instruction file open in an editor, showing its mandatory rules](docs/proof/02-instructions.png)
 
 **The semantic layer underneath.** Eight entity types bound to lakehouse tables, nine relations —
-the model answers the numbers, the ontology answers the links, and both are queryable.
+the model answers the numbers, the ontology answers the links, and both are queryable. Swap the
+industry and this becomes sites, equipment and sensors instead of customers and campaigns.
 
 ![The Customer 360 ontology: eight entities, nine relations, shown as a graph](docs/proof/03-ontology.png)
 
