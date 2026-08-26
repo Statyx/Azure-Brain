@@ -225,3 +225,73 @@ serialising, same input: Q1 correct at 12.8s, Q2 queues and answers its own ques
 **Why this one is dangerous:** it is not an outage. The caller gets a confident,
 well-formed, plausible answer to a question nobody asked, and every status code says
 success. On stage it is indistinguishable from a correct answer.
+
+## An ambiguous question makes the agent pick a different column each run (5 Aug 2026)
+
+**Context:** Fabric Data Agent over a semantic model, driven repeatedly from a Foundry
+supervisor over MCP. Nothing about the defect is Foundry-specific — supervision is only what
+made it **visible**.
+
+**Symptom:** the same question, asked four times in a row, with no change to the agent, the
+model or the data:
+
+| Run | Answer |
+|---|---|
+| 1 | **825** |
+| 2 | **593** |
+| 3 | **825** |
+| 4 | **825** |
+
+Every run is `completed`. Every run generates valid DAX. Every run returns a non-empty,
+plausible, correctly-formatted business number.
+
+**Root cause:** the question ("*combien de clients à risque ?*") is satisfied by **two
+different legitimate columns**, and nothing in it chooses between them:
+
+| Reading | Filter | Rows |
+|---|---|---|
+| the **score band** | `risk_band` ∈ {High, Critical}, i.e. score ≥ 65 | **825** |
+| the **lifecycle state** | `lifecycle_stage = 'at_risk'` | **593** |
+
+Both columns exist. Both are populated. Both answers are *correct* for their reading. The
+agent re-decides which one it means on every run, and never says which it chose.
+
+For reference, the bands in that model: Prospect · Low 0–39 · Medium 40–64 · High 65–84 ·
+Critical 85–100.
+
+**This is NOT the "invents enum values" entry above.** They look similar and need different
+cures:
+
+| | Invented enum (3 Aug) | Ambiguous column (5 Aug) |
+|---|---|---|
+| Filter value | **does not exist** in the data | exists, twice over |
+| Result | **0 rows** | two different non-empty results |
+| Deterministic? | yes — always wrong the same way | **no** — flips between runs |
+| How you notice | an absence that contradicts the demo | **you don't**, unless you ask twice |
+| Cure | declare the domain, deny absent values | **declare the default reading** |
+
+**Fix — in the agent, not in the question.** Telling the presenter to phrase it better does not
+survive a live demo:
+
+1. In `aiInstructions`, pin the **default reading** for every business term that maps to more
+   than one column. Literally: *"« client à risque » means `risk_band` ∈ {High, Critical}. It
+   does NOT mean `lifecycle_stage = 'at_risk'`, which is a separate lifecycle concept — use it
+   only when the user says «  cycle de vie » or « lifecycle »."*
+2. State the **band boundaries** in the same place, so the score threshold can't drift either.
+3. Add a few-shot example for each reading, so both paths are demonstrated rather than inferred.
+4. Require the agent to **name the column it filtered on** in its answer. A number with its
+   definition attached is auditable; a bare number is not.
+
+**Detection — cheap, and nobody does it:** ask every demo question **three times** and diff the
+answers. That is the whole test. This defect was found for free because a supervisor asked the
+same downstream question on every run; a human asks once and believes the number.
+
+**Evidence:** four consecutive runs returning 825 / 593 / 825 / 825 on an unchanged agent. The
+answer becomes **stable immediately** once the question names the band explicitly — which
+confirms ambiguity as the cause rather than caching, thread pollution or a flaky model.
+
+**Why this one is dangerous:** there is no error, no empty result and no warning — the two
+answers differ by 232 customers on the same question, and **both are defensible**. Ambiguity in
+a business term is not a phrasing problem, it is missing metadata; the agent will resolve it
+silently and differently every time until someone writes the default down.
+
