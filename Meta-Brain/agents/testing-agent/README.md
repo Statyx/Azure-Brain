@@ -49,5 +49,6 @@ This lets a brain declare a roadmap without breaking the disk-sync test.
 ## Related
 
 - [instructions.md](instructions.md) — full 3-tier taxonomy and per-project scope
+- [advanced_patterns.md](advanced_patterns.md) — fixtures, mocking, parametrization and the visual validator, drawn from the 3 760-test suite
 - [known_issues.md](known_issues.md) — gotchas hit while building and running the suite
 - [../../SCENARIOS.md](../../SCENARIOS.md) — where the gate sits in the delivery flow (module `M-TEST`)

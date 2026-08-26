@@ -72,3 +72,25 @@ ignored by the disk-sync test but still validated for `name` + `purpose`.
 Writing "all brains are covered" in a README does not make it true — the `BRAINS` list does.
 Same rule as the umbrella one: **never claim "verified" without an artifact that proves it**
 (a collected-test count, a trace, a run log).
+
+
+---
+
+## 7. `git checkout --` Silently Deletes an Uncommitted Test
+
+**Symptom** (hit 2026-08-26, caught only by a test count): a new test was added to
+`test_smoke.py`, temporarily weakened to prove it could fail, then "restored" with
+`git checkout -- tests/test_smoke.py`. That restores the file to **HEAD**, which did not
+contain the new test at all. The suite went from 1768 to 1726 passing and still said
+`0 failed` — a green run that had quietly lost 42 assertions.
+
+**Why it is dangerous here**: proving a new guard actually bites means breaking it on
+purpose. The natural undo (`git checkout`) is exactly the wrong one while the guard is
+still uncommitted.
+
+**Fix**: to prove a test fails, mutate the *data* it inspects, not the test file — or
+commit the test first, then experiment. If you must edit the test, restore it with an
+explicit edit, never with `git checkout`.
+
+**Detection**: a passing-test count that *drops* is the only signal. Record the expected
+count before and after; "0 failed" alone does not mean the suite still exists.

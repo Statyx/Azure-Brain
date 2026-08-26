@@ -6,7 +6,8 @@ Agent specialized in SAP BusinessObjects (BO) to Microsoft Fabric migration proj
 
 | File | Purpose |
 |------|---------|
-| [instructions.md](instructions.md) | Full migration framework: phases, mapping, architecture patterns, POC, validation, pitfalls, case studies, estimation |
+| [instructions.md](instructions.md) | Framework spine — Phases 0 to 2: scoping, discovery, assessment, architecture design |
+| [execution_and_cutover.md](execution_and_cutover.md) | Phases 3 to 6 — conversion, POC, validation, parallel run, decommission, adoption + case studies & estimation template |
 | [microsoft_migration_framework.md](microsoft_migration_framework.md) | Microsoft official 5-stage Power BI migration framework (MS Learn reference) |
 | [discovery_questionnaire.md](discovery_questionnaire.md) | Customer-facing questionnaire: environment, complexity, security, governance readiness, data reusability |
 | [known_issues.md](known_issues.md) | Known blockers, unsupported features, DAX/visual conversion limits, paginated report limitations, estimation pitfalls |

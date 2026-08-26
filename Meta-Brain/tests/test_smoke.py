@@ -81,6 +81,14 @@ class TestCatalogSync:
 class TestAgentStructure:
     """Every agent folder (across every brain) must contain instructions.md."""
 
+    #: The `view` tool truncates a file at 20 KB. An `instructions.md` past that
+    #: threshold is silently cut — the reader gets a document that *looks*
+    #: complete and acts on half a framework. The brain's own loop says "read
+    #: instructions.md in full before acting", so this must be mechanically
+    #: possible. Fix by moving trailing sections into a companion file and
+    #: naming it in the load order, never by trimming content.
+    READ_THRESHOLD = 20 * 1024
+
     @pytest.fixture(params=_ALL_AGENT_DIRS,
                     ids=[agent_id(d) for d in _ALL_AGENT_DIRS])
     def agent_dir(self, request):
@@ -95,6 +103,18 @@ class TestAgentStructure:
         if path.exists():
             assert path.stat().st_size > 50, \
                 f"{path} is suspiciously small"
+
+    def test_instructions_readable_in_one_pass(self, agent_dir):
+        path = agent_dir / "instructions.md"
+        if not path.exists():
+            pytest.skip("no instructions.md")
+        size = path.stat().st_size
+        assert size <= self.READ_THRESHOLD, (
+            f"{agent_id(agent_dir)}/instructions.md is {size} bytes, over the "
+            f"{self.READ_THRESHOLD}-byte read threshold — an agent reading it will "
+            f"silently lose the tail. Move the trailing sections into a companion "
+            f"file and point at it from the load order at the top."
+        )
 
 
 # ── Python compilation ──────────────────────────────────────────

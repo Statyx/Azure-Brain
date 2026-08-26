@@ -40,7 +40,8 @@
 
 | File | Purpose |
 |------|---------|
-| `instructions.md` | **LOAD FIRST** — Mandatory rules (9), architecture, project setup, development workflow, API reference |
+| `instructions.md` | **LOAD FIRST** — Mandatory rules (9), architecture, project setup, development workflow, build & publish |
+| `item_development.md` | **Item manifests + the 7 feature areas** — OneLake, auth, jobs, settings, monitoring, CI/CD, iFrame relaxation |
 | `starter_kit_reference.md` | **Deep Starter Kit knowledge** — 4-file item pattern, view registration system, ribbon factories, layout components API, OneLakeStorageClient, scripts reference, remote hosting, job scheduling, AI commands, full project structure, new-item checklist |
 | `architecture.md` | 4-component architecture, end-to-end flow, authentication model, item lifecycle |
 | `manifest_reference.md` | Manifest structure (BE/FE), Product.json, WorkloadManifest.xml, item manifests, package limits |
@@ -51,12 +52,13 @@
 ## Quick Start (for a new session)
 
 1. Read `instructions.md` — mandatory rules (9), architecture context & development workflow
-2. Read `starter_kit_reference.md` — item pattern, view system, ribbon, layout APIs, scripts, checklist
-3. Read `architecture.md` — 4-component model, auth flow, item lifecycle
-4. Read `components_reference.md` — deep component API (ItemEditor, Ribbon, OneLakeView, Wizard)
-5. Read `manifest_reference.md` — manifest structure, item definitions, package limits
-6. Read `publishing_guide.md` — publishing paths & preview features
-7. Reference `known_issues.md` when debugging
+2. Read `item_development.md` — item manifests and the feature areas you need
+3. Read `starter_kit_reference.md` — item pattern, view system, ribbon, layout APIs, scripts, checklist
+4. Read `architecture.md` — 4-component model, auth flow, item lifecycle
+5. Read `components_reference.md` — deep component API (ItemEditor, Ribbon, OneLakeView, Wizard)
+6. Read `manifest_reference.md` — manifest structure, item definitions, package limits
+7. Read `publishing_guide.md` — publishing paths & preview features
+8. Reference `known_issues.md` when debugging
 
 ## Key Insight
 
