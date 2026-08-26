@@ -43,6 +43,20 @@ Identity slots to use: **Zava** · `zava.com` · `zava.onmicrosoft.com` · works
 `Zava - ` · resource group `rg-zava-<workload>`. Full table in
 [`PUBLIC_SAFETY.md`](../../PUBLIC_SAFETY.md) §1.
 
+### Cropping is not always an option
+
+Decide this *before* capturing, not after.
+
+Cropping works when the sensitive thing is **peripheral** — a URL bar, an avatar, a shell prompt,
+a run ID. Shots 1 and 4 are entirely in that category: full screen plus a cropped prompt covers
+them.
+
+Cropping fails when the sensitive thing **is the subject**. Shot 2 is the workspace list, so
+masking a workspace name removes the very thing being shown — rename the workspace to `Zava - …`
+instead, which takes seconds and requires re-running nothing. Shot 3's chart labels *are* the
+visual; if the report sits on real data, no crop saves it and the demo has to be rebuilt on sample
+data.
+
 ---
 
 ## The four shots
