@@ -31,7 +31,7 @@ Five brains live at the root:
 
 > **Building a whole solution, not a single task?** Start from
 > [`Meta-Brain/SCENARIOS.md`](../Meta-Brain/SCENARIOS.md) instead — the composed demo model
-> (`preset = base + modules + axes`): 3 bases, 10 modules, named presets, and a documented
+> (`preset = base + modules + axes`): 3 bases, 11 modules, named presets, and a documented
 > custom path when none of them fits. Each step names an agent; you then rejoin the loop above.
 > Track a run with [`run_sheet.example.md`](../Meta-Brain/run_sheet.example.md), and never fork
 > a base to make a variant — add an axis, a module, or a preset.

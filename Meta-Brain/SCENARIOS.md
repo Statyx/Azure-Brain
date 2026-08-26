@@ -43,6 +43,7 @@ the agent's `instructions.md` says **how**, and wins on its own domain.
 | `smart-factory` | `B1 + B2 + M-ONTO + M-AGENT` | 4–6 h | Batch + streaming + graph + natural-language Q&A |
 | `digital-twin` | `B1 + B2 + M-ONTO + M-DL + M-AGENT + M-OPS + M-ALERT + M-PORTAL` | 1–2 d | Control room: what is happening **now**, and **why + who is impacted** |
 | `data-agent-addon` | `M-AGENT` | 45 min | Q&A bolted onto a model that already exists |
+| `supervised-agent` | `B1 + M-AGENT + M-SUPER` | +2 h on top of `M-AGENT` | One assistant answering across Fabric data **and** documents, with the reasoning path traceable hop by hop |
 | `ontology-addon` | `M-ONTO` | 1–2 h | Graph traversals over dimensions that already exist |
 | `cicd-setup` | `M-CICD` | 1–2 h | Dev → Prod promotion from Git |
 | `migration-wave` | `B3` | 4–6 w | An existing BO / Databricks / Synapse estate landed in Fabric |
@@ -241,6 +242,37 @@ into the instructions explicitly; the agent will not infer it.
 
 ---
 
+**`M-SUPER` — Foundry supervision layer** · ~2 h · agents `foundry-fabric-bridge` → `foundry-agent-service` → `foundry-orchestration`
+**Attaches to:** `M-AGENT` exit (a **published** Fabric data agent). Optionally a document corpus, for the second source.
+
+Puts a Foundry supervisor in front of the Fabric data agent, so one assistant can answer over
+data *and* documents while every hop stays readable.
+
+1. Foundry project + a model deployment — `foundry-project-agent` (or an existing project).
+2. Bind the Fabric data agent as a tool: **portal creates the named connection, the SDK resolves it by name.** Needs `allow_preview=True`. → `foundry-fabric-bridge-agent`.
+3. A **front-door** agent wrapping that tool — one job, one tool, pre-approved.
+4. A **supervisor** delegating to the front door via the **A2A tool**. Create the connection in ARM and **capture the rollback JSON before you create it**. → `foundry-orchestration-agent`.
+5. *Optional second source:* a knowledge agent for the documentary layer — with the **non-counting contract** written into its instructions. → `foundry-knowledge-agent`.
+6. Traces to Application Insights, so the four-protocol path is inspectable. → `foundry-observability-agent`.
+
+**Boundary rule — the reason this module is worth its latency:** measures, DAX/GQL routing and
+the ontology stay in **Fabric**. Foundry orchestrates and adds the documentary layer; it never
+recomputes a number. The extra seconds buy you a single definition per metric.
+
+**Gate — three checks, and the third is the one everyone skips:**
+- a question entered at the supervisor returns a number **computed by DAX on the Fabric side** (read the trace, not the answer);
+- a **control agent** built from the same instructions *without* the A2A tool **cannot** answer — that is what proves the hop, rather than a tool-call item in a log;
+- the **same question asked three times returns the same number**.
+
+**Watch out:** the third gate exists because an ambiguous business term makes the Fabric agent
+silently pick a different column per run (825 vs 593 on the same question — see
+`../Fabric-Brain/agents/ai-skills-agent/known_issues.md`). Supervision is what makes it visible;
+fix it **in the Fabric agent's instructions**, not in the supervisor. Also: the SDK's
+`WorkflowAgentDefinition.workflow` is an untyped string — never build the spine of a demo on it.
+Proofs and scope: `../Foundry-Brain/tenant_proofs.md`.
+
+---
+
 **`M-OPS` — Operations Agent (proactive)** · 30 min · agent `rti-kusto`
 **Attaches to:** `B2` exit, ideally with `M-ONTO`.
 
@@ -321,6 +353,7 @@ graph LR
     MONTO --> MAGENT
     MDL --> MAGENT
     MAGENT --> MPORTAL["M-PORTAL<br/>External portal"]
+    MAGENT --> MSUPER["M-SUPER<br/>Foundry supervision"]
     B3["B3 · Migration"] --> MAGENT
     B3 --> MCICD["M-CICD"]
 

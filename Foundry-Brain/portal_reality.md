@@ -3,6 +3,11 @@
 Documentation says what *should* exist. This file says what **was observed**. When the two
 disagree, this file wins for behaviour, and the disagreement gets logged here.
 
+> **Companion file:** [`tenant_proofs.md`](tenant_proofs.md) records what was **executed**
+> against the operator's own tenant (SDK / REST / ARM), rather than seen on a lab screen.
+> A screenshot shows a state; a run trace shows a behaviour. On *what the product does*,
+> `tenant_proofs.md` outranks this file; on *what the portal displays*, this one does.
+
 **Method:** portal screenshots from a **hands-on training lab** (Skillable-hosted, seeded
 content), reviewed with the operator as they worked through it. No CLI, no API calls, no tenant
 credentials available to the agent.
@@ -600,3 +605,4 @@ facts. Umbrella rule 9, applied to visual evidence.
 | 2026-08-04 | Added the portal taxonomy, tool catalog, model-gates-tools constraint, catalog-discovery binding, and the agent object model. Reframed as a **training lab** observation (not a demo build) at the user's clarification. |
 | 2026-08-04 | Added the Work IQ tool family, version accumulation, and the stale-lab-screenshots lesson. Extended Generalizable lessons to 11 rows. Added **Evidence discipline** after two findings were over-called and corrected. |
 | 2026-08-04 | Added **Lab 2 — Foundry IQ**: knowledge bases consumed as MCP tools, the portal-then-code Fabric binding (⚠️ *corrects* the earlier "competing paths" reading), the Foundry IQ object model, cross-service RBAC, the two Fabric surfaces, and the governance panes. Lessons extended to 17 rows; dispatcher and Guardrails questions closed. |
+| 2026-08-26 | Linked the new [`tenant_proofs.md`](tenant_proofs.md) and stated the precedence rule between the two files. Nothing in this file was changed by it — the lab observations stand as observations. |

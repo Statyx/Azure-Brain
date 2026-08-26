@@ -84,6 +84,20 @@ So the classic supervisor pattern has **no like-for-like replacement**. It split
 
 Classic → current tool mapping table: `azure/foundry/agents/how-to/migrate#agent-tool-availability`.
 
+### ✅ Confirmed by introspecting the SDK, not just by reading the doc
+
+The paragraph above is Microsoft's statement. It was independently **measured** on
+`azure-ai-projects` **2.4.0** (see [`tenant_proofs.md`](tenant_proofs.md), 2026-08-05):
+
+| Introspection | Result |
+| --- | --- |
+| `ToolType` members | **no `CONNECTED_AGENT`** — the pattern is absent from the package, not merely discouraged |
+| `AgentEndpointProtocol` members | **A2A** and **MCP** — the two supported inbound protocols |
+| `WorkflowAgentDefinition.workflow` | a plain **`str`** — no typed graph; the format is undocumented and fails at runtime, not at construction |
+
+The last row is the one that costs money: a demo whose spine is a hand-written workflow string
+has no compile-time safety net at all.
+
 ### Consequence for this brain
 
 `agent.as_tool` and Connected Agents **must not appear** in any Foundry-Brain instruction file

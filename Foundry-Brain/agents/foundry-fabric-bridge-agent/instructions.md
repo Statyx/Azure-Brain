@@ -245,6 +245,36 @@ Changing those definitions is a **Fabric-side** change → `Fabric-Brain/agents/
 
 ---
 
+## 🔑 The boundary rule — data semantics stay on the data side
+
+> **The data world stays on the data side.** Measures, DAX/GQL routing and the ontology live in
+> Fabric. Foundry orchestrates and adds the documentary layer. Foundry **never reimplements**
+> data semantics.
+
+Stated by the operator during a real build, then validated by it
+([`../../tenant_proofs.md`](../../tenant_proofs.md), 2026-08-05). It is the concrete form of
+umbrella rule 5 (*one owner per domain*) for this bridge, and it decides two arguments that
+come up on every engagement:
+
+**1. "Can't the orchestrator just compute that? It would be faster."** No. Routing a number
+question through supervisor → A2A → MCP → data agent → DAX **is** slower, and that latency is
+the **accepted price**. The alternative is a second definition of the same measure living in a
+prompt, and the failure it produces — two truths for one metric — is worse than seconds. The
+customer always finds the seam.
+
+**2. "The Foundry agent could just add up what it retrieved."** No — that is the counting
+failure from [`../foundry-knowledge-agent/known_issues.md`](../foundry-knowledge-agent/known_issues.md).
+Retrieval windows are not populations.
+
+**What Foundry legitimately adds** on top of a Fabric answer: routing, multi-source synthesis,
+the documentary/verbatim layer, tone and audience shaping, and approval gates. Everything that
+is *about* the number rather than *the number itself*.
+
+**Test it:** ask the chain a counting question and read the trace. If the digits were computed
+anywhere other than DAX/GQL on the Fabric side, the boundary has already leaked.
+
+---
+
 ## Hard limitations (recorded 2026-08-04)
 
 | Limitation | Consequence |

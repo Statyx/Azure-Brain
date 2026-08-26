@@ -181,7 +181,7 @@ run goes back into the model via the run sheet, so the next demo is cheaper.
 
 | File | Purpose |
 | --- | --- |
-| [`../Meta-Brain/SCENARIOS.md`](../Meta-Brain/SCENARIOS.md) | **The demo model** — presets, 3 bases, 10 modules, axes, deploy order |
+| [`../Meta-Brain/SCENARIOS.md`](../Meta-Brain/SCENARIOS.md) | **The demo model** — presets, 3 bases, 11 modules, axes, deploy order |
 | [`../Meta-Brain/run_sheet.example.md`](../Meta-Brain/run_sheet.example.md) | Per-demo run sheet — copy to `RUN.md` in the demo repo |
 | [`../ERROR_RECOVERY.md`](../ERROR_RECOVERY.md) | Decision trees by HTTP status, retry patterns |
 

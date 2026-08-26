@@ -33,11 +33,16 @@ tree. Following the wrong tutorial means writing code against a dying API.
    insight lives.
 5. **[`portal_reality.md`](portal_reality.md)** — what the portal actually does, where it
    disagrees with the docs, and the evidence rules for adding to it.
+6. ✅ **[`tenant_proofs.md`](tenant_proofs.md)** — what was **executed** against a real tenant
+   rather than seen on screen: the A2A hop proven with a control agent, the four-protocol chain
+   (supervisor → A2A → MCP → Fabric data agent → DAX → Lakehouse), SDK 2.4.0 introspection, and
+   an explicit list of what those runs do **not** prove.
 
 **Headline:** the classic `agent.as_tool` / **Connected Agents** pattern **does not exist** in
 the new Foundry Agent Service. A supervisor now attaches **sub-agents via the A2A tool**
-(preview) and **capabilities via a Toolbox** (GA). Portal Workflows work, but retire
-**2026-12-01** — fine to stage a demo, never doctrine.
+(preview, and [proven working on one tenant](tenant_proofs.md)) and **capabilities via a
+Toolbox** (GA). Portal Workflows work, but retire **2026-12-01** — fine to stage a demo, never
+doctrine.
 
 ---
 
@@ -94,8 +99,9 @@ Full rationale and the design rules in [`orchestration_patterns.md`](orchestrati
 > **Seven agents are 🟢 today.** Their behavioural content is grounded in two real observed
 > systems ([`reference_workflow.md`](reference_workflow.md),
 > [`reference_foundry_iq.md`](reference_foundry_iq.md)); the SDK shapes are tenant-verified by
-> the second lab's working script. The rest are written on demand,
-> grounded against a real tenant rather than guessed from docs.
+> the second lab's working script, and a further set of claims is backed by runs executed
+> against the operator's own tenant ([`tenant_proofs.md`](tenant_proofs.md), 2026-08-05).
+> The rest are written on demand, grounded against a real tenant rather than guessed from docs.
 
 ### 01 — Platform
 - 🟡 `foundry-project-agent` — resource + project, RBAC and managed identity, connections, networking

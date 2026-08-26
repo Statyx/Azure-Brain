@@ -2,8 +2,10 @@
 
 > **Prerequisite:** read [`generation_map.md`](generation_map.md) first. It records why the
 > classic pattern is gone and which clocks are running.
-> **Status:** documented from Microsoft Learn on 2026-08-04. **Nothing here is verified** —
-> no run trace exists yet. Treat every code shape as *expected*, not *proven*.
+> **Status:** documented from Microsoft Learn on 2026-08-04. Treat every code shape below as
+> *expected*, not *proven* — **with one exception**: the **A2A tool** was executed end to end
+> against a real tenant on 2026-08-05, with a run trace and a control agent behind it. See
+> [`tenant_proofs.md`](tenant_proofs.md).
 >
 > 📐 **For a complete worked example**, see
 > [`reference_workflow.md`](reference_workflow.md) — a seven-agent orchestration observed
@@ -37,7 +39,7 @@ Two attachment mechanisms, and the choice between them is the whole design decis
 | --- | --- | --- | --- |
 | **classify** a request and let external code dispatch it | **Router agent** — returns a name, calls nothing | GA (it's just a prompt) | — |
 | call a **capability** (query Fabric, hit an API, run code) | **Toolbox** → attached as one MCP tool | **GA** | — |
-| call **another agent** that reasons and holds its own instructions | **A2A tool** | preview | — |
+| call **another agent** that reasons and holds its own instructions | **A2A tool** | preview · ✅ [proven in one tenant](tenant_proofs.md) | — |
 | follow a **fixed, declarative process** with branching and approvals | Portal **Workflows** | preview | ⚠️ **2026-12-01** |
 | orchestrate **in code**, durably | **Microsoft Agent Framework** | — | — (recommended) |
 | replicate classic `agent.as_tool` / Connected Agents | ❌ **nothing** — removed | — | — |
@@ -46,7 +48,13 @@ Two attachment mechanisms, and the choice between them is the whole design decis
 
 **Start with the router.** Promote to A2A only when a supervisor genuinely needs to *hold the
 conversation* across sub-agent calls. See the pattern below — it was observed in a Microsoft
-training lab and it is markedly more robust than A2A for a demo.
+training lab, and it costs one model call per turn where A2A costs three.
+
+⚠️ **Read this ruling as a cost argument, not a feasibility one.** A2A **works** — proven on a
+real tenant with SDK 2.4.0, ARM-created connection, `a2a_preview_call` items in the trace and a
+control agent that could not answer without the tool ([`tenant_proofs.md`](tenant_proofs.md)).
+*"A2A might not work"* is no longer a reason to avoid it. *"A2A spends three model calls per
+turn on a preview surface"* still is. Choose on price and blast radius, not on doubt.
 
 When the supervisor must call: **Supervisor = Prompt Agent. Sub-agents = A2A. Capabilities =
 Toolbox.**
@@ -88,10 +96,13 @@ workflow, an Agent Framework loop — performs the dispatch.
 | Cost per turn | one classification call | classification + delegation + synthesis |
 | Supervisor can combine several sub-agents in one answer | ❌ no | ✅ yes |
 | Dispatch logic lives | outside Foundry | inside Foundry |
+| Executed end to end in a real tenant | ✅ (two labs) | ✅ ([one tenant, SDK 2.4.0](tenant_proofs.md)) |
 
-The router trades *capability* for *reliability*. For a demo, a training, or any first
-iteration, that trade is almost always correct. Reach for A2A when the supervisor must
-genuinely reason **over the results** of several sub-agents.
+The router trades *capability* for *cost and blast radius* — **not** for reliability, which is
+the trade this table originally implied. Both columns have now run for real. For a demo, a
+training, or any first iteration, the router's trade is still almost always correct. Reach for
+A2A when the supervisor must genuinely reason **over the results** of several sub-agents — and
+budget the extra model calls when you do.
 
 ### Instruction-design rules extracted from the observed router
 

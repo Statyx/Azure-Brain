@@ -77,6 +77,42 @@ answer gives no clue which path produced it.
 
 ---
 
+## Proven in the operator's own tenant — 2026-08-05
+
+Method and full scope: [`../../tenant_proofs.md`](../../tenant_proofs.md). SDK-driven, run
+results read back programmatically. One tenant.
+
+### 9. ✅ Scoping a retrieval agent to one entity holds up
+
+A retrieval-grounded agent scoped to a single `customer_id` was asked for the verbatim material
+attached to that customer.
+
+| Measure | Result |
+|---|---|
+| Runs returning the complete expected set | **8 of 9 at 12/12** |
+| Verified attributions | **11 of 11** — 0 hallucinated |
+
+Retrieval scoping is therefore a **usable demo primitive**, not a hope. The one incomplete run
+out of nine is the honest number: budget a re-ask, don't promise 100 %.
+
+### 10. 🔑 The "non-counting contract" — and why a RAG agent must never count
+
+The same agent was given an explicit instruction that producing **aggregate numbers** from
+retrieved documents is not its job. That contract **held live**.
+
+Write it into every retrieval agent. A RAG agent that is allowed to count will count **its own
+retrieval window** and present the result as a business figure — arithmetically correct about
+the wrong population, and impossible to spot in the answer text. There is no retrieval setting
+that fixes this; the retrieval window *is* the bias.
+
+**Rule:** a knowledge agent answers *what was said, by whom, where*. It **hands off** *how
+many* to the agent that owns the measure — in a Fabric context, the data agent
+(`Fabric-Brain/agents/ai-skills-agent`) via
+[`../foundry-fabric-bridge-agent/instructions.md`](../foundry-fabric-bridge-agent/instructions.md).
+Say so in the instructions, in one sentence, and test it with a counting question.
+
+---
+
 ## Doc-sourced — not verified in a tenant
 
 | Trap | Source | Note |

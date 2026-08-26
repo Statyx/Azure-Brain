@@ -36,7 +36,7 @@ preset  =  base  +  modules          … with the axes applied
 
 - **3 bases** — `B1` Batch BI · `B2` Real-Time · `B3` Migration. Each is a spine of steps
   (agent + task + gate) ending in a documented **exit state**.
-- **10 modules** — `M-ONTO`, `M-DL`, `M-AGENT`, `M-OPS`, `M-ALERT`, `M-CICD`, `M-FLOW`,
+- **11 modules** — `M-ONTO`, `M-DL`, `M-AGENT`, `M-SUPER`, `M-OPS`, `M-ALERT`, `M-CICD`, `M-FLOW`,
   `M-PORTAL`, `M-TEST`, `M-MON` — each attaches to an exit state.
 - **Presets** — named combinations already run end to end (`bi-dashboard`, `smart-factory`,
   `digital-twin`…). No preset fits → §2.5 builds a custom one from the same pieces.
@@ -72,6 +72,7 @@ Azure-Brain/                       ← umbrella (this repo)
 ├── Foundry-Brain/                 ← Microsoft Foundry     — 7 active / 11 catalogued (flat)
 │   ├── generation_map.md          ← ⚠ classic vs current + 3 retirement clocks — read first
 │   ├── orchestration_patterns.md  ← supervisor pattern: A2A vs Toolbox vs Workflows
+│   ├── tenant_proofs.md           ← ✅ what was executed against a real tenant (vs observed)
 │   ├── agents/_catalog.yaml
 │   └── agents/<agent>/instructions.md
 └── Meta-Brain/                    ← cross-cutting         — 5 agents   (flat)
@@ -245,13 +246,17 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 > `azure/foundry/agents/*` (current, GA) — plus a third clock: portal **Workflows** retire
 > **2026-12-01** despite living on the current tree. The classic `agent.as_tool` /
 > **Connected Agents** pattern **does not exist** in the new service: a supervisor attaches
-> sub-agents via the **A2A tool** (preview) and capabilities via a **Toolbox** (GA).
+> sub-agents via the **A2A tool** (preview — and now [proven working on one
+> tenant](Foundry-Brain/tenant_proofs.md)) and capabilities via a **Toolbox** (GA).
 >
-> Five agents exist on disk. Their **behavioural** content is grounded in two complete
+> Seven agents exist on disk. Their **behavioural** content is grounded in two complete
 > multi-agent systems observed in Microsoft training labs
 > (`Foundry-Brain/reference_workflow.md`, `Foundry-Brain/reference_foundry_iq.md`); the
-> **SDK shapes** are tenant-verified by the second lab's working `agents.py`. No system here
-> has been re-run end to end against your own tenant. Everything else is `status: planned`.
+> **SDK shapes** are tenant-verified by the second lab's working `agents.py`. A further set of
+> claims — the A2A hop, the four-protocol chain and the SDK 2.4.0 introspection — was executed
+> against a real tenant and is recorded in
+> [`Foundry-Brain/tenant_proofs.md`](Foundry-Brain/tenant_proofs.md), with an explicit list of
+> what those runs do **not** prove. Everything else is `status: planned`.
 > See `Foundry-Brain/agents/_catalog.yaml`.
 
 | Domain | Agent | Purpose |
