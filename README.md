@@ -6,7 +6,7 @@ specialised "brains", one per technology domain, plus cross-cutting meta-tooling
 ![Brains](https://img.shields.io/badge/brains-5_active-blue?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/agents-42_active-orange?style=for-the-badge)
 ![Version](https://img.shields.io/github/v/tag/Statyx/Azure-Brain?style=for-the-badge&label=version&color=purple)
-![Tests](https://img.shields.io/badge/tests-green_on_a_fresh_clone-brightgreen?style=for-the-badge)
+[![CI](https://img.shields.io/github/actions/workflow/status/Statyx/Azure-Brain/no-client-leak.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/Statyx/Azure-Brain/actions/workflows/no-client-leak.yml)
 
 **Contents:** [What this is](#what-this-is) · [What it produces](#-what-it-produces) ·
 [Take only what you need](#-take-only-what-you-need) ·
@@ -296,6 +296,11 @@ request — run them locally first anyway.
 > no signal: it becomes indistinguishable from a real regression. If you see a failure here now, it
 > is real. (Narrow exemption: a link may resolve to a missing file *only* when that filename is
 > gitignored **and** a committed `<name>.example.md` sits beside it — both conditions required.)
+
+For reference, `v1.0.0` runs **1776 passed, 6 skipped**, and the scanner prints `clean`. The count
+grows as agents and documents are added — that is expected. A count that *drops* is not: it means
+assertions stopped being collected. The badge at the top of this page reports the same two gates as
+CI last ran them on `main`.
 
 ---
 
