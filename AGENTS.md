@@ -354,12 +354,19 @@ other repo holds the project.
 
 - Keep Azure-Brain checked out alongside your project, and point the agent at the relevant
   `instructions.md` by path. Nothing here needs to be installed or copied.
+- **Pin a tag, not `main`.** This brain drives agent behaviour: an unpinned reference means the
+  consuming project's agents change the day this repo does.
+  `git clone --branch v1.0.0 https://github.com/Statyx/Azure-Brain.git ../Azure-Brain`
 - **Do not fork or duplicate `instructions.md` into the consuming repo.** The brain is the single
   source of truth; a copy silently goes stale and reintroduces the failures these files prevent.
 - In the consuming repo, reference the brain from its own `AGENTS.md` (or
   `.github/copilot-instructions.md`) — one line naming the brain path and the agents it uses.
+  A ready-to-paste block is in [`README.md`](README.md#-use-it-from-another-repo).
+- **Take only what you need.** 38 of the 42 agents depend on no umbrella file, and each technology
+  brain resolves 83–89 % of its links internally, so a single agent or a single brain lifts out
+  cleanly. `Apps-Brain` is the exception (16 % internal — it consumes the others by design).
 - Corrections and lessons learned go **back into the brain** (`known_issues.md` of the relevant
-  agent), not into the consuming repo.
+  agent), not into the consuming repo — see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 

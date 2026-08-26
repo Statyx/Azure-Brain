@@ -5,11 +5,14 @@ specialised "brains", one per technology domain, plus cross-cutting meta-tooling
 
 ![Brains](https://img.shields.io/badge/brains-5_active-blue?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/agents-42_active-orange?style=for-the-badge)
+![Version](https://img.shields.io/github/v/tag/Statyx/Azure-Brain?style=for-the-badge&label=version&color=purple)
 ![Tests](https://img.shields.io/badge/tests-green_on_a_fresh_clone-brightgreen?style=for-the-badge)
 
-**Contents:** [What this is](#what-this-is) · [Start here](#-start-here) · [Brains](#-brains) ·
+**Contents:** [What this is](#what-this-is) · [Take only what you need](#-take-only-what-you-need) ·
+[Start here](#-start-here) · [Brains](#-brains) ·
 [Layout](#-layout) · [Setup](#-setup) · [Use it from another repo](#-use-it-from-another-repo) ·
-[Umbrella knowledge](#-umbrella-knowledge) · [Testing](#-testing) · [Add a brain](#-adding-a-brain)
+[Umbrella knowledge](#-umbrella-knowledge) · [Testing](#-testing) · [Add a brain](#-adding-a-brain) ·
+[Contributing](#-contributing)
 
 ---
 
@@ -29,6 +32,27 @@ Two things worth internalising before you use it:
   marked *doc* came from Microsoft Learn and may not survive contact with reality. Nothing is
   labelled "verified" without a trace or a test output behind it — that discipline is the whole
   value of the repo, and it degrades the moment someone writes down something merely plausible.
+
+---
+
+## 🧩 Take only what you need
+
+You are not expected to adopt all of it. Pick the granularity that matches what you're doing:
+
+| Level | You take | When |
+| --- | --- | --- |
+| **One agent** | a single `instructions.md` plus the companions it names | one task — *"build the semantic model"* |
+| **One brain** | e.g. `Fabric-Brain/` | you work in one technology all day |
+| **One scenario** | a preset from [`SCENARIOS.md`](Meta-Brain/SCENARIOS.md) — `base + modules` | you're building something end to end |
+| **The whole brain, from your own repo** | reference it by path, [pinned to a tag](#-use-it-from-another-repo) | it's your team's standing knowledge base |
+
+This is a **measured property, not an intention**: 38 of the 42 agents depend on no umbrella file
+at all, and each technology brain resolves the large majority of its links internally — Fabric
+83 %, Database 84 %, Foundry 89 %. Lifting one out is a copy, not a surgery.
+
+**The exception is [`Apps-Brain`](Apps-Brain/README.md)** — 16 % internal, deliberately: it is the
+layer that *consumes* the others, so it points at them constantly. Take it together with the
+brains it references, not on its own.
 
 ---
 
@@ -149,10 +173,38 @@ be installed or copied.
 > source of truth; a copy goes stale silently and reintroduces exactly the failures these files
 > prevent.
 
-In the consuming repo, reference the brain from its own `AGENTS.md` (or
-`.github/copilot-instructions.md`) — one line naming the brain path and the agents it uses.
+**Pin a version.** This brain drives agent behaviour, so an unpinned reference means your agents
+change the day this repo does. Check out a tag, not `main`:
+
+```bash
+git clone --branch v1.0.0 https://github.com/Statyx/Azure-Brain.git ../Azure-Brain
+```
+
+**Then paste this into your own repo's `AGENTS.md`** (or `.github/copilot-instructions.md`),
+keeping only the rows you actually use:
+
+```markdown
+## Knowledge base
+
+This project uses [Azure-Brain](https://github.com/Statyx/Azure-Brain), checked out at
+`../Azure-Brain`, pinned to `v1.0.0`. It is the single source of truth — never copy an
+`instructions.md` into this repo.
+
+Before acting on one of these topics, read the matching file **in full**:
+
+| Task | Read first |
+| --- | --- |
+| Lakehouse, Delta tables, OneLake | `../Azure-Brain/Fabric-Brain/agents/lakehouse-agent/instructions.md` |
+| Semantic model, DAX, Direct Lake | `../Azure-Brain/Fabric-Brain/agents/semantic-model-agent/instructions.md` |
+| Power BI report                  | `../Azure-Brain/Fabric-Brain/agents/report-builder-agent/instructions.md` |
+
+Always: read before write · idempotent re-runs · async-first (HTTP 202, then poll).
+Something failed → `../Azure-Brain/known_issues.md`, then `../Azure-Brain/ERROR_RECOVERY.md`.
+Lessons learned go back into the brain, never into this repo.
+```
+
 Corrections and lessons learned go **back into the brain** (the relevant agent's
-`known_issues.md`), never into the consuming repo. Details:
+`known_issues.md`) — see [`CONTRIBUTING.md`](CONTRIBUTING.md). Details:
 [Using this brain from another working directory](AGENTS.md#using-this-brain-from-another-working-directory).
 
 ---
@@ -220,6 +272,21 @@ request — run them locally first anyway.
 
 Agent counts appear in several files. If you change one, change them all — the tests check
 catalogs against disk, but nothing checks prose.
+
+---
+
+## 🙌 Contributing
+
+The most valuable contribution here is **a lesson learned the hard way** — an error message and its
+real cause, an API that behaves differently from its documentation, a rule that turned out to be
+wrong. That is what this repo is made of. The second most valuable is telling us a rule is wrong:
+being contradicted by a tenant is the point.
+
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first — it names the five rules that actually fail a PR
+(the 20 KB cap, evidence labels, public-safety, catalog sync, expiry clocks) and the two gate
+commands to run locally before you open one.
+
+Version history and upgrade notes: [`CHANGELOG.md`](CHANGELOG.md).
 
 ---
 
