@@ -18,7 +18,7 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 
 - Never create a Data Agent without `aiInstructions` in `stage_config.json`
 - Empty instructions = useless agent — the LLM has no context about your data
-- **MANDATORY first instruction**: `"ALWAYS query the semantic model using DAX. NEVER answer from general knowledge."` — without this, the orchestrator may skip the DAX tool and hallucinate answers
+- **MANDATORY first instruction** — without it the orchestrator may skip the query tool and hallucinate answers. **The wording depends on the data source**, because the agent generates that source's own language: DAX for `semantic_model`, SQL for `lakehouse-tables`, T-SQL for `data_warehouse`, KQL for `kusto`, GQL for `ontology`. Naming DAX on a lakehouse source does not work. Table in `instruction_writing_guide.md`
 - Write instructions first, validate them, THEN deploy
 - See `instruction_writing_guide.md` for the Mandatory Instructions section and 7-Section Framework
 

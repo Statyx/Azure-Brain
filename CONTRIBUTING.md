@@ -31,9 +31,14 @@ and they catch most of what follows.
 
 ### 1. `instructions.md` must stay under 20 KB
 
-An agent reads it with a tool that truncates at 20 480 bytes, and the truncation is **silent** —
-the reader gets a document that looks complete and is missing its ending. A file over the cap is
-therefore not "a bit long", it is quietly broken.
+An agent reads it with a tool that **refuses** any file over **20 480 bytes**. Measured, boundary
+inclusive: 20 480 is returned in full, 20 481 returns `File too large to read at once` and **no
+content at all**. The failure is loud, not silent — but it is still a failure, because the agent
+must fall back to `view_range` or `grep` and may proceed on a partial read of a file the load
+order told it to read whole. Over the cap is not "a bit long", it is not readable in one pass.
+
+This threshold is a property of the reading tool, not of Markdown or of Fabric: it is calibrated
+on the Copilot CLI `view` tool this repo is developed with, and other clients will differ.
 
 Over the limit? Move a coherent block into a **companion file** next to it and add a pointer in the
 load order at the top of `instructions.md`. Companion files have no size cap: they are consulted

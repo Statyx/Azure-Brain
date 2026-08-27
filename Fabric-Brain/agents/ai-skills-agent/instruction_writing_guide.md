@@ -9,7 +9,7 @@ This is the **most important file** for Data Agent quality. The `aiInstructions`
 - A Data Agent without instructions is a general-purpose LLM pointing at your data — it has **no business context**
 - Good instructions = accurate answers, correct terminology, proper formatting
 - Bad instructions = hallucinated metrics, wrong joins, confused users
-- **Without the mandatory "always query" rule**, the orchestrator may skip the DAX tool entirely and answer questions from general knowledge with fabricated data
+- **Without the mandatory "always query" rule**, the orchestrator may skip the query tool entirely and answer questions from general knowledge with fabricated data
 
 ---
 
@@ -24,7 +24,26 @@ CRITICAL RULES:
 3. Use existing DAX measures whenever possible instead of raw column calculations.
 ```
 
-**Why this is mandatory**: The orchestrator LLM decides whether to call the DAX tool or answer from its own knowledge. Without rule #1, questions like "top 5 campaigns by revenue" may be answered with hallucinated campaign names and figures that look plausible but are completely fabricated — with no DAX query executed at all.
+**Rule #1 is source-dependent.** The block above is written for a `semantic_model`
+source. The agent generates whatever language its source speaks, so naming DAX on a
+lakehouse source is wrong — substitute rule #1:
+
+| Source type | Rule #1 wording | Evidence |
+|---|---|---|
+| `semantic_model` | `ALWAYS query the semantic model using DAX` | `observed` |
+| `lakehouse-tables`, `lakehouse` | `ALWAYS query the lakehouse tables using SQL` | `doc` |
+| `data_warehouse` | `ALWAYS query the warehouse using T-SQL` | `doc` |
+| `kusto` | `ALWAYS query the KQL database using KQL` | `doc` |
+| `ontology` | `ALWAYS query the ontology using GQL` | `doc` |
+
+Languages come from the source table in `datasource_configuration.md`. Only the DAX
+wording has been observed working; the others are derived from that table and have
+**not** been tested end to end — treat them as a starting point, not a guarantee.
+
+**Rule #3 applies to `semantic_model` only** — the other sources have no pre-built
+measures to reuse. Drop it, or replace it with a schema-specific rule.
+
+**Why this is mandatory**: The orchestrator LLM decides whether to call the query tool or answer from its own knowledge. Without rule #1, questions like "top 5 campaigns by revenue" may be answered with hallucinated campaign names and figures that look plausible but are completely fabricated — with no DAX query executed at all.
 
 **Real-world evidence** (Marketing360 Agent, March 2026):
 

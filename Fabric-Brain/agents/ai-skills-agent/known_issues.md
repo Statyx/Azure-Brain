@@ -15,7 +15,7 @@
 
 | Issue | Symptom | Workaround |
 |-------|---------|------------|
-| **Missing "always query" rule** | Agent answers some questions from general knowledge with hallucinated data (no DAX query generated) | Add mandatory first instruction: `"ALWAYS query the semantic model using DAX. NEVER answer from general knowledge."` See instruction_writing_guide.md |
+| **Missing "always query" rule** | Agent answers some questions from general knowledge with hallucinated data (no query generated) | Add a mandatory first instruction naming **the source's own query language** — DAX for `semantic_model`, SQL for `lakehouse-tables`, T-SQL for `data_warehouse`, KQL for `kusto`, GQL for `ontology`. Naming DAX on a non-semantic-model source does not work. Table in instruction_writing_guide.md |
 | Instructions too long | Agent ignores later sections | Keep under 5,000 chars; move data descriptions to datasource.json |
 | Instructions in wrong language | Agent responds in unexpected language | Write instructions in the primary response language |
 | Contradictory instructions | Agent behaves inconsistently | Review for conflicts; test each rule independently |
