@@ -83,6 +83,9 @@ Score:
 What type of project?
   ├─ Library/SDK → see repo_structure.md § Library Layout
   ├─ Application/Demo → see repo_structure.md § Application Layout
+  ├─ Microsoft Fabric project → see repo_structure.md § Microsoft Fabric Project Layout
+  │    (deployment code grouped BY WORKLOAD under fabric/<workload>/ — this is the default;
+  │     the flat src/deploy_*.py variant is for a single-workload project only)
   ├─ Monorepo (multiple packages) → see repo_structure.md § Monorepo Layout
   └─ Documentation-only → see repo_structure.md § Docs Layout
 

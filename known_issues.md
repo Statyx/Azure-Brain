@@ -33,8 +33,8 @@ Comprehensive list of every issue encountered and resolved during this project.
 | DataAgent creation via REST API (`POST /items` type `DataAgent`) | ✅ Works |
 | DataAgent instructions via `updateDefinition` (Python `requests`) | ✅ Works |
 | DataAgent instructions via `updateDefinition` (PowerShell) | ❌ JSON encoding fails on markdown w/ special chars |
-| DataAgent without "always query" instruction | ❌ Orchestrator skips DAX, hallucinated answers |
-| DataAgent with "ALWAYS query the semantic model using DAX" instruction | ✅ Forces DAX tool invocation on every question |
+| DataAgent without "always query" instruction | ❌ Orchestrator skips the query tool, hallucinated answers |
+| DataAgent with "ALWAYS query ... using DAX" (semantic model source) | ✅ Forces DAX tool invocation on every question — the wording must name **the source's own language**; DAX is wrong on a lakehouse |
 | DataAgent `aiInstructions` with measures list | ✅ Orchestrator reformulates questions using measure names |
 | DataAgent data source binding via REST API | ❌ No public endpoint — must use portal |
 | DataAgent dataSources in `data_agent.json` definition | ❌ Ignored (schema only has `$schema`) |

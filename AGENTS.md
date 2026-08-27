@@ -63,7 +63,7 @@ Azure-Brain/                       ← umbrella (this repo)
 ├── Fabric-Brain/                  ← Microsoft Fabric      — 24 agents  (flat)
 │   ├── agents/_catalog.yaml
 │   └── agents/<agent>/instructions.md
-├── Apps-Brain/                    ← Applications          — 2 active / 9 catalogued (flat)
+├── Apps-Brain/                    ← Applications          — 3 active / 9 catalogued (flat)
 │   ├── agents/_catalog.yaml       ← ⚠ non-goals live here — "app" is a magnet domain
 │   └── agents/<agent>/instructions.md
 ├── Database-Brain/                ← Azure databases       — 4 active   (nested by domain)
@@ -127,6 +127,7 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | Synapse → Fabric migration | `migration-synapse-agent` | Fabric |
 | App **backend running inside Fabric** (Rayfin, Replit × Fabric) | `fabric-apps-agent` | **Apps** |
 | **External** portal embedding Fabric (FastAPI + Power BI/RTI embed) | `operations-portal-agent` | **Apps** |
+| App **UI**: design system/tokens, `src/` layout, navigation, personas, seed-vs-live mode | `app-frontend-agent` | **Apps** |
 | Deploy Azure DB for PostgreSQL Flexible Server | `postgres-deploy-agent` | Database |
 | Oracle 21c XE source VM on Azure | `oracle-source-vm-agent` | Database |
 | Oracle → PostgreSQL via **Ora2Pg / DMS** (CLI, scriptable) | `oracle-to-postgres-migration-agent` | Database |
@@ -158,6 +159,8 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | `pixel-design-agent` vs `testing-agent` | Pixel = Fabric-report layout rules; testing = generic pytest framework |
 | `fabric-apps-agent` vs `extensibility-toolkit-agent` | Both build UI-ish things, different consumer: `fabric-apps` (Apps) is **our application**; `extensibility-toolkit` (Fabric) is a **workload extending the Fabric portal itself**, published to the Workload Hub |
 | `fabric-apps-agent` vs `operations-portal-agent` | Same brain, opposite runtime: apps run **inside** Fabric on OneLake; portal is an **external** app that embeds/proxies Fabric |
+| `app-frontend-agent` vs `pixel-design-agent` | Both are layout, different artifact: frontend = a **web app** surface (React/Tailwind, routes, tokens); pixel-design = a **Power BI report** canvas. A report embedded in an app stays pixel-design's artifact |
+| `app-frontend-agent` vs `fabric-apps-agent` | Same app, two halves: frontend owns what the user sees and how `src/` is layered; fabric-apps owns Rayfin, the data model and the deploy |
 | Apps-Brain vs Fabric-Brain / Foundry-Brain | Apps **consumes** — it embeds a report, proxies a Data Agent, calls a Foundry endpoint. It never mutates their artifacts; any change is a handoff to the owning agent |
 | Migration agents vs `lakehouse`/`orchestrator` | Migration agents own **source→Fabric translation**; the others own the actual item creation |
 | `foundry-orchestration-agent` (Foundry) vs `project-orchestrator-agent` (Meta) | Foundry one orchestrates **agents at runtime**; Meta one orchestrates the **build** of a project across brains |
@@ -201,7 +204,7 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 | 08-migration | `migration-databricks-agent` | Databricks → Fabric — `dbutils`→`notebookutils`, UC→Lakehouse, DBFS→OneLake |
 | 08-migration | `migration-synapse-agent` | Synapse → Fabric — phased, `mssparkutils`→`notebookutils`, SQL Pool→Warehouse |
 
-### Apps-Brain — 2 active / 9 catalogued · `Apps-Brain/agents/<agent>/instructions.md`
+### Apps-Brain — 3 active / 9 catalogued · `Apps-Brain/agents/<agent>/instructions.md`
 
 > **The cut:** the question is *"I am building an application"*. The **runtime** — Fabric App item,
 > external portal, Azure-hosted — is the first routing decision **inside** this brain, not a brain
@@ -222,7 +225,7 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 | 02-identity | `app-identity-agent` 🟡 | App vs delegated vs managed identity, Entra registration + consent, OBO, token cache, passthrough |
 | 03-embedding | `app-embedding-agent` 🟡 | Power BI app-owns-data + RLS, Fabric Embed for RTI tiles, direct Kusto, CSP/CORS, silent renewal |
 | 04-intelligence | `app-intelligence-agent` 🟡 | Chat proxy to a Fabric Data Agent **or** a Foundry agent — threads, streaming, citations, MCP in-app |
-| 05-frontend | `app-frontend-agent` 🟡 | Persona-aware navigation, live views, design system + theming, accessibility |
+| 05-frontend | `app-frontend-agent` 🟢 | Dual-mode (seed vs live) architecture, four-layer `src/` split, design system as a token file, single route+nav manifest, personas, accessibility |
 | 06-operations | `app-observability-agent` 🟡 | App Insights front-to-back, correlating a user action through the proxy to the platform call |
 | 06-operations | `app-delivery-agent` 🟡 | Build/container pipelines, environment promotion, secrets at runtime, IaC for the app's resources |
 

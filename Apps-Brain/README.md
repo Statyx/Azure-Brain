@@ -7,7 +7,7 @@
 ![Status](https://img.shields.io/badge/status-bootstrap-yellow?style=for-the-badge)
 ![Brain](https://img.shields.io/badge/brain-Apps-teal?style=for-the-badge)
 ![Scope](https://img.shields.io/badge/scope-Runtime_%7C_Identity_%7C_Embedding_%7C_Intelligence-orange?style=for-the-badge)
-![Agents](https://img.shields.io/badge/agents-2_active_%2F_8_catalogued-yellow?style=for-the-badge)
+![Agents](https://img.shields.io/badge/agents-3_active_%2F_9_catalogued-yellow?style=for-the-badge)
 
 ---
 
@@ -112,7 +112,7 @@ off to the owning agent for any change.
 - 🟡 `app-intelligence-agent` — chat proxy to a Fabric Data Agent **or** a Foundry agent, threads, streaming, citations, tool-call surfacing, MCP in-app, cost control
 
 ### 05 — Frontend
-- 🟡 `app-frontend-agent` — persona-aware navigation, live views, design system and theming, accessibility
+- 🟢 [`app-frontend-agent`](agents/app-frontend-agent/README.md) — dual-mode (seed vs live) architecture, four-layer `src/` split, design system as a token file, single route+nav manifest, personas, accessibility
 
 ### 06 — Operations
 - 🟡 `app-observability-agent` — App Insights across front and back, correlating a user action through the proxy to the platform call

@@ -2,9 +2,9 @@
 # The application layer that CONSUMES the platform brains — runtime, identity, embedding,
 # in-app intelligence, frontend, operations.
 # Part of Azure-Brain umbrella (see ../../README.md)
-# Status: 2 active of 9 — remaining agents declared as planned, implemented on demand
+# Status: 3 active of 9 — remaining agents declared as planned, implemented on demand
 # Layout: FLAT (agents/<agent>/) like Fabric-Brain, Meta-Brain and Foundry-Brain
-# Last updated: 2026-08-04
+# Last updated: 2026-08-27
 
 # ---------------------------------------------------------------------------
 # THE CUT
@@ -79,8 +79,8 @@ domains:
     description: The human-facing surface — layout, live views, accessibility, branding
     agents:
       - name: app-frontend-agent
-        purpose: "App frontend conventions — persona-aware navigation, live/streaming views, SVG and canvas visuals fed by direct queries, design system and theming, accessibility and contrast, responsive behaviour"
-        status: planned
+        purpose: "App frontend conventions — the dual-mode (deterministic seed vs live Fabric) architecture, four-layer src split (app/backend/services/data), design system as a token file rather than a component library, single route+nav manifest, persona/role context, screen specs, accessibility floor"
+        status: active
 
   06-operations:
     description: Running the app after it ships
@@ -115,3 +115,10 @@ domains:
 # - app-delivery-agent vs cicd-fabric-agent (Fabric-Brain): app-delivery ships the APPLICATION
 #   and its own Azure resources; cicd-fabric owns Fabric Git integration and deployment pipelines
 #   for Fabric items (including the App item's Fabric-side lifecycle).
+# - app-frontend-agent vs pixel-design-agent (Fabric-Brain): both care about layout, different
+#   artifact. app-frontend owns a WEB APP surface (React/Tailwind, routes, tokens, personas);
+#   pixel-design validates a POWER BI REPORT canvas before deploy (visual bounds, overlaps,
+#   font sizing). A report embedded in an app is still pixel-design's artifact.
+# - app-frontend-agent vs fabric-apps-agent: same app, different half. app-frontend owns what the
+#   user sees and how src/ is layered; fabric-apps owns Rayfin, the data model and the deploy.
+#   Neither duplicates the other's surface.
