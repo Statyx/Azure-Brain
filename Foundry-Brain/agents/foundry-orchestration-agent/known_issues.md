@@ -166,6 +166,95 @@ Agent version counts in the high double and triple digits were observed on a lab
 pruning. Every re-run of a creation script is a release. Before demoing, verify which version is
 **published**.
 
+### `a2a_preview` and `file_search` do not coexist on one agent
+
+**Symptom:** a supervisor given an A2A tool for figures **and** `FileSearchTool` for a document
+corpus deploys cleanly, and then **never routes to A2A**. It answers every question, including
+plainly quantitative ones, out of the corpus.
+**Isolation:** three runs, same instructions, same question, only the tool list changing.
+`a2a_preview` alone → fires, correct answer. `a2a_preview` + `file_search` → A2A never fires,
+a dozen-plus `file_search` calls instead. Adding `tool_choice="required"` → **still**
+`file_search`.
+**Cause:** `file_search` describes its own purpose to the model. An A2A tool surfaces only under
+its **connection name**, which says nothing about what it fronts. The model picks the tool it
+can read.
+**Fix:** naming the A2A tool in the prompt did **not** work (two attempts). The fix is
+architectural — expose the corpus over A2A **as well**, so both tools are the same nature and
+are told apart by name only.
+**Status:** tenant-observed, 2026-08.
+
+### `Failed to fetch agent card: 400` — reads as a permission fault, is not one
+
+Confirms the doc-sourced trap above **in a tenant**, with the real error text. An agent declared
+with `protocols: [a2a]` but **no `agent_card`** is reachable and unusable: the caller fails at
+invoke with `Failed to fetch agent card: 400`. Every instinct says RBAC; nothing is wrong with
+RBAC. Write the card, and **never overwrite an existing one** — it may have been hand-tuned.
+Also: **never set `agent_card_path`.** Foundry resolves the card and negotiates the protocol
+version itself; setting it is actively harmful.
+**Status:** tenant-observed, 2026-08.
+
+### Read and write the agent endpoint as raw JSON — the SDK drops `protocols`
+
+`AgentEndpointConfig` has **no `protocols` field**, so `agent.as_dict()` returns `None` for a
+block the REST API returns in full. Round-tripping through the SDK model therefore **silently
+deletes** `protocols` — disabling `responses` and breaking the front door you just built.
+Merge-patch also **replaces arrays**: re-list every protocol, or you turn one off.
+`api-version` for the Agents API is the literal string **`"v1"`** — a date-shaped value returns
+400 and reads as a broken route. (ARM connections use a dated version; the two are not the same.)
+**Status:** tenant-observed, 2026-08.
+
+### A connection is not validated at creation — only at invoke
+
+A connection pointing at a `.invalid` host was accepted with **HTTP 200**. Creation success says
+nothing about reachability, so a broken target surfaces much later, inside an agent run, as a
+tool failure. Do not treat a created connection as a working one.
+**Status:** tenant-observed, 2026-08.
+
+### Verify routing by connection NAME, never by tool type
+
+Every A2A subordinate emits the same item type (`a2a_preview_call`), so **the type no longer
+identifies which one ran** — only `name` does. A check written on the type alone passes happily
+while the supervisor asks the document corpus for a number. Assert the expected tool fired
+**and** that the other did not.
+Corollary on observability: A2A hops are visible live — a streamed response emits an output-item
+event for the A2A call at roughly a fifth of total latency, then keepalives. But **only the
+supervisor's own hops stream**; whatever happens inside a subordinate arrives all at once with
+its output. Do not animate inner steps as if they had been observed.
+**Status:** tenant-observed, 2026-08.
+
+### A relay contract with no interpretation mandate produces an echo — and the fix is upstream
+
+**Symptom:** a supervisor built to relay subordinate figures faithfully reads as a bare
+pass-through. Users say it "just returns what the data agent said".
+**Cause, two layers.** The prompt only ever said what *not* to add (never recompute, never
+restate, never round) and never once asked for a reading. But the decisive cause was upstream:
+**no question in the calling app could reach the second subordinate**, so there was only ever one
+source, nothing to juxtapose, and no synthesis was possible. The prompt rewrite alone was
+cosmetic.
+**Fix:** before blaming a synthesis prompt, prove that two sources actually arrive.
+**Status:** tenant-observed, 2026-08.
+
+### Granting interpretation buys the opposite defect, and prose rules will not contain it
+
+**Symptom:** having asked for provenance and a reading, the answer becomes unusable the other
+way — the same facts stated twice (as a lead sentence *and* as bullets), seventeen verbatims
+across seven themes each followed by a gloss, and a closing paragraph about what to ask next.
+Every sentence true and sourced; the whole unreadable. The dominant grievance sat third of seven
+at the same visual weight as one voiced once — **a false picture assembled out of true
+quotations**.
+**Cause and fix — the transferable part:** a prose rule cannot beat a structural mandate. *"State
+the provenance in one place and nowhere else"* was already in the prompt and was disobeyed,
+because the **shape** section mandated two places: a lead carrying the scope, and a
+"what-the-data-measured" section. The model read a sentence and a bullet list as different
+presentations, not a repeat. **Deleting the second location** cut the answer by more than half in
+a single deploy. Same mechanism on volume: *"a couple of quotations"* was read **per theme**, so
+cap the **themes**, not the quotations.
+Adjectives ("sparingly", "concise", "operational") moved nothing on their own. Removing a
+mandate did. Also: never ask a reading to name "the question worth asking next" — that puts
+process talk exactly where the insight was expected.
+**Status:** tenant-observed across three deployed versions of the same prompt, measured on one
+fixed question, 2026-08.
+
 ---
 
 After your own first live attempt, add the real error text here. That delta is the whole point of

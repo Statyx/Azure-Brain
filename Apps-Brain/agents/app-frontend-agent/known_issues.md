@@ -155,3 +155,30 @@ check it before any deployment.
 are `a0000000-0000-4000-a000-00000000000a` shaped, secrets are read at runtime. See
 [`../../../PUBLIC_SAFETY.md`](../../../PUBLIC_SAFETY.md) and run
 `python Meta-Brain/tools/scan_public_safety.py <repo>` before pushing.
+
+
+---
+
+## 13. Rule 7 met a tenant: one of the auth implementations is dead code
+
+**Status** — this file's patterns were `[observed]` in a public reference repo but **nothing had
+been rebuilt end to end in our own tenant**. As of 2026-08 the stack has been: scaffolded,
+themed, deployed to a Fabric capacity, signed in against Entra, and used to execute DAX from the
+browser. The twelve entries above survived that contact. This is the delta.
+
+**What rule 7 looks like once it is real** — "one auth interface, N implementations, chosen once
+at bootstrap" holds, and the reason it matters is sharper than expected: on Fabric-hosted apps
+the host SDK's own session tokens **cannot call Fabric** (they are opaque and scoped to the app's
+services), so the SPA must run its own MSAL. The interface therefore has two implementations of
+which **one is dead code in production**, and that is the correct outcome, not a smell. Reading
+the SDK auth path first, because it looked like the native one, cost a full debugging cycle on
+code that never runs. Pick the implementation at bootstrap and follow only that branch.
+
+**Consequence for the dual-mode rule (rule 1)** — a missing auth env var does **not** raise. The
+"configured" flag simply evaluates false and the app ships with authentication *silently
+disabled*, which is indistinguishable from a working app until something asks for data. Entry 10
+above says the vars must be present at build time; the addition is that **their absence is
+silent**, so assert on the served bundle rather than on the build succeeding.
+
+**Cross-reference** — the deploy-side gotchas found in the same session live in
+[`../fabric-apps-agent/known_issues.md`](../fabric-apps-agent/known_issues.md) entries 6-15.
