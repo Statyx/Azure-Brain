@@ -490,3 +490,36 @@ POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
   about **which file classes get read by a human**. Treat every text-serialised
   design artifact as source: `.excalidraw`, `.drawio`, `.puml`, and any exported
   `.svg` carrying `<text>` elements.
+
+---
+
+## Brain Workflow Issues
+
+### 49. An IDE Auto-Commit Published Brain Edits Before the Test Gate Ran
+
+- **Symptom**: mid-write into the brain, `git status --short` returned nothing and
+  `git diff --stat` was empty, while the edited content was demonstrably present in
+  the working file. `git log` showed a commit that no one in the session had made:
+  `Save uncommitted changes`. `git rev-list --left-right --count origin/main...main`
+  returned `0 0` — it had also already been **pushed**.
+- **Cause**: an editor/agent-host background task periodically commits and pushes the
+  whole working tree. It is not aware of the `brain-learn` contract, so it stages
+  everything (not named files), and it fires **before** the mandatory test gate rather
+  than after it. Evidence that it is recurrent, not a one-off: two commits with the
+  identical generated message in the same history.
+- **Fix**: after editing and **before** narrating what you did, re-read the actual git
+  state instead of assuming your edits are still local — an empty `git diff` means
+  *already committed*, not *edit failed*. Then run the gate anyway: the suite and the
+  publication scanner still tell you whether what shipped is sound, and a green result
+  on an already-pushed tree is exactly as informative. If it is red, the fix is a new
+  commit forward, never a rewrite.
+- **Corollary**: do **not** `--amend` or force-push to repair the message once the
+  commit is on `origin` — a shared brain is not private history. Recover the lost *why*
+  in content instead: record the finding, and name the commit hash that carries it, so
+  the meaningless message stops mattering. Here `10cf2de` is the commit that introduced
+  Pattern F in `Foundry-Brain/orchestration_patterns.md`.
+- **Corollary**: an auto-committer silently voids two of `brain-learn`'s three
+  guarantees — named-file staging and no-push-on-red. Only append-only survives it,
+  because that is a property of the edit rather than of the commit. Design brain writes
+  so the *edit itself* is always safe to publish unreviewed.
+
