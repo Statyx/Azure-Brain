@@ -471,3 +471,22 @@ POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
   permanent on a public repo — `git push --force` does not remove it, the old
   SHA still resolves. Before handing work over:
   `git grep -niE "<terms>" \02e4baf2aa206b6f43f0c394a98fb43b0077b1f3 4812d4c0636c233b89f85e09f0879eb25c13281e e392bc680c45cebb624a6da823e6f4b52e1fd8f7 ea81c73925b128ddddd3fc6aec7591817746d285 12d711166ca874a204d8f780ebd0d028d48b445f 775247163369a09f028c8a0a02a64bfa25b1b6e0` must be empty.
+
+### 48. A Diagram Export Is Source Code, and It Names the Workspace Twice
+
+- **Symptom**: a leak guard failed a commit on `docs/architecture.excalidraw`,
+  lines 198 and 204 — a Fabric workspace labelled with the author's initials
+  (`XX - <Project>`), drawn weeks earlier and never re-read since.
+- **Cause**: an `.excalidraw` — like most design-tool saves — is **JSON, not an
+  image**. It is perfectly scannable, but it *reads* as an asset, so it drops out
+  of human review by habit while preserving every display name ever typed onto
+  the canvas.
+- **Fix**: rename inside the file, not around it. Excalidraw stores each label
+  **twice**, as `"text"` and as `"originalText"`, so a single-occurrence replace
+  leaves the name in the second field and the guard fails again on the next line.
+  Replace all occurrences, then re-parse the JSON to prove the file still loads.
+- **Corollary**: the `personal-workspace-prefix` shape rule worked exactly as
+  designed and caught this at commit time — the lesson is not about the rule but
+  about **which file classes get read by a human**. Treat every text-serialised
+  design artifact as source: `.excalidraw`, `.drawio`, `.puml`, and any exported
+  `.svg` carrying `<text>` elements.

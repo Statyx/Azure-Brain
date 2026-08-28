@@ -255,6 +255,82 @@ process talk exactly where the insight was expected.
 **Status:** tenant-observed across three deployed versions of the same prompt, measured on one
 fixed question, 2026-08.
 
+### The same prompt asked the user a question — one click into a demo
+
+**Symptom:** the supervisor answered a **canned suggestion from the calling app's own UI** with a
+clarifying question ("which reading of *at risk* do you mean?"), called no subordinate, and the app
+rendered it under its "unsourced answer" banner. On a prepared question, on stage, the agent replied
+with an intake form.
+**Cause:** the prompt's cure for ambiguity was *"ask the reader which reading they meant"*. That
+licence is permanently available and always cheaper than choosing, so the model took it — and a term
+with three defensible readings (a risk band, a score threshold, a lifecycle stage; 800 / 825 / 593
+customers, all correct) guarantees it fires. The ambiguity was real and correctly diagnosed; the
+**remedy** was the defect.
+**Fix:** replace the licence with a decision — name the criterion, take the widest actionable
+cohort, and **declare the reading inside the answer**. Nothing is lost: the reading is still stated,
+only the refusal is gone.
+**Transferable:** deleting an escape hatch is not done until a test asserts its **absence**. "Prefer
+X" leaves Y reachable, and a model under any pressure takes the cheaper branch. Grep the rendered
+instructions for the forbidden move and fail the build on it.
+**Status:** tenant-observed, 2026-08.
+
+### Cap the wrong unit and the verbosity moves — only a total cannot be re-oriented around
+
+**Symptom:** four consecutive prompt versions, each fixing the previous overrun, each obeyed to the
+letter, each producing an answer as long as the one before — once **more than twice** as long
+(8 591 characters, a fifty-row list, from a version whose only new rule was a per-line fact cap).
+**Cause:** every cap named a *local* unit and left a neighbouring one free. Cap the **themes** and
+quotations-per-theme absorb it. Cap the **layout** ("one line per record") and seven attributes move
+onto the line. Cap **facts per line** and the list grows to fifty rows. Cap facts *and* list length
+and each record sprouts **sub-bullets** — the same form in a third orientation.
+**Fix:** two moves together. Make the unit **countable** ("a line that names more than three things
+in total is over the limit", not "be concise" — adjectives moved nothing at any point), and add a
+**total**: the whole reply fits on one screen, about thirty lines, headings included. The total is
+the only constraint no layout routes around, and it must say what to sacrifice — cut records and cut
+themes, never the scope of a figure.
+**Evidence:** answer length went from 2 070–8 591 characters to **2 004–3 079** across six runs.
+**Corollary — duplication migrates rather than dies.** Suppressed at the provenance level it
+returned as identifiers printed in the lead *and* in the list, then a third time in the quotation
+section. Each individual removal was obeyed.
+**Status:** tenant-observed across five deployed versions of one prompt, 2026-08.
+
+### A prose rule cannot stop a model ending its turn early — `tool_choice` can
+
+**Symptom:** roughly **one turn in four** returned in ~6 s having called **nothing**, replying with
+its plan — *"I must first question the two sources separately"*, an echo of the routing rule read as
+a procedure to narrate. The calling app renders that as a one-line answer under its "unsourced"
+banner: indistinguishable from a broken deployment.
+**Cause:** routing instructions describe a sequence, and a sequence can be narrated instead of
+executed. An explicit prose rule against it ("announcing a call is not making it; call them now, in
+this turn") did **not** hold.
+**Fix:** `PromptAgentDefinition(..., tool_choice="required")`. Structural, not persuasive.
+**0 stalls in 6 runs**, both subordinates called every time.
+**Read this next to the `a2a_preview` / `file_search` entry above — same knob, opposite verdict.**
+There, `required` was powerless because a `file_search` was present to satisfy it; the model met the
+constraint with the wrong tool. Here every tool on the agent is a subordinate, so there is nothing
+to satisfy it *with* except the data. `required` fixes "called nothing"; it can never fix "called
+the wrong one".
+**SDK note:** `PromptAgentDefinition._attribute_map` is **empty** and `__init__` is
+`(*args, **kwargs)`, so introspection tells you nothing about which fields exist. The only way to
+know is to construct the object and read `as_dict()`. `tool_choice="required"` serialises.
+**Status:** tenant-observed, 2026-08.
+
+### Judge a prompt change on a batch — one run cannot tell you anything
+
+**Symptom:** two consecutive runs of the **identical** deployed version, on the identical question,
+returned 2 748 and 6 024 characters — one acceptable, one a regression. A third gave 2 070. A single
+probe "proves" whichever conclusion it happens to draw, and the next version is then built on it.
+**Fix:** re-ask the same question **at least five times** per version and report the spread, not a
+sample. This is what turned the sequence above from opinion into measurement.
+**Two harness traps that imitate a real regression:**
+- If the helper already returns extracted response items, calling the extractor **again** on its
+  result yields `[]` — which reads exactly like *"no subordinate fired"*, the same signal the app's
+  unsourced banner uses. A tooling bug and a genuine routing failure are indistinguishable from the
+  metric alone. Confirm against the answer text before believing either.
+- `tool_user_error` (HTTP 400, body linking the A2A auth troubleshooting guide) is **transient**: it
+  arrived once and the identical call succeeded on retry. Retry before diagnosing auth.
+**Status:** tenant-observed, 2026-08.
+
 ---
 
 After your own first live attempt, add the real error text here. That delta is the whole point of
