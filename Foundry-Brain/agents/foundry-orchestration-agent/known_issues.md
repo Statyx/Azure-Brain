@@ -5,6 +5,11 @@ Every real failure goes here. This file is what turns documentation into a brain
 **Convention:** one entry per issue. State the *symptom first* — that's what a future reader
 searches for. Mark whether the cause is confirmed against a tenant or inferred from docs.
 
+**If you are building rather than debugging**, the entries about what a supervisor *says* — the
+refusal, the length overruns, the plan-as-answer stall — have been distilled into a prescriptive
+form as **Pattern F, the interpreting supervisor**, in `Foundry-Brain/orchestration_patterns.md`.
+Start there; this file is the evidence behind it.
+
 ---
 
 ## Doc-sourced traps (not yet observed in a tenant)

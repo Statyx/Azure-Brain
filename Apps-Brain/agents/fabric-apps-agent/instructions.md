@@ -1,4 +1,6 @@
-![alt text](image.png)# Fabric Apps Agent — Application Backends on Microsoft Fabric (Rayfin)
+# Fabric Apps Agent — Application Backends on Microsoft Fabric (Rayfin)
+
+![Fabric Apps](image.png)
 
 > Scaffold, model, deploy, and govern **application backends that run directly
 > inside Microsoft Fabric** using **Rayfin** (open-source SDK + CLI) and the
@@ -62,6 +64,30 @@ npm create @microsoft/rayfin@latest    # scaffold a new project
 npx rayfin up                          # provision + deploy + run on Fabric
 ```
 
+### Install the authoritative skill before you build `[sourced]`
+
+Rayfin ships an **official agent-skills plugin** from the product repo. It is
+version-locked to the CLI, so it is fresher than this file will ever be. Install it
+first; treat it as authoritative on **SDK surface** (decorators, DAB config, storage,
+querying) and treat *this* agent as authoritative on **how it fits a Fabric solution**
+(routing, ownership boundaries, the known-issues list below).
+
+```bash
+copilot plugin marketplace add microsoft/rayfin
+copilot plugin install rayfin@rayfin-skills
+```
+
+Two skills exist, and the split matters:
+- **`rayfin-getting-started`** — the public router skill shipped by the plugin. It
+  orients, scaffolds via the CLI, then hands off.
+- **`rayfin`** — the *in-project*, version-locked skill. It is **not** in the public
+  plugin: the CLI scaffold writes it to `.agents/skills/rayfin/SKILL.md`. It only
+  exists **after** you scaffold, and it wins on SDK details.
+
+> Scaffolding has two shapes: `npm create @microsoft/rayfin@latest` (**create-rayfin**)
+> creates a **child directory** — `cd` into it. `rayfin init` scaffolds **in place** —
+> there is nothing to `cd` into. See `known_issues.md` #6 before trusting `rayfin init`.
+
 ### Package map `[verified]`
 
 | Package | Role |
@@ -78,6 +104,12 @@ npx rayfin up                          # provision + deploy + run on Fabric
 | `@microsoft/rayfin-lib` | Shared HTTP client / utilities |
 | `@microsoft/rayfin-mcp` | **Model Context Protocol** tooling (agent-friendly) |
 | `@microsoft/fabric-embedded-host` | PostMessage bridge + embedded-mode detection for Fabric iframes |
+| `@microsoft/rayfin-guide` | Cross-cutting builder guides for the platform |
+| `@microsoft/rayfin-docs` | Docs indexing + search library (backs the MCP/doc tooling) |
+| `@microsoft/rayfin-tools-common` | Shared utilities across the tools packages — not an app dependency |
+
+15 packages are published. The last three are **support tier**: you consume them
+transitively, you do not `npm install` them into an app.
 
 ### Templates & related repos `[verified]`
 - **Templates gallery**: `github.com/microsoft/awesome-rayfin`
@@ -97,6 +129,8 @@ npx rayfin up                          # provision + deploy + run on Fabric
 - **Entra ID** for sign-in; **Purview** policies (optional) carry through automatically.
 - Status: **Preview** (launched at Build, 2026-06-02). **No GA date** committed yet —
   flag this when positioning to customers. `[verified]`
+  Re-checked **2026-08-29**: still Preview on Learn + the Fabric "What's New" feed,
+  no GA commitment. The product repo is pushing daily, so re-verify before quoting.
 
 > If the **App item** doesn't appear in any workspace after enabling the setting,
 > it's almost always a **region** issue, not a config error. See `known_issues.md`.

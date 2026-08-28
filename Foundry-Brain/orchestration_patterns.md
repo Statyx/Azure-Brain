@@ -863,6 +863,69 @@ Ownership boundary, non-negotiable (umbrella rules 5 and 7): the Fabric Data Age
 **created and published** by `Fabric-Brain/agents/ai-skills-agent/`. Foundry-Brain attaches and
 calls it. Any change to the Fabric artifact is a **handoff**, not an edit.
 
+## Pattern F — the interpreting supervisor (the answer contract)
+
+Patterns A–E decide *which* agent gets called. None of them decide **what the supervisor says**
+once the answers come back. That is a separate design surface, and it is where an otherwise correct
+system fails in front of an audience: every figure right, every source cited, and the reply either
+unreadable or — worse — a question back.
+
+Derived over thirteen deployed versions of one supervisor (a Fabric data agent for the numbers and a
+document corpus for the verbatims, both over A2A), each measured against the live agent. **Start
+from the contract below instead of rediscovering it**; the sequence that produced it is logged in
+`agents/foundry-orchestration-agent/known_issues.md`.
+
+### The contract
+
+1. **Decide, never ask back.** When a term has several defensible readings, name the criterion, take
+   the widest actionable cohort, and **declare the reading inside the answer**. Never offer the
+   reader a choice: the licence to ask is permanently available and always cheaper than choosing, so
+   it wins — including on a question the user reached by clicking your own app's suggestion.
+2. **Relay figures verbatim, with their scope attached.** The supervisor recomputes nothing and
+   rewrites no number. Left free it will round "825 customers (bands High + Critical)" into
+   "800 customers", reintroducing one storey up the ambiguity the data layer just resolved.
+3. **State provenance in exactly one place.** Two mandated locations — a lead sentence *and* a
+   "what was measured" block — are read as two presentations, not as a repeat, and the model will
+   fill both. Delete the second location rather than adding a rule against duplication.
+4. **Give a countable limit and a total.** Adjectives ("concise", "sparingly") move nothing.
+   Countable limits work but only bind the unit they name, so the verbosity migrates to the
+   neighbouring one — themes, then facts per line, then list length, then sub-bullets under each
+   row. Only a **total** ("the whole reply fits on one screen, about thirty lines") cannot be
+   re-oriented around. Say what to sacrifice when it binds: cut records and themes, never the scope
+   of a figure.
+5. **Surface an empty retrieval; never retry until documents appear.** A retry loop manufactures
+   confidence the system does not have.
+6. **Carry no figure in the instructions themselves.** A grounded agent with a hardcoded fact is
+   worse than an ungrounded one, because it looks sourced. Worth a test that greps the rendered
+   prompt for digits.
+
+### The structural knobs — prose will not do these
+
+- **`PromptAgentDefinition(..., tool_choice="required")`** if the supervisor may end a turn having
+  called nothing (it narrates the routing rule as a plan, and the app renders that as a one-line
+  unsourced answer). A prose rule against it does not hold; this does.
+- **Only where the tool list is homogeneous.** `required` forces *a* call, never the *right* one —
+  with a `file_search` beside an A2A tool it is satisfied by the wrong tool. Make every tool the
+  same nature so they are told apart by name alone.
+- **Remove an escape hatch by asserting its absence**, not by adding a preference. "Prefer X"
+  leaves Y reachable.
+
+### How to know it works: measure, never sample
+
+Two consecutive runs of one deployed version, same question, returned 2 748 and 6 024 characters.
+A single probe "proves" whichever conclusion it draws, and the next version is built on it.
+
+Re-ask **the same question at least five times per version** and report the spread: answered vs
+stalled, which connections fired, answer length, latency. Cheap to build, and it is the only thing
+that separates a fix from a lucky draw. Two traps that imitate a regression: a helper that already
+extracts response items will return `[]` if you extract again — the same signal as "no subordinate
+fired"; and `tool_user_error` (HTTP 400) is transient, so retry before diagnosing auth.
+
+### Extending this pattern
+
+Each future improvement adds a numbered clause **and** the batch that justifies it. A clause with no
+measurement behind it is a preference, and preferences are what this pattern exists to replace.
+
 ## Design rules for the supervisor
 
 Derived from the mechanics above. These are the rules that decide whether a demo holds up live.
@@ -884,6 +947,12 @@ Derived from the mechanics above. These are the rules that decide whether a demo
 6. **Structured inputs over agent versions.** Values that vary per user or per environment
    (vector store IDs, MCP endpoints) belong in `structured_inputs`, overridden at runtime —
    not baked into a new agent version.
+7. **The answer contract is a design surface, not a polish pass.** Rules 1–6 make the right
+   sub-agent run; none of them make the reply usable. Budget for it, and start from Pattern F
+   above rather than deriving it again.
+8. **Judge every instruction change on a batch, never on one run.** Same version, same question,
+   twice the length — that is the normal spread, not a fluke. Without a repeat harness you are
+   tuning on noise.
 
 ## Open questions — resolve against the tenant, then record
 
