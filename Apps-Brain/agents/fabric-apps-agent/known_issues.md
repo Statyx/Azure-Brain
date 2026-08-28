@@ -306,6 +306,70 @@ one region against a workspace in another. Observed 2026-08.
 
 ---
 
+### 16. Sign-in works on localhost and breaks after deploy — the redirect URI is a chicken-and-egg
+
+**Symptom**: Entra returns a `redirect_uri` mismatch only once the app is hosted. Locally it
+was fine, so the auth config "obviously" works and the deploy gets blamed.
+
+**Root cause**: `rayfin.yml → services.auth.allowedRedirectUris` has to list the **deployed
+origin**, and that origin is only knowable *after* the first deploy. Rayfin mints it as
+`https://<slug>-<hash>-<region>.webapp.fabricapps.net`, where `<hash>` is assigned at
+provisioning time. You cannot pre-declare it and you cannot derive it.
+
+**Fix**: accept two passes. Deploy once to obtain the URL, add it to `allowedRedirectUris`,
+redeploy. Then keep **all three** origins listed permanently:
+
+```yaml
+allowedRedirectUris:
+  - http://localhost:5173
+  - http://127.0.0.1:5173          # a DIFFERENT origin to Entra — list both
+  - https://<slug>-<hash>-<region>.webapp.fabricapps.net
+```
+
+`localhost` and `127.0.0.1` are not interchangeable here: Entra matches the string, so a dev
+who opens the other one gets the same mismatch on a machine where it "works".
+
+**Evidence**: `rayfin.yml` of an app deployed to Sweden Central carrying exactly these three,
+after the first deploy failed sign-in with only the two local ones. Observed 2026-08.
+
+> Related but distinct: **#8** — redirect URIs are also *auto-appended* per item, so a rename
+> that creates a second AppBackend leaves the first item's URI behind on the wrong app.
+
+---
+
+### 17. `manifest.json → tokens[]` is how build-time values reach a static bundle — and it is extensible
+
+**Symptom**: the SPA needs Fabric IDs (workspace, item, portal URL) at runtime. The reflex is
+to hardcode them, or to add `VITE_*` variables and wire a second substitution mechanism.
+
+**Root cause**: Rayfin already has one. `manifest.json` declares placeholder tokens that the
+build substitutes into the emitted bundle. What is not obvious is that the array is **not a
+fixed Rayfin vocabulary** — a project can add its own:
+
+```jsonc
+"tokens": [
+  "__RAYFIN_API_URL__", "__RAYFIN_PK__",        // Rayfin's own
+  "__FABRIC_ITEM_ID__", "__FABRIC_WORKSPACE_ID__", "__FABRIC_PORTAL_URL__"
+]
+```
+
+**Fix**: declare the token in `manifest.json`, reference the placeholder in source, let the
+build replace it. One mechanism instead of two.
+
+**⚠️ Same blast radius as `VITE_*`**: substitution happens at **build**, into a bundle that is
+served publicly. A token is a *build-time constant in public source*, never a secret. See
+**#13** — everything inlined into the hosted bundle is public.
+
+**Adjacent**: point `staticHosting.buildCommand` at a **Fabric-specific script**
+(`npm run build:fabric`), not the plain dev build. That script is where the `rayfin env`
+prebuild step runs, so a build invoked by any other path ships unsubstituted placeholders.
+
+**Evidence**: `manifest.json` + `rayfin.yml` of a deployed app carrying three custom
+`__FABRIC_*` tokens alongside Rayfin's two, with `buildCommand: npm run build:fabric`.
+Observed 2026-08.
+
+---
+
 ## Positioning Cautions (Preview)
 
 - **No committed GA date** — never promise GA timelines to customers.

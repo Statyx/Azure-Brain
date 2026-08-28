@@ -88,6 +88,16 @@ Two skills exist, and the split matters:
 > creates a **child directory** — `cd` into it. `rayfin init` scaffolds **in place** —
 > there is nothing to `cd` into. See `known_issues.md` #6 before trusting `rayfin init`.
 
+**After scaffolding, the docs are version-locked to the project — query them, don't recall
+them.** The scaffold also writes an `AGENTS.md` and a `.mcp.json` registering a local
+`rayfin` MCP server (`npx -y @microsoft/rayfin-mcp start`). That server exposes
+`search_docs`, `get_doc`, `list_docs` and `discover_packages`, and it reads **this
+project's `node_modules`** — so its answers match the installed package versions rather
+than whatever the model remembers. Prefer it over recall for API details and examples.
+Fallback ladder when MCP is unavailable: `rayfin docs ...` from the project root, then
+`npx -y @microsoft/rayfin-cli docs ...`. Use `discover_packages` when the installed docs
+don't cover the topic.
+
 ### Package map `[verified]`
 
 | Package | Role |
