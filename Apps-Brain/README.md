@@ -93,11 +93,26 @@ off to the owning agent for any change.
 
 > [`agents/_catalog.yaml`](agents/_catalog.yaml) is the source of truth.
 > Status legend: 🟢 active (implemented) · 🟡 planned · ⚫ deprecated.
-> **Two agents are 🟢 today**, both carried over from Fabric-Brain with their production
-> history intact. The rest are written on demand, grounded against real work rather than
-> guessed from docs.
+> **Three agents are 🟢 today.** Two were carried over from Fabric-Brain with their production
+> history intact; `app-frontend-agent` was written against an app we shipped. The rest are
+> written on demand, grounded against real work rather than guessed from docs.
 
 ### 01 — Runtime
+
+> **Default runtime: the Fabric App (Rayfin).** Chosen for the simplification — one command
+> provisions database, Entra auth, Data APIs and hosting, and the data lands in OneLake in
+> place, so Power BI, notebooks and data agents read it with no pipeline and no copy. Start
+> there unless one of these is true:
+>
+> | Deviate when | Go to |
+> |---|---|
+> | The app must run outside Fabric, or there is no capacity to host it | `app-hosting-azure-agent` 🟡 |
+> | The centre of gravity is embedding — Power BI app-owns-data, RTI tiles, embed tokens | [`operations-portal-agent`](agents/operations-portal-agent/README.md) |
+> | The target region is unsupported at preview, or a GA commitment is required | see `fabric-apps-agent` → Prerequisites; Fabric Apps is **preview**, no committed GA date |
+>
+> The runtime choice does **not** change the frontend discipline: `app-frontend-agent`
+> Rules 1–8 and the [shell blueprint](agents/app-frontend-agent/app_shell_blueprint.md) apply
+> to all three.
 - 🟢 [`fabric-apps-agent`](agents/fabric-apps-agent/README.md) — **Fabric Apps (preview) via Rayfin**: scaffold → model → deploy an app backend (DB, Entra auth, Data APIs, hosting) with data landing in OneLake in place; Replit × Fabric path
 - 🟢 [`operations-portal-agent`](agents/operations-portal-agent/README.md) — **external operations portal** (FastAPI + static): Data Agent chat proxy, Power BI + RTI dashboard embed, portal-native live SVG views
 - 🟡 `app-hosting-azure-agent` — Container Apps / Static Web Apps / App Service: choosing, ingress, scale-to-zero, revisions

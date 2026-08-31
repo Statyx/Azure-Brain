@@ -42,7 +42,16 @@
 domains:
 
   01-runtime:
-    description: Where the application actually runs — the hosting model and its deployment path
+    description: >
+      Where the application actually runs — the hosting model and its deployment path.
+      DEFAULT: the Fabric App (Rayfin), chosen for the simplification — one command
+      provisions database, Entra auth, Data APIs and hosting, and data lands in OneLake
+      in place (no pipeline, no copy). Deviate only when the app must run outside Fabric
+      or there is no capacity (app-hosting-azure-agent), when the centre of gravity is
+      embedding Power BI / RTI (operations-portal-agent), or when the region is
+      unsupported at preview / a GA commitment is required (Fabric Apps is preview, no
+      committed GA date). The runtime choice does NOT change the frontend discipline:
+      app-frontend-agent Rules 1-8 and its shell blueprint apply to all three.
     agents:
       - name: fabric-apps-agent
         purpose: "Fabric Apps (preview) via Rayfin — scaffold/model/deploy app backends (DB, Entra auth, Data APIs, hosting), data in OneLake in place; Replit x Fabric vibe-coding path"

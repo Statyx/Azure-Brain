@@ -22,6 +22,10 @@ Use it when the app exposes **domain data** *and* an **assistant over that data*
 shape for a Fabric/Foundry-backed app. If there is no assistant, keep §2, §6 and §7 and drop the
 rest.
 
+**Runtime-neutral on purpose.** A Fabric App (Rayfin — the default runtime), an external portal
+and an Azure-hosted app render the same three surfaces. Nothing below changes because the hosting
+changed; a runtime switch is not a licence to re-decide the shell.
+
 Three surfaces, and no more until the domain demands one:
 
 | Surface | Role | Listed in nav |

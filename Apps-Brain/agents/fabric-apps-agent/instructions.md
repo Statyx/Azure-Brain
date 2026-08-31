@@ -157,6 +157,12 @@ transitively, you do not `npm install` them into an app.
 3. Walk the generated structure: data models, auth config, API definitions, app entry.
 4. Suggest `npx rayfin up` for the first deploy, or hand off to **Mode 2** to
    design the data model first.
+5. **Before laying out any screen**, load
+   [`../app-frontend-agent/app_shell_blueprint.md`](../app-frontend-agent/app_shell_blueprint.md)
+   and [`../app-frontend-agent/design_tokens.md`](../app-frontend-agent/design_tokens.md).
+   The scaffold gives you a backend and a blank frontend; the blueprint gives you the
+   screen shape with its defaults already decided. Skipping it is how the shell gets
+   re-derived — and re-derived wrong — once per app.
 
 **Anti-pattern**: don't hand-roll infra (DB, auth, API gateway) — Rayfin provisions
 it. If the user asks to "set up a database + auth + REST API on Fabric", that's a
@@ -301,6 +307,24 @@ When to choose which:
 - ❌ Treating Replit output as a sandbox demo → it deploys a **real** Fabric app.
 - ❌ Confusing this with **custom workloads** (iFrame SDK / Workload Hub) →
   that's `extensibility-toolkit-agent`; this agent owns **app backends** (Rayfin).
+
+---
+
+## Boundary with app-frontend-agent
+
+Rayfin scaffolds a backend **and a blank frontend**. This agent owns the backend half;
+it does not own what the screens look like.
+
+| Concern | Owner |
+|---------|-------|
+| Data model, auth, Data APIs, `rayfin.yml`, deploy, the App item | **fabric-apps-agent** (this) |
+| Screen shape, `src/` layering, tokens, route manifest, personas, the assistant rail | `app-frontend-agent` |
+
+> A Fabric App is a **hosting choice**, not a different frontend discipline. Everything in
+> [`../app-frontend-agent/instructions.md`](../app-frontend-agent/instructions.md) Rules 1–8
+> applies unchanged here — the dual-mode rule, the four layers, the token file, and the
+> [shell blueprint](../app-frontend-agent/app_shell_blueprint.md). Do not re-decide them
+> because the runtime changed.
 
 ---
 

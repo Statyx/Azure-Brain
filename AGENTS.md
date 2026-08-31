@@ -212,6 +212,13 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 > boundary. That is why `fabric-apps-agent` lives here: a Fabric App item is a hosting choice for
 > an app, the same way Container Apps is.
 >
+> **Default runtime: the Fabric App (Rayfin)** — one command provisions DB, Entra auth, Data APIs
+> and hosting, with data landing in OneLake in place. Deviate when the app must run outside Fabric,
+> when the centre of gravity is Power BI / RTI embedding, or when the region is unsupported at
+> preview. The runtime does **not** change the frontend discipline — `app-frontend-agent` Rules 1–8
+> and its [shell blueprint](Apps-Brain/agents/app-frontend-agent/app_shell_blueprint.md) apply to
+> all three. See [`Apps-Brain/README.md`](Apps-Brain/README.md) § 01 — Runtime.
+>
 > ⚠️ **"App" is a magnet domain.** The **non-goals** in
 > [`Apps-Brain/agents/_catalog.yaml`](Apps-Brain/agents/_catalog.yaml) are load-bearing — data
 > logic → Fabric-Brain, Fabric **workloads** → `extensibility-toolkit-agent`, agent **definition**
@@ -220,7 +227,7 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 
 | Domain | Agent | Purpose |
 |---|---|---|
-| 01-runtime | `fabric-apps-agent` | Fabric Apps (preview) via Rayfin — scaffold/model/deploy backends, data in OneLake; Replit × Fabric |
+| 01-runtime | `fabric-apps-agent` | **Default runtime.** Fabric Apps (preview) via Rayfin — scaffold/model/deploy backends, data in OneLake; Replit × Fabric. Hands the screen shape to `app-frontend-agent` |
 | 01-runtime | `operations-portal-agent` | External ops portal (FastAPI + static) — Data Agent proxy, Power BI + RTI embed, live SVG views |
 | 01-runtime | `app-hosting-azure-agent` 🟡 | Container Apps / Static Web Apps / App Service — choosing, ingress, scale-to-zero, revisions |
 | 02-identity | `app-identity-agent` 🟡 | App vs delegated vs managed identity, Entra registration + consent, OBO, token cache, passthrough |
