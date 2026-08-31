@@ -28,7 +28,7 @@ Each phase produces a deliverable. Each has a gate. Never proceed to the next ph
 
 ---
 
-## 7 Mandatory Rules
+## 9 Mandatory Rules
 
 ### Rule 1: Icons MUST use Playwright pipeline — never svglib/cairosvg
 - FabricToolset SVGs contain gradients that only render correctly with a browser engine

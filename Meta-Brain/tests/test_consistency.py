@@ -25,7 +25,7 @@ import re
 
 import pytest
 
-from conftest import ROOT
+from conftest import ROOT, all_agent_dirs
 
 # Files that legitimately describe the superseded format. They document Legacy
 # PBIX for maintaining reports already shipped in it, so "use Legacy" is correct
@@ -157,3 +157,177 @@ class TestAsyncPatternCompleteness:
         assert "allow_redirects" in api, (
             "fabric_api.md documents async polling without allow_redirects=False — "
             "that guard is what prevents the SSL-read hang")
+
+
+# --------------------------------------------------------------------------
+# Agent README summary counts
+# --------------------------------------------------------------------------
+# A README is a *summary* of the agent, and an agent reading only the summary
+# must not get a smaller contract than the authoritative file gives.
+#
+# On 2026-08-31 `app-frontend-agent/README.md` announced "the 8 rules" in its
+# file table and, twelve lines below, "## The seven rules, in one line each"
+# followed by a list of seven — Rule 8 (the app shell blueprint) was invisible
+# to anyone who trusted the summary. The same audit found
+# `orchestrator-agent/README.md` claiming 10 documented issues against a
+# known_issues.md holding 12.
+#
+# Neither is catchable by review: the number is right *somewhere else* in the
+# same file, and nobody counts headings while reading a diff.
+#
+# LIMIT OF THIS GUARD, stated rather than implied: it can only verify a claim
+# when the target file numbers its entries in headings. A file whose rules live
+# in a plain numbered list is not covered — `test_the_guard_covers_the_known_cases`
+# below fails if the currently-covered files ever drop out, so the loss of
+# coverage is loud instead of silent.
+
+_WORD_NUMBERS = {
+    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
+    "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12,
+    "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16,
+    "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20,
+}
+
+# Which file a counted noun refers to.
+_CLAIM_TARGET = {
+    "rule": "instructions.md",
+    "rules": "instructions.md",
+    "pitfall": "known_issues.md",
+    "pitfalls": "known_issues.md",
+    "issue": "known_issues.md",
+    "issues": "known_issues.md",
+    "entry": "known_issues.md",
+    "entries": "known_issues.md",
+}
+
+_CLAIM_RX = re.compile(
+    r"(?<![\w.])(\d{1,3}|" + "|".join(_WORD_NUMBERS) + r")\s+"
+    r"(?:documented\s+)?"
+    r"(rules?|pitfalls?|issues?|entries|entry)\b",
+    re.I)
+
+# `## Rule 8 — …`, `## Issue #12: …`, `### 20. …`
+_NUMBERED_HEADING_RX = re.compile(
+    r"^#{2,3}\s+(?:issue\s*#?\s*|rule\s+)?(\d{1,3})\s*[.:\u2014\u2013-]", re.I)
+
+
+def _entry_count(path):
+    """How many numbered entries a file actually holds, or None if unverifiable.
+
+    Uses the highest index rather than the number of matches: a file that
+    retires entry 7 but keeps 1-12 still documents twelve, and a README saying
+    so is right.
+    """
+    if not path.exists():
+        return None
+    indices = [
+        int(m.group(1))
+        for line in path.read_text(encoding="utf-8", errors="ignore").splitlines()
+        if (m := _NUMBERED_HEADING_RX.match(line))
+    ]
+    return max(indices) if indices else None
+
+
+def _claims(readme):
+    """(line no, claimed count, target filename, raw line) for verifiable claims.
+
+    A bare number near a noun is not a claim about a file. It counts only when
+    the line names the matching file — a table row like
+    `| known_issues.md | 20 documented pitfalls |` — or when it is a heading,
+    which is a section title *about* that set. That keeps prose such as
+    "Top 3 issues by frequency:" out, since it names neither.
+    """
+    out = []
+    for n, line in enumerate(
+            readme.read_text(encoding="utf-8", errors="ignore").splitlines(), 1):
+        for m in _CLAIM_RX.finditer(line):
+            raw, noun = m.group(1).lower(), m.group(2).lower()
+            target = _CLAIM_TARGET[noun]
+            if target not in line and not line.startswith("#"):
+                continue
+            count = _WORD_NUMBERS.get(raw) or int(raw)
+            out.append((n, count, target, line.strip()))
+    return out
+
+
+_AGENT_READMES = sorted(
+    d / "README.md" for d in all_agent_dirs() if (d / "README.md").exists())
+
+# A file may also miscount *itself*: pptx-builder-agent's instructions.md carried
+# `## 7 Mandatory Rules` above Rule 1 … Rule 9. Same defect, one file instead of two.
+_SUMMARY_FILES = sorted(
+    d / name
+    for d in all_agent_dirs()
+    for name in ("README.md", "instructions.md")
+    if (d / name).exists())
+
+
+class TestAgentSummaryCounts:
+    """A stated count of rules or issues must match the file it summarises."""
+
+    @pytest.mark.parametrize(
+        "doc", _SUMMARY_FILES,
+        ids=[str(p.relative_to(ROOT)).replace("\\", "/") for p in _SUMMARY_FILES])
+    def test_counts_match_the_authoritative_file(self, doc):
+        for lineno, claimed, target, line in _claims(doc):
+            actual = _entry_count(doc.parent / target)
+            if actual is None:
+                continue          # target does not number its entries — see LIMIT above
+            assert claimed == actual, (
+                f"{doc.relative_to(ROOT)} L{lineno} claims {claimed} "
+                f"but {target} documents {actual}:\n  {line}\n\n"
+                "Update the summary — an agent that reads only the summary would "
+                "act on the smaller contract. Do not renumber the source file to "
+                "match the summary.")
+
+    def test_the_guard_covers_the_known_cases(self):
+        """Guard the guard: the two files audited on 2026-08-31 stay covered."""
+        for rel, target in [
+            ("Apps-Brain/agents/app-frontend-agent", "instructions.md"),
+            ("Apps-Brain/agents/app-frontend-agent", "known_issues.md"),
+            ("Fabric-Brain/agents/orchestrator-agent", "known_issues.md"),
+        ]:
+            agent = ROOT / rel
+            assert _entry_count(agent / target) is not None, (
+                f"{rel}/{target} no longer numbers its entries in headings, so "
+                "the count guard silently stopped covering it. Restore the "
+                "numbered headings or narrow this test deliberately.")
+            claims = _claims(agent / "README.md")
+            assert any(t == target for _, _, t, _ in claims), (
+                f"{rel}/README.md no longer states a count for {target}. That is "
+                "allowed, but remove it from this list so the guard stays honest.")
+
+    def test_detector_catches_the_original_wording(self, tmp_path):
+        """The exact two defects found in the audit, plus the spelled-out form."""
+        (tmp_path / "instructions.md").write_text(
+            "## Rule 1 — a\n## Rule 2 — b\n## Rule 3 — c\n", encoding="utf-8")
+        (tmp_path / "known_issues.md").write_text(
+            "## 1. a\n## 2. b\n", encoding="utf-8")
+        assert _entry_count(tmp_path / "instructions.md") == 3
+        assert _entry_count(tmp_path / "known_issues.md") == 2
+
+        readme = tmp_path / "README.md"
+        readme.write_text(
+            "## The seven rules, in one line each\n"
+            "| `known_issues.md` | 10 documented issues |\n", encoding="utf-8")
+        found = {(c, t) for _, c, t, _ in _claims(readme)}
+        assert (7, "instructions.md") in found, "missed a spelled-out heading claim"
+        assert (10, "known_issues.md") in found, "missed a table-row claim"
+
+    def test_detector_ignores_prose_that_names_no_file(self, tmp_path):
+        """`Top 3 issues by frequency:` is a sample, not a total."""
+        readme = tmp_path / "README.md"
+        readme.write_text(
+            "See `instructions.md` -> **Common pitfalls**. Top 3 issues by frequency:\n"
+            "The agent applies 4 rules of thumb when sizing a visual.\n",
+            encoding="utf-8")
+        assert not _claims(readme), (
+            "a count that names neither the file it counts nor a section title "
+            "must not be read as a claim")
+
+    def test_highest_index_wins_over_match_count(self, tmp_path):
+        """A retired entry leaves a gap; the README may still say twelve."""
+        (tmp_path / "known_issues.md").write_text(
+            "## 1. a\n## 2. b\n## 12. l\n", encoding="utf-8")
+        assert _entry_count(tmp_path / "known_issues.md") == 12
+

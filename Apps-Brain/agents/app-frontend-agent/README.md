@@ -33,7 +33,7 @@ run with or without a tenant.
 | [`app_shell_blueprint.md`](app_shell_blueprint.md) | The three-surface screen shape to start from, with the defaults already chosen |
 | [`known_issues.md`](known_issues.md) | 20 documented pitfalls |
 
-## The seven rules, in one line each
+## The eight rules, in one line each
 
 1. **Dual mode is the architecture** — one env var switches seed ↔ live, and a missing live id
    falls back to seed wholesale.
@@ -43,9 +43,19 @@ run with or without a tenant.
 5. **Persona is a context** — role switcher is a demo affordance, never authorization.
 6. **Specify the screen before writing it** — YAML spec in `design/screens/`.
 7. **One auth interface, N implementations, chosen once** at bootstrap.
+8. **Start from the shell blueprint** — the three surfaces and their defaults are already
+   decided; spend the iteration budget on the domain, not on the shell.
+
+> Rules 1–7 govern the shape of the **code**. Rule 8 governs the shape of the **screens**, and
+> delegates to [`app_shell_blueprint.md`](app_shell_blueprint.md).
 
 ## Provenance
 
 Grounded in the public repo `EtienneSIG/Fabric_Fraud_analysis` (read 2026-08-27). Patterns are
 tagged `[observed]` (read in that source) or `[derived]` (our generalisation). **Nothing is
 marked verified** — no screen from this stack has been rebuilt end to end in our own tenant.
+
+[`app_shell_blueprint.md`](app_shell_blueprint.md) has a **second, independent source**: an app
+we shipped and then iterated on (2026-08-28 → 08-31). Its defaults are not style preferences —
+each was reached by shipping the alternative first and undoing it, and its latency figures were
+measured on that app, not estimated. `known_issues.md` entries 15–20 record what each one cost.

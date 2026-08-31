@@ -45,7 +45,7 @@
 | `notebooks.md` | Spark notebooks for CSV→Delta, transformations |
 | `monitoring.md` | Run tracking, error handling, retry patterns |
 | `pipeline_definitions.md` | Pipeline JSON schema, expression cookbook (15 real-world patterns), all activity types |
-| `known_issues.md` | 10 documented issues — includes Spark debugging walkthrough |
+| `known_issues.md` | 12 documented issues — includes Spark debugging walkthrough |
 | `workspace_deployment_recipe.md` | End-to-end workspace deploy — order, dependencies, per-step scripts |
 | `deployment_performance.md` | **Read when a deploy feels slow** — timing budget, adaptive polling, token/session cache, parallel graph, skipping Spark |
 | `templates/README.md` | **Template index** — what each template does, how to deploy, customization checklist |

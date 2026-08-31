@@ -42,7 +42,7 @@ Each phase has a **quality gate** — never skip to the next phase until the gat
 ## Files
 | File | Purpose |
 |------|---------|
-| `instructions.md` | **LOAD FIRST** — System prompt, 7 rules, pipeline phases, layout constants, code patterns |
+| `instructions.md` | **LOAD FIRST** — System prompt, 9 rules, pipeline phases, layout constants, code patterns |
 | `content_synthesis.md` | Phase 2: Project discovery → theme clustering → narrative building → YAML outline |
 | `icon_pipeline.md` | Phase 3: SVG→PNG conversion via Playwright, FabricToolset catalog, icon mapping |
 | `layout_patterns.md` | Phase 4: Reusable PPTX layout patterns — zones, cards, badges, pills, arrows |
