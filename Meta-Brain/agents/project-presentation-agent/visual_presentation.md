@@ -198,6 +198,56 @@ graph TD
 </p>
 ```
 
+### Native GitHub video player — the only form that plays inline
+
+GitHub builds a `<details>` + `<video>` player for **exactly one** form: a bare
+`https://github.com/user-attachments/assets/<guid>` URL, **alone on its own line**. It resolves
+that id to a signed `private-user-images.githubusercontent.com` source and writes the player
+itself. Nothing else plays — an mp4 committed to the repo has no id to expand, so it can only be
+offered as a download link beside the player.
+
+````markdown
+## Demo
+
+https://github.com/user-attachments/assets/<guid>
+
+> Full quality: **[`marketing/teaser-en.mp4`](marketing/teaser-en.mp4)** · [Version française](marketing/teaser-fr.mp4)
+````
+
+**Getting the asset URL — there is no API, and no `gh` command.** It is minted by the web upload
+widget: open *New issue* (or any comment box), use **"Paste, drop, or click to add files"**, pick
+the **local** file, wait for the upload — GitHub then writes the bare URL into the textarea. Copy
+that line and close the tab **without submitting**; the asset persists, the issue is not needed.
+Budget ~30 s of human action and plan for it, it cannot be automated. Limit ≈ 10 MB for video.
+
+**What does not work, and at which layer it is blocked:**
+
+| Attempt | What GitHub returns | Result |
+|---|---|---|
+| `[text](url)` markdown link on the attachment URL | a plain link | no player |
+| `<video src="https://raw.githubusercontent.com/…">` | tag **removed by the README sanitizer** | nothing renders |
+| `raw.githubusercontent.com/…/file.mp4` | `application/octet-stream` + `X-Content-Type-Options: nosniff` | browser refuses to decode |
+| `github.com/{o}/{r}/raw/…` · `blob/…?raw=true` | 302 → the same raw URL above | same |
+| Release asset via `gh release create` | 302 with `response-content-disposition=attachment` | forces a download |
+
+The blob page **does** play a committed mp4, and that is a false lead: it is GitHub's own
+client-side file viewer, not markdown. A README is static sanitized HTML with no JS — it can only
+hand the browser a URL, and the attachment route is the only one served as `video/mp4`.
+
+**Verify with GitHub's own renderer rather than guessing** — before committing:
+
+```powershell
+$body = @{ text = "https://github.com/user-attachments/assets/<guid>"; mode = "gfm"; context = "owner/repo" } | ConvertTo-Json -Compress
+[System.IO.File]::WriteAllText("$env:TEMP\md.json", $body, (New-Object System.Text.UTF8Encoding $false))
+gh api -X POST /markdown --input "$env:TEMP\md.json"      # expect <details> + <video>
+```
+
+and after pushing, on the rendered README itself:
+
+```powershell
+gh api /repos/{owner}/{repo}/readme -H "Accept: application/vnd.github.html+json"   # expect <video
+```
+
 ---
 
 ## Color Reference for Badges & Diagrams

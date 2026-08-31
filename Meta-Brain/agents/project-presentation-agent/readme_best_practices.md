@@ -68,6 +68,7 @@ Place badges immediately after the title. Group by category:
 
 | Type | Best for | Size guideline |
 |------|----------|---------------|
+| **Inline video player** | Demo teasers, product tours | mp4 ≤ 10 MB — bare `user-attachments` URL, see `visual_presentation.md` |
 | Demo GIF | CLI tools, UI apps | < 10 MB, 15-30 sec |
 | Screenshot | Dashboards, UIs | ≤ 800px wide, PNG |
 | Architecture diagram | Libraries, platforms | Mermaid (inline) or PNG |
@@ -283,3 +284,45 @@ a number starts ageing the moment it is typed.
 
 Anti-pattern: a badge such as `![Tests](.../badge/tests-39_passing-brightgreen)` is a hard-coded
 string dressed up as a live metric. It will keep reading `39` forever.
+
+---
+
+## Demo-repo README: a reader's page, not an engineering logbook
+
+A demo repo's README drifts in a predictable direction: every trap solved during the build gets
+appended to it, and after a few months the first screen a visitor meets is a changelog of someone
+else's debugging. The cure is a **split by audience**, not a trim:
+
+| File | Audience | Contents |
+|---|---|---|
+| `README.md` | someone deciding whether to care | what it does, a playing teaser, architecture, screens, quick start |
+| `docs/ENGINEERING-NOTES.md` | someone maintaining it | the traps, the failure modes, why it is built this way |
+
+Section order that survived review, hook first and machinery last:
+
+1. Title + one-line description
+2. Badges (6-8: CI, tests, license, platform, language)
+3. Synthetic-data disclaimer, if the data is generated
+4. **Hook** — the problem in one sentence, then the inline video player, then 3-4 lines of argument
+5. Repository structure (table: path → what lives there)
+6. How it fits together (Mermaid — see `### 9. Architecture`)
+7. Screens (2-3 screenshots, captioned with what to look at)
+8. The storyline / the data model
+9. Quick start
+10. Documentation index (links out to `docs/`)
+
+Rules that made the split hold:
+
+- **Extract programmatically, never retype.** Slice the old file at heading offsets and write both
+  outputs from the source text. Retyping silently drops paragraphs and paraphrases rules into
+  something subtly different.
+- **Check cross-references in both directions before cutting.** A sentence like "the screenshots
+  below the title" becomes false the moment its referent moves to the other file. Grep every
+  `#anchor` across all docs before removing a section.
+- **Screenshots hosted on GitHub's CDN are not in the repo.** Deleting a `user-attachments` URL
+  removes the only reference to that image — it cannot be recovered from git, because it was never
+  committed. Treat those URLs as content, not as identifiers, and pin them with a test.
+- **Lead with the video, not a screenshot.** A player is the only element that shows the product
+  moving without asking the reader to leave the page.
+- Prose describing what the reader is about to see ("the cockpit", "the approach") is skipped. If a
+  section exists only to introduce the next one, delete it.
