@@ -971,6 +971,33 @@ Measured on this pattern, clauses 7–8, supervisor v15: **two consecutive full 
 identifier in any prose body, no undigested ratio, block present on every answer. Latency 25–100 s
 per supervised answer.
 
+**`tool_user_error` is transient at a rate worth engineering for — measure it before shipping the
+question.** The rule above ("retry before diagnosing auth") was recorded from a single occurrence.
+Asking one question five times, unchanged, put a number on it: **4 answers and 1 failure**, the
+failure landing at **110 s** while the four successes ran **98, 106, 135 and 157 s**. So it is *not*
+a wall-clock ceiling — 135 s and 157 s completed — it is one A2A hop dropping intermittently, and
+the wall-clock at which it surfaces is meaningless. One in five is fine for a harness and
+unacceptable for a UI suggestion a demo user reaches in one click.
+
+**The status is useless, the code is the discriminator.** The payload is
+`{"error":{"type":"invalid_request_error","code":"tool_user_error",...}}` — HTTP **400** with the
+*type* of a malformed request. Any retry policy keyed on the status, or on `type`, will either
+retry genuinely broken requests forever or refuse to retry the one fault that clears on its own.
+Key on `code`.
+
+**One retry, not two.** Retries are priced in the pattern's own latency: at up to 157 s per answer,
+a third attempt can leave someone watching a spinner for six minutes — worse on stage than the
+failure it prevents. One retry takes a measured ~20 % failure rate to roughly 4 %. And the retry
+**must be announced** — the same reason a supervised answer needs a live elapsed counter, a silent
+four-minute wait reads as a crash.
+
+**The two-register rule of clause 7 applies to failures too.** An orchestrated call fails with a
+provider payload — a `resp_…` task id, an error type, a vendor troubleshooting URL — and printing it
+is the same defect as printing a column name inside an answer: correct, sourced, and unreadable by
+the person it is shown to. Give the failure a sentence, and fold the payload underneath exactly as
+the `SOURCE` block is folded. Evidence: the app shipped the raw JSON to a demo screen, which is what
+prompted this measurement.
+
 ### Extending this pattern
 
 Each future improvement adds a numbered clause **and** the batch that justifies it. A clause with no
