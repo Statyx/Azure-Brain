@@ -128,6 +128,7 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | App **backend running inside Fabric** (Rayfin, Replit × Fabric) | `fabric-apps-agent` | **Apps** |
 | **External** portal embedding Fabric (FastAPI + Power BI/RTI embed) | `operations-portal-agent` | **Apps** |
 | App **UI**: design system/tokens, `src/` layout, navigation, personas, seed-vs-live mode | `app-frontend-agent` | **Apps** |
+| **What the screens should look like** — app shell, entry page, assistant rail, chat surface | `app-frontend-agent` | **Apps** |
 | Deploy Azure DB for PostgreSQL Flexible Server | `postgres-deploy-agent` | Database |
 | Oracle 21c XE source VM on Azure | `oracle-source-vm-agent` | Database |
 | Oracle → PostgreSQL via **Ora2Pg / DMS** (CLI, scriptable) | `oracle-to-postgres-migration-agent` | Database |
@@ -225,7 +226,7 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 | 02-identity | `app-identity-agent` 🟡 | App vs delegated vs managed identity, Entra registration + consent, OBO, token cache, passthrough |
 | 03-embedding | `app-embedding-agent` 🟡 | Power BI app-owns-data + RLS, Fabric Embed for RTI tiles, direct Kusto, CSP/CORS, silent renewal |
 | 04-intelligence | `app-intelligence-agent` 🟡 | Chat proxy to a Fabric Data Agent **or** a Foundry agent — threads, streaming, citations, MCP in-app |
-| 05-frontend | `app-frontend-agent` 🟢 | Dual-mode (seed vs live) architecture, four-layer `src/` split, design system as a token file, single route+nav manifest, personas, accessibility |
+| 05-frontend | `app-frontend-agent` 🟢 | Dual-mode (seed vs live) architecture, four-layer `src/` split, design system as a token file, single route+nav manifest, personas, accessibility, **app shell blueprint** (the three surfaces, defaults pre-decided) |
 | 06-operations | `app-observability-agent` 🟡 | App Insights front-to-back, correlating a user action through the proxy to the platform call |
 | 06-operations | `app-delivery-agent` 🟡 | Build/container pipelines, environment promotion, secrets at runtime, IaC for the app's resources |
 

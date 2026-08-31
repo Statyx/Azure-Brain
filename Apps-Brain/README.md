@@ -112,7 +112,7 @@ off to the owning agent for any change.
 - 🟡 `app-intelligence-agent` — chat proxy to a Fabric Data Agent **or** a Foundry agent, threads, streaming, citations, tool-call surfacing, MCP in-app, cost control
 
 ### 05 — Frontend
-- 🟢 [`app-frontend-agent`](agents/app-frontend-agent/README.md) — dual-mode (seed vs live) architecture, four-layer `src/` split, design system as a token file, single route+nav manifest, personas, accessibility
+- 🟢 [`app-frontend-agent`](agents/app-frontend-agent/README.md) — dual-mode (seed vs live) architecture, four-layer `src/` split, design system as a token file, single route+nav manifest, personas, accessibility, **and the reusable app shell blueprint** — the three surfaces a data+assistant app converges on, with the defaults already decided
 
 ### 06 — Operations
 - 🟡 `app-observability-agent` — App Insights across front and back, correlating a user action through the proxy to the platform call

@@ -79,7 +79,7 @@ domains:
     description: The human-facing surface — layout, live views, accessibility, branding
     agents:
       - name: app-frontend-agent
-        purpose: "App frontend conventions — the dual-mode (deterministic seed vs live Fabric) architecture, four-layer src split (app/backend/services/data), design system as a token file rather than a component library, single route+nav manifest, persona/role context, screen specs, accessibility floor"
+        purpose: "App frontend conventions — the dual-mode (deterministic seed vs live Fabric) architecture, four-layer src split (app/backend/services/data), design system as a token file rather than a component library, single route+nav manifest, persona/role context, screen specs, the reusable three-surface app shell blueprint (entry / cockpit with a fixed assistant rail / unlisted diagnostic route) with its defaults already chosen, accessibility floor"
         status: active
 
   06-operations:
