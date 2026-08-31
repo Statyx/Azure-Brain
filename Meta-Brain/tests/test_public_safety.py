@@ -106,6 +106,13 @@ def test_no_warning_findings(findings):
      "fabric-sql-endpoint"),
     ('server = "abc123def456.datawarehouse.pbidedicated.windows.net"',
      "fabric-sql-endpoint"),
+    # ── added 2026-08-31: an identifier with no GUID in it ──
+    ('PROJECT_ENDPOINT = "https://mktg-fdry-prod.services.ai.azure.com/api/projects/p1"',
+     "azure-resource-hostname"),
+    ('"endpoint": "https://zv7k2contoso-openai.openai.azure.com/"',
+     "azure-resource-hostname"),
+    ('KV = "kv-prod-weu-7743.vault.azure.net"',
+     "azure-resource-hostname"),
 ])
 def test_scanner_detects(scanner, tmp_path, line, rule):
     f = tmp_path / "sample.md"
@@ -153,6 +160,19 @@ def test_scanner_detects(scanner, tmp_path, line, rule):
      "shields.io colour token"),
     ("Proven on the Live Event Operations and Network Operations demos",
      "the sanitised label must not itself be a finding"),
+    # ── cry-wolf protection for azure-resource-hostname (2026-08-31) ──
+    ('endpoint = "https://<resource>.services.ai.azure.com/api/projects/<project>"',
+     "the placeholder form is the shape this brain teaches"),
+    ("`{account}.services.ai.azure.com` is the Foundry data-plane host",
+     "the brace form, used in the same docs"),
+    ('vaultUri: "https://myvault.vault.azure.net/"',
+     "'my*' is the Azure docs' own example label"),
+    ('url = f"https://{KV_NAME}.vault.azure.net"',
+     "an f-string expansion is a read, not a literal"),
+    ('abfss://files@storageaccount.dfs.core.windows.net/path',
+     "a bare role word names a role, not an instance — 11 such lines exist"),
+    ('wasbs://container@account.blob.core.windows.net/',
+     "same, and it is how every ADLS example in this brain is written"),
 ])
 def test_scanner_stays_quiet(scanner, tmp_path, line, why):
     """Cry-wolf protection.

@@ -175,6 +175,26 @@ RULES: list[Rule] = [
          r"|datawarehouse\.pbidedicated\.windows\.net)",
          "BLOCK", "A real SQL analytics endpoint identifies the workspace and "
                   "the tenant. Use <sql_endpoint>.datawarehouse.fabric.microsoft.com."),
+    # ── added 2026-08-31: a resource hostname is an identifier with no GUID ──
+    # `real-guid` cannot see this: there is no 8-4-4-4-12 run in
+    # `myproject.services.ai.azure.com`, yet the label names a tenant resource
+    # as precisely as a GUID does. Found in a downstream project, where a real
+    # Foundry endpoint had been compiled into a bundle served *without*
+    # authentication and no rule flagged it.
+    Rule("azure-resource-hostname",
+         r"[A-Za-z0-9_<>{}$%*.\-]+\."
+         r"(?:services\.ai\.azure\.com"
+         r"|openai\.azure\.com"
+         r"|cognitiveservices\.azure\.com"
+         r"|search\.windows\.net"
+         r"|vault\.azure\.net"
+         r"|servicebus\.windows\.net"
+         r"|documents\.azure\.com"
+         r"|blob\.core\.windows\.net"
+         r"|dfs\.core\.windows\.net)",
+         "BLOCK", "A resource hostname names your tenant's resource even though "
+                  "it contains no GUID. Use a placeholder: "
+                  "<resource>.services.ai.azure.com, or read it from env."),
 ]
 
 
@@ -296,6 +316,37 @@ def _is_placeholder_host(match: re.Match) -> bool:
     return bool(_HOST_PLACEHOLDER_WORDS.match(left))
 
 
+def _is_placeholder_resource_host(match: re.Match) -> bool:
+    """True when an Azure resource hostname is documentation, not a real host.
+
+    Sibling of `_is_placeholder_host`, kept separate because the suffix list
+    differs and because that function hardcodes `.datawarehouse`. Same failure
+    mode to avoid: the brain *teaches* these hostnames, so a rule that flags
+    `<resource>.services.ai.azure.com` fires 20 times on a clean tree and gets
+    switched off — which protects nothing.
+
+    Also accepts `my*` / `your*` labels (`myvault.vault.azure.net`), which the
+    Azure docs use as example names, and bare role words (`account`,
+    `storageaccount`, `storage`) — a label that is only a common noun names a
+    role, not an instance. Real resource names carry a discriminator: digits, a
+    region or environment suffix, or a non-word run.
+    """
+    value = match.group(0)
+    left = re.split(r"\.(?:services|openai|cognitiveservices|search|vault|"
+                    r"servicebus|documents|blob|dfs)\.", value, maxsplit=1)[0]
+    if any(c in _HOST_PLACEHOLDER_CHARS for c in left):
+        return True
+    if _HOST_PLACEHOLDER_WORDS.match(left):
+        return True
+    if re.match(r"^(?:my|your|example|sample|contoso|zava|fabrikam)"
+                r"[a-z0-9-]*$", left, re.I):
+        return True
+    return bool(re.match(
+        r"^(?:storage|storageaccount|account|container|resource|project|"
+        r"foundry|namespace|vault|keyvault|kv|adls|datalake|onelake|"
+        r"cosmos|search|openai|aiservices|blobstorage)$", left, re.I))
+
+
 def scan_file(path: pathlib.Path, root: pathlib.Path,
               allowed: dict[str, str],
               rules: list[Rule] | None = None) -> list[dict]:
@@ -318,6 +369,9 @@ def scan_file(path: pathlib.Path, root: pathlib.Path,
                 if rule.name == "personal-workspace-prefix" and _is_arithmetic(line, m):
                     continue
                 if rule.name == "fabric-sql-endpoint" and _is_placeholder_host(m):
+                    continue
+                if (rule.name == "azure-resource-hostname"
+                        and _is_placeholder_resource_host(m)):
                     continue
                 findings.append({
                     "file": str(path.relative_to(root)).replace("\\", "/"),
