@@ -221,3 +221,144 @@ downloaded to disk and read with `ReadAllText` → `True`, 563 620 chars. No red
 **Wider rule** — a verification step is code, and it fails like code. When a check contradicts a
 cheaper, more direct signal (here: identical asset hashes), **suspect the check before acting on
 it** — acting on a false negative costs a redeploy; acting on a false *positive* ships a broken app.
+
+---
+
+## 15. Two navigations on one subject, and neither said what the app does
+
+**Symptom** (2026-08-30) — a landing page offered a guided arc (4 steps, all of them charts) *and*
+a roster of 4 assistants (all of them chat). Both led to the same product. Nothing on the page
+announced that the app does **data visualisation**: the arc's buttons read like report chapters,
+so the room expected slides and got a cockpit.
+
+**Cause** — the two lists were built at different times for different audiences and never
+reconciled. Each was internally coherent; side by side they split the subject and the visitor had
+to guess which one was the product.
+
+**Fix** — merge into a single 60/40 surface where **every row is a button**, and make the opening
+question typed `mixed` so both subordinates fire on the first click — the app demonstrates what it
+is instead of describing it.
+
+**Side effect worth expecting** — merging pages exposed that the merged-away pages hardcoded
+`bg-white` / `text-slate-900` instead of theme variables, so the dark theme became unreadable the
+moment they shared a shell. See entry 2: hardcoded light colours survive as long as nothing
+composes them.
+
+**Wider rule** — landing cards that count *canned questions* on a page whose real problem is
+*charts* measure the wrong thing. Count what the page is for.
+
+---
+
+## 16. A fraction is not a rail, and eight suggestions are a decision
+
+**Symptom** (2026-08-30) — a two-pane cockpit split `1.05fr / 1fr`. At every viewport the chat
+pane grew with the window, so the app read as "a chat that happens to have charts" rather than a
+cockpit with an assistant in it.
+
+**Fix** — pin the conversation to a fixed rail (`22rem`, `24rem` at `xl`) and let the content pane
+take the remainder. A fraction shares growth; a rail assigns it. Choose deliberately which pane is
+allowed to grow.
+
+**Second half — suggestions in two acts.** Eight suggestions at once is not generosity, it is a
+decision to make, and a live demo stalls on it. Showing **none** after the first answer is worse:
+it empties the rail exactly when the audience has just learned what a good question looks like.
+Ship **3 starters, then 3 chips** after each answer, minus what was already asked.
+
+**Related** — the markdown renderer stopped hardcoding `text-sm`; the container owns text size in
+one place. A component that sets its own size cannot be reused at another scale.
+
+---
+
+## 17. A cap over an ordered list does not sample the list, it truncates it
+
+**Symptom** (2026-08-30) — chart click-through openers were selected with `slice(0, 3)` over a
+registry that happened to list numeric questions first and graph questions last. Result: **no
+click could reach the ontology any more**. Nothing failed, no test went red, no error surfaced —
+the feature simply stopped covering a third of the product.
+
+**Cause** — `slice` was written when the registry was short and unordered. It silently became a
+filter on insertion order the day the registry grew.
+
+**Fix** — pick one per family (`pickVaried`), and **pin the coverage, not the count**: a test that
+asserts "3 openers" keeps passing through this bug; a test that asserts "each family is
+represented" fails the moment the truncation appears.
+
+**Related, same commit** — two registers for one click: a `prompt` that names table and column
+(because a phrase like "at risk" has several legitimate readings), and a `label` the room reads.
+Removing jargon from the label must not upgrade a *declared* step into an *animated* one: only the
+assistant's own hops are observable, so the platform-side step stays labelled as not measured
+here.
+
+**Wider rule** — any `slice`/`take`/`head` over a curated list is a coverage decision in disguise.
+Either the list is genuinely unordered, or the cap needs to be a selection.
+
+---
+
+## 18. Replaying recorded answers is defensible — but only under four conditions
+
+**Context** (2026-08-30) — a multi-agent supervisor answered suggested questions in **40–160 s**
+(mean 61.5 s, worst 141 s across 23 questions). That is unusable on stage. Answers were pre-captured
+and replayed after a short delay.
+
+**Why this is dangerous** — the brain's own rule is that *a grounded agent with hardcoded facts is
+worse than an ungrounded one, because it looks sourced*. A cache sits one layer above that rule and
+inherits it: replayed text still presents as a live answer.
+
+**The four conditions that make it defensible:**
+
+1. **Nothing is written by hand.** The capture script invokes the **live** supervisor and stores the
+   text, which subordinates actually fired, and the real elapsed seconds. It **refuses** to record
+   an answer where no subordinate fired. (0 of 23 were refused — the check is the point, not the
+   score.)
+2. **The replay declares itself.** The wait names it, the answer carries its capture date, and the
+   displayed duration is the **live** agent's, never the theatrical delay. Showing the fake delay
+   would be an unsupported claim about the system.
+3. **The question list is derived, not typed.** The freeze script walks the registry through the
+   **UI's own** selection function. Re-implementing that selection in the capture language would
+   drift silently from what users actually see.
+4. **A miss is fail-safe.** Lookup normalises case and whitespace **only**. Fuzzier matching would
+   serve a real answer to a *different* question — the one outcome worse than being slow.
+
+**Operational detail** — write the file after **each** answer, not at the end. The first capture run
+died at question 14; the 14 already written survived.
+
+---
+
+## 19. Unlisting a route costs nothing; deleting it costs a redeploy
+
+**Symptom** (2026-08-30) — a connectivity-check page was cluttering the navigation and the reflex
+was to delete it.
+
+**Why that is the wrong move** — it is the **only** screen that says *which link* in the chain
+broke, and it deliberately sits **outside** the auth guard, so it still answers when sign-in itself
+is what broke. Deleting it means a rebuild and a redeploy to get the diagnostic back — at the exact
+moment the app is already failing.
+
+**Fix** — remove it from the nav manifest, keep the route reachable by URL. A route nobody links to
+costs nothing on screen and stays one keystroke away.
+
+**Wider rule** — diagnostics pages are judged by what they cost when you need them, not by what
+they cost in the menu.
+
+---
+
+## 20. A build artifact reaches the browser — treat it as published
+
+**Symptom** (2026-08-30) — a generated topology JSON was compiled into a static bundle served
+**without authentication**, and it carried the real AI-service endpoint. No guard caught it: the
+repo's leak scanner matched GUIDs, and a hostname such as `<name>.services.ai.azure.com` contains
+no `8-4-4-4-12` run.
+
+**Fix** — **replace** the value with a placeholder rather than dropping the field, so the shape the
+consumer expects is preserved, and add a *shape* rule to the leak guard that rejects any concrete
+resource hostname in a shipped artifact.
+
+**A guard must not become the leak** — when the guard reports a hostname it caught, that message is
+the only place the value appears; it must not be echoed into a committed file or a log that ships.
+
+**Evidence** — the same gap existed in this brain: `Meta-Brain/tools/scan_public_safety.py` had a
+rule for Fabric SQL endpoints and none for `services.ai.azure.com`, `openai.azure.com`,
+`vault.azure.net` and friends. Fixed 2026-08-31 (rule `azure-resource-hostname`, 60 tests passing).
+
+**Wider rule** — anything the build compiles into a client bundle is public the moment it deploys.
+Config-shaped does not mean server-side.

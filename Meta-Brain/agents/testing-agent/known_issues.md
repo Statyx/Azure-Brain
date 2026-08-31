@@ -94,3 +94,68 @@ explicit edit, never with `git checkout`.
 
 **Detection**: a passing-test count that *drops* is the only signal. Record the expected
 count before and after; "0 failed" alone does not mean the suite still exists.
+
+---
+
+## 8. A Generator That Reads a Gitignored File Is Reproducible on One Machine
+
+**Symptom** (observed 2026-08-30 in a downstream project): a script generated a committed
+artifact from a local config. The config was **gitignored** — CI materialised the
+`config.example.yaml` instead, produced a different tree, and the "artifact matches generator
+output" test went red **by construction**, on every run, forever.
+
+**Why the test's own advice cannot fix it**: the failure message said *"re-run the generator"*.
+Doing that locally re-bakes the same private values and the artifact stays machine-specific. The
+advice is not just useless, it is a loop.
+
+**Cause**: the generator's input was the private file, so "reproducible" silently meant
+"reproducible where that file exists".
+
+**Fix**: read the **committed example** as the generator's input. Two problems close at once —
+the build is reproducible everywhere, and the published artifact can no longer name a tenant
+resource.
+
+**Detection**: regenerate in a temporary tree that has **no** local config and diff byte for byte.
+If the two differ, the generator has a hidden input.
+
+**Wider rule**: for any check of the form *"committed artifact == generator output"*, ask what the
+generator reads. If any input is gitignored, the check can only pass on the author's machine.
+
+---
+
+## 9. A Skipped Test Is Not a Passing Test
+
+**Symptom** (same session): a guard existed, was correct, and never ran — CI did not execute the
+step that produced its input, so the test **skipped**. The run was green and the summary line said
+so; the guard protected nothing for as long as it existed.
+
+**Cause**: `skip` is the honest thing to do when a precondition is missing, which is exactly why it
+is invisible. Nobody reads a skip count in a green run.
+
+**Fix**: add a gate that **fails when any test was skipped** in CI (locally, skips are fine). A
+skip in CI means either the precondition belongs in the pipeline, or the test does not belong in
+the suite. Both are decisions; neither should be made by silence.
+
+**Detection**: `pytest -q` prints `N passed, M skipped`. Treat a rising `M` the same way as a
+falling `N` (entry 7): both are the suite quietly shrinking.
+
+---
+
+## 10. Grep Is the Wrong Tool to Guard Source Code
+
+**Symptom** (same session): a guard had to assert that a generator reads `config.example.yaml`
+and never `config.yaml`. A text search for `config.yaml` fired on both files immediately — their
+own prose and docstrings discuss `config.yaml` at length, and `config.example.yaml` *contains*
+the substring `config.yaml`.
+
+**Fix**: parse the source with `ast` and inspect **string constants** only. The question being
+asked is about values the program uses, not about words the file contains; `ast` answers that
+question and a regex answers a different one.
+
+**Companion rule — a guard must not become the leak.** When the guard's job is to catch a secret
+or an endpoint, the caught value belongs in the **failure message only**. Never write it to a
+report file, a fixture, or a log that gets committed — otherwise the guard publishes exactly what
+it was built to stop.
+
+**Wider rule**: before writing a text-search guard, ask whether the same string can legitimately
+appear in prose. If it can, the guard needs a parser, not a better regex.
