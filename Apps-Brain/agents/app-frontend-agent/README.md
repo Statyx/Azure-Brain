@@ -28,9 +28,10 @@ run with or without a tenant.
 
 | File | Purpose |
 |---|---|
-| [`instructions.md`](instructions.md) | **LOAD FIRST** — the 7 rules, ownership, handoffs |
+| [`instructions.md`](instructions.md) | **LOAD FIRST** — the 8 rules, ownership, handoffs |
 | [`design_tokens.md`](design_tokens.md) | Token set, semantic colours, component recipes, dark mode, a11y |
-| [`known_issues.md`](known_issues.md) | 12 documented pitfalls |
+| [`app_shell_blueprint.md`](app_shell_blueprint.md) | The three-surface screen shape to start from, with the defaults already chosen |
+| [`known_issues.md`](known_issues.md) | 20 documented pitfalls |
 
 ## The seven rules, in one line each
 

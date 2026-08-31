@@ -15,8 +15,10 @@ and the **dual-mode (seed vs live) rule** that lets the same build demo without 
 
 1. This file — the conventions, in full.
 2. [`design_tokens.md`](design_tokens.md) — the exact token set, component recipes, dark-mode plan.
-3. [`known_issues.md`](known_issues.md) — before debugging anything.
-4. The runtime agent for your hosting model: [`../fabric-apps-agent/instructions.md`](../fabric-apps-agent/instructions.md)
+3. [`app_shell_blueprint.md`](app_shell_blueprint.md) — the screen shape to start from (Rule 8).
+   Read it **before** laying out screens, not after.
+4. [`known_issues.md`](known_issues.md) — before debugging anything.
+5. The runtime agent for your hosting model: [`../fabric-apps-agent/instructions.md`](../fabric-apps-agent/instructions.md)
    (Fabric App via Rayfin) or [`../operations-portal-agent/instructions.md`](../operations-portal-agent/instructions.md)
    (external portal).
 
@@ -30,6 +32,7 @@ and the **dual-mode (seed vs live) rule** that lets the same build demo without 
 | **Persona / role** | Role context, what each role may see, UI-side redaction |
 | **Dual mode** | `mock` vs `live` — deterministic seed data as a first-class mode |
 | **Screen specs** | One spec per screen in `design/screens/`, written before the TSX |
+| **Screen shape** | The three-surface shell an app starts from, and which parts are fixed |
 
 ## What This Agent Does NOT Own
 
@@ -276,10 +279,29 @@ Which credential each implementation should use, and the consent it needs, is
 
 ---
 
+## Rule 8 — Start from the shell blueprint, iterate on the domain `[observed]`
+
+An app that exposes **data plus an assistant** converges on the same three surfaces — an entry
+screen that demonstrates the product, a cockpit where content is fluid and the assistant is a
+**fixed rail**, and an **unlisted** diagnostic route. That shape is written down in
+[`app_shell_blueprint.md`](app_shell_blueprint.md), with the defaults already chosen: 60/40 entry,
+`22rem`/`24rem` rail, 3 starters → 3 chips, two registers per chart click, family-based selection.
+
+**Rule** `[derived]`: treat those defaults as **already decided** and spend the iteration budget on
+the domain. Each was reached by shipping the alternative first and undoing it —
+[`known_issues.md`](known_issues.md) entries 15–20 record what each one cost.
+
+Deviating is fine; deviating *by default* is the waste. The blueprint's §8 says which parts are
+fixed (changing them costs a redesign) and which are free.
+
+---
+
 ## Deliverable checklist
 
 Before handing a frontend off:
 
+- [ ] The three surfaces exist, and the diagnostic route is **not** in the nav manifest.
+- [ ] The cockpit uses a fixed rail, not a fraction; no component hardcodes a colour or text size.
 - [ ] `npm run dev` renders every screen with **no Fabric configuration at all** (mock mode).
 - [ ] `isMock()` appears in `backend/` only — a grep for it under `src/app` returns nothing.
 - [ ] One token file, imported once; no second copy.
