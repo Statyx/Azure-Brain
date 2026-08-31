@@ -898,6 +898,38 @@ from the contract below instead of rediscovering it**; the sequence that produce
 6. **Carry no figure in the instructions themselves.** A grounded agent with a hardcoded fact is
    worse than an ungrounded one, because it looks sourced. Worth a test that greps the rendered
    prompt for digits.
+7. **Two registers, and they never mix — provenance is *relocated*, not deleted.** Clause 3 removes
+   the duplicate; it does not say which of the two survivors to keep, and the model keeps the
+   sentence. Observed on the second turn of a live demo: a lead reading
+   `crm_customer_profile[risk_band] IN {"High","Critical"}`, then the same fields again as a
+   six-bullet form. Every word true, sourced, and unreadable to the marketing lead it was written
+   for. Split by **register**: the prose names the population *in the words the reader already
+   uses* and carries no identifier of any kind — no table, column or measure name, no bracketed or
+   backticked field, no DAX/GQL fragment, no `IN` / `>=`, no quoted literal value set. The
+   identifiers go to **one trailing block opening with a fixed ASCII marker** (`### SOURCE` — that
+   word, capitals, English, whatever language the answer is in), at most six one-fact lines, and
+   **excluded from the total of clause 4** so the block never competes with the answer for room.
+   The apparent contradiction with "a number without its scope is not an answer" is resolved by
+   declaring the plain-language description of the population **not to be a statement of
+   provenance**. Both rules then survive intact.
+   - The client folds that block behind a button, so nothing is lost to the analyst who wants it.
+     **Parse it tolerantly while mandating it strictly**: the split must never *hide* content.
+     Strip decoration and compare (`line.replace(/[#*_\s:\u2014-]/g,'').toLowerCase()`) rather than
+     enumerate forms — a single regex missed `**Source :**`, because French typography puts the
+     colon *inside* the bold markers. Split on the **last** match ("source" is an ordinary word),
+     and if either side comes out empty, return the whole reply as prose.
+8. **One figure, one unit, once.** A share reaches the supervisor as a ratio and it will print both
+   units: observed live, `0,0784742699514886, soit 7,84742699514886 %` — the same figure twice, each
+   at full float precision. Give the percentage and only the percentage, and drop the decimal tail
+   that records how the division landed. This is the **single** exception to clause 2, and it applies
+   to a share alone: a count, a sum or an amount is still relayed to its last digit. State the
+   exception's narrowness explicitly, or it swallows the rule that stops 825 becoming 800.
+   - Related, and the reason clause 8 was even reachable: **a share asked for under its own defining
+     filter returns the whole population.** Requesting an *at-risk share* while also filtering to the
+     at-risk bands makes numerator = denominator, and the reply says 100 % of the customer base is
+     churning. Arithmetically true, informationally empty, and catastrophic on stage. Forbid it by
+     name and say that a share coming back as the whole population *is the symptom*, to be re-asked
+     rather than reported.
 
 ### The structural knobs — prose will not do these
 
@@ -920,6 +952,24 @@ stalled, which connections fired, answer length, latency. Cheap to build, and it
 that separates a fix from a lucky draw. Two traps that imitate a regression: a helper that already
 extracts response items will return `[]` if you extract again — the same signal as "no subordinate
 fired"; and `tool_user_error` (HTTP 400) is transient, so retry before diagnosing auth.
+
+**A check phrased in the old contract measures the question, not the agent.** When clause 7 shipped,
+the harness kept failing on one probe — whose question was *"how many customers have a
+`churn_risk_score` above the threshold? **name the column and filter used**"*. It named the very
+identifier it then booked as a leak, so it guaranteed its own failure; and a second check in the same
+run was simultaneously counting that word as proof the scope had survived. Re-read every question
+against the new contract when a clause changes, and phrase probes **in the words a user would
+actually type**. The stronger test is the plain-language one: ask with no identifier, and require the
+identifiers to appear in the block anyway.
+
+**Apply a universal clause to every answer, not to a question of its own.** Clause 7 first got one
+dedicated probe, which passed while another answer in the same run leaked. A contract that holds for
+all replies must be asserted over all replies collected in the run — it costs nothing and it is the
+difference between "one question complied" and "the version complies".
+
+Measured on this pattern, clauses 7–8, supervisor v15: **two consecutive full batches at 8/8**, no
+identifier in any prose body, no undigested ratio, block present on every answer. Latency 25–100 s
+per supervised answer.
 
 ### Extending this pattern
 

@@ -182,3 +182,42 @@ silent**, so assert on the served bundle rather than on the build succeeding.
 
 **Cross-reference** — the deploy-side gotchas found in the same session live in
 [`../fabric-apps-agent/known_issues.md`](../fabric-apps-agent/known_issues.md) entries 6-15.
+
+
+---
+
+## 14. The served-bundle assertion that lies — a false negative that orders a redeploy
+
+**Status** — observed 2026-08, Windows / PowerShell 5.1, verifying a Fabric-hosted SPA.
+
+**Symptom** — entry 13's own advice is followed: fetch the served bundle and grep it for a string
+only the newest build can contain. The check reports the string **absent**. The obvious reading is
+that the deploy silently did not land, and the obvious next move is to rebuild and redeploy.
+
+**Cause** — the probe, not the deploy. `curl.exe -s <url>` piped into a PowerShell variable is
+decoded with the console code page, so a UTF-8 bundle comes back mangled and `.Contains()` returns
+false on strings that are physically present. Same family as `Invoke-WebRequest` mis-decoding UTF-8;
+`curl.exe` is usually recommended as the cure, and it is — only if the bytes never pass through the
+pipeline. The probe string here also contained an accented character (`requête`), which is what made
+the corruption reach the compared substring.
+
+**Fix** — two independent habits, and use both:
+
+1. **Download to a file, then read with .NET**, so the bytes are decoded once, as UTF-8:
+   `curl.exe -s -o $tmp <url>` then `[System.IO.File]::ReadAllText($tmp)`. Pass an **absolute**
+   path — .NET resolves relative paths against the process CWD, not the shell's location.
+2. **Probe with ASCII-only fragments.** Any accented character in the needle turns an encoding
+   problem into a content problem and hides it.
+
+**The cheaper check first** — compare the **asset hash in `index.html`** against the hash the local
+build just printed. It is pure ASCII, it needs no substring at all, and if the two match, the served
+file *is* the file that was built; a failing content probe after that can only be the probe. Here
+the local build emitted `main-<hash>.js` and the served page referenced the same `main-<hash>.js`,
+which was the tell that the content probe was wrong.
+
+**Evidence** — same URL, same asset: piped `curl.exe` → `.Contains('Source et requ')` = `False`;
+downloaded to disk and read with `ReadAllText` → `True`, 563 620 chars. No redeploy was needed.
+
+**Wider rule** — a verification step is code, and it fails like code. When a check contradicts a
+cheaper, more direct signal (here: identical asset hashes), **suspect the check before acting on
+it** — acting on a false negative costs a redeploy; acting on a false *positive* ships a broken app.
