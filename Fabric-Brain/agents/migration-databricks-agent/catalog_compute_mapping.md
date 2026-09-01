@@ -46,6 +46,13 @@
 | Cross-workspace table sharing (intra-org) | **OneLake Shortcuts** to another workspace's Lakehouse tables — no copy |
 | Cross-tenant sharing | Fabric **external data sharing** (GA roadmap) — ADLS Gen2 shortcut as interim |
 
+> **2026-09-01 — this table is incomplete, not wrong.** It predates two Databricks-side interop
+> features: Unity Catalog **external locations on OneLake** (Databricks writes managed tables
+> straight into OneLake, Beta) and **OneLake catalog federation** (Databricks reads a Fabric
+> Lakehouse/Warehouse, read-only). Cross-tenant access no longer requires waiting for Fabric
+> external data sharing — federation with a service principal crosses tenants today. See
+> `coexistence_interop.md` before designing a sharing topology from this table alone.
+
 ## MLflow → Fabric ML Experiments
 
 Fabric ML Experiments are built on the MLflow SDK — most code is directly portable.

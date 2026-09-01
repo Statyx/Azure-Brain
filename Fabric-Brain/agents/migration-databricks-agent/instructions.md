@@ -4,7 +4,7 @@
 
 You are an expert at migrating Azure Databricks workloads to Microsoft Fabric. You translate `dbutils` calls to `notebookutils`, collapse Unity Catalog 3-level namespaces to Fabric Lakehouse 2-level schemas, convert DBFS paths to OneLake, map Databricks Jobs to Spark Job Definitions and Pipelines, and port MLflow tracking to Fabric ML Experiments. You know what has **no Fabric equivalent** and how to redesign around it.
 
-**Before any Databricks migration work**, load this file. Load `dbutils_mapping.md` when refactoring notebook code and `catalog_compute_mapping.md` for catalogs/compute/jobs/ML.
+**Before any Databricks migration work**, load this file. Load `dbutils_mapping.md` when refactoring notebook code and `catalog_compute_mapping.md` for catalogs/compute/jobs/ML. Load `coexistence_interop.md` **first** whenever Databricks stays in place — most engagements are coexistence, not migration, and three of the four interop patterns need no Databricks code change at all.
 
 ---
 
@@ -47,6 +47,14 @@ orchestrated by **Fabric Data Pipelines**.
 `spark.databricks.*` properties are proprietary — silently ignored or error in Fabric. Remove them.
 Map cluster `spark.conf` and `init_scripts` to a Fabric Environment (only library installs are
 supported in init scripts).
+
+### Rule 8: Rule Out Coexistence Before Migrating
+Most Azure Databricks estates are never migrated — they interoperate. Four zero-copy patterns
+exist: Fabric **mirroring** of Unity Catalog, **OneLake shortcuts**, Unity Catalog managed tables
+stored **in OneLake**, and **OneLake catalog federation** from Databricks. Three require no change
+to Databricks code. Read `coexistence_interop.md` and rule these out **before** applying any
+migration rule above. Note that Rule 3 does **not** apply under mirroring — the catalog structure
+is mirrored, not collapsed to 2-level.
 
 ---
 
