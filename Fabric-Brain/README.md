@@ -150,7 +150,7 @@ run goes back into the model via the run sheet, so the next demo is cheaper.
 | File | Purpose |
 | --- | --- |
 | [`../agent_principles.md`](../agent_principles.md) | **Mandatory** — Operating principles, task management, quality standards |
-| [`../shared_constraints.md`](../shared_constraints.md) | 8 hard rules all agents follow (config-driven, idempotent, async-first) |
+| [`../shared_constraints.md`](../shared_constraints.md) | 9 hard rules all agents follow (config-driven, idempotent, async-first) |
 | [`fabric_api.md`](fabric_api.md) | REST API patterns, auth, async operations, LRO polling |
 | [`../known_issues.md`](../known_issues.md) | Gotchas & workarounds. See also [`../ERROR_RECOVERY.md`](../ERROR_RECOVERY.md) |
 | [`environment.md`](environment.md) | Python, Azure CLI, PowerShell setup |
@@ -221,7 +221,7 @@ graph LR
 | [`../Meta-Brain/SCENARIOS.md`](../Meta-Brain/SCENARIOS.md) | The demo model — pick a preset, or compose base + modules |
 | [`../Meta-Brain/run_sheet.example.md`](../Meta-Brain/run_sheet.example.md) | Run sheet to copy per demo — and the promotion rules that feed the brain |
 | [`../ERROR_RECOVERY.md`](../ERROR_RECOVERY.md) | HTTP error decision trees + retry code examples |
-| [`../shared_constraints.md`](../shared_constraints.md) | 8 hard rules every agent follows |
+| [`../shared_constraints.md`](../shared_constraints.md) | 9 hard rules every agent follows |
 | [resource_ids.example.md](resource_ids.example.md) | Template for your workspace/item IDs |
 | [environment.example.md](environment.example.md) | Template for your environment setup |
 

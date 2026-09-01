@@ -31,6 +31,14 @@ After creating or modifying any artifact, verify it exists and is valid before p
 ### 7. Follow Naming Conventions
 All Fabric artifacts must follow the naming patterns defined in `agents/project-orchestrator-agent/naming_conventions.md`. Consistent naming enables automation and cross-agent coordination.
 
+**Those patterns are defaults — confirm them before you create.** At the start of a project,
+derive the names, show them, and let the caller override any of them. Names are free to choose
+and expensive to change: once Git integration is on, a renamed item keeps its old directory
+forever; renaming a Rayfin app can create a *second* AppBackend; a Foundry agent's name **is**
+its API identifier and has no rename operation. Confirm workspaces, items, reports and agents.
+Do **not** ask about schemas, tables, columns or measures — apply the conventions there without
+a question. See `Meta-Brain/agents/project-orchestrator-agent/naming_conventions.md` § Rule 0.
+
 ### 8. Async-First API Pattern
 Every Fabric REST API creation and execution call returns HTTP 202. Always:
 - Use `allow_redirects=False` on POST requests

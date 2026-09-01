@@ -149,6 +149,13 @@ transitively, you do not `npm install` them into an app.
 
 ## Mode 1 — `Fabric app scaffold [name]`
 
+> **Agree on `[name]` before you scaffold.** Propose one, let the caller override it, and use
+> that exact string for `id:` *and* `name:`. `id:` — not `name:` — drives the AppBackend
+> displayName, and the CLI creates an item when the name is not found, so a later rename can
+> leave you with a **second** AppBackend and a second hosting URL to register
+> ([`known_issues.md` #8](known_issues.md)). This is the one name in the whole app that is
+> genuinely painful to change afterwards.
+
 1. Confirm prerequisites (Node, Fabric capacity, preview setting, region).
 2. Pick a starting point:
    - **Empty**: `npm create @microsoft/rayfin@latest` then name it `[name]`.

@@ -69,6 +69,14 @@ Examples:
   RetailAnalytics-Demo
 ```
 
+**The pattern is a proposal — confirm it before you create.** State the name you are about to
+use and let the caller override it, in the same message. A workspace is the cheapest name to
+agree on and one of the more annoying to change: once Git integration is on, a renamed item
+keeps its old directory forever (`../cicd-fabric-agent/known_issues.md` GI-005), so the whole
+tree carries a name nobody chose. One sentence now, not a cascade later. Full gate and the
+rest of the rename costs: `../../../Meta-Brain/agents/project-orchestrator-agent/naming_conventions.md`
+§ Rule 0.
+
 ### Rule 5: One Workspace per Environment
 Don't mix Dev and Prod items in the same workspace. Use deployment pipelines to promote between environments.
 

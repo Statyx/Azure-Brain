@@ -202,7 +202,12 @@ _CLAIM_TARGET = {
 
 _CLAIM_RX = re.compile(
     r"(?<![\w.])(\d{1,3}|" + "|".join(_WORD_NUMBERS) + r")\s+"
-    r"(?:documented\s+)?"
+    # One qualifier may sit between the number and the noun. Allow-listed rather
+    # than `\w+`, which would read "3 of the 12 issues" as a claim of three.
+    # Found the hard way: "8 hard rules" slipped through the first version of
+    # this regex, so the six stale shared_constraints.md claims were caught by a
+    # manual grep, not by the guard that exists to catch them.
+    r"(?:(?:documented|hard|mandatory|key|numbered|known)\s+)?"
     r"(rules?|pitfalls?|issues?|entries|entry)\b",
     re.I)
 
@@ -330,4 +335,106 @@ class TestAgentSummaryCounts:
         (tmp_path / "known_issues.md").write_text(
             "## 1. a\n## 2. b\n## 12. l\n", encoding="utf-8")
         assert _entry_count(tmp_path / "known_issues.md") == 12
+
+
+# ---------------------------------------------------------------------------
+# The same defect, one level up — cross-file counts
+# ---------------------------------------------------------------------------
+# 2026-09-01. `shared_constraints.md` grew a 9th rule ("Write As If Already
+# Public") and *six* files went on advertising "8 hard rules": AGENTS.md,
+# README.md, GETTING_STARTED.md, Fabric-Brain/README.md (twice) and
+# Database-Brain/README.md. The guard above saw none of them — they are not
+# agent files, and they do not name a *sibling*: they link across the tree.
+#
+# So the claim is resolved against the file the line actually names, and the
+# scan is widened to the umbrella and brain docs. A reader who trusts
+# "8 hard rules" stops at rule 8 and never applies rule 9, which is the whole
+# public-safety rule — the same failure mode, with a bigger blast radius.
+_LINKED_MD_RX = re.compile(r"[\w./-]+\.md")
+
+_UMBRELLA_DOCS = sorted(
+    set(ROOT.glob("*.md"))
+    | {p for p in ROOT.glob("*/README.md")}
+    | {p for p in ROOT.glob("*/*.md") if p.parent.name.endswith("-Brain")})
+
+
+def _cross_file_claims(doc):
+    """(line no, claimed, target path, actual, raw line) for cross-file claims.
+
+    Two conditions, both needed. The line must name a `.md` file that resolves
+    *and* numbers its entries in headings — otherwise there is nothing to check
+    against. And the count must sit **after** the link, because a description
+    follows the thing it describes. Without that second condition, the root
+    `known_issues.md` line "apply the four rules above — see
+    `.../report-builder-agent/known_issues.md`" reads as a claim that the linked
+    file holds four entries. It holds fifteen, and the sentence never said
+    otherwise.
+    """
+    out = []
+    for n, line in enumerate(
+            doc.read_text(encoding="utf-8", errors="ignore").splitlines(), 1):
+        names = [(m.group(0), m.end()) for m in _LINKED_MD_RX.finditer(line)]
+        if not names:
+            continue
+        for m in _CLAIM_RX.finditer(line):
+            raw = m.group(1).lower()
+            claimed = _WORD_NUMBERS.get(raw) or int(raw)
+            for name, end in names:
+                if end > m.start():
+                    continue          # the count precedes the link — not about it
+                target = (doc.parent / name).resolve()
+                actual = _entry_count(target)
+                if actual is None:
+                    continue
+                out.append((n, claimed, target, actual, line.strip()))
+                break
+    return out
+
+
+class TestCrossFileSummaryCounts:
+    """A count stated next to a link must match the file that link points at."""
+
+    @pytest.mark.parametrize(
+        "doc", _UMBRELLA_DOCS,
+        ids=[str(p.relative_to(ROOT)).replace("\\", "/") for p in _UMBRELLA_DOCS])
+    def test_counts_match_the_linked_file(self, doc):
+        for lineno, claimed, target, actual, line in _cross_file_claims(doc):
+            assert claimed == actual, (
+                f"{doc.relative_to(ROOT)} L{lineno} claims {claimed} but "
+                f"{target.relative_to(ROOT)} documents {actual}:\n  {line}\n\n"
+                "Update the summary. Do not renumber the source file to match it.")
+
+    def test_the_guard_covers_shared_constraints(self):
+        """Guard the guard: the six files audited on 2026-09-01 stay covered."""
+        assert _entry_count(ROOT / "shared_constraints.md") is not None, (
+            "shared_constraints.md no longer numbers its rules in headings, so "
+            "every 'N hard rules' claim pointing at it became unverifiable.")
+        advertised = [
+            d for d in _UMBRELLA_DOCS
+            if any(t == (ROOT / "shared_constraints.md").resolve()
+                   for _, _, t, _, _ in _cross_file_claims(d))]
+        assert len(advertised) >= 5, (
+            "the files that advertise a rule count for shared_constraints.md "
+            f"dropped to {len(advertised)}. That is allowed, but confirm it was "
+            "deliberate rather than a lost scan path.")
+
+    def test_detector_resolves_a_relative_link(self, tmp_path):
+        """The Fabric-Brain/README.md shape: `../shared_constraints.md`, 8 vs 9."""
+        (tmp_path / "shared_constraints.md").write_text(
+            "### 1. a\n### 8. h\n### 9. i\n", encoding="utf-8")
+        brain = tmp_path / "Some-Brain"
+        brain.mkdir()
+        doc = brain / "README.md"
+        doc.write_text(
+            "| [`../shared_constraints.md`](../shared_constraints.md) "
+            "| 8 hard rules every agent follows |\n", encoding="utf-8")
+        found = [(c, a) for _, c, _, a, _ in _cross_file_claims(doc)]
+        assert (8, 9) in found, "missed the stale cross-tree claim"
+
+    def test_detector_ignores_a_link_to_an_unnumbered_file(self, tmp_path):
+        """A prose file has no entries to count — say nothing rather than guess."""
+        (tmp_path / "notes.md").write_text("Some prose.\n", encoding="utf-8")
+        doc = tmp_path / "README.md"
+        doc.write_text("See [notes](notes.md) — 3 rules of thumb.\n", encoding="utf-8")
+        assert not _cross_file_claims(doc)
 

@@ -119,7 +119,7 @@ Azure-Brain/                       Umbrella repo
 ├── agent_principles.md            Operating principles (umbrella)
 ├── PUBLIC_SAFETY.md               Write-as-if-public rules (Zava, fake GUIDs, no secrets)
 ├── known_issues.md                Cross-cutting gotchas
-├── shared_constraints.md          8 hard rules every agent follows
+├── shared_constraints.md          9 hard rules every agent follows
 └── ERROR_RECOVERY.md              HTTP error decision trees
 ```
 

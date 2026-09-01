@@ -15,7 +15,7 @@
 | **Project Pipeline** | 12-step build sequence from config to deployment | Step-by-step execution plan |
 | **Industry Configuration** | JSON config templates that define an entire project | `project-config.json` |
 | **Agent Coordination** | Handoff protocol between specialized agents | Agent invocation order + dependency graph |
-| **Naming Conventions** | Standard naming for all Fabric artifact types | Enforced naming rules |
+| **Naming Conventions** | Standard naming for all Fabric artifact types | Defaults, confirmed with the user at the naming gate (§ Rule 0) |
 | **Project Validation** | End-to-end checklist to verify completeness | Validation report |
 
 ## What This Agent Does NOT Own

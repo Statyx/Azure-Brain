@@ -257,7 +257,7 @@ domain.
 | --- | --- |
 | [`AGENTS.md`](AGENTS.md) | **Entry point** — routing table + index of all 42 agents |
 | [`agent_principles.md`](agent_principles.md) | **Mandatory** — plan first, verify before done, capture the lesson after any correction |
-| [`shared_constraints.md`](shared_constraints.md) | The 8 hard rules — read before write, config-driven, idempotent, async-first |
+| [`shared_constraints.md`](shared_constraints.md) | The 9 hard rules — read before write, config-driven, idempotent, async-first |
 | [`PUBLIC_SAFETY.md`](PUBLIC_SAFETY.md) | **Write as if already public** — the company is always *Zava*, GUIDs are visibly fake, no account name in a path, secrets read at runtime |
 | [`known_issues.md`](known_issues.md) | Cross-cutting gotchas and workarounds |
 | [`ERROR_RECOVERY.md`](ERROR_RECOVERY.md) | Decision trees by HTTP status, retry patterns |

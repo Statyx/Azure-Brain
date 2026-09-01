@@ -64,6 +64,14 @@ the agent's `instructions.md` says **how**, and wins on its own domain.
 | **capacity** | F2 (demo) · F16+ (production, large models) | F2 | all |
 | **report format** | PBIR folder (new reports) · legacy PBIX (maintaining an existing one) | PBIR | B1 · B3 · M-TEST |
 | **identity** | interactive `az login` · service principal | interactive | M-CICD · M-PORTAL |
+| **naming** | proposed-and-confirmed · caller-supplied | proposed-and-confirmed | all |
+
+**naming** is the axis you only notice when it is wrong. Derive the defaults from
+[`naming_conventions.md`](agents/project-orchestrator-agent/naming_conventions.md), then **show
+them and let the caller override** before the first item exists — §Rule 0 there lists what a
+late rename actually costs (an orphaned Git folder, a duplicate Rayfin backend, a Foundry agent
+whose name *is* its API identifier). Confirm the workspace, items, reports and agents; do not
+ask about schemas, tables or measures.
 
 The **storyline** axis is the one people skip and regret. A demo with random data has no
 punchline. Pick one root cause (one gate, one device, one supplier) that propagates to a

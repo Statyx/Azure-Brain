@@ -4,6 +4,39 @@ Standard naming patterns for all Fabric artifact types. These conventions are en
 
 ---
 
+## Rule 0 — propose the names, then ask. Never impose them.
+
+Everything below is a **default proposal**, not a decree. Before the first item is created,
+show the derived names to the user and let them override any of them. Asking costs one
+question at step 0; changing your mind after Step 4 costs a rename cascade.
+
+Ask before the first `POST`:
+
+| Ask for | Default if the user has no preference |
+|---|---|
+| **Workspace name** | `<CompanyName>` |
+| The **company/project token** every other name derives from | taken from the domain model |
+| Any **item name the user wants to own** — report titles are the usual one | the patterns below |
+
+Record the answers in the project config *and* in the run sheet. Every later agent reads them
+from there and never re-derives them.
+
+### Why asking is cheaper than renaming
+
+Three mechanisms, each already documented and verified in its own agent:
+
+| Rename this… | …and this breaks | Source |
+|---|---|---|
+| A Fabric item, once Git integration is on | The Git **directory keeps the old name forever** — by design. `displayName` updates, the folder does not, and every dependency still points at the old path | [`cicd-fabric-agent/known_issues.md`](../../../Fabric-Brain/agents/cicd-fabric-agent/known_issues.md) GI-005 |
+| A Fabric App (Rayfin) | `id:` drives the displayName and the CLI **creates** an item when the name is absent → a *second* AppBackend, plus a second hosting URL to register | [`fabric-apps-agent/known_issues.md`](../../../Apps-Brain/agents/fabric-apps-agent/known_issues.md) #8 |
+| A Foundry agent | Its name **is** its API identifier, duplicated into router prompts and workflow YAML — and there is **no rename operation** | [`foundry-orchestration-agent/known_issues.md`](../../../Foundry-Brain/agents/foundry-orchestration-agent/known_issues.md) |
+
+> **Do not turn Rule 0 into an interrogation.** Confirm only the names that are expensive to
+> change — workspace, items, agents, reports. Names *inside* a Lakehouse (schemas, tables,
+> columns, DAX measures) are cheap to change later: apply the conventions below without asking.
+
+---
+
 ## Artifact Naming Rules
 
 | Artifact Type | Pattern | Example |

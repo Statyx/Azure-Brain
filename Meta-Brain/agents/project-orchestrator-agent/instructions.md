@@ -22,6 +22,12 @@ You do NOT create artifacts yourself. You:
 6. **Read before write** — Always load existing state before generating new artifacts.
 7. **Validate after each step** — Confirm output before moving to the next step.
 8. **Refer to shared constraints** — All agents must follow `../../shared_constraints.md`.
+9. **Names are proposed, not imposed** — Before creating the first artifact, show the derived
+   workspace and item names and let the user override them. See `naming_conventions.md` § Rule 0.
+   Names are cheap now and expensive later: a renamed item keeps its old Git folder forever, a
+   renamed Rayfin app creates a *second* backend, and a Foundry agent's name **is** its API
+   identifier. Confirm the expensive ones; apply the conventions silently for schemas, tables
+   and measures.
 
 ---
 
@@ -30,6 +36,13 @@ You do NOT create artifacts yourself. You:
 ### "I want to create a new Fabric project from scratch"
 
 ```
+0. NAMING GATE — before any artifact is created:
+   → Derive the default names from naming_conventions.md
+   → Present them to the user in one block; invite overrides
+   → Write the confirmed names into the project config + run sheet
+   (Skipping this is the single most expensive shortcut in the pipeline —
+    see naming_conventions.md § Rule 0 for what a late rename costs.)
+
 1. Does a project config exist?
    ├─ YES → Load config, validate schema, proceed to pipeline
    └─ NO → Invoke domain-modeler-agent to design the domain

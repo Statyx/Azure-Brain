@@ -47,6 +47,11 @@ Every step still names an agent: resolve it here, then follow the loop above. Th
 **Never fork a base or a preset to make a variant** — add an axis value, a module, or a preset
 line. Same rule as the instruction files: a copy goes stale.
 
+**Agree on the names before creating the first item.** Derive the defaults from
+[`naming_conventions.md`](Meta-Brain/agents/project-orchestrator-agent/naming_conventions.md),
+show them, let the caller override. Workspace, items, reports and agents only — schemas, tables
+and measures stay silent. § Rule 0 there lists what a late rename costs, and it is never zero.
+
 ---
 
 ## Repository layout
@@ -55,7 +60,7 @@ line. Same rule as the instruction files: a copy goes stale.
 Azure-Brain/                       ← umbrella (this repo)
 ├── AGENTS.md                      ← you are here — index + routing
 ├── agent_principles.md            ← mandatory operating principles
-├── shared_constraints.md          ← 8 hard rules, all brains
+├── shared_constraints.md          ← 9 hard rules, all brains
 ├── known_issues.md                ← cross-cutting gotchas
 ├── ERROR_RECOVERY.md              ← decision trees by HTTP status
 ├── PUBLIC_SAFETY.md               ← Zava identity + publish-by-default rules
@@ -323,6 +328,12 @@ its own domain**.
     secrets are read at runtime; real values live in a gitignored file with a committed
     `.example` twin. See **`PUBLIC_SAFETY.md`**, verify with
     `python Meta-Brain/tools/scan_public_safety.py <repo>`.
+12. **Names are proposed, not imposed.** Before creating the first workspace, item, report or
+    agent, show the derived names and let the caller override them. Naming conventions are
+    defaults. Skip the question for schemas, tables, columns and measures — those are cheap to
+    change. See
+    [`naming_conventions.md`](Meta-Brain/agents/project-orchestrator-agent/naming_conventions.md)
+    § Rule 0.
 
 Conventions: Python 3.12+ with `pathlib` and type hints · UTF-8 everywhere, **no BOM**
 (`[System.IO.File]::WriteAllText()` in PowerShell, never `Out-File` for JSON) · conventional

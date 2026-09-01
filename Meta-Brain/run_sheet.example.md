@@ -26,6 +26,7 @@
 | capacity | F2 | |
 | report format | PBIR | |
 | identity | interactive | |
+| naming | proposed-and-confirmed | names agreed before the first item was created |
 
 ## 2. Environment
 
@@ -37,6 +38,16 @@ Resource IDs are **not** written here — they live in the gitignored
 | Workspace name | `{Project}-Demo` |
 | Capacity SKU | F2 |
 | Region | |
+
+**Names confirmed with the caller** *(fill in at the naming gate, before the first item is
+created — a late rename is the expensive kind, see `naming_conventions.md` § Rule 0)*:
+
+| What | Proposed | Confirmed / overridden |
+| --- | --- | --- |
+| Workspace | | |
+| Company / project token | | |
+| Reports | | |
+| Data agent(s) | | |
 
 ## 3. Progress
 

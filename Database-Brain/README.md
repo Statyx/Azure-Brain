@@ -133,6 +133,6 @@ See [`../GETTING_STARTED.md`](../GETTING_STARTED.md) for the umbrella setup guid
 ## Cross-brain references
 
 - [`../agent_principles.md`](../agent_principles.md) — mandatory operating principles every agent follows
-- [`../shared_constraints.md`](../shared_constraints.md) — 8 hard rules across all brains
+- [`../shared_constraints.md`](../shared_constraints.md) — 9 hard rules across all brains
 - [`../known_issues.md`](../known_issues.md) — cross-cutting gotchas
 - [`../ERROR_RECOVERY.md`](../ERROR_RECOVERY.md) — decision trees by HTTP status
