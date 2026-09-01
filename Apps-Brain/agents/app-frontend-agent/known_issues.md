@@ -362,3 +362,60 @@ rule for Fabric SQL endpoints and none for `services.ai.azure.com`, `openai.azur
 
 **Wider rule** — anything the build compiles into a client bundle is public the moment it deploys.
 Config-shaped does not mean server-side.
+
+---
+
+## 21. A bulk edit that round-trips through `Get-Content` silently re-encodes the source
+
+**Status** — observed 2026-09-01, Windows / PowerShell 5.1, bulk-editing a Vite + React source tree.
+
+**Symptom** — a scripted sweep across five `.tsx`/`.ts` files (a mechanical string substitution)
+completed with no error and a clean `git status` diff that looked plausible. The app built, the tests
+passed, and the deployed page rendered `rÃ©seau`, `DÃ©connexion`, `TÃ©lÃ©mÃ©trie`. Every accented
+character in every touched file had become two. Nothing in the build or the test gate objected,
+because double-encoded UTF-8 is still valid UTF-8 — it just spells something else.
+
+**Cause** — the read, not the write. `Get-Content -Raw` in Windows PowerShell 5.1 has no encoding
+default of `utf8`; on a **BOM-less** UTF-8 file it falls back to the ANSI code page (Windows-1252),
+so `é` (`0xC3 0xA9`) is decoded as the two characters `Ã` + `©`. Writing that string back out as
+UTF-8 encodes each of them again, and the file now physically contains `0xC3 0x83 0xC2 0xA9`. The
+round-trip is lossy in one direction only, so it is invisible on a file that happens to be pure
+ASCII — which is why a sweep can corrupt three files out of eight and look like it worked.
+
+This is the **write-side twin of entry 14**. Entry 14 is a mis-decoded *probe*, which produces a
+false negative and costs a redeploy. This one mis-decodes on the way *in* and persists the damage
+into source control, where it survives review, ships, and is then re-corrupted by the next sweep.
+
+**Fix** — never let source text round-trip through the PowerShell pipeline for a bulk edit:
+
+1. **Prefer the editing tool** (`edit` / a real refactoring tool) over a shell script. It reads and
+   writes UTF-8 unconditionally and leaves untouched bytes untouched.
+2. If a script is genuinely required, bypass the cmdlets and name the encoding on both ends:
+   `[System.IO.File]::ReadAllText($p)` (detects UTF-8 without a BOM) and
+   `[System.IO.File]::WriteAllText($p, $s, (New-Object System.Text.UTF8Encoding $false))`.
+   Pass **absolute** paths — .NET resolves relative paths against the process CWD, not the shell's.
+3. Never `Get-Content -Raw | ... | Set-Content` on source. `Set-Content -Encoding utf8` does not
+   rescue it: by then the string in memory is already wrong, and the flag only controls the write.
+
+**Detection, and why the usual gates miss it** — `tsc`, `vitest` and `vite build` all pass, because
+the corruption is well-formed. Two cheap checks that do catch it:
+
+- grep the tree for the tell-tale sequence `Ã` — a legitimately French source file contains `é`,
+  never `Ã©`;
+- read the **built** asset with `[System.Text.Encoding]::UTF8.GetString($bytes)` and count matches.
+  Do not use `Invoke-WebRequest`'s `.Content` for this: `text/javascript` is served without a
+  `charset`, so PowerShell decodes it as Latin-1 and reports mojibake in a *clean* file. Verified in
+  the same session — the same bundle scored 6 hits decoded as Latin-1 and 0 decoded as UTF-8.
+
+**Evidence** — 5 source files corrupted by one sweep; the live bundle served `rÃ©seau`. After repair
+and redeploy, the served asset was byte-identical to the local build (633 277 bytes) and scored 0
+mojibake when decoded as UTF-8, while genuine data accents (`Rhône`, `Île-de-France`, `Métropole`)
+survived intact.
+
+**Wider rule** — an encoding bug is not a rendering bug: it is a **content** bug that the compiler
+cannot see. Any gate that only asks "does it build?" will pass it. If a step can rewrite a file it
+was not asked to change, the safe design is to not let it read the file as text at all.
+
+**Corollary** — writing UI copy in English removes the whole risk class for the app's own strings,
+but **not** for the data: place names, customer names and comments stay accented. Translating is a
+mitigation, never the fix.
