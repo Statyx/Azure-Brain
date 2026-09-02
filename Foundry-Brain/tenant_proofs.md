@@ -188,6 +188,42 @@ property — it is one of the strongest arguments for the orchestrated architect
 
 ---
 
+## 🔒 PROVEN ABSENT — how to prove a capability is *missing*, and one that is
+
+This file's own rule was *"only proves presence"* — an absence claim normally cannot be
+distinguished from a wrong guess about the URL, the permission, or the name. **2026-09-02 found a
+case where it can**, and the technique generalises.
+
+**The case:** is a Fabric **data agent** reachable as an MCP server, so a Foundry agent could
+attach it as a plain MCP tool and skip the connection ARM cannot create?
+
+Sixteen endpoint names were tried under the shape the ontology item genuinely uses,
+`https://api.fabric.microsoft.com/v1/mcp/dataPlane/workspaces/{ws}/items/{id}/<name>`. All returned
+`404` / JSON-RPC `-32601` / `EntityNotFound`. On its own that proves nothing — sixteen wrong
+guesses look identical to sixteen missing permissions.
+
+**What made it conclusive was a control that fails differently.** The *same* URL with
+`/ontologyEndpoint`, the *same* token, the *same* DataAgent item, returns **`500` / `-32603`**
+internal error: the route exists, was dispatched, and choked on the wrong item type behind it.
+
+| Response | What it proves |
+| --- | --- |
+| `404` / `-32601` / `EntityNotFound` | the **route** is not registered — the name is not real |
+| `500` / `-32603` internal error | the route **is** registered and reached; the item behind it is wrong |
+
+Two different failure modes from one endpoint means the server distinguishes *unknown route* from
+*bad payload*, so a 404 is a statement about the route and not about us. **Conclusion: a Fabric
+data agent exposes no MCP endpoint on the Fabric MCP data plane.** Combined with ARM having no
+`AzureFabric` category and `client.connections` being read-only, the portal step is the only
+remaining path — see
+[`foundry-fabric-bridge-agent/known_issues.md`](agents/foundry-fabric-bridge-agent/known_issues.md).
+
+**Reusable rule:** before concluding a capability is absent, find an input that makes the same
+surface fail *a different way*. Without that control, an absence claim is a guess wearing a
+status code.
+
+---
+
 ## Still unproven — do not claim these
 
 - [ ] A2A **latency and cost** per hop — never measured
@@ -195,7 +231,9 @@ property — it is one of the strongest arguments for the orchestrated architect
 - [ ] Whether the hop **survives streaming** — not attempted
 - [ ] The `WorkflowAgentDefinition.workflow` **string format** — still undocumented, still unread
 - [ ] Whether **toolboxes** exist in this region — not seen in either lab or this tenant
-- [ ] Any statement about a capability being **absent** — this file only proves presence
+- [ ] Any statement about a capability being **absent** — this file only proves presence.
+      *Amended 2026-09-02:* absence **can** be proven when a control makes the same surface fail a
+      different way — see "PROVEN ABSENT" above. Without such a control the bullet stands.
 
 ---
 
@@ -205,3 +243,4 @@ property — it is one of the strongest arguments for the orchestrated architect
 | --- | --- |
 | 2026-08-26 | File created. Promoted the 2026-08-04→05 hands-on session from a transcript in another repository into the brain: A2A live proof with the witness-agent method, the four-protocol chain, SDK 2.4.0 introspection, RAG scoping measures, the architecture rule, and the pointer to the Fabric non-determinism defect. |
 | 2026-09-02 | A2A **reproduced on a second tenant** (Sweden Central), and the two prerequisites this file had omitted recorded: first-class `properties.audience`, and a `Foundry Agent Consumer` grant whose absence reports as **404**. Also flagged that "ARM only" settles the A2A connection and does **not** generalise to a Fabric data-agent connection, which ARM provably cannot create. |
+| 2026-09-02 | Added **PROVEN ABSENT**: a Fabric data agent exposes no MCP endpoint (16 names → `404`/`-32601`, control `/ontologyEndpoint` → `500`/`-32603` on the same item). Amended the "only proves presence" bullet with the control-that-fails-differently technique. |

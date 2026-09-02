@@ -139,6 +139,53 @@ be accepted. It was restored from a rollback captured seconds earlier. `tenant_p
 states the rule — *the undo must exist before the do* — and the correct move was a scratch
 connection name from probe one, not from probe four.
 
+#### Correction — 2026-09-02 (same day): the MCP route does not exist either
+
+Having proved ARM cannot create the connection, the obvious next hope was to skip the connection
+entirely and reach the data agent as an **MCP server**, the way `foundry-tools-agent` attaches any
+other MCP tool. Fabric *does* run an MCP data plane, and the ontology agent documents a working
+URL shape for it (`mcp_ontology.md`):
+
+```
+https://api.fabric.microsoft.com/v1/mcp/dataPlane/workspaces/{ws}/items/{id}/ontologyEndpoint
+```
+
+Sixteen endpoint names were tried against that shape with a live `api.fabric.microsoft.com` token
+and a JSON-RPC `initialize`, pointed at a **DataAgent** item: `aiSkillEndpoint`,
+`dataAgentEndpoint`, `aiAssistantEndpoint`, `mcpEndpoint`, `aiassistant`, `aiAssistant`, `aiskill`,
+`aiSkill`, `dataAgent`, `dataagent`, `agentEndpoint`, `queryEndpoint`, `openai`, `endpoint`, bare
+`/items/{id}`, `/aiskills/{id}`. Also `/mcp/dataPlane/workspaces/{ws}` and `.../{ws}/items`.
+
+**All returned HTTP 404**, JSON-RPC `-32601`, `errorCode: EntityNotFound`.
+
+**The control is what makes this conclusive.** The same URL with `/ontologyEndpoint`, against the
+same DataAgent item, returns **HTTP 500** `-32603` *"unable to complete your request due to an
+internal error"* — the route exists and is dispatched, and fails only because the item is the wrong
+type. A 404 on every other name therefore means **the route itself does not exist**, not that
+permissions or the item are wrong. Endpoint names on this surface are per-item-type, and no
+DataAgent name is registered.
+
+| Signal | Meaning |
+|---|---|
+| `404` / `-32601` / `EntityNotFound` | route not registered — the endpoint name is not a real one |
+| `500` / `-32603` internal error | route exists, dispatched, wrong item type behind it |
+
+**Rule: a Fabric data agent is not reachable as an MCP server on the Fabric MCP data plane.**
+Do not spend a session guessing endpoint names — use the 404-vs-500 discriminator above to settle
+it in one request. (Unrelated and still true: `https://api.fabric.microsoft.com/v1/mcp/powerbi`
+exists as a *different* MCP surface — see `Fabric-Brain/fabric_api.md`. It is not a data-agent
+route.)
+
+**Consequence — this closes the last alternative.** Three independent negatives now converge:
+ARM has no `AzureFabric` category, the data plane's `client.connections` is read-only, and the MCP
+data plane exposes no data-agent endpoint. **The portal step is the only path**, which promotes the
+"revised rule" above from *strong recommendation* to *the only known method*.
+
+**Evidence:** 16 probe URLs, all `404 / -32601 / EntityNotFound` with Fabric `requestId`s;
+control `/ontologyEndpoint` → `500 / -32603` on the same item and token; item confirmed as
+`"type":"DataAgent"` by `GET /v1/workspaces/{ws}/items/{id}` returning 200 in the same script run,
+so the token, workspace and item id are all known good.
+
 ### 5. ⚠️ The lab's own Fabric-bound agent contradicts itself
 
 `Inventory-Agent` is instructed *"The response must come only from the Fabric Data Agent tool

@@ -31,6 +31,20 @@ the ontology into a live tool for an AI orchestrator.
    https://api.fabric.microsoft.com/v1/mcp/dataPlane/workspaces/<workspace-ID>/items/<ontology-item-ID>/ontologyEndpoint
    ```
 
+> ⚠️ **`ontologyEndpoint` does not generalise to other item types.** The path segment is
+> per-item-type, and — measured 2026-09-02 — **no equivalent exists for a Fabric data agent**.
+> Sixteen candidate names (`aiSkillEndpoint`, `dataAgentEndpoint`, `aiAssistantEndpoint`,
+> `mcpEndpoint`, `openai`, bare `/items/{id}`, `/aiskills/{id}`, …) all returned
+> `404` / JSON-RPC `-32601` / `EntityNotFound`.
+>
+> **Use the status code to tell "wrong name" from "wrong item":** on this surface a **404 /
+> `-32601`** means the route is not registered at all, while a **500 / `-32603`** means the route
+> exists and was dispatched but the item behind it is the wrong type — `/ontologyEndpoint` aimed at
+> a DataAgent returns exactly that 500. One request settles it; do not enumerate names blindly.
+> To consume a Fabric **data agent** from Foundry, see
+> [`foundry-fabric-bridge-agent/known_issues.md`](../../../Foundry-Brain/agents/foundry-fabric-bridge-agent/known_issues.md)
+> — it needs a portal-created connection, not MCP.
+
 ## Setup in VS Code
 
 Create `.vscode/mcp.json` in the project folder:
