@@ -446,3 +446,67 @@ def continuous_stream(sensors_config: list, events_per_second: float = 10,
 6. **Anomalies** — Inject 2-5% anomalies for interesting alerts and dashboards
 7. **BOM-free CSV** — Always use `encoding="utf-8"` (not `utf-8-sig`) when writing
 8. **Consistent timestamps** — Use ISO 8601 format: `2024-01-15T10:30:00Z`
+
+---
+
+## Exact anomalies — when a demo agent reports the number
+
+**Extends Tip 6 (2026-09-02).** Tip 6 above ("inject 2-5 % anomalies") stays correct for
+*alerting* and *dashboard* demos, where the anomaly only has to be visible. It is
+**insufficient** whenever a Data Agent or a Foundry orchestrator will **state the number
+out loud** and a human in the room can challenge it.
+
+**Symptom:** you plant a "+12 % over-delivery", and the quarterly rollup reads +11.68 %.
+Nothing is broken — the demo is just no longer checkable by hand, and the first person to
+recompute it on a napkin has grounds to distrust every other figure the agent produced.
+
+**Root cause:** per-row random noise does not cancel out at the aggregate. Drawing each
+daily value as `target/n × uniform(0.8, 1.2)` leaves a residual of a few tenths of a
+percent on the sum — invisible per row, fatal at the total.
+
+**Fix — normalise the weight vector, then scale.** Build the shape first, divide it by its
+own sum, and only then multiply by the target. The daily curve stays organic; the
+aggregate lands *exactly*.
+
+```python
+def normalised_weights(rng, n, weekday_of):
+    """Weekday-shaped daily weights that sum to exactly 1.0."""
+    w = [rng.uniform(0.85, 1.15) * (0.75 if weekday_of(i) >= 5 else 1.0)
+         for i in range(n)]
+    total = sum(w)
+    return [x / total for x in w]          # sum == 1.0, so target is hit exactly
+
+daily = [target * w for w in normalised_weights(rng, n_days, weekday_of)]
+```
+
+Three companion rules learned alongside it:
+
+1. **Force-include the anomaly's dimension members in any random draw.** If a brand is
+   assigned "4 markets out of 5" at random, the draw can silently delete the market your
+   storyline depends on. Every row count still passes; the demo is gone. Seed the draw
+   with the anomaly's members, then fill the remainder randomly.
+
+2. **Use two independent normalised vectors when two measures must diverge.** In the media
+   case, impressions carry the anomaly while spend tracks the plan (`N(1.0, 0.015)`),
+   because over-delivery means *more inventory for the same money*. Driving both from one
+   vector silently changes what the anomaly means.
+
+3. **A "missing record" anomaly must be omitted rows, never a status flag.** Writing
+   `invoice_status = "Unbilled"` lets the agent answer with a `WHERE` filter. Omitting the
+   rows forces a real `LEFT JOIN ... WHERE fk IS NULL`, which is the behaviour actually
+   being demonstrated.
+
+**Assert the exactness in the test suite**, with a tight tolerance and a floor on the
+background noise — otherwise a later tweak degrades the demo while every test still
+passes:
+
+```python
+assert abs(actual - expected) <= 0.05      # percentage points
+assert noise.abs().max() < 4.0             # anomalies must still stand out
+```
+
+**Evidence:** observed 2026-09-02 building the Zava Media demo (11 tables, ~65 000 rows).
+Before normalisation the planted gaps landed at ±0.3 pp off target; after, they land on
++12.00 / +11.00 / −8.00 % with background noise under 2.5 pp. Verified by 26 passing
+pytest assertions and a byte-identical regeneration (`git status` clean after re-running
+the generator).
