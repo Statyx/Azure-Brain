@@ -81,6 +81,64 @@ already in your hand, and the remaining unknown is one field.
 HTTP 200 and only fails at invoke. So a scripted connection proves less than it appears to, and
 still needs a routing probe behind it.
 
+#### Correction — 2026-09-02: the probe was run, and ARM cannot do it at all
+
+The implementation described above as *"it has not been run"* has now been run against a live
+tenant (Sweden Central, `Microsoft.CognitiveServices/accounts/*/projects/*`). It **failed**, and the
+failure changes the conclusion rather than completing it.
+
+**The remaining unknown was not one field. The category does not exist on the control plane.**
+
+`MicrosoftFabricPreviewTool` fails at *runtime*, after the connection is created and the agent is
+built, with:
+
+```
+No CustomKeys connection found for AzureFabric
+```
+
+So the tool resolves a connection that is `CustomKeys` **and** of category `AzureFabric`. Measured
+against ARM:
+
+| Attempt | Result |
+|---|---|
+| `category: AzureFabric` | rejected — `unable to deserialize request body`, at api-versions `2025-04-01-preview`, `2025-06-01`, `2025-06-01-preview`, `2025-08-01-preview`, `2025-10-01-preview`, `2025-11-15-preview` |
+| `category: MicrosoftFabric` + `authType: CustomKeys` | rejected — *"AuthType for MicrosoftFabric Connection can only be AAD, UserEntraToken"* |
+| `category: MicrosoftFabric` + `authType: AAD` | **accepted, HTTP 200** — and then refused by the tool at runtime |
+| data-plane `client.connections` | read-only: `get`, `get_default`, `list`. No `create`. |
+
+Brute-forcing the category enum (it is *not* a discriminator, so it yields no list — see the
+enumeration technique below) gives: **accepted** — `MicrosoftFabric`, `AzureOneLake`,
+`AzureSynapseAnalytics`, `CustomKeys`, `RemoteA2A`, `RemoteTool`. **Rejected** — `AzureFabric`,
+`azurefabric`, `Fabric`, `FabricDataAgent`, `PowerBI`, `MicrosoftOneLake`.
+
+**Revised rule: the portal step is REQUIRED for a Fabric data-agent connection, not a fallback.**
+The paragraph above — *"do not read this as 'the portal step is unnecessary'"* — was right to hedge,
+and the hedge should now be read as a hard requirement. Create the connection once in the portal,
+under the name the deploy resolves by, and keep everything else scripted.
+
+**The expensive part is that ARM says yes.** `MicrosoftFabric`/`AAD` is stored and returns 200, so a
+deploy script that treats "ARM accepted it" as its success oracle reports success and fails six
+steps later inside a model run. **ARM acceptance is not tool validation.** The only oracle for a
+connection is a real question routed through the tool that consumes it.
+
+**Evidence:** runtime error above, reproduced on every run of a 3-probe verifier; the six api-version
+rejections and the enum brute-force were run against a scratch connection name; the same verifier's
+A2A probe passes in the same run, so the harness itself is known good.
+
+**Technique worth reusing —** make the validator enumerate itself. Sending a deliberately invalid
+*discriminator* returns the full legal set. `authType: "__probe__"` returned all 21 values:
+`RegistryIdentity, Basic, None, PAT, SAS, ServicePrincipal, AccessKey, ApiKey, CustomKeys, OAuth2,
+AccountKey, AAD, DelegatedSAS, ProjectManagedIdentity, AccountManagedIdentity, UserEntraToken,
+AgentUserImpersonation, AgenticIdentityToken, AgenticUser, UserTokenAndProjectManagedIdentity,
+DeveloperConnection`. **Limit:** this works only for discriminators. `category` is not one — an
+unknown value yields only `unable to deserialize request body`, so it must be brute-forced.
+
+**Method note, recorded because it nearly cost the demo:** the first of these probes was run
+*against the production connection*, which was deleted before knowing whether any replacement would
+be accepted. It was restored from a rollback captured seconds earlier. `tenant_proofs.md` already
+states the rule — *the undo must exist before the do* — and the correct move was a scratch
+connection name from probe one, not from probe four.
+
 ### 5. ⚠️ The lab's own Fabric-bound agent contradicts itself
 
 `Inventory-Agent` is instructed *"The response must come only from the Fabric Data Agent tool

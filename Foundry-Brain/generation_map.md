@@ -139,11 +139,16 @@ doc-only and **unverified**.
 | Agent creation | `project_client.agents.create_version(agent_name=…, definition=PromptAgentDefinition(model=…, instructions=…, tools=[…]))` | ✅ ran |
 | Connection lookup | `project_client.connections.get(<name>)` → `.id` | ✅ ran |
 | OpenAI client | `project_client.get_openai_client()` | ✅ ran |
-| Invocation | `openai.responses.create(..., extra_body={"agent_reference": …})` | doc |
+| Invocation | `openai.responses.create(..., extra_body={"agent_reference": {"type": "agent_reference", "name": …}})` | ✅ ran |
 | Agent kinds | **Prompt Agents** (server-side, Projects SDK) vs **Hosted Agents** (Agent Framework `FoundryChatClient`, ephemeral in-process) | doc |
 
 > ⚠️ **`allow_preview=True` is mandatory** to see preview tools (e.g. the Fabric data agent
 > tool). Omit it and the tool type is simply absent — the resulting error never says "preview".
+
+> ⚠️ **`agent_reference` needs its own `type` discriminator** (tenant-verified 2026-09-02). The
+> abbreviated form `{"agent_reference": {"name": "My-Agent"}}` that reads naturally from the docs
+> is rejected; the object must carry `"type": "agent_reference"` alongside `"name"`. This row was
+> marked `doc` until it was run, and the shorthand was the first thing tried.
 
 > ⚠️ **Hostname:** the portal shows `<resource>.services.ai.azure.com`. Some documentation shows
 > `<resource>.ai.azure.com`. Copy the endpoint from the portal's *Project details* page; do not

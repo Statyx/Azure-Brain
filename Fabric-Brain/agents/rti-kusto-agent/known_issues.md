@@ -253,3 +253,27 @@ Instead of manually running a notebook to convert CSVs to Delta tables, automate
 5. **Poll** the Location header until `status == "Completed"`
 
 **Key**: Use explicit `StructType` schemas (not `inferSchema`) for reliable type casting of booleans, dates, and doubles.
+
+## Streaming Ingestion
+
+### 17. Enabling the streaming ingestion policy is not synchronous
+
+**Context:** Eventhouse / KQL database, `.alter database ... policy streamingingestion`, 2026-09.
+
+**Symptom:** the policy command returns success, and the *next* streaming ingest still fails.
+Retrying a minute later succeeds with nothing having changed. Enabling the policy is a control
+command whose effect propagates; treat it like the tenant settings at the top of this file, not
+like a DDL statement that has taken effect by the time it returns.
+
+**Fix:** after enabling the policy, poll an actual ingest (or sleep and retry) rather than
+proceeding on the command's return value. A deploy that enables the policy and immediately
+ingests is a race that passes on a warm cluster and fails on a cold one.
+
+**Related trap — do not use `raise_for_status()` on the ingest call.** Kusto returns the real
+reason in the response *body*; `raise_for_status()` raises on the status line and discards it,
+turning a precise, actionable message into a bare `HTTPError: 400`. Read `resp.text` first, then
+decide whether to raise.
+
+**Evidence:** observed during an automated Eventhouse deploy — same script, same payload, failing
+immediately after the policy command and succeeding on retry.
+

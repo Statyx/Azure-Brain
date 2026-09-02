@@ -132,14 +132,18 @@ Does the capability need its own instructions, persona, or multi-step reasoning?
    │
 3. Verify the card actually published
    │  GET {BASE_URL}/agents/{agent}/endpoint/protocols/a2a/agentCard/v1.0
-   │  Confirm protocolVersion matches the path you requested
+   │  ⚠️ protocolVersion is NOT top-level — read supportedInterfaces[].protocolVersion
    │
 4. Create the A2A connection on the CALLER's project (ARM PUT)
    │  category: RemoteA2A · authType: AgenticIdentityToken
    │  target:   {A2A base path}   ⚠️ do NOT set an agent card path
    │  audience: https://ai.azure.com
+   │  ⚠️ audience goes at properties level. properties.metadata.audience is
+   │     stored and IGNORED → "Failed to fetch agentic identity access token"
    │
 5. Grant the caller Foundry Agent Consumer on the target's project
+   │  ⚠️ use instance_identity.principal_id (blueprint's is not assignable)
+   │  ⚠️ until it propagates the card fetch returns 404, not 403 — retry 5+ min
    │
 6. Declare the tool on the supervisor
    │  conn = project.connections.get(NAME)

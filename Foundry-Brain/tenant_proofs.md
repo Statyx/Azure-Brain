@@ -61,6 +61,36 @@ justification changes: it is now a **cost and robustness** argument, no longer a
 one. "A2A might not work" is no longer a valid reason to avoid it. "A2A costs three model calls
 per turn and uses a preview surface" still is.
 
+### Second tenant, 2026-09-02 — reproduced, and the two prerequisites this file omitted
+
+The hop was reproduced independently on a different tenant (Sweden Central), which both confirms
+the proof above and exposes what it left out. The row *"can the connection be created without
+touching the portal? ✅ yes — ARM only"* is **true and dangerously easy to over-read**: it settles
+the *A2A* connection and nothing else. Creating it from ARM is necessary but not sufficient, and
+the same sentence does **not** transfer to a Fabric data-agent connection (see
+`agents/foundry-fabric-bridge-agent/known_issues.md` → *"the probe was run, and ARM cannot do it
+at all"*).
+
+Two things must be true beyond a well-formed connection, neither recorded here before:
+
+| Prerequisite | Failure if missing |
+|---|---|
+| `properties.audience` set **first-class** (not in `properties.metadata`) | `Failed to fetch agentic identity access token with status code: 400, response: ` — with an **empty** response body |
+| Caller holds **`Foundry Agent Consumer`** on the target's project, granted to `instance_identity.principal_id` | `Failed to fetch agent card: 404` — a 404, not a 403, for ~4 minutes |
+
+Both were diagnosed the slow way. The 404 in particular reads as a wrong URL and cost two full
+investigations into card paths that were correct throughout. Full detail, including the observed
+`404 · 404 · 404 · 403 · 200` propagation sequence and why `blueprint.principal_id` cannot be
+granted, lives in `agents/foundry-orchestration-agent/known_issues.md`.
+
+**Evidence:** `items: ['a2a_preview_call', 'a2a_preview_call_output', 'message']`, the subordinate
+returning two contract clauses verbatim with their identifiers, in an automated 3-probe verifier
+that also asserts the negative case (the contracts agent must *not* answer a quantitative question).
+
+⇒ Revised reading of the table above: **A2A is feasible and reproducible across two tenants.** The
+remaining risk is not "does it work" but "is it wired correctly", and the two rows above are where
+that goes wrong.
+
 ---
 
 ## ✅ PROVEN — the full chain, end to end
@@ -174,3 +204,4 @@ property — it is one of the strongest arguments for the orchestrated architect
 | Date | Change |
 | --- | --- |
 | 2026-08-26 | File created. Promoted the 2026-08-04→05 hands-on session from a transcript in another repository into the brain: A2A live proof with the witness-agent method, the four-protocol chain, SDK 2.4.0 introspection, RAG scoping measures, the architecture rule, and the pointer to the Fabric non-determinism defect. |
+| 2026-09-02 | A2A **reproduced on a second tenant** (Sweden Central), and the two prerequisites this file had omitted recorded: first-class `properties.audience`, and a `Foundry Agent Consumer` grant whose absence reports as **404**. Also flagged that "ARM only" settles the A2A connection and does **not** generalise to a Fabric data-agent connection, which ARM provably cannot create. |

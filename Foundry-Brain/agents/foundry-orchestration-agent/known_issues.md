@@ -198,7 +198,119 @@ Also: **never set `agent_card_path`.** Foundry resolves the card and negotiates 
 version itself; setting it is actively harmful.
 **Status:** tenant-observed, 2026-08.
 
-### Read and write the agent endpoint as raw JSON — the SDK drops `protocols`
+### `Failed to fetch agent card: 404` — a *different* error, and it means RBAC
+
+Sibling of the 400 above and far more expensive, because the status code points away from the
+cause. A caller that lacks **`Foundry Agent Consumer` on the target's project** does not get 403.
+It gets **404**, for minutes, and a 404 on a card fetch is indistinguishable from a wrong URL.
+
+Observed progression on a live tenant, retrying once per minute after the grant:
+
+```
+attempt 1   404 Not Found
+attempt 2   404 Not Found
+attempt 3   404 Not Found
+attempt 4   403 Forbidden      ← only now does it look like a permission fault
+attempt 5   200 OK
+```
+
+**Rule: on a Foundry A2A card fetch, treat 404 as "RBAC has not propagated yet" until at least
+5 minutes of retries have passed.** Do not go looking at the path first. ~4 minutes observed here;
+the A2A documentation allows up to 10.
+
+The cost of not knowing this: two full investigations into agent-card paths that were correct the
+whole time — `agent_card_path` variants (all rejected: *"Agent card path is invalid for a Foundry
+agent. Either fix the agent card path or remove it to use the default."*) and
+`send_credentials_for_agent_card=True` (three variants, all still 404).
+
+**Evidence:** after the grant landed, the same unchanged tool definition returned
+`items: ['a2a_preview_call', 'a2a_preview_call_output', 'message']` and a verbatim clause answer.
+**Status:** tenant-observed, 2026-09-02.
+
+### Two principal ids on an agent, and only one can be granted anything
+
+An agent document exposes **both** `blueprint.principal_id` and `instance_identity.principal_id`.
+They are not interchangeable:
+
+```
+az role assignment create --assignee-object-id <blueprint.principal_id>
+→ (PrincipalTypeNotSupported) Principals of type
+  #microsoft.graph.agentIdentityBlueprintPrincipal cannot validly be used in role assignments.
+```
+
+**Use `instance_identity.principal_id`.** Picking the wrong one fails at the grant, which is the
+good case; the bad case is granting a blueprint id somewhere that accepts it silently and then
+debugging a 404 that will never clear.
+
+Two further practical notes, both of which falsify a natural reading of the docs:
+
+- **Agents have identities before they are published.** Both agents here carried populated
+  `blueprint` and `instance_identity` while `publish_approval_status` was `"not_published"`. The
+  documentation's *"after publishing, each published agent receives a unique identity"* invites the
+  conclusion that publishing is a prerequisite for A2A. It is not — the hop worked unpublished.
+- **The scope argument is not the one `project_scope()`-style helpers return.** A helper built for
+  REST returns a full `https://management.azure.com/...` URL; `az role assignment --scope` needs a
+  **bare** resource id and rejects the URL form with `(MissingSubscription)` — an error naming the
+  account context, which is fine, rather than the argument that is actually malformed.
+
+**Status:** tenant-observed, 2026-09-02.
+
+### The A2A `audience` must be a first-class connection property, not metadata
+
+**Symptom:**
+
+```
+Failed to fetch agentic identity access token with status code: 400, response:
+```
+
+**The empty `response:` is the diagnostic.** There is no downstream body to report because no
+downstream call was made — the token was never minted. An error with a *populated* response is a
+different problem entirely.
+
+**Root cause:** the connection resource has a first-class `properties.audience`. Writing the value
+into `properties.metadata.audience` — which is how the portal *displays* it, so it is the natural
+thing to mirror — is accepted by ARM, stored, and **ignored** by the runtime.
+
+**Fix:** set it at `properties` level:
+
+```jsonc
+"properties": {
+  "category": "RemoteA2A",
+  "target":   "<subordinate A2A BASE path>",
+  "authType": "AgenticIdentityToken",
+  "audience": "https://ai.azure.com"   // ← first-class. metadata.audience is not read.
+}
+```
+
+**Evidence:** the error is a clean switch. With `properties.audience` set, it disappears and the
+chain advances to the card fetch; with a deliberately wrong audience, it returns immediately;
+with the value only in `metadata`, it returns. Note this failure comes *before* the RBAC 404 above,
+so the two must be fixed in order — audience first, then the grant.
+**Status:** tenant-observed, 2026-09-02.
+
+### The default agent-card path does not exist — and you must still not set one
+
+Fetched directly with a valid user token against a Foundry agent's A2A endpoint:
+
+| Path | Status |
+|---|---|
+| `…/endpoint/protocols/a2a` | 405 |
+| `…/endpoint/protocols/a2a/agentCard/v1.0` | **200, full valid card** |
+| `…/endpoint/protocols/a2a/.well-known/agent-card.json` | 404 (Foundry-branded `agent-card-not-found`) |
+| `…/agentCard`, `…/card`, `…/.well-known/agent.json` | 404 |
+
+The A2A-standard well-known path is the one that 404s. This makes setting `agent_card_path`
+look obviously correct — and it is rejected anyway, because Foundry resolves the card internally
+for a Foundry target. **The existing rule "never set `agent_card_path`" stands; this table exists
+so the next reader does not spend an hour re-deriving why the tempting fix is not available.**
+
+**Related correction:** the card carries **no top-level `protocolVersion`**. Versions live per
+entry inside `supportedInterfaces[]` (observed: `1.0` and `0.3`, bindings `JSONRPC` and
+`HTTP+JSON`). A verification that reads the top level prints `protocolVersion None` against a
+perfectly healthy card — a check that cannot fail, later quoted as evidence that the card was
+broken. Read `supportedInterfaces[].protocolVersion`.
+**Status:** tenant-observed, 2026-09-02.
+
 
 `AgentEndpointConfig` has **no `protocols` field**, so `agent.as_dict()` returns `None` for a
 block the REST API returns in full. Round-tripping through the SDK model therefore **silently

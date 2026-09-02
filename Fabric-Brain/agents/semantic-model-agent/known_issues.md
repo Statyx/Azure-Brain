@@ -150,6 +150,33 @@ coverage_pct = (described / total) * 100
 
 ---
 
+## Issue 16: A Measure Cannot Share a Table's Column Name — and the Check Is Case-INSENSITIVE
+
+**Symptom**: model deploy is rejected because a measure and a column in the same table are
+considered the same name, even when they differ in case (`Impressions` vs `impressions`).
+
+**Root cause**: within one table, the measure and column namespaces are shared, and the collision
+check that enforces it **folds case**. So a measure named `Revenue` collides with a column named
+`revenue`, and renaming only the casing does not resolve it.
+
+**Fix**: give the measure a genuinely different name (`Total Revenue`, `Revenue Amount`), or hide
+the underlying column and expose only the measure. Changing case alone is not a fix.
+
+⚠️ **This does not contradict Issue 2 above — the two rules operate at different layers, and both
+are true:**
+
+| Layer | Rule |
+|---|---|
+| Report visual → model **lookup** | **case-SENSITIVE** (Issue 2): `total revenue` will not find `Total Revenue` |
+| Measure vs column **collision** inside one table | **case-INSENSITIVE**: `revenue` and `Revenue` are the same name |
+
+Read together: you must match the case exactly when *referencing* a measure, and you cannot rely
+on case to *distinguish* one from a column. A name that differs from a column only by case is
+therefore the worst of both — rejected at deploy, and unusable if it were not.
+
+**Evidence**: tenant-observed, 2026-09 — deploy rejected on a measure/column pair differing only
+in capitalisation; accepted after the measure was renamed.
+
 ## Debugging Checklist
 
 When a semantic model deployment fails or behaves unexpectedly:
