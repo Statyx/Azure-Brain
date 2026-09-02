@@ -1,0 +1,10 @@
+# Regenerable from build_teaser.py — kept out of git to avoid ~10 MB of binaries whose
+# source of truth is the script next to them.
+#   python build_teaser.py --boards   -> boards/
+#   python build_teaser.py --sheet    -> contact-sheet.png
+#   python build_teaser.py --render   -> first-frame.png, last-frame.png
+boards/
+contact-sheet.png
+first-frame.png
+last-frame.png
+__pycache__/
