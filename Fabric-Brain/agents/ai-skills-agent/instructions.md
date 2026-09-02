@@ -197,6 +197,7 @@ GET  /v1/workspaces/{wsId}/items?type=DataAgent
 - Data Agent definition structure: `definition_structure.md`
 - How to write great instructions: `instruction_writing_guide.md`
 - Data source configuration: `datasource_configuration.md`
+- Capacity SKU, region and tenant prerequisites: `capacity_and_region.md`
 - Few-shot example patterns: `fewshot_examples.md`
 - Known issues & gotchas: `known_issues.md`
 - Deploy template: `templates/deploy_data_agent.py`
