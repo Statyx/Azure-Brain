@@ -51,6 +51,36 @@ The lab's own instruction: workspace ID is *"the string that appears between `gr
 **Consequence:** the portal path is brittle and unautomatable. The trailing-`?` warning exists
 because people include it.
 
+#### Correction, 2026-08 — "unautomatable" is too strong when you deployed the Fabric side yourself
+
+The two GUIDs are only hard to obtain if you arrive holding nothing but a browser URL. They are
+not new values: **workspace ID** and **artifact ID** are exactly what the Fabric REST API returns
+when it creates the workspace and the data agent, so any scripted Fabric deploy is already holding
+both before the Foundry side starts. Scraping them back out of a URL recovers, by hand, values the
+deploy wrote to disk minutes earlier.
+
+So the rule splits in two:
+
+- **Arriving at a pre-existing Fabric estate** — the portal path stands. Item 4 is unchanged: scrape
+  carefully, mind the `?`.
+- **Deploying both halves in one chain** — pass `workspace_id` and `data_agent_id` straight from
+  deploy state into an ARM connection PUT. No browser, no copy-paste, and the connection is created
+  in the same idempotent step as everything else.
+
+**Status:** *unconfirmed for the ARM half.* The identity of the GUIDs is established — it follows
+from the URL format the lab itself documents and from the creation responses. What is **not**
+established is the ARM request body: the `category` a *Fabric data agent* connection expects is
+undocumented, and no tenant has accepted or rejected one here. An implementation that probes
+`FabricDataAgent` → `MicrosoftFabric` → `CustomKeys`, records the winner, and falls back to printed
+portal steps exists in a demo repo; it has not been run.
+
+**Do not read this as "the portal step is unnecessary."** Read it as: the *inputs* to that step are
+already in your hand, and the remaining unknown is one field.
+
+**Related:** a connection is **not validated at creation** — an unreachable target is accepted with
+HTTP 200 and only fails at invoke. So a scripted connection proves less than it appears to, and
+still needs a routing probe behind it.
+
 ### 5. ⚠️ The lab's own Fabric-bound agent contradicts itself
 
 `Inventory-Agent` is instructed *"The response must come only from the Fabric Data Agent tool
@@ -110,6 +140,10 @@ If you cannot establish that an artifact was complete when it was captured, the 
   the lab distinguished them — one identity was used throughout.
 - Can the project connection be created **without** the portal (CLI, Bicep, SDK)? Only the portal
   path was observed.
+  - *Partially addressed 2026-08* — see the correction under item 4. The **inputs** need no portal
+    when you deployed the Fabric side yourself. The ARM request body remains unknown, so the
+    question stays open on its second half: which `category` does a Fabric data agent connection
+    take?
 - `project_connections` is a list — what happens when a tool fronts several Fabric data agents?
   How does the model choose between them?
 - Is there a background/async mode reachable from `MicrosoftFabricPreviewTool`, matching what the
