@@ -8,7 +8,9 @@ specialised "brains", one per technology domain, plus cross-cutting meta-tooling
 ![Version](https://img.shields.io/github/v/tag/Statyx/Azure-Brain?style=for-the-badge&label=version&color=purple)
 [![CI](https://img.shields.io/github/actions/workflow/status/Statyx/Azure-Brain/no-client-leak.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/Statyx/Azure-Brain/actions/workflows/no-client-leak.yml)
 
-**Contents:** [What this is](#what-this-is) · [What it produces](#-what-it-produces) ·
+**Contents:** [What this is](#what-this-is) ·
+[Watch it](#what-you-learn-building-is-always-lost) ·
+[What it produces](#-what-it-produces) ·
 [Take only what you need](#-take-only-what-you-need) ·
 [Start here](#-start-here) · [Brains](#-brains) ·
 [Layout](#-layout) · [Setup](#-setup) · [Use it from another repo](#-use-it-from-another-repo) ·
@@ -33,6 +35,19 @@ Two things worth internalising before you use it:
   marked *doc* came from Microsoft Learn and may not survive contact with reality. Nothing is
   labelled "verified" without a trace or a test output behind it — that discipline is the whole
   value of the repo, and it degrades the moment someone writes down something merely plausible.
+
+---
+
+## What you learn building is always lost.
+
+https://github.com/user-attachments/assets/4bdba31c-01a6-46a5-a728-76725cbe5aec
+
+> Full quality: **[`marketing/teaser-azure-brain-en.mp4`](marketing/teaser-azure-brain-en.mp4)** · 40 s, no audio
+
+Forty seconds, no narration. Two projects that share nothing — a retail customer 360 and a
+telco network operations console — built by the same agents reading the same instruction files.
+The teaser states the case; the rest of this README is the evidence for it. The cut is owned by
+[`marketing/build_teaser.py`](marketing/build_teaser.py), so it can be remade when the copy changes.
 
 ---
 

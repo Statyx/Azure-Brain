@@ -12,3 +12,11 @@
 # nothing to rotate. If port 1521 is ever exposed publicly, this becomes a
 # real finding again: parameterise the scripts instead of extending this note.
 PASSWORD=Demo_Ora2Pg_2026!
+
+# GitHub user-attachments asset id for the README teaser video
+# (https://github.com/user-attachments/assets/4bdba31c-...). It is not a tenant,
+# subscription or workspace id: GitHub mints it when a file is uploaded through
+# the web UI, and it is the only form GitHub expands into a <video> player.
+# It is already public by construction - the README that carries it is public.
+# Removing it does not protect anything; it just breaks the player.
+4bdba31c-01a6-46a5-a728-76725cbe5aec
