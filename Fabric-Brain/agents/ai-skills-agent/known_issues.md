@@ -295,3 +295,122 @@ answers differ by 232 customers on the same question, and **both are defensible*
 a business term is not a phrasing problem, it is missing metadata; the agent will resolve it
 silently and differently every time until someone writes the default down.
 
+
+---
+
+## A run reports its own pipeline steps, not the data sources it read (2 Sep 2026)
+
+**Context:** Fabric Data Agent over a Lakehouse + Eventhouse, `POST /threads/{id}/runs` then
+`GET /runs/{id}/steps`, api-version `2024-05-01-preview`. Six real captures, Sep 2026.
+
+**Symptom:** a UI that shows the room *which data was consulted* renders the agent's internals:
+
+```
+Read from  generate.filename · analyze.database.execute · analyze.database.fewshots.matching
+           · trace.analyze_ontology · analyze.database.nl2code · trace.analyze_semantic_model
+```
+
+**Root cause — two mistakes, and the second is the dangerous one.**
+
+1. The step names are the ones already documented under *Pipeline Trace* above. What is easy to
+   assume, and wrong, is that a run *also* reports `itemReference.itemType` (`Lakehouse`,
+   `KQLDatabase`, `SemanticModel`…). It does not. Across **six captures on two agents, zero runs
+   returned a single `itemReference`.** A label map keyed on item types therefore never matches
+   and every name falls through raw.
+
+2. **Four of the six steps read nothing.** `generate.filename`, `analyze.database.nl2code`,
+   `fewshots.loading` and `fewshots.matching` are the agent *preparing* to look — naming a file
+   and turning a question into a query. Only these three touch data:
+
+   | Step | What it actually read |
+   |---|---|
+   | `analyze.database.execute` | ran the generated query against the bound source |
+   | `trace.analyze_ontology` | consulted the ontology / graph |
+   | `trace.analyze_semantic_model` | consulted the semantic model |
+
+   So `len(toolsFired)` is **not** a source count. An answer that never reached `execute` still
+   fires 3–4 steps, and a UI counting them will tell the room it read from four places when it
+   read from none. That is the exact failure a "what was consulted" badge exists to prevent, and
+   counting steps *inverts* it.
+
+**Fix:**
+
+1. Classify every step name explicitly — a data-reading step gets an operator-facing label, a
+   scaffolding step is dropped. Keep pass-through for genuinely unknown names (a true name beats
+   an invented one), but **assert in a test that nothing in your recorded runs is unclassified**,
+   or pass-through silently becomes the default path.
+2. Filter scaffolding **before** the "nothing was consulted" check, so an answer that only
+   prepared correctly falls through to the warning instead of claiming sources.
+3. Do not translate `trace.analyze_semantic_model` etc. by hand into demo prose — see the
+   vocabulary note below.
+
+**Evidence:** six captured runs, `toolsFired` per run — 4, 4, 4, 6, 6, 7 steps; `itemReference`
+absent from all six. Runs that fired 4 steps and runs that fired 7 both reached `execute` exactly
+once.
+
+---
+
+## The agent narrates its own plumbing, and you cannot edit the answer (2 Sep 2026)
+
+**Context:** same six captures. Answers frozen ahead of a demo and replayed verbatim.
+
+**Symptom:** a recorded answer reads *"no further non-zero pause entries appear in the slice
+returned by the **semantic model**"*. The sentence ships to the screen naming the storage layer,
+in a console whose whole premise is operator language.
+
+**Root cause:** the prompt named tables and columns (correctly — that is how you stop the agent
+guessing) but said nothing about the **register of the write-up**, so the agent narrated its
+retrieval as part of the story.
+
+**Fix — change the question, never the answer.** A frozen answer that is hand-edited is no longer
+evidence, and hardcoded prose is worse than no grounding because it still looks sourced. Append a
+register instruction to the prompt and re-capture:
+
+> *"Report it the way a duty manager briefs the operations room: name devices, sites, cells and
+> customers rather than tables, models or systems."*
+
+**Watch the phrasing of that instruction.** The first attempt — *"never name the storage, the
+model or the tooling that produced the answer"* — was read by the agent as a constraint on its
+**behaviour**: it returned in 29.5 s having consulted **nothing**. Reworded to describe the
+*write-up* rather than forbid the *tooling*, the same question ran 139.4 s and fired 7 steps.
+Phrase the constraint as a reporting style, never as a prohibition that mentions tools.
+
+**Evidence:** same opener, three consecutive captures — original prompt 177.2 s / 7 steps /
+leaked "semantic model"; "never name the tooling" 29.5 s / **0 steps** / refused as unsourced;
+"report it the way a duty manager briefs the room" 139.4 s / 7 steps / clean.
+
+---
+
+## A non-merging capture script silently deletes a good recording (2 Sep 2026)
+
+**Context:** a script that pre-records demo answers, refusing any run that consulted nothing.
+
+**Symptom:** an answer captured successfully in 67.8 s with 4 steps was **gone** after the next
+run. No error; the run that replaced it was correctly refused.
+
+**Root cause:** two safe-looking decisions that are lethal together.
+
+- The agent is **non-deterministic** — the same question returned 4 steps in 67.8 s, then 0 steps
+  in 11.6 s minutes later, unchanged.
+- The script started from an **empty map** each invocation and rewrote the whole file. So refusing
+  the bad run also discarded the good recording already on disk, and `--only <id>` wiped every
+  answer it was not asked to refresh.
+
+The refusal rule was working perfectly. It is the *write* that lost the data.
+
+**Fix:** load the existing file and merge, so a run can only **add** an answer or **replace one
+with a newer sourced answer**. Losing a recording must take deleting the file on purpose.
+
+**But merge alone strands entries.** The bank is keyed by the prompt text, so editing a prompt —
+exactly what the vocabulary fix above requires — does not update its entry, it orphans the old one
+under the old key. A stranded answer can never be served (the key no longer exists) yet still
+ships in the bundle and still reads as demo copy. So prune against the **whole** question
+registry, never the `--only` subset, or refreshing one question evicts the rest.
+
+**Evidence:** `rca-culprit` — 67.8 s / 4 steps, then 11.6 s / 0 steps on an unchanged agent. After
+the merge fix, a single-question re-capture left the other five answers byte-identical and dropped
+one stranded key, logged explicitly.
+
+**Generalises beyond capture scripts:** any cache in front of a non-deterministic producer, where
+the writer validates before persisting, has this shape. Validation decides what to *keep*; it must
+never decide what to *erase*.
