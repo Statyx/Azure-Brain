@@ -26,8 +26,10 @@ PBIR-specific gotchas, with detection and fix. For Legacy PBIX issues, see [`kno
 | 16 | Card callout height < 120 px clips numbers | MEDIUM | Always height ≥ 120 px AND set `value.fontSize` explicitly on cardVisual (NOT `cardCalloutArea.fontSize` — that property does not exist; `cardCalloutArea` only owns padding/background/cornerRadius) |
 | 17 | `displayName` differs from `name` in `page.json` | LOW | OK — `name` is the folder ID, `displayName` is the tab label |
 | 18 | Filter file (`filters.json`) at wrong scope | LOW | Report-scoped: `definition/filters.json`. Page-scoped: `pages/<id>/filters.json`. Visual-scoped: `pages/<id>/visuals/<vid>/filters.json` |
-| 19 | **Report freezes on "Loading your report..." forever (HTTP 405 access-request)** | **CRITICAL** | CLI validates 0/0 but the LIVE renderer hangs. Required: `version.json` = `"2.0.0"` (NOT `4.0.0`); `report.json` MUST have `reportSource` + `settings` + `objects`; `baseTheme` MUST be a real built-in (e.g. `CY26SU05`) with its theme json — no custom-name baseTheme, no `customTheme`+`RegisteredResources`; `visualContainer` schema `2.10.0` (not 2.5.0). Diagnose by `getDefinition` on a working QuickCreate report and diffing. |
+| 19 | **Report freezes on "Loading your report..." forever (HTTP 405 access-request)** | **CRITICAL** | CLI validates 0/0 but the LIVE renderer hangs. Required: `version.json` = `"2.0.0"` (NOT `4.0.0`); `report.json` MUST have `reportSource` + `settings` + `objects`; `baseTheme` MUST be a real built-in (e.g. `CY26SU05`) with its theme json — no custom-name baseTheme, no `customTheme`+`RegisteredResources`; `visualContainer` schema `2.10.0` (not 2.5.0). Diagnose by `getDefinition` on a working QuickCreate report and diffing. ⚠️ **The `2.10.0` part is wrong — corrected 2026-09-02, see [§19-bis](#19-bis-correction-2026-09-02--visualcontainer-2100-does-not-exist).** |
 | 20 | "Cannot load model — CapacityNotActive" (report renders, model won't load) | HIGH | The Fabric capacity is **Paused**. Resume: `az fabric capacity resume --capacity-name <n> --resource-group <rg>`. Not a report bug. |
+| 21 | A `$schema` URL that 404s **disables validation instead of failing it** | **HIGH** | The CLI emits `PBIR_SCHEMA_UNREACHABLE` as a *warning*, skips every file pinned to that schema, and still reports `"result":"succeeded"`. Curl each `$schema` URL for a 200 before trusting a clean run — see [§21](#21-an-unreachable-schema-silently-skips-validation) |
+| 22 | `templates/deploy_report.py` in this agent validates the **legacy** format | MEDIUM | It checks `layoutOptimization` / `sections[]` and rejects `definition/pages` paths — the opposite of Rule 1 (PBIR only). Do not reuse its `validate_report()`; see [§22](#22-the-shipped-template-validates-the-format-rule-1-forbids) |
 
 ---
 
@@ -157,11 +159,123 @@ if ($status.status -ne "Succeeded") { throw $status.error }
 
 ---
 
+### 19-bis. Correction 2026-09-02 — `visualContainer` 2.10.0 does not exist
+
+**Context:** `powerbi-report-author validate`, schema host `developer.microsoft.com`, measured 2026-09-02.
+
+Issue 19 above is right about `version.json`, `report.json` and `baseTheme` — those four
+conditions did fix a hanging report and are kept. It is **wrong** about the schema version.
+
+**Symptom:** the run looks clean —
+
+```json
+{"data":{"result":"succeeded","errorCount":0,"warningCount":1,...}}
+```
+
+— but the single warning is `PBIR_SCHEMA_UNREACHABLE`, and **every visual was skipped**.
+27 visuals, none of them validated, exit code 0.
+
+**Root cause:** `visualContainer/2.10.0` returns **404**. Measured, one HTTP call each:
+
+| URL under `.../item/report/definition` | Status |
+|---|---|
+| `visualContainer/2.5.0/schema.json` | **200** |
+| `visualContainer/2.9.0/schema.json` | **200** ← newest that exists |
+| `visualContainer/2.10.0/schema.json` | **404** |
+| `visualContainer/2.11.0` … `2.14.0` | **404** |
+| `page/2.1.0/schema.json` | **200** |
+| `page/2.3.1/schema.json` | **404** |
+| `report/3.3.0/schema.json` | **200** |
+
+**Fix:** pin `visualContainer/2.9.0`. It is the highest version that resolves, and it is the
+version the report declares about itself in `report.json` → `reportVersionAtImport.visual`.
+That self-declaration is the cheapest place to read the right answer off an existing report.
+
+**Evidence:** after switching 2.10.0 → 2.9.0 and removing `ordinal` (see §23), the same
+27-visual report validated `"errorCount":0,"warningCount":0` — warning count went to zero,
+which is what proves the visuals were actually read this time. Deployed to Fabric, and
+`getDefinition` round-tripped 36 parts / 27 visuals.
+
+**Beware of a false negative when measuring this.** A first probe using Python `requests`
+through the corporate proxy returned a blank status for *every* version including ones that
+genuinely exist, which looked like "the host is blocked, the 404s mean nothing". `curl.exe`
+from the same shell returned clean, discriminating status codes. If a probe fails uniformly,
+suspect the probe before concluding anything about the server.
+
+---
+
+### 21. An unreachable schema silently skips validation
+
+**Context:** `powerbi-report-author validate`, 2026-09-02.
+
+`PBIR_SCHEMA_UNREACHABLE` is emitted as a **warning**, not an error. The CLI then skips
+every file that pointed at that schema and still prints `"result":"succeeded"`. A typo in a
+`$schema` version therefore does not fail the build — it turns the check off.
+
+**Fix:** treat any `PBIR_SCHEMA_UNREACHABLE` as an error. Before trusting a clean validate,
+confirm each distinct `$schema` URL returns 200:
+
+```powershell
+$root = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition"
+foreach ($p in @("visualContainer/2.9.0","page/2.1.0","report/3.3.0")) {
+    $code = curl.exe -s -o NUL -w "%{http_code}" "$root/$p/schema.json"
+    Write-Output ("{0,-24} {1}" -f $p, $code)
+}
+```
+
+**The generalisable half:** `warningCount: 0` is the assertion that matters, not
+`errorCount: 0`. A validator that degrades to skipping on a fetch failure reports success for
+work it never looked at, so "0 errors" only means something once the warning count is also 0.
+
+---
+
+### 22. The shipped template validates the format Rule 1 forbids
+
+**Context:** [`templates/deploy_report.py`](templates/deploy_report.py) in this agent folder, read 2026-09-02.
+
+**Symptom:** its `validate_report()` checks for `layoutOptimization` and a `sections[]` array,
+and raises on any part path containing `definition/pages` — i.e. it accepts **legacy PBIX-style
+JSON** and rejects **PBIR**, while [`instructions.md`](instructions.md) Rule 1 mandates PBIR only.
+
+**Fix:** do not reuse that function. For PBIR, walk the `.Report` folder and send every file as
+a part, since `updateDefinition` is a full replace (issue 7):
+
+```python
+parts = [
+    {"path": p.relative_to(root).as_posix(),
+     "payload": base64.b64encode(p.read_bytes()).decode(),
+     "payloadType": "InlineBase64"}
+    for p in sorted(root.rglob("*")) if p.is_file()
+]
+```
+
+**Status:** the template file itself is left in place — it is still referenced elsewhere and
+this entry is the warning, not a deletion.
+
+---
+
+### 23. `page.json` rejects `ordinal`
+
+**Context:** `page` schema 2.1.0, 2026-09-02.
+
+**Symptom:** `PBIR_SCHEMA_VALIDATION_ERROR: / must NOT have additional properties (property: "ordinal")`,
+once per page.
+
+**Root cause:** page order is owned solely by `pages.json` → `pageOrder`. `ordinal` is a legacy
+PBIX-era property with no equivalent in PBIR; the schema is closed, so an extra property is an
+error rather than being ignored.
+
+**Fix:** remove `ordinal` from every `page.json`. Order the `pageOrder` array instead.
+
+**Evidence:** 3 errors before, 0 after, on the same 3-page report.
+
+---
+
 ## Debugging Checklist
 
 When a report misbehaves, walk this list in order:
 
-1. **`powerbi-report-author validate <Report>.Report`** — fix every `error`, review every `warning`
+1. **`powerbi-report-author validate <Report>.Report`** — fix every `error`, review every `warning`. **`warningCount` must be 0, not just `errorCount`**: a `PBIR_SCHEMA_UNREACHABLE` warning means the CLI skipped every file pinned to that schema and still reported success (§21).
 2. Compare your visual's JSON against [`cli_knowledge/visuals/<type>/effective.json`](cli_knowledge/visuals/) — does the property exist? at the right path?
 3. Round-trip each suspicious value through `expr encode --kind ...`
 4. Inspect a known-good report with `preview-visuals` — compare structure

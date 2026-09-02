@@ -49,10 +49,18 @@ Every JSON file in `definition/` declares a `$schema`. The schemas live under `h
 | `definition/report.json` | `.../report/3.3.0/schema.json` |
 | `definition/pages/pages.json` | `.../pagesMetadata/1.1.0/schema.json` |
 | `definition/pages/<id>/page.json` | `.../page/2.1.0/schema.json` |
-| `definition/pages/<id>/visuals/<vid>/visual.json` | `.../visualContainer/2.10.0/schema.json` |
+| `definition/pages/<id>/visuals/<vid>/visual.json` | `.../visualContainer/2.9.0/schema.json` ⚠️ **was `2.10.0` — corrected 2026-09-02, that version 404s** |
 | `definition/**/filters.json` *(any filters.json)* | `.../filterConfiguration/1.2.0/schema.json` |
 | `definition.pbir` | `.../definitionProperties/2.0.0/schema.json` |
 | `StaticResources/SharedResources/BaseThemes/<t>.json` | `.../theme/2.140.0/schema.json` |
+
+> **⚠️ Verify each of these returns 200 before trusting a clean `validate`.** An unreachable
+> `$schema` is reported as a *warning* (`PBIR_SCHEMA_UNREACHABLE`) and the CLI then **skips**
+> every file pinned to it while still printing `"result":"succeeded"`. Measured 2026-09-02:
+> `visualContainer/2.10.0` through `2.14.0` all 404 — **`2.9.0` is the newest that exists** —
+> and `page/2.3.1` 404s while `page/2.1.0` resolves. The version a given report expects is
+> also written in its own `report.json` → `reportVersionAtImport`. Full evidence and the
+> one-line curl check: [`known_issues.md` §19-bis and §21](known_issues.md).
 
 > **Schema names vs file names** — note that `pages.json` uses the **`pagesMetadata`** schema, `page.json` uses **`page`**, and `visual.json` uses **`visualContainer`** (not `visual`). The CLI will surface mismatches as `PBIR_FORMATTING_*` or `PBIR_VCO_*` errors. If `validate --format text` reports a missing-property error, do not silence it — re-check property names in `cli_knowledge/`.
 
@@ -191,11 +199,13 @@ Every entry must correspond to an existing `pages/<name>/page.json`.
 
 ## `visuals/<visualId>/visual.json` — Visual Definition
 
-Skeleton (cardVisual example):
+Skeleton (cardVisual example). The `$schema` below was `2.10.0` until 2026-09-02; that
+version returns 404, which silently disables validation for every visual — see
+[`known_issues.md` §19-bis](known_issues.md).
 
 ```json
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "<uuid>",
   "position": { "x": 20, "y": 80, "z": 0, "width": 200, "height": 120, "tabOrder": 0 },
   "visual": {
