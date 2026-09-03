@@ -24,10 +24,29 @@ So: every allowlisted value carries a reason, and a repo can add its own in a
 
 The mirror image exists too: `.publicsafety-deny` adds repo-specific forbidden
 terms on top of the shared `CLIENT_NAMES` baseline.
+
+Correction 2026-09-03 — excluding a repo's own leak-guard corpus
+---------------------------------------------------------------
+`SELF` below skips *this* tool's own files, because they contain every pattern
+by construction. But the docstring above promises the scanner works on any
+project, and a responsible project has its **own** leak guard — whose fixtures
+are, by the same construction, full of the patterns. Scanning a sibling demo
+repo produced **19 of 20 BLOCKs from its own `tests/test_leak_guard.py`**,
+burying the single real finding. Per PUBLIC_SAFETY.md, that is a bug in the
+scanner, not a fact of life: 95 % noise is a report nobody reads.
+
+So `.publicsafety-allow` also accepts **path** entries:
+
+    path:tests/test_leak_guard.py        # our own detection fixtures
+    path:.github/scripts/check_*.py      # glob, matched on the relative path
+
+Deliberately NOT a blanket `test_*.py` skip: a real GUID in a test file is
+still published. The repo must name the files, and each still needs a reason.
 """
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 import os
 import pathlib
@@ -228,9 +247,29 @@ def load_allowlist(root: pathlib.Path) -> dict[str, str]:
     if f.exists():
         for raw in f.read_text(encoding="utf-8", errors="ignore").splitlines():
             line = raw.split("#", 1)[0].strip()
-            if line:
+            if line and not line.lower().startswith("path:"):
                 allowed[line.lower()] = "allowlisted in .publicsafety-allow"
     return allowed
+
+
+def load_path_exclusions(root: pathlib.Path) -> list[str]:
+    """Files this repo has declared to be its *own* leak-guard corpus.
+
+    Added 2026-09-03. `SELF` skips this tool's fixtures; a consuming repo needs
+    the same for its own, or its detection tests report as leaks. Observed: a
+    sibling demo repo where 19 of 20 BLOCKs came from its `test_leak_guard.py`.
+
+    Path-scoped on purpose, never value-scoped: allowlisting the *value* of a
+    fixture would also silence a genuine hit of that value anywhere else.
+    """
+    globs: list[str] = []
+    f = root / ".publicsafety-allow"
+    if f.exists():
+        for raw in f.read_text(encoding="utf-8", errors="ignore").splitlines():
+            line = raw.split("#", 1)[0].strip()
+            if line.lower().startswith("path:"):
+                globs.append(line[5:].strip().replace("\\", "/"))
+    return [g for g in globs if g]
 
 
 def load_denylist(root: pathlib.Path) -> list[str]:
@@ -389,11 +428,15 @@ def scan_file(path: pathlib.Path, root: pathlib.Path,
 def scan(root: pathlib.Path) -> list[dict]:
     allowed = load_allowlist(root)
     rules = RULES + denylist_rules(root)
+    excluded = load_path_exclusions(root)
     out: list[dict] = []
     for path in repo_files(root):
         if not path.is_file() or path.name in SELF:
             continue
         if path.suffix.lower() not in SCAN_SUFFIXES:
+            continue
+        rel = path.relative_to(root).as_posix()
+        if any(fnmatch.fnmatch(rel, g) for g in excluded):
             continue
         out.extend(scan_file(path, root, allowed, rules))
     return out

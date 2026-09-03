@@ -217,6 +217,48 @@ def test_denylist_adds_repo_specific_terms(scanner, tmp_path, monkeypatch):
     assert {h["rule"] for h in hits()} == {"denylisted-term"}
 
 
+def test_path_exclusion_is_scoped_to_the_file(scanner, tmp_path):
+    """A repo may exempt its own leak-guard corpus — by path, never by value.
+
+    Added 2026-09-03. `SELF` skips this tool's own fixtures, but the scanner is
+    documented as usable on any project, and a responsible project has its own
+    leak guard whose fixtures are full of the patterns by construction. Scanning
+    a sibling demo repo returned 19 of 20 BLOCKs from its `test_leak_guard.py`,
+    burying the one real finding — the noise failure PUBLIC_SAFETY.md forbids.
+
+    The load-bearing property is the second half: excluding the fixture must NOT
+    silence the same value in shipped code, which is what a value-level
+    allowlist entry would have done.
+    """
+    secret = "x7qk3zv9m2rt6bd1ncf8.datawarehouse.fabric.microsoft.com"
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_leak_guard.py").write_text(
+        f'BAD = "{secret}"\n', encoding="utf-8")
+    shipped = tmp_path / "config.md"
+    shipped.write_text(f"endpoint: {secret}\n", encoding="utf-8")
+
+    # Without the exemption both files are reported.
+    files = {f["file"] for f in scanner.scan(tmp_path)}
+    assert files == {"tests/test_leak_guard.py", "config.md"}
+
+    (tmp_path / ".publicsafety-allow").write_text(
+        "# our own detection fixtures\npath:tests/test_leak_guard.py\n",
+        encoding="utf-8")
+
+    findings = scanner.scan(tmp_path)
+    assert {f["file"] for f in findings} == {"config.md"}, (
+        "a path: entry must exempt only that file — the same value in shipped "
+        "code is still a leak.")
+
+
+def test_path_exclusion_never_becomes_an_allowed_value(scanner, tmp_path):
+    """`path:` lines are routed to the path list, not the value allowlist."""
+    (tmp_path / ".publicsafety-allow").write_text(
+        "# fixtures\npath:tests/*.py\n", encoding="utf-8")
+    assert "path:tests/*.py" not in scanner.load_allowlist(tmp_path)
+    assert scanner.load_path_exclusions(tmp_path) == ["tests/*.py"]
+
+
 def test_tool_hardcodes_no_customer_name(scanner):
     """The scanner must not be the leak.
 

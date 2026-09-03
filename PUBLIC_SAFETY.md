@@ -179,6 +179,24 @@ is wrong on a clean repo gets ignored, and then it protects nothing — the same
 failure a permanently-red test suite causes. Either fix the rule or record the
 value in `.publicsafety-allow` **with a reason**.
 
+**A repo may exempt its own leak-guard corpus, by path.** *(2026-09-03)* The
+scanner skips its own definitions — they contain every pattern by construction —
+and a project that has its own leak guard needs the same. Scanning a sibling
+demo repo returned **19 of 20 BLOCKs from its `tests/test_leak_guard.py`**,
+which buries the one real finding; with the exemptions it reported `1 BLOCK`.
+Add path lines to the same `.publicsafety-allow`:
+
+```
+# our own detection fixtures - full of the patterns on purpose
+path:tests/test_leak_guard.py
+path:.github/scripts/check_*.py      # globs match the relative path
+```
+
+Path-scoped, never value-scoped: allowlisting a fixture's *value* would also
+silence a genuine hit of that value in shipped code. And deliberately not a
+blanket `test_*.py` skip — a real GUID in a test file is still published, so
+the repo must name the files, each with a reason.
+
 The mirror image exists too, and it is where **real** customer names go —
 never into the tool itself:
 

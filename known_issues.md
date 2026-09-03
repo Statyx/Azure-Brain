@@ -523,3 +523,47 @@ POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
   because that is a property of the edit rather than of the commit. Design brain writes
   so the *edit itself* is always safe to publish unreviewed.
 
+### 50. The Publication Scanner Reported a Repo's Own Leak Guard as 19 of 20 Leaks
+
+- **Symptom**: `python Meta-Brain/tools/scan_public_safety.py <sibling-repo>` returned
+  `20 BLOCK, 27 WARN` on a public demo repo. Nineteen of the twenty BLOCKs pointed at
+  that repo's **own** detection fixtures — `tests/test_leak_guard.py`,
+  `tests/test_supervisor.py`, `.github/scripts/check_client_leak.py` — matching on
+  deliberately fabricated values of the blocked shapes
+  (`<stub>.datawarehouse.fabric.microsoft.com`, `<x>.services.ai.azure.com`).
+  The **one real finding** was the twentieth line.
+- **Cause**: the tool has a `SELF` set that skips its own definitions, "because they
+  contain every pattern by construction". But its docstring promises it is
+  "deliberately usable **outside** Azure-Brain", and `SELF` is hardcoded to
+  *Azure-Brain's* filenames. Any consuming repo responsible enough to own a leak guard
+  therefore gets that guard's corpus reported as leaks. The per-repo escape hatch that
+  did exist, `.publicsafety-allow`, allowlists **values** — useless here, because a
+  fixture value is unique and random, and allowlisting it by value would also silence a
+  genuine hit of the same value in shipped code.
+- **Fix**: `.publicsafety-allow` now also accepts `path:` entries, matched as globs
+  against the repo-relative path, e.g. `path:tests/test_leak_guard.py`. Deliberately
+  **not** a blanket `test_*.py` skip — a real GUID in a test file is still published —
+  so the repo must name the files, each still carrying a reason.
+- **Evidence**: same repo, same commit. Before: `20 BLOCK, 27 WARN`. After adding five
+  `path:` lines: `1 BLOCK, 22 WARN`, the survivor being a genuine `client-acronym` hit
+  in a shipped `theme/*.json` that had been invisible underneath the noise.
+  `Meta-Brain/tests/test_public_safety.py` gained
+  `test_path_exclusion_is_scoped_to_the_file`, which asserts both halves: the fixture is
+  exempt **and** the identical value in shipped code is still reported.
+- **Lesson**: `PUBLIC_SAFETY.md` already stated the principle — *"false positives are
+  bugs in the scanner, not facts of life... a scanner that is always red is one nobody
+  reads"*. The brain held the rule and the tool still violated it, because the rule was
+  only ever tested against **this** repo, where `SELF` happens to be sufficient. A guard
+  verified solely on its home repo is unverified for its documented use.
+- **Corollary**: this is the same defect class as `agent_principles.md` §3b, seen from
+  the other side. There, a correction was *present but read too late* to change
+  behaviour; here, a finding is *present but buried* at 95 % noise. In both cases the
+  information exists and still fails to act. Signal that arrives late and signal that
+  arrives drowned are the same bug.
+- **Corollary**: writing this very entry tripped the scanner — quoting the two fixture
+  hostnames verbatim produced `2 BLOCK` on `known_issues.md` and failed the gate, which
+  is the tool behaving correctly. It is also the clearest argument for path-scoping: the
+  *values* must stay redacted even inside a war story, while the *file* that legitimately
+  contains them is exempted by name. Redact by value, exempt by path.
+
+
