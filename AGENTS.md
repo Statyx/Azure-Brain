@@ -340,6 +340,15 @@ its own domain**.
     [`naming_conventions.md`](Meta-Brain/agents/project-orchestrator-agent/naming_conventions.md)
     § Rule 0.
 
+13. **Check [`superseded_rules.yaml`](superseded_rules.yaml) before applying any layout, format or
+    naming rule.** It is the brain's index of rules that must **not** be applied, and of rules
+    that are valid only under a stated condition. Finding a rule is not enough: a rule can be
+    correct, current and still the wrong one here, because its condition does not hold.
+    > **File an entry the moment a project applies a newer rule in place of an older one**, while
+    > the evidence is still in hand. `kind: superseded` — the old rule is wrong, never apply it.
+    > `kind: conditional` — both are valid, the old one only under its written `condition`.
+    > Entries are enforced on every run by `Meta-Brain/tests/test_superseded.py`.
+
 Conventions: Python 3.12+ with `pathlib` and type hints · UTF-8 everywhere, **no BOM**
 (`[System.IO.File]::WriteAllText()` in PowerShell, never `Out-File` for JSON) · conventional
 commits (`feat(energy):`, `fix(core):`, `docs(brain):`).

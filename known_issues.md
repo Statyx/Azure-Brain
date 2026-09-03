@@ -598,4 +598,47 @@ POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
   and pushed on time — and still invisible, because the reader was looking at a different copy
   of the file. Superseding a rule in git does not supersede it on disk.
 
+### 52. Retiring a Rule Had a Policy, Four Conventions and No Index — So Retired Rules Kept Being Applied
+
+- **Symptom**: after #51, the obvious question was "how does an agent know which rules are dead?"
+  There was no answer. The brain held **four** competing ways to mark a rule retired, and a rule
+  could be retired in one of them while still reading as a live imperative everywhere else.
+- **Cause**: the four mechanisms had grown independently and only one was enforced.
+  `status: deprecated` in `_catalog.yaml` (validated by `test_smoke.py`); the `*.legacy.md`
+  filename suffix (used in one agent, and only *exempted* by tests, never checked); a
+  `## Corrections` section with an inline `(SUPERSEDED <date>)` marker (`taskflow-agent` only,
+  documented nowhere); and hardcoded regexes in `test_consistency.py` — eight of them, written
+  for the PBIR doctrine alone. Retiring the *next* rule meant writing all of that Python again,
+  so nobody did. `agent_principles.md` §3b already stated the correct policy and named its own
+  gap in writing: *"Neither was caught by CI. Both are invisible to a diff."*
+- **Fix**: `superseded_rules.yaml` at the repo root — a declarative registry walked by
+  `Meta-Brain/tests/test_superseded.py`. A rule is retired by adding an entry, with no new
+  Python. Three properties make it hold: every entry must declare at least one enforcement
+  (`forbidden` regexes, an `adjacency` check, or a named `enforced_by` test) or the suite fails;
+  every entry carries an `authority_anchor` regex that must still be present in the file it
+  points at, so the registry cannot outlive the rule it describes; and `adjacency` mechanises
+  §3b's own sentence — *"a correction 200 lines below the rule it corrects is not a correction,
+  it is a footnote nobody reaches"* — by failing when the correction drifts more than N lines
+  from the statement it corrects. Declared as Key rule 13 in `AGENTS.md` so it is read at loop
+  step 2, alongside the mandatory rules, and not at step 4 with `known_issues.md`.
+- **Evidence**: `python -m pytest tests/test_superseded.py -v` → **29 passed, 7 skipped**. The
+  registry's first three entries are the real cases: the PBIR prohibition (indexed, enforcement
+  delegated to the existing `test_consistency.py` rather than duplicated), the `kebab-case`
+  Fabric workload folder, and the flat `src/` layout. The second is provable in one line —
+  `import fabric.data-agent` → `SyntaxError: invalid syntax`, `import fabric.data_agent` → OK —
+  which means the Naming Conventions row mandating `fabric/data-agent/` produced a repo its own
+  orchestrator could not import (`Statyx/Fab-Zava-Media` commit `36dfa20`, 8 workload packages,
+  18/18 modules importable after the correction, 192 tests green).
+- **Lesson**: a policy without an index is unusable at the only moment it matters — *before* the
+  work, when the agent does not yet know which rule is stale and so cannot know to go looking.
+  §3b told an agent what to do *once it already knew* a rule was wrong. That is the easy half.
+  The registry answers the question an agent can actually ask cold: **what must I not apply?**
+- **Corollary**: the `conditional` kind matters as much as `superseded`, and was the harder
+  insight. The reflex — "a project used a newer rule, so flag the old one obsolete" — would have
+  destroyed a correct rule here: the flat `src/` layout of #51 was never stale, it is explicitly
+  scoped to *"one workload only"*. It was misapplied because its **condition** went unread, not
+  because it was dead. A registry that only tracked dead rules would have missed the very failure
+  that prompted it. Retiring is one failure mode; applying a live rule outside its condition is
+  the other, and it is quieter.
+
 

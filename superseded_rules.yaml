@@ -1,0 +1,110 @@
+# Superseded and conditional rules — the brain's index of what must NOT be applied.
+#
+# WHY THIS FILE EXISTS
+# --------------------
+# `agent_principles.md` §3b already requires a correction to sit adjacent to the false
+# statement it corrects. It also admits, in its own words, the weakness that motivated it:
+#
+#     "Neither was caught by CI. Both are invisible to a diff."
+#
+# So the policy existed and nothing enforced it. Worse, an agent had no single place to ask
+# the one question that matters at the start of a project: *which rules are dead?* Retiring a
+# rule meant hand-writing regexes into `test_consistency.py`, which was done exactly once (the
+# PBIR doctrine) and for nothing else.
+#
+# This file is that single place, and it is executable:
+# `Meta-Brain/tests/test_superseded.py` walks every entry on every run.
+#
+# WHEN TO ADD AN ENTRY
+# --------------------
+# The moment a project applies a newer rule in place of an older one. File it here **then**,
+# while the evidence is in your hands — not later, from memory.
+#
+# kind:
+#   superseded  - the old rule is WRONG. It must never be applied again, on any project.
+#   conditional - BOTH rules are valid; the old one applies only under a stated `condition`.
+#                 Filing these matters as much as filing `superseded` ones. Applying a
+#                 conditional rule while ignoring its condition is precisely the failure
+#                 recorded as known_issues.md #51 — the flat layout was not stale, its
+#                 condition ("one workload only") was simply not read.
+#
+# ENFORCEMENT — every entry MUST carry at least one of:
+#   forbidden   - regexes that may not appear in any Markdown file (scanned by the test)
+#   adjacency   - the correction must sit within N lines of the statement it corrects (§3b)
+#   enforced_by - a named existing test file that already guards this rule bespoke
+# An entry carrying none of the three is a note, not a rule, and the suite fails on it.
+#
+# `authority_anchor` is the anti-rot guard: it is a regex that must still be present in the
+# `authority` file. If the current rule is ever reworded or removed, the test fails and forces
+# this registry to be revisited deliberately, instead of silently describing a rule that no
+# longer exists.
+
+rules:
+
+  - id: report-format-pbir
+    kind: superseded
+    recorded: 2026-09-03
+    retired: 2026-06-13
+    summary: >-
+      "Always use the Legacy PBIX format / NEVER PBIR / PBIR renders blank" —
+      a real 2026 workaround that outlived its bug and hardened into doctrine
+      across eleven files in three brains.
+    replaced_by: >-
+      PBIR folder format is the default for new reports. Legacy PBIX stays valid ONLY for
+      maintaining reports already shipped in it, and must say so explicitly.
+    authority: Fabric-Brain/agents/report-builder-agent/instructions.md
+    authority_anchor: 'PBIR folder format'
+    evidence: >-
+      report-builder-agent/known_issues.md #19 — root cause diagnosed and fixed 2026-06-13
+      (version.json 2.0.0, report.json needs reportSource+settings+objects, baseTheme must be
+      a real built-in, visualContainer schema 2.10.0). Audit of 2026-07-31 found the
+      prohibition still stated in the imperative in eleven files.
+    enforced_by: Meta-Brain/tests/test_consistency.py
+
+  - id: fabric-workload-folder-hyphen
+    kind: superseded
+    recorded: 2026-09-03
+    summary: >-
+      "Fabric workload folder = kebab-case (fabric/data-agent/)" as an unqualified rule in the
+      Naming Conventions table. Unimplementable when the folder is a Python package: a hyphen
+      is not a valid Python identifier, so the folder can never be imported.
+    replaced_by: >-
+      When fabric/<workload>/ holds imported .py modules, the folder must be snake_case
+      (fabric/data_agent/). kebab-case remains correct for workload folders holding only
+      .ps1, notebooks or artifacts, which are never imported.
+    authority: Meta-Brain/agents/project-presentation-agent/repo_structure.md
+    authority_anchor: 'Fabric workload folders in a Python repo must be'
+    evidence: >-
+      Statyx/Fab-Zava-Media commit 36dfa20 — `import fabric.data-agent` raises
+      "SyntaxError: invalid syntax"; `import fabric.data_agent` succeeds. 8 workload packages,
+      18/18 modules importable via importlib, 192 tests green.
+    adjacency:
+      file: Meta-Brain/agents/project-presentation-agent/repo_structure.md
+      near: '\| Fabric workload folder \|'
+      must_contain: 'Correction \d{4}-\d{2}-\d{2}.{0,80}snake_case'
+      within_lines: 20
+
+  - id: fabric-repo-layout-flat
+    kind: conditional
+    recorded: 2026-09-03
+    condition: >-
+      The project deploys exactly ONE Fabric workload and is not expected to grow.
+      A second workload triggers migration to the by-workload layout.
+    summary: >-
+      The flat `src/` layout is NOT retired, and must not be treated as retired. It is valid
+      under a stated condition. It is registered here because it was applied once with the
+      condition ignored, producing a five-workload repo flattened into a single src/.
+    replaced_by: >-
+      The by-workload layout (fabric/<workload>/ + foundry/ + design/ + artifacts/) as soon as
+      the project deploys more than one workload.
+    authority: Meta-Brain/agents/project-presentation-agent/repo_structure.md
+    authority_anchor: 'The moment a second workload appears, migrate to the by-workload layout'
+    evidence: >-
+      known_issues.md #51 — a stale second clone of the brain served this layout without its
+      condition; Statyx/Fab-Zava-Media was built flat with five workloads and had to be
+      restructured (commit 36dfa20, 74 renames, 0 unmatched deletions, 192 tests green).
+    adjacency:
+      file: Meta-Brain/agents/project-presentation-agent/repo_structure.md
+      near: 'Microsoft Fabric Project Layout .{0,3} flat'
+      must_contain: 'only when the project deploys'
+      within_lines: 6

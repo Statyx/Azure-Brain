@@ -307,6 +307,28 @@ docs-project/
 | Documentation | `UPPERCASE` for root docs | `README.md`, `CONTRIBUTING.md` |
 | Images | `kebab-case` with descriptive names | `architecture-overview.png` |
 
+> 🔴 **Correction 2026-09-03 — Fabric workload folders in a Python repo must be `snake_case`.**
+> The `Fabric workload folder` row above mandates `kebab-case` (`fabric/data-agent/`). That is
+> **unimplementable when the workload folder is a Python package**: a hyphen is not a valid
+> Python identifier, so the folder can never be imported.
+>
+> ```
+> >>> import fabric.data-agent
+> SyntaxError: invalid syntax
+> >>> import fabric.data_agent
+> OK
+> ```
+>
+> **Rule.** When `fabric/<workload>/` holds `.py` modules that are imported — which is the case
+> in the by-workload layout above, where `deploy_all.py` drives each step through `importlib` —
+> the folder **must** be `snake_case`: `fabric/data_agent/`. `kebab-case` remains correct for
+> workload folders holding only `.ps1`, notebooks or artifacts, which are never imported.
+> Applying the row above literally produces a repo whose own orchestrator cannot load it.
+>
+> **Evidence:** `Statyx/Fab-Zava-Media` commit `36dfa20` — 8 workload packages under `fabric/`,
+> 18/18 modules importable via `importlib.import_module`, 192 tests green. The `SyntaxError`
+> above is the actual interpreter output from that repo.
+
 ---
 
 ## .gitignore Essentials

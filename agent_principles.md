@@ -58,6 +58,23 @@ keep the original in place — a correction is only legible next to what it corr
 Neither was caught by CI. Both are invisible to a diff: the new text is correct, and nothing
 about it reveals that a *different* file still contradicts it.
 
+**Enforced since 2026-09-03.** The gap admitted just above — *"Neither was caught by CI"* — is
+now closed. [`superseded_rules.yaml`](superseded_rules.yaml) at the repo root is the
+machine-readable index of retired rules, and `Meta-Brain/tests/test_superseded.py` verifies on
+every run that each correction still sits **adjacent** to the statement it corrects, and that
+the replacement rule is still stated where the registry claims it is.
+
+Two kinds, because the brain has been bitten by both:
+
+| kind | Meaning | The failure it prevents |
+|---|---|---|
+| `superseded` | the old rule is wrong | an agent applies a rule that was retracted in another file |
+| `conditional` | both valid; the old one only under a written `condition` | an agent applies a *correct* rule whose condition does not hold — `known_issues.md` #51 |
+
+File the entry **when a project first applies the newer rule**, not afterwards from memory. An
+entry carrying no enforcement (`forbidden`, `adjacency` or `enforced_by`) fails the suite: an
+unenforced note is exactly what this section already proved does not work.
+
 ## 4. Verification Before Done
 
 - Never mark a task complete without proving it works
