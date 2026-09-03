@@ -287,6 +287,63 @@ and read back with `category=RemoteTool`; the five-body `AzureFabric` rejection 
 /v1/admin/tenantsettings` for the service-principal flags; three verifier runs after each change,
 all failing identically.
 
+#### ✅ RESOLVED — 2026-09-03. The capacity was paused.
+
+**The block above is kept because its reasoning was wrong in an instructive way, not because its
+conclusion stands.** It does not. The chain now verifies **3/3 end to end, with no portal step
+anywhere**.
+
+The cause was not the identity hop, not RBAC, not tenant settings, not the endpoint mode. **The
+Fabric capacity behind the workspace was paused**, and a paused capacity answers `404` on the
+data-agent MCP surface with the reason in the body:
+
+```
+HTTP 404
+{"error":{"code":-32601,
+          "message":"Internal error CapacityNotActive.Capacity <guid> is not active",
+          "data":{"errorCode":"CapacityNotActive","requestId":"..."}}}
+```
+
+Foundry relays the **status only**, so the one word that explains everything never arrives. Resume
+the capacity, wait for `state=Active`, re-run — it passes.
+
+**Two habits would each have caught this on the first day.**
+
+1. **Re-send the failing request yourself before believing a third party's summary of it.** Foundry
+   said *"the remote MCP server returned HTTP 404 while enumerating tools"*, which frames it as a
+   routing problem. One direct `POST` to the same URL printed `CapacityNotActive`. The umbrella
+   playbook already carried *"capacity paused → 404"* — see
+   [`ERROR_RECOVERY.md`](../../../ERROR_RECOVERY.md) § 2 — and it was never reached, because the
+   symptom it is filed under is *"workspace items return 404"* and no workspace item was involved.
+2. **Identical failures acquit every suspect.** Four connection `authType` values —
+   `UserEntraToken`, `ProjectManagedIdentity`, `UserTokenAndProjectManagedIdentity`,
+   `AgentUserImpersonation` — produced a **byte-identical** error. Four independent identity models
+   cannot share one identity bug. That sameness was a result and it was read as bad luck; it should
+   have moved the search upstream of the connection entirely.
+
+Also settled while resolving it, and worth keeping:
+
+- **`RemoteTool` accepts `UserEntraToken` and `ProjectManagedIdentity`** for this connection, and
+  **both work**. It rejects `AAD` and `AccountManagedIdentity` at ARM validation time
+  (*"AuthType for RemoteTool Connection can only be None, CustomKeys, ProjectManagedIdentity,
+  OAuth2, Dev…"*). Prefer `ProjectManagedIdentity` for an unattended run — it does not depend on a
+  user token being exchangeable.
+- **The Fabric tool does not fire under the connection name on this binding.** It fires under the
+  **MCP server's own tool name**, `DataAgent_<data agent name>`, from `tools/list`. Only
+  `MicrosoftFabricPreviewTool` names the tool after the connection. A verifier asserting the
+  connection name reports *"never fired"* while the trace plainly shows the call — a stale
+  assertion reads exactly like a broken chain.
+- **After a resume, the first call can exceed the caller's timeout** while the capacity warms up.
+  Foundry's tool client gives up at **100 s** with `TaskCanceledException … HttpClient.Timeout`.
+  That is a cold start, not a second fault. Re-run.
+
+**Evidence:** the `CapacityNotActive` body captured on six request shapes (verbs, Accept values,
+protocol versions, URL variants) — all 404, all the same body, which is what proved the fault was
+not in the request; `az resource show … --query properties.state` → `Paused`, then `Active` after
+`az fabric capacity resume`; the authType matrix re-run after the resume, in which
+`UserEntraToken` and `ProjectManagedIdentity` both returned a real answer with
+`DataAgent_Zava_Media_Analyst` in the fired-tool list; a full 3/3 verifier pass.
+
 ### 5. ⚠️ The lab's own Fabric-bound agent contradicts itself
 
 `Inventory-Agent` is instructed *"The response must come only from the Fabric Data Agent tool

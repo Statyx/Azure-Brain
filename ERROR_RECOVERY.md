@@ -108,6 +108,59 @@ def check_capacity_first(ws_id, headers):
     return True
 ```
 
+### When the 404 reaches you second-hand (added 2026-09-03)
+
+The rule above is correct and was still missed, because the 404 never arrived as a Fabric
+404. It arrived as **another service's summary of one**:
+
+```
+The remote MCP server at api.fabric.microsoft.com:443/v1/mcp/workspaces/{ws}/
+dataagents/{id}/agent returned HTTP 404 (Not Found) while enumerating tools
+```
+
+That reads as *"wrong route"*, so the investigation goes to the URL — and the table above,
+keyed on *"all workspace items return 404"*, is never consulted, because no workspace item
+was being listed.
+
+**Fabric puts the reason in the body, and the relaying service drops it.** Sent directly,
+the same request answers:
+
+```
+HTTP 404
+{"error":{"code":-32601,
+          "message":"Internal error CapacityNotActive.Capacity <guid> is not active",
+          "data":{"errorCode":"CapacityNotActive","requestId":"..."}}}
+```
+
+**Rule: when a third party reports a Fabric 4xx, re-send that exact request yourself before
+believing its interpretation.** One request, and the body names the cause. Note also that a
+paused capacity is **404**, never 503 or 409 — the status carries no hint that the resource
+exists and is merely asleep.
+
+Confirm and fix on the control plane:
+
+```bash
+az resource show -g <rg> -n <capacity> \
+   --resource-type Microsoft.Fabric/capacities --query properties.state -o tsv   # Paused
+az fabric capacity resume -g <rg> --capacity-name <capacity>
+```
+
+After a resume, the first data-plane call can still exceed a caller's timeout while the
+capacity warms up — Foundry's tool client gives up at 100 s. A second run passes. Do not
+read that timeout as a second, different fault.
+
+### Diagnostic rule — identical failures acquit every suspect
+
+While the capacity was paused, four different connection `authType` values —
+`UserEntraToken`, `ProjectManagedIdentity`, `UserTokenAndProjectManagedIdentity`,
+`AgentUserImpersonation` — all failed with a **byte-identical** error. Each had been a
+plausible cause; each was disproved by the others.
+
+**When several genuinely independent hypotheses fail in exactly the same way, none of them
+is the cause — the fault is upstream of all of them.** Stop enumerating candidates on that
+axis and look for the thing they share. Sameness of failure is information; treat it as a
+result, not as a run of bad luck.
+
 ---
 
 ## Section 3: Conflict / Duplicate (409)

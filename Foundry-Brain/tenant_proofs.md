@@ -320,6 +320,35 @@ the runtime hop is not.
 - [ ] Whether `FabricIQPreviewTool` can reach a Fabric data agent **from an unattended script**.
       Transport proven (MCP `200`, `tools/list` returns the tool) and the ARM connection proven
       creatable, but the service-side call still returns `404` while enumerating tools. Unresolved.
+      **✅ Resolved 2026-09-03 — it can, and does.** The `404` was a **paused Fabric capacity**,
+      which this surface reports as `404` with `CapacityNotActive` in the body while Foundry relays
+      only the status. Resumed the capacity → the chain verifies **3/3 unattended, no portal step**.
+      See the proof below.
+
+## ✅ PROVEN 2026-09-03 — Foundry → Fabric data agent, unattended, deployed entirely from code
+
+A supervisor calling a **Fabric data agent over MCP** and an **A2A subordinate**, both bound from
+ARM, both firing correctly, verified by an oracle that asserts routing **by name and as a pair**
+(the right tool fired **and** the other did not):
+
+| Probe | Expected | Result |
+|---|---|---|
+| quantitative | Fabric fires, contracts stays out | ✅ `DataAgent_Zava_Media_Analyst` alone |
+| contractual | contracts fires | ✅ A2A alone |
+| the demo | both, one answer | ✅ both, single `### SOURCE` block |
+
+- Connection: `RemoteTool` / `GenericProtocol`, `metadata.type = fabric_iq_preview`,
+  `audience = https://api.fabric.microsoft.com`, created by `PUT` at api-version `2025-06-01`.
+- **`authType`: both `UserEntraToken` and `ProjectManagedIdentity` work.** `AAD` and
+  `AccountManagedIdentity` are rejected by ARM validation for this category. Prefer
+  `ProjectManagedIdentity` unattended — it does not depend on a user token being exchangeable.
+- The tool fires as **`DataAgent_<data agent name>`**, the MCP server's own tool name — *not* the
+  connection name, which is what `MicrosoftFabricPreviewTool` would have used.
+- `require_approval="never"` is required, or an unattended run hangs on consent.
+
+**What this does not settle:** nothing about latency, cost or streaming; nothing about GA
+behaviour (both tools are preview); and nothing about whether the data agent's own instructions
+travel over MCP — **they do not**, so the guard rails must be restated in the calling prompt.
 
 ---
 
@@ -331,3 +360,4 @@ the runtime hop is not.
 | 2026-09-02 | A2A **reproduced on a second tenant** (Sweden Central), and the two prerequisites this file had omitted recorded: first-class `properties.audience`, and a `Foundry Agent Consumer` grant whose absence reports as **404**. Also flagged that "ARM only" settles the A2A connection and does **not** generalise to a Fabric data-agent connection, which ARM provably cannot create. |
 | 2026-09-02 | Added **PROVEN ABSENT**: a Fabric data agent exposes no MCP endpoint (16 names → `404`/`-32601`, control `/ontologyEndpoint` → `500`/`-32603` on the same item). Amended the "only proves presence" bullet with the control-that-fails-differently technique. |
 | 2026-09-03 | **Retracted the 2026-09-02 PROVEN ABSENT claim.** A Fabric data agent *does* expose MCP, at `/mcp/workspaces/{ws}/dataagents/{id}/agent` (`initialize` → `200`, `tools/list` returns the tool). Two independent errors: the search varied only the trailing name and never the path shape, and the `500` control was an artefact of omitting `Accept: text/event-stream` (the same URL returns `200` with it). Recorded the three MCP route families, the `RemoteTool`/`GenericProtocol` ARM connection that `FabricIQPreviewTool` resolves, and the fact that `AzureFabric` not being an ARM category — re-verified across five body shapes — never implied the goal was unreachable. Logged the still-unresolved service-side `404` so the entry does not overclaim. |
+| 2026-09-03 | **Resolved that `404`, and promoted the chain to proven.** It was a **paused Fabric capacity**, which the data-agent MCP surface reports as `404` with `CapacityNotActive` in the body while Foundry relays only the status — so the umbrella rule *"capacity paused → 404"* was never reached, because the symptom arrived second-hand and reframed as a routing error. Added the full unattended proof (3/3, no portal step), the working `authType` set for `RemoteTool`, the `DataAgent_<name>` tool-naming rule, and the post-resume 100 s cold-start timeout. Two general habits recorded in [`ERROR_RECOVERY.md`](../ERROR_RECOVERY.md) § 2: re-send a relayed error yourself before believing its interpretation, and treat **identical failures across independent hypotheses** as acquitting all of them rather than as bad luck. |
