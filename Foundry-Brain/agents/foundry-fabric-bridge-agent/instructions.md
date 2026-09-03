@@ -8,6 +8,11 @@
 > lab ("Building Foundry IQ", 2026-08-04), including the working `agents.py` that creates a
 > Fabric-bound agent. Source: [`../../labs/foundry-iq/raw_capture.md`](../../labs/foundry-iq/raw_capture.md).
 > Doc-derived material is labelled inline.
+>
+> 🔴 **Correction 2026-09-03 — the portal is not the only path.** The portal material below stays
+> valid, but it is now **one of two** routes. The second is fully scriptable and proven unattended
+> on a live tenant. **No human present — CI, deploy script, promotion? Load
+> [`arm_connection.md`](arm_connection.md) instead of the portal steps.**
 
 ---
 
@@ -38,6 +43,9 @@ The one thing to get right:
 3. **Bind through a project connection, never by pasting GUIDs into code.** The GUIDs create the
    connection once, in the portal. Code then resolves that connection **by name**. Hardcoding
    GUIDs in a script is how an environment promotion breaks.
+   > 🔴 **Corrected 2026-09-03.** The rule holds — *resolve by name, never hardcode GUIDs*. What
+   > is wrong is "in the portal": the connection can also be created **from ARM**, and must be
+   > when the run is unattended. See [`arm_connection.md`](arm_connection.md).
 4. **`allow_preview=True` on the client, or nothing works.** The Fabric tool is a preview surface;
    `AIProjectClient` refuses preview models without it.
 5. **Grant the caller access on the Fabric side.** Foundry reaching into Fabric is a
@@ -80,6 +88,13 @@ This is the correction that matters most, and it is **verified in working code**
 
 An earlier reading of the docs suggested two competing binding styles — "portal GUIDs" versus
 "SDK connection". They are not competing. They are sequential.
+
+> 🔴 **Correction 2026-09-03 — there is a third style, and it needs no browser.**
+> Steps 1–2 below assume a person reading GUIDs out of a URL. That is the **assisted** path, and
+> it is still fine. It is not the only one: an ARM `RemoteTool` connection binds the same data
+> agent over its **MCP endpoint** — which this file once claimed did not exist. Step 3 is
+> unchanged; only `FabricIQPreviewTool` replaces `MicrosoftFabricPreviewTool`.
+> Route, body, `authType` matrix, tool-naming trap: [`arm_connection.md`](arm_connection.md).
 
 ### Step 1 — portal: harvest two GUIDs from the Fabric URL
 
@@ -286,6 +301,10 @@ anywhere other than DAX/GQL on the Fabric side, the boundary has already leaked.
 | Two GUIDs must be read out of a browser URL by hand | brittle and unautomatable in the portal path; script the connection creation if you can |
 | The Fabric answer's quality is bounded by the Fabric agent's instructions | you cannot fix a bad metric definition from the Foundry side |
 
+> 🔴 **Row 5 corrected 2026-09-03.** *"Script it if you can"* — you can. The ARM path in
+> [`arm_connection.md`](arm_connection.md) removes the browser; the GUIDs come from config.
+> Not a limitation any more — a choice of path.
+
 ---
 
 ## Error recovery
@@ -300,6 +319,9 @@ anywhere other than DAX/GQL on the Fabric side, the boundary has already leaked.
 | Answers disagree between two runs | both Fabric IQ **and** the Fabric data agent tool are attached | detach one |
 | Permission error crossing into Fabric | the calling identity has no workspace grant | grant it in Fabric → *Manage access* |
 | Metric numbers are "wrong" but consistent | the Fabric data agent's terminology block defines them differently | read that block; fix it in Fabric, not here |
+| **`404 while enumerating tools`** on a URL that works by hand *(2026-09-03)* | the **Fabric capacity is paused** — it answers `404` with `CapacityNotActive` in the body, and Foundry drops the body | `az fabric capacity resume`; preflight it — [`arm_connection.md`](arm_connection.md) |
+| The trace shows the Fabric call but the verifier says *"never fired"* *(2026-09-03)* | `FabricIQPreviewTool` fires as **`DataAgent_<name>`**, not as the connection name | fix the assertion, not the chain |
+| First call after a capacity resume times out at ~100 s | cold start, not a fault | retry once before diagnosing |
 
 ---
 
@@ -330,3 +352,10 @@ anywhere other than DAX/GQL on the Fabric side, the boundary has already leaked.
 - [ ] The wrapper prompt carries *only from the tool* **and** *do not summarize*
 - [ ] No business data hardcoded in the wrapper prompt
 - [ ] Exactly one Fabric integration attached — tool **or** knowledge source, not both
+
+*Added 2026-09-03 — for an unattended binding, see [`arm_connection.md`](arm_connection.md):*
+
+- [ ] The Fabric **capacity is Active** — checked by the script itself, not by a human
+- [ ] The verifier asserts the tool name the binding actually emits (`DataAgent_<name>` for
+      `FabricIQPreviewTool`), not the connection name
+- [ ] `require_approval` is `"never"` if nobody will be there to approve

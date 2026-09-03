@@ -5,6 +5,8 @@ Making a Foundry agent able to ask Microsoft Fabric a question — and trust the
 ## Read
 
 - [`instructions.md`](instructions.md) — the agent
+- [`arm_connection.md`](arm_connection.md) — binding **from code, no browser**: the MCP route, the
+  ARM connection body, and the paused-capacity `404` preflight *(added 2026-09-03)*
 - [`known_issues.md`](known_issues.md) — what goes wrong
 - [`../../reference_foundry_iq.md`](../../reference_foundry_iq.md) — the end-to-end reference
   implementation this bridge sits inside
@@ -21,6 +23,11 @@ Making a Foundry agent able to ask Microsoft Fabric a question — and trust the
    turns two GUIDs from the Fabric URL into a named **project connection**. Code then resolves
    that connection **by name**. Which is why the same script promotes across environments
    unchanged. Never hardcode the GUIDs.
+
+   > 🔴 *Corrected 2026-09-03:* the portal is the **assisted** path, not the only one. A Fabric
+   > data agent **does** expose MCP — an earlier note here said it did not — so the connection can
+   > also be created from ARM and the whole chain deploys unattended. *Resolve by name, never
+   > hardcode* still holds. See [`arm_connection.md`](arm_connection.md).
 
 3. **Approve the tool before running the workflow.** Tool approval cannot be completed inside a
    workflow preview — Microsoft says so explicitly. Run each Fabric-bound agent alone, force the
