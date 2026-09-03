@@ -99,6 +99,7 @@ a service that no longer exists. If you document a new retirement date, add it t
 | A gotcha that spans several brains | [`known_issues.md`](known_issues.md) at the root |
 | An HTTP status with a recovery path | [`ERROR_RECOVERY.md`](ERROR_RECOVERY.md) |
 | A rule that changes how work is done | the owning agent's `instructions.md` |
+| A rule that turned out to be **wrong** | **both** — a dated correction *adjacent to the false statement* in `instructions.md` (and in its load order), **then** the war story in `known_issues.md`. `known_issues.md` alone is read too late to stop the behaviour — see [`agent_principles.md`](agent_principles.md) § 3b |
 | Detail too long for `instructions.md` | a **companion file** beside it |
 | A new end-to-end demo shape | a module or preset in [`Meta-Brain/SCENARIOS.md`](Meta-Brain/SCENARIOS.md) |
 

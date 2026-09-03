@@ -323,6 +323,11 @@ its own domain**.
    proves it. A false "verified" makes downstream agents retry a path that cannot work.
 10. **Follow `agent_principles.md`** — plan first, verify before done, capture lessons in
     `known_issues.md` after any correction.
+    > 🔴 **Extended 2026-09-03.** `known_issues.md` is **not enough** when the correction
+    > invalidates a rule. It is read at step 4 of the loop; mandatory rules are read at step 2 —
+    > so a retraction filed only there is read *after* the agent already acted on the rule it
+    > retracts. Put a dated correction **adjacent to the false statement** in `instructions.md`
+    > (and in its load order) first. See [`agent_principles.md`](agent_principles.md) § 3b.
 11. **Write as if already public.** The company is always **Zava**; GUIDs in docs and samples are
     visibly fake (`a0000000-0000-4000-a000-00000000000a`); no path contains your account name;
     secrets are read at runtime; real values live in a gitignored file with a committed

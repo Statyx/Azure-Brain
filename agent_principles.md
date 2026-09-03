@@ -26,6 +26,38 @@ followed in every session, for every task, without exception.
 - Ruthlessly iterate on these lessons until mistake rate drops
 - Review lessons at session start for relevant project
 
+### 3b. A correction must reach the file that drives behaviour *(added 2026-09-03)*
+
+The first bullet above is **necessary but not sufficient**, and taking it as sufficient has
+already shipped one wrong agent twice.
+
+`known_issues.md` is read at **step 4** of the loop in [`AGENTS.md`](AGENTS.md). The mandatory
+rules in `instructions.md` are read at **step 2**. A retraction filed only in `known_issues.md`
+is therefore read *after* the agent has already acted on the rule it retracts. The brain ends up
+holding the correction **and still emitting the wrong behaviour** — the worst of both, because
+the lesson looks recorded.
+
+> **Rule.** When a correction invalidates a rule, ask: *which file made the agent do the wrong
+> thing?* The correction goes **there**, adjacent to the false statement — and, if the file has a
+> **load order**, in the load order too, because a companion described as authoritative will be
+> read as authoritative.
+
+Then, and only then, file the war story in `known_issues.md`.
+
+**Placement matters as much as content.** A correction 200 lines below the rule it corrects is
+not a correction, it is a footnote nobody reaches. Put it directly under the false statement and
+keep the original in place — a correction is only legible next to what it corrects.
+
+**Observed twice, both found only because a user asked "did you actually fix it?":**
+
+| Case | Correction filed in | Still teaching the wrong thing |
+|---|---|---|
+| Fabric data agent MCP *(2026-09-03)* | `tenant_proofs.md`, `known_issues.md` | `foundry-fabric-bridge-agent/instructions.md` — "the GUIDs create the connection **in the portal**" as a *mandatory rule* |
+| Frontend design tokens *(2026-09-01)* | `design_tokens.md` §8 | same agent's `instructions.md` load order — still billed §1–§7 as "the exact token set" |
+
+Neither was caught by CI. Both are invisible to a diff: the new text is correct, and nothing
+about it reveals that a *different* file still contradicts it.
+
 ## 4. Verification Before Done
 
 - Never mark a task complete without proving it works

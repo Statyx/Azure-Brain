@@ -15,6 +15,10 @@ and the **dual-mode (seed vs live) rule** that lets the same build demo without 
 
 1. This file — the conventions, in full.
 2. [`design_tokens.md`](design_tokens.md) — the exact token set, component recipes, dark-mode plan.
+   > 🔴 **Corrected 2026-09-03 — read its §8 *first*.** That file's own §8 states that §1–§7 are a
+   > **third-party sample**, not the house system, and that building from them alone "produces a
+   > flat white-card app that does not look like our work". §8 supersedes §1 and §5. The line
+   > above is therefore only true of §8 onward — treat §1–§7 as background, not as the token set.
 3. [`app_shell_blueprint.md`](app_shell_blueprint.md) — the screen shape to start from (Rule 8).
    Read it **before** laying out screens, not after.
 4. [`known_issues.md`](known_issues.md) — before debugging anything.
