@@ -14,6 +14,11 @@
 - **Root Cause**: GitHub auto-generates anchor IDs by lowercasing and replacing spaces with hyphens. Special characters are stripped.
 - **Solution**: `## Quick Start` → `#quick-start`. `## Q&A` → `#qa`. Test links after push.
 
+### Problem: relative links silently break when prose is moved into a subfolder during a README split
+- **Root Cause**: A relative link resolves from the **directory of the file that contains it**, not from the repository root. Splitting a long README moves paragraphs down one level (root → `docs/`) without changing a single character of their text, so a link written from the root's point of view now resolves one level too deep: `docs/ARCHITECTURE.md` becomes `docs/docs/ARCHITECTURE.md`. It survives review because the text is unchanged and the target file genuinely exists — only its position *relative to the new host* changed. `readme_best_practices.md` already tells the splitter to check cross-references in both directions, but that rule covers links **pointing at** the moved section; it does not cover links **carried inside** it.
+- **Solution**: After moving prose between directory levels, rebase every relative link it carries onto the new host's directory, and verify mechanically instead of by reading: parse each `[label](target)`, skip `http(s)`/`mailto`/`#anchor`, then assert `(host.parent / target).exists()`. Run the check over the source *and* the destination file. A dead relative link in a public repo stays invisible until a reader clicks it.
+- **Evidence**: Splitting the `Fab-Zava-Media` README (2026-09-03) into `README.md` + `docs/ENGINEERING-NOTES.md` carried a paragraph containing `[ARCHITECTURE § 4](docs/ARCHITECTURE.md)` into `docs/`. Extraction was programmatic and the text verbatim, so nothing looked wrong; a link checker over both files reported `BROKEN: 1 — docs/ENGINEERING-NOTES.md: missing file docs/ARCHITECTURE.md`. Rebasing to `[ARCHITECTURE § 4](ARCHITECTURE.md)` cleared it.
+
 ---
 
 ## Badges
