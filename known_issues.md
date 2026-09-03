@@ -566,4 +566,36 @@ POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
   *values* must stay redacted even inside a war story, while the *file* that legitimately
   contains them is exempted by name. Redact by value, exempt by path.
 
+### 51. A Second, Stale Clone of the Brain Served a Rule That Had Been Superseded Five Weeks Earlier
+
+- **Symptom**: asked to check a Fabric demo repo against the brain's repository-layout rule,
+  the agent read `Meta-Brain/agents/project-presentation-agent/repo_structure.md`, found the
+  flat `src/deploy_*.py` Fabric layout, and reported the repo **already compliant** —
+  recommending only cosmetic additions (per-folder READMEs). The by-workload layout
+  (`fabric/lakehouse/`, `fabric/ontology/`, `fabric/powerbi/`, `design/`) that had replaced it
+  as the default was never seen, so the actual restructuring gap was reported as a non-issue.
+- **Cause**: two clones of `Statyx/Azure-Brain` exist on the machine. A filesystem search for
+  the brain resolved to the non-canonical one. Nothing about it looked wrong — it had the right
+  remote, was on `main`, and had a clean working tree — but its HEAD was five weeks old. Its
+  `repo_structure.md` was 5,882 bytes and contained only the flat layout; the canonical clone's
+  was 15,475 bytes and leads with *"Microsoft Fabric Project Layout — deployment code grouped
+  by workload"*, demoting the flat variant to a *"single workload only"* fallback.
+- **Fix**: `git pull --ff-only` in the stale clone; both files then hash identically. The
+  durable rule: **fast-forward a brain clone before reading a rule out of it.** A clean tree on
+  `main` says nothing about freshness — only the commit date does. When two paths can both
+  answer "where is the brain", verify which one, do not let a search decide.
+- **Evidence**: stale clone HEAD `74f518b` (2026-07-30), `repo_structure.md` 5,882 bytes, last
+  written 2026-04-01; canonical clone 15,475 bytes, last written 2026-08-27, whose header
+  records *"adopted 2026-08-27 from the public repo `EtienneSIG/Fabric_Fraud_analysis`"*. After
+  `git pull --ff-only`, stale clone HEAD `73d8459` (2026-09-03) and SHA-256 of both copies of
+  `repo_structure.md` agree (`77F7CCF076E07DD1…`).
+- **Lesson**: a rule in this brain is a *versioned* artifact, so reading it from an arbitrary
+  path is reading an unknown version of it. `skills/brain-learn` already ranks the canonical
+  path first and pulls before writing — but that discipline exists only on the **write** side.
+  Every agent that *reads* the brain inherits the same hazard with none of the guard.
+- **Corollary**: same defect class as #50, third variant. There a correction arrived too late
+  (`agent_principles.md` §3b), or arrived drowned at 95 % noise. Here it was correct, committed
+  and pushed on time — and still invisible, because the reader was looking at a different copy
+  of the file. Superseding a rule in git does not supersede it on disk.
+
 
