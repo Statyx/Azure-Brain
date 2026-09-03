@@ -186,6 +186,107 @@ control `/ontologyEndpoint` → `500 / -32603` on the same item and token; item 
 `"type":"DataAgent"` by `GET /v1/workspaces/{ws}/items/{id}` returning 200 in the same script run,
 so the token, workspace and item id are all known good.
 
+#### 🔴 RETRACTION — 2026-09-03: the MCP route *does* exist, and the portal is *not* the only path
+
+The two blocks above conclude that the portal step is the only known method. **That conclusion is
+withdrawn.** Both negatives it rests on were over-stated, and one of them was produced by a broken
+probe. Nothing above is deleted — the reasoning is the lesson.
+
+**1. The data agent's MCP endpoint exists.** Verified live, Sweden Central, 2026-09-03:
+
+```
+POST https://api.fabric.microsoft.com/v1/mcp/workspaces/{ws}/dataagents/{agent_id}/agent
+     Accept: application/json, text/event-stream
+
+initialize -> 200   serverInfo.name = "DataAgent MCP Server", protocolVersion 2025-06-18
+tools/list -> 200   [{"name": "DataAgent_<agent name>",
+                      "inputSchema": {"properties": {"userQuestion": {"type": "string"}}},
+                      "annotations": {"readOnlyHint": true}}]
+```
+
+Three route families exist and they do **not** share a shape:
+
+| Target | Route |
+|---|---|
+| **Data agent** | `/mcp/workspaces/{ws}/dataagents/{id}/agent` |
+| Ontology | `/mcp/dataPlane/workspaces/{ws}/items/{id}/ontologyEndpoint` |
+| Semantic model | `/mcp/fabricaihub/integrations/m365` |
+
+The sixteen probes all held `/mcp/dataPlane/workspaces/{ws}/items/{id}/` fixed and varied only the
+last segment. The data agent route drops `dataPlane` **and** uses `dataagents` instead of `items`.
+Sixteen results say nothing about a shape never sent.
+
+**2. The control was malformed.** `/ontologyEndpoint` returned `500` because the probe omitted
+`Accept: text/event-stream`, required by MCP streamable-HTTP. With the header, the same URL returns
+**200**. The 404-vs-500 table above is therefore an artefact of the client, not a property of the
+server — and the "conclusive" reasoning built on it was circular. **A control only controls if it
+is correct: make it succeed once against something known to work before letting its failure mean
+anything.**
+
+**3. The connection IS creatable from ARM — with a different category.** `AzureFabric` really is
+not an ARM category (re-probed 2026-09-03 across five body shapes — `CustomKeys`+credentials, AAD,
+UserEntraToken, API target, portal target — all `unable to deserialize request body`). But that is
+a fact about **one binding**, not about the goal:
+
+| Tool | Connection it resolves | From ARM? |
+|---|---|---|
+| `MicrosoftFabricPreviewTool` | `CustomKeys` / `AzureFabric` | **No** — portal only |
+| `FabricIQPreviewTool` | `RemoteTool` / `GenericProtocol`, MCP `target` | **Yes** |
+
+The working body, `PUT .../projects/{proj}/connections/{name}?api-version=2025-06-01`:
+
+```json
+{"properties": {
+  "category": "RemoteTool",
+  "group": "GenericProtocol",
+  "authType": "UserEntraToken",
+  "audience": "https://api.fabric.microsoft.com",
+  "target": "https://api.fabric.microsoft.com/v1/mcp/workspaces/{ws}/dataagents/{id}/agent",
+  "isSharedToAll": false,
+  "useWorkspaceManagedIdentity": false,
+  "metadata": {"type": "fabric_iq_preview"}
+}}
+```
+
+- `metadata.type` is **undocumented and load-bearing**: without it the connection is created and
+  resolves by name, and the tool still refuses it.
+- `audience` is the **Fabric** one. The azd docs show `https://analysis.windows.net/powerbi/api`;
+  prefer what a working portal-made connection produced over what the document says.
+- **The connection name must not contain underscores** under `RemoteTool` —
+  *"Connection name must be 1-64 characters long and can only contain alphanumeric characters,
+  dashes, and dots."* `MicrosoftFabric` accepted underscores, so a name that worked for years
+  starts failing the moment the category changes. The rule is **category-dependent**, not global.
+
+**4. What misled the whole search.** The runtime error is
+`No CustomKeys connection found for AzureFabric`. I searched ARM for `AzureFabric`, correctly found
+nothing, and concluded the goal was unreachable. **The error names a category you never create.**
+Searching for the string in an error message is not the same as searching for the capability the
+error is about.
+
+**⚠️ Still unresolved — do not read this as "it works end to end."** With the ARM connection
+created and the endpoint proven reachable by a user token, `FabricIQPreviewTool` still fails at run
+time with:
+
+```
+The remote MCP server at https://api.fabric.microsoft.com:443/v1/mcp/workspaces/{ws}/dataagents/{id}/agent
+returned HTTP 404 (Not Found) while enumerating tools
+```
+
+Ruled out so far: endpoint mode (fails identically whether `server_url` is sent or omitted and the
+connection `target` used); Fabric workspace RBAC (both the Foundry **account** and **project**
+system-assigned identities granted `Admin` on the workspace — neither had *any* access before, and
+granting it changed nothing); Fabric tenant settings (`ServicePrincipalAccessPermissionAPIs`,
+`ServicePrincipalAccessGlobalAPIs` and both admin-API settings are **enabled**). The item is
+published — the user-token probe lists its tool. So the failure is in the **cross-service identity
+hop**, and it is not yet characterised. `PowerBIMCP` is disabled on this tenant; whether an
+equivalent gate exists for the data-agent MCP surface was not determined.
+
+**Evidence:** live `initialize`/`tools/list` 200s with the tool name returned; ARM `PUT` accepted
+and read back with `category=RemoteTool`; the five-body `AzureFabric` rejection sweep; workspace
+`roleAssignments` before (one User) and after (two ServicePrincipal Admins); `GET
+/v1/admin/tenantsettings` for the service-principal flags; three verifier runs after each change,
+all failing identically.
+
 ### 5. ⚠️ The lab's own Fabric-bound agent contradicts itself
 
 `Inventory-Agent` is instructed *"The response must come only from the Fabric Data Agent tool

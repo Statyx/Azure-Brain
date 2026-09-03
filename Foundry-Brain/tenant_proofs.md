@@ -224,6 +224,84 @@ status code.
 
 ---
 
+### 🔴 RETRACTED 2026-09-03 — the claim above is FALSE. A Fabric data agent *does* expose MCP.
+
+The conclusion in bold above ("a Fabric data agent exposes no MCP endpoint") is **withdrawn**.
+It is kept on the page because *how* it went wrong is worth more than the claim was.
+
+**The endpoint, verified live** (Sweden Central, user token, 2026-09-03):
+
+```
+POST {fabric_api_base}/mcp/workspaces/{workspace_id}/dataagents/{agent_id}/agent
+     Accept: application/json, text/event-stream
+
+initialize  -> 200  serverInfo.name = "DataAgent MCP Server"
+tools/list  -> 200  [{ "name": "DataAgent_<agent name>",
+                       "inputSchema": {"properties": {"userQuestion": {"type": "string"}}} }]
+```
+
+Three MCP route families exist, and they do not share a shape:
+
+| Target | Route |
+| --- | --- |
+| Data agent | `/mcp/workspaces/{ws}/dataagents/{id}/agent` |
+| Ontology | `/mcp/dataPlane/workspaces/{ws}/items/{id}/ontologyEndpoint` |
+| Semantic model | `/mcp/fabricaihub/integrations/m365` |
+
+**Two independent mistakes produced the false negative, and either alone was enough.**
+
+1. **Only one axis was varied.** All sixteen probes held
+   `/mcp/dataPlane/workspaces/{ws}/items/{id}/` fixed and changed the trailing segment. The data
+   agent route drops `dataPlane` *and* replaces `items` with `dataagents`. Sixteen results say
+   nothing about a shape that was never sent. **A negative is only as wide as the space actually
+   searched — and "sixteen tries" measures effort, not coverage.**
+
+2. **The control was itself broken.** `/ontologyEndpoint` returned `500` / `-32603` because the
+   probe omitted `Accept: text/event-stream`, which MCP streamable-HTTP requires. With the correct
+   header the *same* URL returns **`200`**. So the row below claiming "500 proves the route is
+   registered and reached" was an artefact of a malformed request. The control did fail
+   differently — for a reason that had nothing to do with the question being asked.
+
+The second one is the sharper lesson: **a control only controls if it is correct.** A
+discriminating result from a broken client discriminates between two of *your* bugs, not between
+two states of the service. Before trusting a control, prove the client is right by making it
+succeed at least once against something known to work.
+
+**What survives from the original section.** Re-probed 2026-09-03 with five different body shapes
+(`AzureFabric` × {CustomKeys+credentials, AAD, UserEntraToken} × {API target, portal target}):
+every one returns `Error when parsing request; unable to deserialize request body`, while
+`category: "CustomKeys"` is accepted. So `AzureFabric` genuinely is not an ARM category — the
+deserializer rejects the enum value regardless of the rest of the body. **That sub-claim was
+correct.** What did not follow from it is the conclusion drawn next to it: *"the portal step is
+the only remaining path"*. `AzureFabric` is the name of **one binding**, not of the goal. The goal
+— Foundry querying the Fabric data agent — has a second binding that ARM creates without a portal:
+
+| Tool | Connection it resolves | Creatable from ARM? |
+| --- | --- | --- |
+| `MicrosoftFabricPreviewTool` | `CustomKeys` / `AzureFabric` | **No** — portal only |
+| `FabricIQPreviewTool` | `RemoteTool` / `GenericProtocol` over MCP | **Yes** |
+
+The error message that misled the search — `No CustomKeys connection found for AzureFabric` —
+names a category **you never create**. Searching ARM for the string in an error message is not the
+same as searching for the capability the error is about.
+
+**Corrected reusable rule.** Before concluding a capability is absent, state the *axes* the search
+covered (name, path shape, category, tool, protocol) and name the ones it did not. Then verify the
+control succeeds somewhere before trusting it to fail informatively. An absence claim without both
+is a guess wearing a status code — and, written into a brain, it stops the next agent from looking
+where the answer actually is.
+
+**Still open, and honestly unresolved.** With the ARM connection created and the endpoint proven
+reachable by a user token, the *service-side* call still answers
+`returned HTTP 404 (Not Found) while enumerating tools`, in both endpoint modes (`server_url` sent
+and omitted), after granting both Foundry system-assigned identities **Admin** on the Fabric
+workspace, with all `ServicePrincipal*` Fabric tenant settings enabled. So the cross-service
+identity hop is **not** settled here. Do not claim this binding works end to end from an
+unattended script on the strength of this entry — the transport and the control plane are proven,
+the runtime hop is not.
+
+---
+
 ## Still unproven — do not claim these
 
 - [ ] A2A **latency and cost** per hop — never measured
@@ -234,6 +312,14 @@ status code.
 - [ ] Any statement about a capability being **absent** — this file only proves presence.
       *Amended 2026-09-02:* absence **can** be proven when a control makes the same surface fail a
       different way — see "PROVEN ABSENT" above. Without such a control the bullet stands.
+      *Re-amended 2026-09-03:* that amendment was applied to a case where it produced a **false**
+      negative, twice over — the search varied one axis, and the control was malformed. The
+      technique is not wrong, but it is far weaker than it read: a control must be shown to
+      **succeed** somewhere before its failure is allowed to mean anything, and the axes searched
+      must be stated. Treat every absence claim in this brain as provisional.
+- [ ] Whether `FabricIQPreviewTool` can reach a Fabric data agent **from an unattended script**.
+      Transport proven (MCP `200`, `tools/list` returns the tool) and the ARM connection proven
+      creatable, but the service-side call still returns `404` while enumerating tools. Unresolved.
 
 ---
 
@@ -244,3 +330,4 @@ status code.
 | 2026-08-26 | File created. Promoted the 2026-08-04→05 hands-on session from a transcript in another repository into the brain: A2A live proof with the witness-agent method, the four-protocol chain, SDK 2.4.0 introspection, RAG scoping measures, the architecture rule, and the pointer to the Fabric non-determinism defect. |
 | 2026-09-02 | A2A **reproduced on a second tenant** (Sweden Central), and the two prerequisites this file had omitted recorded: first-class `properties.audience`, and a `Foundry Agent Consumer` grant whose absence reports as **404**. Also flagged that "ARM only" settles the A2A connection and does **not** generalise to a Fabric data-agent connection, which ARM provably cannot create. |
 | 2026-09-02 | Added **PROVEN ABSENT**: a Fabric data agent exposes no MCP endpoint (16 names → `404`/`-32601`, control `/ontologyEndpoint` → `500`/`-32603` on the same item). Amended the "only proves presence" bullet with the control-that-fails-differently technique. |
+| 2026-09-03 | **Retracted the 2026-09-02 PROVEN ABSENT claim.** A Fabric data agent *does* expose MCP, at `/mcp/workspaces/{ws}/dataagents/{id}/agent` (`initialize` → `200`, `tools/list` returns the tool). Two independent errors: the search varied only the trailing name and never the path shape, and the `500` control was an artefact of omitting `Accept: text/event-stream` (the same URL returns `200` with it). Recorded the three MCP route families, the `RemoteTool`/`GenericProtocol` ARM connection that `FabricIQPreviewTool` resolves, and the fact that `AzureFabric` not being an ARM category — re-verified across five body shapes — never implied the goal was unreachable. Logged the still-unresolved service-side `404` so the entry does not overclaim. |

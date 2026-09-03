@@ -45,6 +45,35 @@ the ontology into a live tool for an AI orchestrator.
 > [`foundry-fabric-bridge-agent/known_issues.md`](../../../Foundry-Brain/agents/foundry-fabric-bridge-agent/known_issues.md)
 > — it needs a portal-created connection, not MCP.
 
+> 🔴 **CORRECTION — 2026-09-03. The warning above is wrong on both counts.** Kept for the lesson.
+>
+> **A Fabric data agent has its own MCP route.** It is not on this shape, which is why sixteen
+> names on this shape found nothing:
+>
+> ```
+> https://api.fabric.microsoft.com/v1/mcp/workspaces/<workspace-ID>/dataagents/<data-agent-ID>/agent
+> ```
+>
+> Verified live: `initialize` → `200` (`serverInfo.name = "DataAgent MCP Server"`), `tools/list`
+> → the agent's single `DataAgent_<name>` tool. Note it drops `dataPlane` **and** replaces `items`
+> with `dataagents` — the search varied the trailing segment and never the path shape, so its
+> negative covered one axis out of two.
+>
+> **The 404-vs-500 discriminator was an artefact of a malformed request.** `/ontologyEndpoint`
+> returned `500` because the probe omitted the `Accept: text/event-stream` header that MCP
+> streamable-HTTP requires. With the header the same URL returns **200**. Do not use that table to
+> settle anything.
+>
+> **Always send both content types**, here and in `.vscode/mcp.json` clients that let you set
+> headers:
+>
+> ```
+> Accept: application/json, text/event-stream
+> ```
+>
+> A missing `text/event-stream` turns a working endpoint into a `500` and invites exactly the wrong
+> conclusion.
+
 ## Setup in VS Code
 
 Create `.vscode/mcp.json` in the project folder:
