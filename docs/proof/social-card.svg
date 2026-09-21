@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title description">
+  <title id="title">Azure Brain - The knowledge layer for GitHub Copilot</title>
+  <desc id="description">A luminous circuit brain above the Azure Brain wordmark. Reusable cloud data and AI knowledge across Fabric, Foundry, Databases, Apps and Meta. Learn once. Build better.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1">
+      <stop stop-color="#111923"/>
+      <stop offset="1" stop-color="#080d15"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop stop-color="#168bff" stop-opacity=".22"/>
+      <stop offset=".6" stop-color="#168bff" stop-opacity=".06"/>
+      <stop offset="1" stop-color="#168bff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="electric" x1="0" y1="1" x2="1" y2="0">
+      <stop stop-color="#3b8fff"/>
+      <stop offset="1" stop-color="#a3e4ff"/>
+    </linearGradient>
+    <linearGradient id="trace" x1="0" x2="1">
+      <stop stop-color="#203f59" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#4287bc" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#203f59" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#a2c9e9" opacity=".09"/>
+    </pattern>
+    <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+    <g id="brain" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M640 199V109
+        C640 91 619 85 607 99
+        C588 92 570 105 571 124
+        C548 127 539 151 553 169
+        C541 190 554 211 576 212
+        C582 235 610 240 628 224
+        C636 221 640 211 640 199Z
+        M640 199V109
+        C640 91 661 85 673 99
+        C692 92 710 105 709 124
+        C732 127 741 151 727 169
+        C739 190 726 211 704 212
+        C698 235 670 240 652 224
+        C644 221 640 211 640 199Z"/>
+      <path d="M608 104V127L590 145H574
+        M555 169H585L606 190V208
+        M617 149H604V165L619 180
+        M672 104V127L690 145H706
+        M725 169H695L674 190V208
+        M663 149H676V165L661 180"/>
+    </g>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#background)"/>
+  <rect width="1280" height="640" fill="url(#grid)"/>
+  <ellipse cx="640" cy="180" rx="470" ry="310" fill="url(#halo)"/>
+  <path d="M0 0H1280" stroke="url(#electric)" stroke-width="6"/>
+
+  <!-- Peripheral traces may be cropped; the wordmark and core promise stay central. -->
+  <g fill="none" stroke="url(#trace)" stroke-width="1.5">
+    <path d="M74 123H267L313 169H495"/>
+    <path d="M15 217H202L235 184H455L485 154H520"/>
+    <path d="M158 288H299L352 235H464L505 194H532"/>
+    <path d="M1206 123H1013L967 169H785"/>
+    <path d="M1265 217H1078L1045 184H825L795 154H760"/>
+    <path d="M1122 288H981L928 235H816L775 194H748"/>
+  </g>
+  <g fill="#87caff">
+    <circle cx="313" cy="169" r="3" opacity=".55"/>
+    <circle cx="235" cy="184" r="3" opacity=".4"/>
+    <circle cx="464" cy="235" r="3" opacity=".5"/>
+    <circle cx="967" cy="169" r="3" opacity=".55"/>
+    <circle cx="1045" cy="184" r="3" opacity=".4"/>
+    <circle cx="816" cy="235" r="3" opacity=".5"/>
+  </g>
+
+  <g font-family="'Segoe UI', Aptos, Calibri, sans-serif" text-anchor="middle">
+    <text x="640" y="53" fill="#8fa8bf" font-size="16" font-weight="600" letter-spacing="4">LESS RELEARNING. MORE BUILDING.</text>
+    <use href="#brain" stroke="#2998ff" stroke-width="8" opacity=".7" filter="url(#glow)"/>
+    <use href="#brain" stroke="url(#electric)" stroke-width="3.6"/>
+    <g fill="#bfe8ff">
+      <circle cx="574" cy="145" r="4"/>
+      <circle cx="606" cy="208" r="4"/>
+      <circle cx="619" cy="180" r="4"/>
+      <circle cx="706" cy="145" r="4"/>
+      <circle cx="674" cy="208" r="4"/>
+      <circle cx="661" cy="180" r="4"/>
+    </g>
+
+    <text x="640" y="355" font-size="116" font-weight="700" letter-spacing="-5" fill="#f4f8fc">Azure <tspan fill="url(#electric)">Brain</tspan></text>
+    <text x="640" y="412" fill="#d8e6f3" font-size="32" font-weight="400">The knowledge layer for GitHub Copilot.</text>
+    <text x="640" y="451" fill="#8fa8bf" font-size="24">Reusable instructions for cloud data &amp; AI.</text>
+
+    <g fill="#101d2b" stroke="#294157">
+      <rect x="277" y="486" width="128" height="46" rx="10"/>
+      <rect x="417" y="486" width="141" height="46" rx="10"/>
+      <rect x="570" y="486" width="163" height="46" rx="10"/>
+      <rect x="745" y="486" width="121" height="46" rx="10"/>
+      <rect x="878" y="486" width="125" height="46" rx="10"/>
+    </g>
+    <g fill="#cfdfed" font-size="21" font-weight="600">
+      <text x="341" y="516">Fabric</text>
+      <text x="487.5" y="516">Foundry</text>
+      <text x="651.5" y="516">Databases</text>
+      <text x="805.5" y="516">Apps</text>
+      <text x="940.5" y="516">Meta</text>
+    </g>
+  </g>
+
+  <path d="M64 568H1216" stroke="#223143"/>
+  <g font-family="'Segoe UI', Aptos, Calibri, sans-serif" font-size="19">
+    <text x="64" y="605" fill="#b6c8d9" font-weight="600">Learn once. Build better.</text>
+    <text x="1216" y="605" fill="#7790a7" text-anchor="end">github.com/Statyx/Azure-Brain</text>
+  </g>
+</svg>

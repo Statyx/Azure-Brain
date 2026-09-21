@@ -49,6 +49,21 @@ Edit `Fabric-Brain/resource_ids.md` with your values:
 
 > You don't need all IDs upfront. Fill them in as you deploy items.
 
+### Prepare a second tenant without switching the current environment
+
+Use the opt-in templates in
+[`tenant-profiles/new-tenant/resource_ids.example.md`](tenant-profiles/new-tenant/resource_ids.example.md)
+and [`environment.example.md`](tenant-profiles/new-tenant/environment.example.md).
+Create their private `resource_ids.md` and `environment.md` copies beside them,
+and explicitly tell the agent which profile directory to read. Leave the active
+per-brain files unchanged.
+
+Use a dedicated PowerShell process and an `AZURE_CONFIG_DIR` under `LOCALAPPDATA`,
+outside the repo and synced folders. The template documents the sign-in procedure.
+Browser, Fabric CLI and SDK sessions are independent; a profile does not switch them
+automatically. Existing projects also need separate configuration and deployment
+state for the new tenant, not copies of the old resource IDs.
+
 ## 3. Verify Auth Works (2 min)
 
 ```bash

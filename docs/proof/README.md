@@ -67,12 +67,20 @@ data.
 | `02-instructions.png` | `lakehouse-agent/instructions.md` open in an editor | Explains the mechanism — an agent reads this, then acts |
 | `03-ontology.png` | The Customer 360 ontology, 8 entities and 9 relations | The semantic layer the numbers sit on |
 | `04-portal.png` | The operations portal landing page | The same artifacts served as an application |
-| `social-card.png` | `01` under a scrim, with the title and the counts | The repo's social preview — the link card on LinkedIn, X, Slack |
+| `social-card.png` | Circuit-brain illustration, large wordmark, GitHub Copilot purpose and the five domains | The repo's social preview — the link card on Teams, LinkedIn, X, Slack |
 
-`social-card.png` is generated, not captured: it composes `01-agent-and-report.png` at 1280 × 640,
-the size GitHub expects under **Settings → General → Social preview**. Regenerate it rather than
-editing it by hand, and re-upload it there if the counts change — nothing tests that the card and
-the badges agree.
+`social-card.png` is generated from the editable [`social-card.svg`](social-card.svg), not from
+a screenshot. The title and purpose sit near the centre for cropped previews; peripheral
+decoration can be lost without hiding the project's identity. There are no agent counts to drift.
+
+Regenerate from the repo root with `python marketing/build_social_card.py`. The
+[`renderer`](../../marketing/build_social_card.py) uses Playwright and Chromium, like the teaser
+renderer, and rejects a PNG that is not 1280 × 640 or is 1 MB or larger.
+
+**Publishing is a separate step:** under the repository's **Settings → General → Social preview
+→ Edit → Upload an image**, upload `social-card.png`. Committing the file alone does not update
+GitHub's Open Graph image. Existing Teams or social-media cards may keep a cached thumbnail
+after the upload; confirm the new image with a newly shared link.
 
 A Foundry trace of a supervisor calling its sub-agents is still missing. It is the one shot almost
 nobody else can produce, and it would back the brain's own claim that *a trace is the only place a
