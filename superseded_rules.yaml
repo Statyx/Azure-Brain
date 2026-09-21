@@ -108,3 +108,69 @@ rules:
       near: 'Microsoft Fabric Project Layout .{0,3} flat'
       must_contain: 'only when the project deploys'
       within_lines: 6
+
+  - id: project-backend-only-completion
+    kind: conditional
+    recorded: 2026-09-21
+    condition: >-
+      The project has no application in scope, or the user explicitly excluded its migration.
+      Otherwise the app runtime-owner handoff and browser verification are required.
+    summary: >-
+      The twelve-step backend pipeline was treated as an exhaustive inventory during a
+      whole-project tenant migration, silently leaving its existing application behind.
+    replaced_by: >-
+      Inventory the repository, include an existing application in whole-project scope,
+      and distinguish backend completion, app publication and browser verification.
+    authority: Meta-Brain/agents/project-orchestrator-agent/instructions.md
+    authority_anchor: 'Inventory the existing repository'
+    evidence: >-
+      project-orchestrator-agent/known_issues.md #9: after adding the app deployment step,
+      the new hosting URL served the fresh build and normal Edge completed a live data/contract
+      journey. Backend-only success had not provided an application URL.
+    adjacency:
+      file: Meta-Brain/agents/project-orchestrator-agent/instructions.md
+      near: '\*\*Sequential pipeline\*\*'
+      must_contain: 'Correction 2026-09-21'
+      within_lines: 5
+
+  - id: app-frontend-unverified-blanket
+    kind: superseded
+    recorded: 2026-09-21
+    summary: >-
+      The blanket assertion that no screen from this stack has been rebuilt end to end in
+      our tenant is historical, not a current prohibition on reporting bounded verification.
+    replaced_by: >-
+      The standalone migrated Fabric App has browser evidence. Report the tested scope;
+      do not upgrade every design-system rule, iframe SSO or optional feature to verified.
+    authority: Apps-Brain/agents/app-frontend-agent/instructions.md
+    authority_anchor: 'bounded verification now exists'
+    evidence: >-
+      fabric-apps-agent/tenant_migration.md section 8: normal Edge sign-in, seven routes,
+      live DAX and an uncached combined question returning HTTP 200 with both sources,
+      followed by user confirmation in their ordinary browser.
+    adjacency:
+      file: Apps-Brain/agents/app-frontend-agent/instructions.md
+      near: 'Nothing here is marked verified'
+      must_contain: 'Correction 2026-09-21'
+      within_lines: 5
+
+  - id: fabric-app-foundry-resource-principal
+    kind: superseded
+    recorded: 2026-09-21
+    summary: >-
+      The three browser API resources do not all resolve to the Power BI Service principal.
+      That statement applies to Fabric and Power BI, not Foundry.
+    replaced_by: >-
+      Discover each resource principal and its enabled delegated scopes. Foundry resolves
+      separately; acquire a separate audience token and avoid universal broad-consent rules.
+    authority: Apps-Brain/agents/fabric-apps-agent/tenant_migration.md
+    authority_anchor: 'Fabric and Power BI share an API service principal; Foundry does not'
+    evidence: >-
+      Graph scope discovery in the migration resolved the Foundry audience to Azure Machine
+      Learning Services. The custom SPA used separate audiences and successfully executed
+      real Fabric, Power BI and Foundry calls.
+    adjacency:
+      file: Apps-Brain/agents/fabric-apps-agent/known_issues.md
+      near: 'resources all resolve'
+      must_contain: 'Correction 2026-09-21'
+      within_lines: 5

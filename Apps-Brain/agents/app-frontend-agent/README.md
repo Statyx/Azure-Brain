@@ -31,7 +31,7 @@ run with or without a tenant.
 | [`instructions.md`](instructions.md) | **LOAD FIRST** — the 8 rules, ownership, handoffs |
 | [`design_tokens.md`](design_tokens.md) | Token set, semantic colours, component recipes, dark mode, a11y |
 | [`app_shell_blueprint.md`](app_shell_blueprint.md) | The three-surface screen shape to start from, with the defaults already chosen |
-| [`known_issues.md`](known_issues.md) | 21 documented pitfalls |
+| [`known_issues.md`](known_issues.md) | 21 originally documented pitfalls; **22 documented pitfalls** as of 2026-09-21 |
 
 ## The eight rules, in one line each
 
@@ -54,6 +54,12 @@ run with or without a tenant.
 Grounded in the public repo `EtienneSIG/Fabric_Fraud_analysis` (read 2026-08-27). Patterns are
 tagged `[observed]` (read in that source) or `[derived]` (our generalisation). **Nothing is
 marked verified** — no screen from this stack has been rebuilt end to end in our own tenant.
+
+> **Correction 2026-09-21:** that blanket claim is historical. The standalone Fabric App
+> migration has bounded browser verification (normal Edge sign-in, live data, seven routes
+> and an uncached combined question). This does not verify the entire design system or
+> portal iframe SSO; see [instructions.md](instructions.md), "Provenance and confidence",
+> and [the migration evidence](../fabric-apps-agent/tenant_migration.md), §8.
 
 [`app_shell_blueprint.md`](app_shell_blueprint.md) has a **second, independent source**: an app
 we shipped and then iterated on (2026-08-28 → 08-31). Its defaults are not style preferences —

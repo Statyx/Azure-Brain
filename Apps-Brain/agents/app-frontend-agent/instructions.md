@@ -69,6 +69,14 @@ Confidence markers used below:
 **Nothing here is marked verified.** No screen from this stack has been rebuilt end to end in
 our own tenant yet. Do not tell a downstream agent that a path is proven.
 
+> **Correction 2026-09-21 — bounded verification now exists.** The blanket statement
+> above is historical. A migrated React/Vite Fabric App was published and tested through
+> normal Edge sign-in, live DAX, seven routes and an uncached Fabric/Foundry question.
+> The user subsequently confirmed their ordinary Edge session worked. This proves that
+> standalone path, not every rule in this design system, portal iframe SSO or every
+> optional walkthrough interaction. Evidence and limits:
+> [`../fabric-apps-agent/tenant_migration.md`](../fabric-apps-agent/tenant_migration.md), §8.
+
 ---
 
 ## System Prompt
@@ -317,6 +325,18 @@ Before handing a frontend off:
       ([`../../../PUBLIC_SAFETY.md`](../../../PUBLIC_SAFETY.md)). Verify with
       `python Meta-Brain/tools/scan_public_safety.py <repo>`.
 - [ ] `.env.example` committed, `.env` gitignored.
+
+**Published-app handoff additions (2026-09-21):**
+
+- [ ] Separate offline UI tests, hosted-asset verification and real browser authentication.
+      A page HTTP 200 or a recorded answer does not prove live access.
+- [ ] For a normal-window acceptance test, disable Playwright's fixed viewport emulation;
+      keep explicit viewports for deterministic screenshots. Check the DOM dimensions
+      before changing CSS to repair a suspected sizing defect ([known issue #22](known_issues.md)).
+- [ ] Report the tested account/tenant, live screens and uncached assistant result through
+      the runtime owner's private deployment evidence, without publishing tokens or account details.
+- [ ] Let the user complete Microsoft sign-in/MFA; do not inject external access tokens.
+      Close the test browser before deleting its temporary profile; retain sanitized evidence.
 
 ## Handoff protocol
 

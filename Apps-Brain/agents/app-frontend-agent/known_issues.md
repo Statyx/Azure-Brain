@@ -419,3 +419,33 @@ was not asked to change, the safe design is to not let it read the file as text 
 **Corollary** — writing UI copy in English removes the whole risk class for the app's own strings,
 but **not** for the data: place names, customer names and comments stay accented. Translating is a
 mitigation, never the fix.
+
+---
+
+## 22. A maximized Edge window still renders a small app — check the test viewport first
+
+**Context** — supervised Playwright Python + Edge, Windows, 2026-09-21.
+
+**Symptom** — the user maximizes Edge but the app occupies only part of the window. It
+looks like a fixed-width root or a broken responsive shell.
+
+**Root cause** — the harness supplied `viewport={"width": 1440, "height": 1000}`.
+Maximizing the native window does not remove Playwright's fixed viewport emulation.
+The page was correctly filling that emulated viewport, not the surrounding browser window.
+
+**Fix** — for an ordinary-window acceptance run, launch the persistent context with
+`channel="msedge"`, `headless=False`, `no_viewport=True` and
+`args=["--start-maximized"]`. Resize the native window and measure `window.innerWidth`,
+`document.documentElement.clientWidth`, root bounds and `scrollWidth`.
+Account for the vertical scrollbar; do not demand identical inner/client widths when it
+takes space. Do not change application CSS to compensate for the harness.
+
+Keep fixed viewports for deterministic screenshots and breakpoint tests: this is a choice
+between two test modes, not a ban on viewport emulation. Browser authentication must still
+be interactive, with no injected CLI token. Close the context and confirm the temporary
+profile is no longer used before removing it; never delete the user's everyday profile.
+
+**Evidence** — after relaunching with native sizing, document/root widths followed 2552,
+1432 and 1076-pixel viewports without horizontal overflow. A later 2187-pixel inner width
+corresponded to 2172 pixels of content plus a 15-pixel vertical scrollbar. No CSS change
+was needed. The user subsequently confirmed the published site worked in ordinary Edge.

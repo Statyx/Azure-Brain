@@ -16,6 +16,10 @@ You do NOT create artifacts yourself. You:
 
 1. **Config-driven** — All project decisions come from configuration files. Never hard-code industry-specific behavior.
 2. **Sequential pipeline** — Follow the 12-step pipeline in order. Never skip steps unless explicitly flagged in config.
+   > **Correction 2026-09-21 — scope, not just sequence.** The twelve steps below describe
+   > backend artifacts, not an exhaustive inventory of an existing project. When an app
+   > exists or is in scope, add its runtime-owner handoff before final validation.
+   > Backend-only completion is valid only when the app is absent or explicitly excluded.
 3. **One agent per step** — Each step has a primary agent owner. Invoke that agent.
 4. **Handoff protocol** — When completing a step: state what was produced, name the next agent, list affected files.
 5. **Idempotent** — Re-running a step produces identical output for the same configuration.
@@ -28,6 +32,11 @@ You do NOT create artifacts yourself. You:
    renamed Rayfin app creates a *second* backend, and a Foundry agent's name **is** its API
    identifier. Confirm the expensive ones; apply the conventions silently for schemas, tables
    and measures.
+
+10. **Inventory the existing repository** — A whole-project migration includes its existing
+    application, even if an old deployment script omitted it. Preserve the old target; track
+    backend completion, app publication and browser verification as three separate states.
+    Never return an old-tenant hosting URL as the result of a new-tenant migration.
 
 ---
 
@@ -82,6 +91,25 @@ You do NOT create artifacts yourself. You:
 4. Invoke rti-kusto-agent for Eventhouse + KQL
 5. Update reports if HTAP dashboard pages needed
 ```
+
+### "Redeploy the whole project into another tenant"
+
+1. Inventory the repository's **actual** deliverables and persisted deployment state, including
+   frontend, hosting, SPA registration, permissions, callbacks and build-time service bindings.
+   Preserve the source environment; a resume must not recreate successful resources.
+2. Present the destination tenant, login, subscription, capacity SKU/region and workspace
+   once for approval. Keep actual IDs/account names in ignored local configuration.
+3. Complete the required Fabric/Foundry dependencies with their owners. Then hand off to
+   [`fabric-apps-agent`](../../../Apps-Brain/agents/fabric-apps-agent/instructions.md) and
+   load its [tenant migration guide](../../../Apps-Brain/agents/fabric-apps-agent/tenant_migration.md).
+   An app-only retry must be possible without redeploying the whole data platform.
+4. Validate publication independently of backend tests: actual generated hosting URL,
+   fresh served bundle and destination bindings, proper Entra callback and real sign-in.
+   Validate the real data queries and a newly typed assistant question in ordinary Edge;
+   InPrivate success alone is not the acceptance path.
+5. Return the **application URL**, expected login, proven journeys and remaining manual
+   or untested steps. Report any explicitly excluded application as "not migrated", not
+   "project complete". See [known issue #9](known_issues.md) for the observed failure.
 
 ---
 
@@ -148,3 +176,6 @@ For any project orchestration task:
 3. **`config_templates.md`** — Project configuration schema
 4. **`naming_conventions.md`** — Artifact naming rules
 5. **`../../shared_constraints.md`** — Cross-agent hard rules
+6. **When an application exists/in scope** —
+   [`fabric-apps-agent/tenant_migration.md`](../../../Apps-Brain/agents/fabric-apps-agent/tenant_migration.md)
+   before any app migration or final completion claim.

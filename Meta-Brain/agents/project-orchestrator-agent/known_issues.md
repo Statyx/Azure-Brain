@@ -45,3 +45,22 @@
 - **Symptom**: Agent produces generic output instead of industry-specific
 - **Cause**: Specialized agent wasn't given the config file path
 - **Fix**: Always pass config file paths in the handoff. Example: "Use `industries/zava-energy/semantic-model.json` for measure definitions."
+
+### 9. "Everything redeployed" omitted the existing Fabric App
+
+- **Context**: whole-project tenant migration, observed 2026-09-21.
+- **Symptom**: backend artifacts and agent probes were green, but the user still had no
+  application URL in the new tenant. The old frontend remained bound to the former tenant.
+- **Cause**: the existing orchestrator's backend-only step list was treated as the complete
+  project inventory, even though the repository already contained a Rayfin React application.
+- **Fix**: inventory the repository before defining scope. Include an idempotent app step and
+  an app-only resume path. Handoff to the app runtime owner for identity, registry, build,
+  publication and real browser verification. Return the actual new application URL, never
+  the old host, report link or workspace link. See
+  [the migration guide](../../../Apps-Brain/agents/fabric-apps-agent/tenant_migration.md).
+- **Evidence**: after adding the missing app step, a new AppBackend and destination SPA
+  were published; nine served assets matched the fresh build, normal Edge sign-in worked,
+  and a new combined data/contract question returned HTTP 200 with both sources.
+  Backend/frontend suites passed (312/124 tests). Manual task-flow import remained explicitly
+  outstanding rather than being hidden by the app's success.
+- **Lesson**: backend complete, app published and user journey verified are distinct states.

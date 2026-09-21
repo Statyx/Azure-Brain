@@ -252,6 +252,14 @@ authentication *silently disabled*. That looks like a working app until someone 
 do-not-edit header. App variables belong in `.env.production.local` /
 `.env.development.local` — gitignored, higher Vite precedence, never touched by Rayfin.
 
+**Migration extension (2026-09-21)**: those higher-priority files can also retain generated
+`VITE_FABRIC_*` / `VITE_RAYFIN_*` values from a former target. Back them up, remove only
+stale owned overrides, preserve unrelated settings, and perform a fresh production build
+after Rayfin generates the destination environment. Never use `--skip-build` with the old
+bundle. **Evidence**: the corrected deployment served nine assets byte-identical to the
+fresh build, with all eight intended bindings and no former owned values. See
+[tenant_migration.md](tenant_migration.md), §6.
+
 ---
 
 ### 14. Two audiences, one service principal — the wrong one returns 401
@@ -261,6 +269,13 @@ do-not-edit header. App variables belong in `.env.production.local` /
 
 **Root cause**: the resources all resolve to the **Power BI Service** principal, but they are
 **separate audiences and need separate `acquireToken` calls**:
+
+> **Correction 2026-09-21:** only Fabric and Power BI share that principal. Foundry is a
+> separate resource principal; `https://ai.azure.com` resolved to Azure Machine Learning
+> Services in the verified tenant. Discover by resource URI, not display name. The broad
+> permission set below is historical evidence, not a universal least-privilege baseline;
+> [the migration guide](tenant_migration.md) records the narrower tested set and
+> deploying-user-only consent. Distinct audiences still require distinct tokens.
 
 | Audience | Used for |
 |---|---|
@@ -329,6 +344,13 @@ allowedRedirectUris:
 `localhost` and `127.0.0.1` are not interchangeable here: Entra matches the string, so a dev
 who opens the other one gets the same mismatch on a machine where it "works".
 
+**Own-MSAL clarification (2026-09-21)**: the lists above govern Rayfin's authentication
+service. An app using its own MSAL SPA must **also** preserve and update that registration's
+`spa.redirectUris`. The observed migration added the generated origin and `/blank.html`;
+that page invokes MSAL v5's redirect bridge. Updating Rayfin alone cannot repair that SPA's
+redirect mismatch. **Evidence**: after publication and the SPA update, real popup sign-in
+and downstream queries succeeded in normal Edge; see [tenant_migration.md](tenant_migration.md).
+
 **Evidence**: `rayfin.yml` of an app deployed to Sweden Central carrying exactly these three,
 after the first deploy failed sign-in with only the two local ones. Observed 2026-08.
 
@@ -393,3 +415,36 @@ Observed 2026-08.
 
 > Never skip the region/preview-setting check (step 1) — it's the #1 cause of
 > "App item didn't appear".
+
+---
+
+### 18. Explicit tenant/workspace flags still reuse the old AppBackend
+
+**Context**: Rayfin 1.34.0, tenant migration, 2026-09-21.
+**Symptom**: logs show the new tenant and workspace but `Redeployment detected` reuses the
+old item; Fabric returns 404, `Could not found the requested item`.
+**Root cause**: `.deployments.json` uses normalized workspace names. The installed CLI's
+`resolveExistingDeployment` checks that key before its workspace-ID fallback.
+**Fix**: archive the complete old record under a tenant/workspace-qualified key, release
+only the conflicting name alias, retain unrelated aliases, and deploy with the explicit
+target. Verify the active target after both provisioning and upload. Do not delete the old
+cloud app. See [the migration sequence](tenant_migration.md), §3.
+**Evidence**: first attempt reproduced the wrong-item 404 despite explicit flags; after
+the local registry fix the next attempt created the new item and the following pass
+reused it. Collision and matching-target reuse regression tests passed.
+
+### 19. A correct CLI login does not migrate the browser application
+
+**Context**: Rayfin 1.34.0, MSAL 5.19, Vite and normal Edge, 2026-09-21.
+**Symptom**: backend verification succeeds while Rayfin retains an old-tenant login and
+the app's mode-specific environment files still reference its old registration and services.
+**Cause**: CLI, Rayfin and browser caches are independent; Vite embeds configuration at build
+time. A backend-only deployment changes none of those frontend bindings.
+**Fix**: follow [tenant_migration.md](tenant_migration.md): pinned child-process deployment
+token, dedicated destination SPA and scoped consent, tenant-filtered account selection,
+separate audiences, proper callback, fresh production build and real browser verification.
+Do not make InPrivate or a storage-policy change the permanent workaround.
+**Evidence**: all nine deployed assets matched the fresh build, eight destination bindings
+replaced their old values, normal Edge sign-in and live DAX passed, and an uncached browser
+question returned both data and contract sources in 75.4 seconds. The user independently
+confirmed normal Edge worked; tests passed with `sessionStorage` unchanged.

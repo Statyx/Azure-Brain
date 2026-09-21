@@ -641,4 +641,23 @@ POST /workspaces/{wsId}/items/{nbId}/jobs/instances?jobType=RunNotebook
   that prompted it. Retiring is one failure mode; applying a live rule outside its condition is
   the other, and it is quieter.
 
+### 53. A Pre-HTTP Network Timeout Was Mistaken for Another Tenant/Consent Problem
+
+- **Context**: Fabric App tenant migration from Windows, observed 2026-09-21.
+- **Symptom**: Fabric and Power BI requests timed out before any HTTP response, although
+  Graph worked and the selected Azure CLI tenant was correct.
+- **Cause**: the failing layer was connectivity, not an observed Entra denial. Python, curl
+  and Edge reproduced the timeout. The precise network component responsible was not established.
+- **Fix**: distinguish connection timeout, HTTP authentication/authorization failure, and
+  application/API failure before changing identity or consent. Compare the same destination
+  across tools; retry an authenticated real API route before resuming deployment.
+  A response from the API root, even a 404, proves reachability only. A reachable Graph
+  endpoint or previously loaded portal page does not establish Fabric reachability.
+  Follow approved network troubleshooting; never prescribe disabling VPN or security controls.
+- **Evidence**: after a user-initiated network change, the same authenticated workspace
+  preflight succeeded and deployment resumed. Later Rayfin failures returned an actual
+  wrong-item 404 caused by a local registry collision, a separate problem documented in
+  [Fabric Apps known issues #18](Apps-Brain/agents/fabric-apps-agent/known_issues.md).
+- **Lesson**: changing the selected tenant or expanding consent cannot repair a TCP timeout.
+  A recovery after a network change is correlation, not proof that the VPN itself caused it.
 

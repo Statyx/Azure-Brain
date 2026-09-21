@@ -265,6 +265,13 @@
 **Input**: All artifacts from Steps 1-11  
 **Output**: Validation report, deployment confirmation  
 
+> **Correction 2026-09-21 — conditional completion.** Backend artifacts alone complete
+> this step only when no application exists/in scope, or the user explicitly excluded it.
+> Otherwise invoke the app runtime owner after its Fabric/Foundry dependencies; follow
+> [the Fabric App migration and verification gates](../../../Apps-Brain/agents/fabric-apps-agent/tenant_migration.md).
+> Require the actual new hosting URL, fresh bindings and a real browser journey before
+> reporting the application verified. Keep manual steps and untested modes explicit.
+
 **What happens**:
 - Verify all artifacts exist in workspace
 - Run semantic model refresh (Calculate mode for Direct Lake)
@@ -286,6 +293,7 @@
 | Operations Agent | AI agent over Eventhouse (RTI) | rti-kusto-agent | Step 10 + 9b |
 | CI/CD Setup | Automated deployment pipeline | fabric-cli-agent | Step 12 |
 | Monitoring | Ongoing health checks | monitoring-agent | Step 12 |
+| Application publication and browser verification | Existing app or app in scope; mandatory unless explicitly excluded | fabric-apps-agent + app-frontend-agent | Its Fabric/Foundry dependencies; before Step 12 completes |
 
 ---
 

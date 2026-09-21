@@ -196,6 +196,16 @@ Deliver, per entity:
 
 ## Mode 3 — `Fabric app deploy`
 
+> **Tenant migration gate — added 2026-09-21.** Before the steps below, read
+> [`tenant_migration.md`](tenant_migration.md) and [known issues #18–19](known_issues.md).
+> Inventory the existing app, registration, consent, callbacks and build bindings.
+> Explicit tenant/workspace flags do not by themselves defeat Rayfin 1.34's name-first
+> deployment lookup. Preserve the old record and release only its colliding alias.
+> Backend success is not app publication, and publication is not browser verification:
+> return the actual hosting URL only after checking its new-target assets, then verify
+> normal Edge sign-in, real data and an uncached assistant request separately.
+> InPrivate is a diagnostic comparison, not the deployment strategy.
+
 1. Pre-flight: preview setting on? supported region? signed in to the right tenant?
 2. Run `npx rayfin up` (provisions DB, auth, access policies, APIs, hosting).
 3. Verify the **Fabric App** item appears in the target workspace.
@@ -213,6 +223,11 @@ Deliver, per entity:
 | No App item after deploy | Unsupported region (suffix 8) or preview setting off | Move capacity / enable setting |
 | Sign-in fails | Entra app / tenant mismatch | Re-check brokered auth provider config |
 | Data not in OneLake | Deploy incomplete | Re-run `npx rayfin up`, check CLI logs |
+
+> **Triage extension 2026-09-21.** Before applying the sign-in row, distinguish a
+> pre-HTTP network timeout from an Entra/API response. Azure CLI, Rayfin and Edge have
+> independent caches. Do not repeat sign-ins or widen consent to repair unreachable
+> Fabric endpoints. See [`tenant_migration.md`](tenant_migration.md), §§2–5.
 
 ---
 
