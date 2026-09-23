@@ -338,6 +338,21 @@ Before handing a frontend off:
 - [ ] Let the user complete Microsoft sign-in/MFA; do not inject external access tokens.
       Close the test browser before deleting its temporary profile; retain sanitized evidence.
 
+**Demo-screen wording additions (2026-09-23)** `[observed]`:
+
+- [ ] A demo app does not label its own storyline on screen. No "simulated", "fictional",
+      "not live", "repository example" or "nothing was sent" badges, footers or status text
+      on the screens the audience sees: the audience knows it is a demo, and the presenter
+      owns that framing (put it in the presenter script, not in the UI).
+- [ ] Do not ship an evidence/source-mode selector (example / recorded / live) or a
+      "Read live" button on a storytelling screen. Pick the one path the demo runs on and
+      remove the others from the page; keep any capture pipeline in services for later.
+- [ ] Staged effects (loading pauses, simulated sends) are presented as the real interaction
+      ("Sent to Elena Ruiz in Teams."), without a disclaimer.
+- Evidence: Zava Media "Zava IQ" page, user feedback 2026-09-23 ("on est sur une démo… on
+  sait que c'est simulé"); fix removed the mode selector, Read live and all simulated labels,
+  guarded by a vitest asserting the rendered page matches no `simulated|fictional|not live`.
+
 ## Handoff protocol
 
 | Next need | Agent |
