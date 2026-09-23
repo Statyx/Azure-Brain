@@ -146,3 +146,37 @@ What do I want to show?
 ![Stars](https://img.shields.io/github/stars/owner/repo?style=for-the-badge)
 ![Issues](https://img.shields.io/github/issues/owner/repo?style=for-the-badge)
 ```
+
+---
+
+## Demo repositories ship a presenter script (2026-09-23)
+
+A demo is not self-explanatory: the app shows *what*, the audience needs to know *why this
+screen, why now, and what to look at*. Every demo repository therefore ships a presenter
+script next to the code, and a demo is not "done" without it.
+
+- **Where:** `docs/demo/DEMO_SCRIPT.html` (one self-contained HTML file, no external assets,
+  printable). Reference it from `.github/copilot-instructions.md` so future sessions keep it
+  in sync with the app.
+- **Language:** the script is written in the language the demo is **presented** in — by
+  default English, like the app. Do not mix languages inside one script.
+- **Mandatory content:**
+  1. *The storyline* — the one business question and why neither source answers it alone.
+  2. *Before the demo* — day-before / hour-before / five-minutes-before checklists (capacity
+     running, tests green, warm-up, sign-in, diagnostic tab).
+  3. *Screen by screen* — for each scene: clicks, the exact on-screen text (quoted as the app
+     shows it), what to show, what to say, the key moment and the trap to avoid, with timings
+     and a short-version subset.
+  4. *Branding and wording* — each layer/product name, colour, badge and tagline, plus a
+     Say / Avoid table (e.g. "the figure comes from a Fabric measure; the AI cites it" vs
+     "the AI calculated it").
+  5. *What is live, recorded or scripted* — for the presenter only; the UI itself carries no
+     such labels (see [app-frontend-agent](../../../Apps-Brain/agents/app-frontend-agent/instructions.md),
+     "Demo-screen wording additions").
+  6. *Challenge questions* with expected answers, a *Plan B* table, and copy-paste questions.
+- **Keep it true:** when a screen's text changes, update the quoted text in the script in the
+  same commit. Numbers in the script must match the ones the test suite asserts.
+- **Evidence:** Zava Media (Fab-Zava-Media) — user feedback 2026-09-23: the demo screens
+  alone did not convey the context ("je comprends pas ce que fait la démo"); fix was a
+  presenter script with per-step what-to-show / what-to-say / branding, moved to
+  `docs/demo/DEMO_SCRIPT.html` and fully translated to English (commits `f12ae85`, `e9deb33`).
