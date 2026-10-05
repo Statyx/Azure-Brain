@@ -428,7 +428,7 @@ At the end of a demo, walk the deviation log in `RUN.md` and route each line:
 Two rules on the way in:
 
 - **Never fork a base to make a variant.** Add an axis, a module, or a preset.
-- **Write as if already public.** The company is always **Zava**, GUIDs are visibly fake, no path
+- **Write as if already public.** The company is always **Caldova**, GUIDs are visibly fake, no path
   contains your account name. See [`../PUBLIC_SAFETY.md`](../PUBLIC_SAFETY.md) and verify with
   `python tools/scan_public_safety.py ..` before pushing.
 

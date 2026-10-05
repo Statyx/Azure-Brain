@@ -7,7 +7,7 @@ Fill-in-the-blank skeletons, distilled from a complete seven-agent system observ
 marked **required**. The required lines are the ones that failed in observed systems when
 omitted.
 
-> Company is always **Zava**. Names below are placeholders, not a real directory.
+> Company is always **Caldova**. Names below are placeholders, not a real directory.
 
 ---
 

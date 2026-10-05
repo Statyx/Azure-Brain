@@ -42,7 +42,7 @@ python Meta-Brain/tools/scan_public_safety.py .   # gate 2 — no client leak
       companion file, referenced from the load order at the top.
 - [ ] **2. Labels** — nothing is marked **verified** without an artifact behind it. When unsure, I
       wrote `doc`.
-- [ ] **3. Public by default** — company is Zava, GUIDs are visibly fake, no path contains an
+- [ ] **3. Public by default** — company is Caldova, GUIDs are visibly fake, no path contains an
       account name, no secret is committed. Including in the commit message.
 - [ ] **4. Catalog matches disk** — if I added, renamed or removed an agent folder, I updated that
       brain's `agents/_catalog.yaml` in the same commit.

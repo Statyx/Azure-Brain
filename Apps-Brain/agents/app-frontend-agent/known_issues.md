@@ -151,7 +151,7 @@ check it before any deployment.
 
 **Cause** — public reference repos often ship their own deployment doc with live ids and URLs.
 
-**Fix** — never copy identifiers or hostnames from a reference repo. Company is **Zava**, GUIDs
+**Fix** — never copy identifiers or hostnames from a reference repo. Company is **Caldova**, GUIDs
 are `a0000000-0000-4000-a000-00000000000a` shaped, secrets are read at runtime. See
 [`../../../PUBLIC_SAFETY.md`](../../../PUBLIC_SAFETY.md) and run
 `python Meta-Brain/tools/scan_public_safety.py <repo>` before pushing.

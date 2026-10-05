@@ -4,8 +4,8 @@
 
 Battle-tested pattern for deploying a complete Fabric workspace from scratch via Python + REST API.
 Used successfully on:
-- **Zava - Fabric RTI Demo** (IoT sensor monitoring, Eventhouse + Lakehouse)
-- **Zava - Financial Platform** (CCE validation, Lakehouse-only)
+- **Caldova - Fabric RTI Demo** (IoT sensor monitoring, Eventhouse + Lakehouse)
+- **Caldova - Financial Platform** (CCE validation, Lakehouse-only)
 
 ## Deployment Order
 

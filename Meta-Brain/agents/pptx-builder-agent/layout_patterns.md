@@ -219,7 +219,7 @@ The title must describe the **project or analysis** — NEVER use generic slogan
 GOOD:  "Use case presentation"  +  "Architecture vision"
 GOOD:  "Validation des Estimations de Coûts de Construction"
 BAD:   "Bring your data into the era of AI"
-BAD:   "Zava Financial Platform — CCE Validation" (internal codename)
+BAD:   "Caldova Financial Platform — CCE Validation" (internal codename)
 ```
 
 ### Pattern: Hero text with subtitle

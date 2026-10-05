@@ -7,7 +7,7 @@ below are applied at authoring time.
 
 Two rules carry almost all the weight:
 
-> **1. The company is always Zava.** Never Contoso, never a real customer,
+> **1. The company is always Caldova.** Never Contoso, never a real customer,
 > never your employer, never your initials.
 >
 > **2. Real values live in gitignored files that ship as `.example` templates.**
@@ -22,22 +22,23 @@ convention failed — fix the convention, not just the file.
 
 | Slot | Value | Notes |
 |---|---|---|
-| Company | **Zava** | The only company name. Used across every brain, demo and sample. |
-| Legal / long form | Zava Group | For document headers, invoices, sample data |
-| Domain | `zava.com` | |
-| Tenant domain | `zava.onmicrosoft.com` | Never a real `*.onmicrosoft.com` |
-| Email | `first.last@zava.com` | e.g. `dana.reed@zava.com` |
-| Workspace prefix | `Zava - ` | e.g. `Zava - Retail Analytics` |
-| Resource group | `rg-zava-<workload>` | e.g. `rg-zava-retail` |
-| Storage / short names | `zava<workload>` | lowercase, no separators |
-| Project repo | `Zava-<Domain>` | e.g. `Zava-Retail`, `Zava-Energy` |
+| Company | **Caldova** | The only company name. Used across every brain, demo and sample. |
+| Legal / long form | Caldova Group | For document headers, invoices, sample data |
+| Domain | `caldova.com` | |
+| Tenant domain | `caldova.onmicrosoft.com` | Never a real `*.onmicrosoft.com` |
+| Email | `first.last@caldova.com` | e.g. `dana.reed@caldova.com` |
+| Workspace prefix | `Caldova - ` | e.g. `Caldova - Retail Analytics` |
+| Resource group | `rg-caldova-<workload>` | e.g. `rg-caldova-retail` |
+| Storage / short names | `caldova<workload>` | lowercase, no separators |
+| Project repo | `Caldova-<Domain>` | e.g. `Caldova-Retail`, `Caldova-Energy` |
+| Application name | `Caldova <Purpose>` | e.g. **Caldova Service Desk**, **Caldova Media** — the name shown in the app shell, the README title and the deck |
 
 **Do not use a personal prefix.** A workspace called `ABC - Retail` publishes
 the author's initials into every screenshot, every API response and every
-sample JSON in the repo. Use `Zava - Retail`.
+sample JSON in the repo. Use `Caldova - Retail`.
 
-Divisions, when a scenario needs several: **Zava Retail**, **Zava Energy**,
-**Zava Health**, **Zava Financial**, **Zava Manufacturing**.
+Divisions, when a scenario needs several: **Caldova Retail**, **Caldova Energy**,
+**Caldova Health**, **Caldova Financial**, **Caldova Manufacturing**.
 
 People, when a scenario needs named users — invented, non-attributable:
 `Dana Reed`, `Priya Nair`, `Marco Silva`, `Lena Fischer`, `Tom Okafor`.
@@ -45,6 +46,15 @@ People, when a scenario needs named users — invented, non-attributable:
 > Legacy names (`Contoso`, `Tailwind`, `Northwind`, `Fabrikam`) still appear in
 > older files. They are being replaced as those files are touched. Do not add
 > new ones.
+
+> **Correction 2026-10-05 — the company was Zava, it is now Caldova.** Changed at
+> the user's explicit request ("Caldova Service Desk, Caldova Media"). Every new
+> application, workspace, repo and sample uses Caldova. `Zava` survives only in
+> historical evidence that quotes a real artifact by its real name — the
+> `Statyx/Fab-Zava-Media` repo, the `DataAgent_Zava_Media_Analyst` tenant proof,
+> and Microsoft's own *Zava retail* Foundry IQ lab. Do not rename those (the
+> citation would no longer resolve), and do not create anything new called Zava.
+> Logged as `company-name-zava` in [`superseded_rules.yaml`](superseded_rules.yaml).
 
 ---
 
@@ -160,7 +170,7 @@ the single most common way a tenant ID reaches a public repo.
 
 ```bash
 python Meta-Brain/tools/scan_public_safety.py .          # this repo
-python Meta-Brain/tools/scan_public_safety.py ../Zava-Retail
+python Meta-Brain/tools/scan_public_safety.py ../Caldova-Retail
 python Meta-Brain/tools/scan_public_safety.py . --json
 python Meta-Brain/tools/scan_public_safety.py . --list-allowed
 ```
@@ -217,7 +227,7 @@ What it blocks beyond secrets, since the 2026-08-03 audit:
 |---|---|
 | `client-name` | a generic engagement/event phrase; real names come from `CLIENT_DENYLIST` |
 | `client-acronym` | the same name with the letters filed off — case-sensitive |
-| `personal-workspace-prefix` | `XX - Something`, i.e. initials instead of `Zava - ` (hyphen or en dash; the em dash is this brain's title separator and is excluded) |
+| `personal-workspace-prefix` | `XX - Something`, i.e. initials instead of `Caldova - ` (hyphen or en dash; the em dash is this brain's title separator and is excluded) |
 | `fabric-sql-endpoint` | a real `*.datawarehouse.fabric.microsoft.com` host (placeholders and the `*` form stay quiet) |
 | `denylisted-term` | anything listed in this repo's `.publicsafety-deny` |
 
@@ -236,7 +246,7 @@ test run, so the brain cannot drift back.
    allowlisted with a reason.
 2. `git ls-files | Select-String -Pattern "resource_ids\.md|state\.json|\.env$"`
    → empty.
-3. Company name is Zava; no personal prefix in workspace or resource names.
+3. Company name is Caldova; no personal prefix in workspace or resource names.
 4. Screenshots and GIFs checked by eye — the scanner cannot read images, and
    the Fabric UI shows the tenant name in the top bar.
 5. `git log -p` skimmed if the repo ever held real values: **the scanner sees

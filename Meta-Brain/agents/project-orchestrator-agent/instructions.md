@@ -141,7 +141,7 @@ Track project progress in a `project_state.json`:
 
 ```json
 {
-  "project": "zava-energy",
+  "project": "caldova-energy",
   "pipeline": {
     "step_1_domain_model": "completed",
     "step_2_sample_data": "completed",

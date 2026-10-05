@@ -63,7 +63,7 @@ Azure-Brain/                       ← umbrella (this repo)
 ├── shared_constraints.md          ← 9 hard rules, all brains
 ├── known_issues.md                ← cross-cutting gotchas
 ├── ERROR_RECOVERY.md              ← decision trees by HTTP status
-├── PUBLIC_SAFETY.md               ← Zava identity + publish-by-default rules
+├── PUBLIC_SAFETY.md               ← Caldova identity + publish-by-default rules
 ├── GETTING_STARTED.md             ← 15-min setup
 ├── Fabric-Brain/                  ← Microsoft Fabric      — 24 agents  (flat)
 │   ├── agents/_catalog.yaml
@@ -328,7 +328,7 @@ its own domain**.
     > so a retraction filed only there is read *after* the agent already acted on the rule it
     > retracts. Put a dated correction **adjacent to the false statement** in `instructions.md`
     > (and in its load order) first. See [`agent_principles.md`](agent_principles.md) § 3b.
-11. **Write as if already public.** The company is always **Zava**; GUIDs in docs and samples are
+11. **Write as if already public.** The company is always **Caldova**; GUIDs in docs and samples are
     visibly fake (`a0000000-0000-4000-a000-00000000000a`); no path contains your account name;
     secrets are read at runtime; real values live in a gitignored file with a committed
     `.example` twin. See **`PUBLIC_SAFETY.md`**, verify with

@@ -44,7 +44,7 @@
 ### 8. Agent Skips Reading Config
 - **Symptom**: Agent produces generic output instead of industry-specific
 - **Cause**: Specialized agent wasn't given the config file path
-- **Fix**: Always pass config file paths in the handoff. Example: "Use `industries/zava-energy/semantic-model.json` for measure definitions."
+- **Fix**: Always pass config file paths in the handoff. Example: "Use `industries/caldova-energy/semantic-model.json` for measure definitions."
 
 ### 9. "Everything redeployed" omitted the existing Fabric App
 

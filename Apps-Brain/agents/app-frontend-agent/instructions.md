@@ -320,7 +320,7 @@ Before handing a frontend off:
 - [ ] `NAV` and `ROUTES` in the same file; every nav path resolves.
 - [ ] Settings screen shows mode, workspace/agent ids, and the role matrix.
 - [ ] Seed data validates against `design/contracts/*.schema.json`.
-- [ ] No real tenant GUID, workspace URL or customer name anywhere — company is **Zava**,
+- [ ] No real tenant GUID, workspace URL or customer name anywhere — company is **Caldova**,
       GUIDs are `a0000000-0000-4000-a000-00000000000a` shaped
       ([`../../../PUBLIC_SAFETY.md`](../../../PUBLIC_SAFETY.md)). Verify with
       `python Meta-Brain/tools/scan_public_safety.py <repo>`.

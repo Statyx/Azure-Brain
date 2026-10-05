@@ -44,7 +44,7 @@ Five brains live at the root:
 - **Read [`known_issues.md`](../known_issues.md)** at umbrella root before debugging — most errors are already documented.
 - **Follow [`agent_principles.md`](../agent_principles.md)** — config-driven, idempotent, async-first. Applies to every brain.
 - **Write as if already public** — see [`PUBLIC_SAFETY.md`](../PUBLIC_SAFETY.md).
-  The company is always **Zava**. GUIDs in docs and samples are visibly fake
+  The company is always **Caldova**. GUIDs in docs and samples are visibly fake
   (`a0000000-0000-4000-a000-00000000000a`); never paste one from a real tenant.
   No hardcoded path containing your account name (`$PSScriptRoot`, `%USERPROFILE%`).
   Secrets are read at runtime. Real values go in a gitignored file with a committed

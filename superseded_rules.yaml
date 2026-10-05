@@ -41,6 +41,27 @@
 
 rules:
 
+  - id: company-name-zava
+    kind: superseded
+    recorded: 2026-10-05
+    summary: >-
+      "The company is always Zava" ? the fictional identity used for every application,
+      workspace, repo, tenant domain and sample across all brains.
+    replaced_by: >-
+      The company is always Caldova (caldova.com, `Caldova - ` workspace prefix,
+      rg-caldova-<workload>, applications named `Caldova <Purpose>` such as Caldova Service
+      Desk or Caldova Media). Zava survives only in historical evidence quoting a real
+      artifact by its real name (Fab-Zava-Media, DataAgent_Zava_Media_Analyst, Microsoft's
+      Zava retail Foundry IQ lab).
+    authority: PUBLIC_SAFETY.md
+    authority_anchor: 'company is always \*?\*?Caldova'
+    evidence: >-
+      Explicit user request 2026-10-05: future application names move from Zava to Caldova
+      ("Caldova Service Desk, Caldova Media"), to be applied in the brain and everywhere.
+    forbidden:
+      - 'company is always \*?\*?`?Zava'
+    enforced_by: Meta-Brain/tests/test_public_safety.py
+
   - id: report-format-pbir
     kind: superseded
     recorded: 2026-09-03

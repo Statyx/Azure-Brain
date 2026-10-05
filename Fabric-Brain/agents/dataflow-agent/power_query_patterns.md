@@ -96,7 +96,7 @@ in
 ### OData Feed
 ```m
 let
-    Source = OData.Feed("https://services.odata.org/V4/Zava/Zava.svc/"),
+    Source = OData.Feed("https://services.odata.org/V4/Caldova/Caldova.svc/"),
     Customers = Source{[Name="Customers", Signature="table"]}[Data]
 in
     Customers
@@ -105,7 +105,7 @@ in
 ### SharePoint List
 ```m
 let
-    Source = SharePoint.Tables("https://zava.sharepoint.com/sites/mysite", [ApiVersion=15]),
+    Source = SharePoint.Tables("https://caldova.sharepoint.com/sites/mysite", [ApiVersion=15]),
     MyList = Source{[Title="My List"]}[Items]
 in
     MyList

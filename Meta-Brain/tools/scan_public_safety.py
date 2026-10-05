@@ -152,12 +152,12 @@ RULES: list[Rule] = [
          r"\s*[:=]\s*[\"']?[A-Za-z0-9~._\-]{16,}",
          "BLOCK", "Replace with a placeholder and read from env/Key Vault."),
     Rule("tenant-domain",
-         r"\b(?!zava\.|contoso\.|fabrikam\.|example\.|yourtenant\.|mytenant\.)"
+         r"\b(?!caldova\.|zava\.|contoso\.|fabrikam\.|example\.|yourtenant\.|mytenant\.)"
          r"[A-Za-z0-9][A-Za-z0-9-]{1,60}\.onmicrosoft\.com\b",
-         "BLOCK", "Identifies your tenant. Use zava.onmicrosoft.com."),
+         "BLOCK", "Identifies your tenant. Use caldova.onmicrosoft.com."),
     Rule("corporate-email",
          r"\b[A-Za-z0-9._%+-]+@(?:microsoft|outlook|gmail|hotmail)\.com\b",
-         "BLOCK", "Use first.last@zava.com or user@example.com."),
+         "BLOCK", "Use first.last@caldova.com or user@example.com."),
     Rule("windows-user-path",
          r"[A-Za-z]:\\Users\\(?!<|\{|%|USERNAME|Public\b)[A-Za-z0-9._-]+",
          "WARN", "Leaks your account name. Use %USERPROFILE% or <user>."),
@@ -171,7 +171,7 @@ RULES: list[Rule] = [
     # ── added 2026-08-03 after the external audit ────────────────
     Rule("client-name",
          r"\b(?:" + "|".join(CLIENT_NAMES) + r")\b",
-         "BLOCK", "Names a real engagement. Use Zava, or an undeducible "
+         "BLOCK", "Names a real engagement. Use Caldova, or an undeducible "
                   "generic label ('a live-event control-room demo')."),
     Rule("client-acronym",
          r"\b(?:" + "|".join(CLIENT_ACRONYMS) + r")\b",
@@ -186,7 +186,7 @@ RULES: list[Rule] = [
     Rule("personal-workspace-prefix",
          r"(?<![A-Za-z0-9_])[A-Z]{2,4} [-\u2013] (?=[A-Z][a-z])",
          "BLOCK", "Initials in a workspace name publish their owner into every "
-                  "screenshot and API response. Use the 'Zava - ' prefix "
+                  "screenshot and API response. Use the 'Caldova - ' prefix "
                   "(PUBLIC_SAFETY.md).", flags=0),
     Rule("fabric-sql-endpoint",
          r"[A-Za-z0-9_<>{}$%*.\-]+\."
@@ -377,7 +377,7 @@ def _is_placeholder_resource_host(match: re.Match) -> bool:
         return True
     if _HOST_PLACEHOLDER_WORDS.match(left):
         return True
-    if re.match(r"^(?:my|your|example|sample|contoso|zava|fabrikam)"
+    if re.match(r"^(?:my|your|example|sample|contoso|caldova|zava|fabrikam)"
                 r"[a-z0-9-]*$", left, re.I):
         return True
     return bool(re.match(

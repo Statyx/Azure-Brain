@@ -182,21 +182,21 @@ mcp_fabric_mcp_onelake_list_workspaces()
 
 # List files in a lakehouse
 mcp_fabric_mcp_onelake_list_files(
-    workspace: "Zava - Fabric RTI Demo",
+    workspace: "Caldova - Fabric RTI Demo",
     item: "LH_SensorReference",
     path: "Files/"
 )
 
 # Read a Delta table
 mcp_fabric_mcp_onelake_get_table(
-    workspace: "Zava - Fabric RTI Demo",
+    workspace: "Caldova - Fabric RTI Demo",
     item: "LH_SensorReference",
     table: "dim_sensors"
 )
 
 # Upload a CSV
 mcp_fabric_mcp_onelake_upload_file(
-    workspace: "Zava - Fabric RTI Demo",
+    workspace: "Caldova - Fabric RTI Demo",
     item: "LH_SensorReference",
     path: "Files/new_data.csv",
     localPath: "data/raw/new_data.csv"

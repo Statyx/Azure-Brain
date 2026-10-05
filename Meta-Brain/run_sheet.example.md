@@ -9,7 +9,7 @@
 | | |
 | --- | --- |
 | **Date** | YYYY-MM-DD |
-| **Audience / story** | e.g. "operations manager, Zava plant 3" |
+| **Audience / story** | e.g. "operations manager, Caldova plant 3" |
 | **Preset** | `digital-twin` — or `custom` |
 | **Formula** | `B1 + B2 + M-ONTO + M-DL + M-AGENT` |
 | **Brain commit** | `git rev-parse --short HEAD` in Azure-Brain |

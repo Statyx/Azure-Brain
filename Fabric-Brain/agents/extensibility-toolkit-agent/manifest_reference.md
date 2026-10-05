@@ -45,10 +45,10 @@ The top-level backend configuration for the workload.
 <?xml version="1.0" encoding="utf-8"?>
 <WorkloadManifest>
   <!-- Unique workload identifier: [Organization].[WorkloadName] -->
-  <Name>Zava.DataQuality</Name>
+  <Name>Caldova.DataQuality</Name>
   
   <!-- Display metadata -->
-  <DisplayName>Zava Data Quality</DisplayName>
+  <DisplayName>Caldova Data Quality</DisplayName>
   <Description>Data quality monitoring and remediation for Fabric</Description>
   <Version>1.0.0</Version>
   
@@ -85,19 +85,19 @@ The top-level frontend configuration for the workload.
 ```json
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/workload/product.schema.json",
-  "name": "Zava.DataQuality",
-  "displayName": "Zava Data Quality",
+  "name": "Caldova.DataQuality",
+  "displayName": "Caldova Data Quality",
   "description": "Data quality monitoring and remediation for Fabric",
   "version": "1.0.0",
   "icon": {
-    "name": "zava-dq-icon"
+    "name": "caldova-dq-icon"
   },
   "category": "Data Management",
   "homePage": {
     "path": "/home"
   },
   "assets": {
-    "zava-dq-icon": "assets/workload-icon.png"
+    "caldova-dq-icon": "assets/workload-icon.png"
   }
 }
 ```
@@ -202,7 +202,7 @@ Per-item frontend manifest. One file per item type.
 
 ```env
 # Workload identity
-WORKLOAD_NAME=Zava.DataQuality
+WORKLOAD_NAME=Caldova.DataQuality
 
 # Entra ID
 AZURE_AD_APP_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
@@ -248,7 +248,7 @@ build/
 │   └── [gateway binaries reference]
 │
 └── Manifest/                 # NuGet package for deployment
-    └── Zava.DataQuality.1.0.0.nupkg
+    └── Caldova.DataQuality.1.0.0.nupkg
 ```
 
 ---
@@ -281,7 +281,7 @@ Manifest/
 
 | Element | Pattern | Example |
 |---------|---------|---------|
-| WorkloadName | `[Organization].[WorkloadName]` | `Zava.DataQuality` |
+| WorkloadName | `[Organization].[WorkloadName]` | `Caldova.DataQuality` |
 | Dev WorkloadName | `Org.[WorkloadName]` | `Org.DataQuality` |
 | Item type name | PascalCase, singular | `QualityRule` |
 | Backend manifest | `[ItemName]Item.xml` | `QualityRuleItem.xml` |

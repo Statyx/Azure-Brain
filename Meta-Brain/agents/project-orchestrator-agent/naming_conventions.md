@@ -41,22 +41,22 @@ Three mechanisms, each already documented and verified in its own agent:
 
 | Artifact Type | Pattern | Example |
 |--------------|---------|---------|
-| **Workspace** | `<CompanyName>` or `<CompanyName>_<Environment>` | `ZavaEnergy`, `ZavaEnergy_Dev` |
+| **Workspace** | `<CompanyName>` or `<CompanyName>_<Environment>` | `CaldovaEnergy`, `CaldovaEnergy_Dev` |
 | **Lakehouse (Bronze)** | `BronzeLH` | `BronzeLH` |
 | **Lakehouse (Silver)** | `SilverLH` | `SilverLH` |
 | **Lakehouse (Gold)** | `GoldLH` | `GoldLH` |
 | **Notebook** | `NB<NN>_<Purpose>` | `NB01_BronzeToSilver`, `NB03_SilverToGold` |
 | **Dataflow Gen2** | `DF_<Domain>` | `DF_Generation`, `DF_Billing`, `DF_HR` |
-| **Data Pipeline** | `PL_<CompanyName>_Orchestration` | `PL_ZavaEnergy_Orchestration` |
-| **Semantic Model** | `SM_<CompanyName>` | `SM_ZavaEnergy`, `SM_Finance` |
-| **Report (Analytics)** | `<CompanyName>Analytics` | `ZavaEnergyAnalytics` |
-| **Report (Forecast)** | `<CompanyName>Forecasting` | `ZavaEnergyForecasting` |
-| **Report (HTAP)** | `<CompanyName>HTAP` | `ZavaEnergyHTAP` |
+| **Data Pipeline** | `PL_<CompanyName>_Orchestration` | `PL_CaldovaEnergy_Orchestration` |
+| **Semantic Model** | `SM_<CompanyName>` | `SM_CaldovaEnergy`, `SM_Finance` |
+| **Report (Analytics)** | `<CompanyName>Analytics` | `CaldovaEnergyAnalytics` |
+| **Report (Forecast)** | `<CompanyName>Forecasting` | `CaldovaEnergyForecasting` |
+| **Report (HTAP)** | `<CompanyName>HTAP` | `CaldovaEnergyHTAP` |
 | **Data Agent** | `<Domain>_<Role>` | `Energy_Analyst`, `Finance_Controller` |
 | **Eventhouse** | `RT_<Prefix>_Events` | `RT_Energy_Events` |
 | **KQL Database** | `EventsDB` or `<Domain>DB` | `EventsDB` |
 | **EventStream** | `ES_<StreamName>` | `ES_GridTelemetry`, `ES_SensorData` |
-| **Spark Environment** | `Env_<CompanyName>` | `Env_ZavaEnergy` |
+| **Spark Environment** | `Env_<CompanyName>` | `Env_CaldovaEnergy` |
 
 ---
 

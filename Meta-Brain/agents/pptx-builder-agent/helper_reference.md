@@ -110,7 +110,7 @@ Rounded card with title + bullet list. Used on Solution and Use Case slides.
 
 ## Color System — Complete Reference
 
-### Zava-Inspired Triads (50/200/700 = background/border/text)
+### Caldova-Inspired Triads (50/200/700 = background/border/text)
 
 | Name | 50 (bg) | 200 (border) | 700 (text) | Usage |
 |------|---------|-------------|-----------|-------|

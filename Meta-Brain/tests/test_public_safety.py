@@ -135,7 +135,7 @@ def test_scanner_detects(scanner, tmp_path, line, rule):
     ('pwd = notebookutils.credentials.getSecret(url, "db-password")',
      "same, Fabric side"),
     ('Password=${DB_PASSWORD}', "environment expansion, not a literal"),
-    ('tenant = "zava.onmicrosoft.com"', "the prescribed fictional tenant"),
+    ('tenant = "caldova.onmicrosoft.com"', "the prescribed fictional tenant"),
     (r'$here = "C:\Users\<user>\repo"', "explicit placeholder"),
     # ── cry-wolf protection for the rules added 2026-08-03 ──
     ("| SQL Analytics Endpoint | `*.datawarehouse.fabric.microsoft.com` |",
@@ -143,7 +143,7 @@ def test_scanner_detects(scanner, tmp_path, line, rule):
     ('Source = Sql.Database("<sql_endpoint>.datawarehouse.fabric.microsoft.com", '
      '"<lakehouse_name>"),',
      "the placeholder form is the shape we teach"),
-    ('workspaceName: "Zava - Retail Analytics"',
+    ('workspaceName: "Caldova - Retail Analytics"',
      "the prescribed workspace prefix is not all-caps initials"),
     ("SELECT COUNT(*) FROM fact_sales", "'SELECT' contains the letters l-e-c"),
     ("- **EBITDA**: Revenue - COGS - Operating Expenses",
@@ -321,9 +321,9 @@ def test_entry_points_reference_public_safety(name):
         f"{name} must point at PUBLIC_SAFETY.md, or agents will never load it.")
 
 
-def test_zava_is_the_documented_company():
+def test_caldova_is_the_documented_company():
     text = (ROOT / "PUBLIC_SAFETY.md").read_text(encoding="utf-8")
-    assert "Zava" in text
+    assert "Caldova" in text
 
 
 @pytest.mark.parametrize("pattern", [

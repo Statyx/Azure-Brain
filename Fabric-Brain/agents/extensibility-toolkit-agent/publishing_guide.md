@@ -73,7 +73,7 @@ For ISVs and solution builders who want to distribute workloads to **any Fabric 
 2. **Set globally unique WorkloadName**:
    ```xml
    <!-- WorkloadManifest.xml -->
-   <Name>Zava.DataQuality</Name>
+   <Name>Caldova.DataQuality</Name>
    ```
    - Use your registered publisher name as the prefix
    - This ID is permanent once published
@@ -173,7 +173,7 @@ Opt-in webhook that notifies your backend when workload items are created, updat
 ```json
 {
   "eventType": "Created",
-  "workloadName": "Zava.DataQuality",
+  "workloadName": "Caldova.DataQuality",
   "itemType": "QualityRule",
   "itemId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "workspaceId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
@@ -256,7 +256,7 @@ Body:
 {
   "jobType": "DataQualityCheck",
   "jobId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  "workloadName": "Zava.DataQuality",
+  "workloadName": "Caldova.DataQuality",
   "itemType": "QualityRule",
   "itemId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "workspaceId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",

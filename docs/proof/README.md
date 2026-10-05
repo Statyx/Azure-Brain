@@ -32,15 +32,15 @@ after the content has already been cloned. So:
 | **Browser in full screen (F11), or crop the chrome entirely** | Kills the URL bar, the tabs and the profile picture in one move. The URL is where workspace and item GUIDs live. |
 | Top-right avatar, name and tenant label cropped | Identifies you and the tenant. |
 | No path containing an account name | `C:\Users\<you>\...` in a terminal prompt is the single most common leak. `cd` somewhere neutral first, or crop the prompt. |
-| Workspace named `Zava - <something>` | A workspace named with your initials trips the `personal-workspace-prefix` rule — in text. In an image, nothing catches it but you. |
+| Workspace named `Caldova - <something>` | A workspace named with your initials trips the `personal-workspace-prefix` rule — in text. In an image, nothing catches it but you. |
 | No real `*.datawarehouse.fabric.microsoft.com` host | Real SQL endpoints are a flagged pattern. |
 | No GUID that came from a real tenant | Even expired. Crop it or blur it. |
-| Sample data is **Zava** data | No real customer name in a chart label, a table cell or a filter. |
+| Sample data is **Caldova** data | No real customer name in a chart label, a table cell or a filter. |
 | No token, no secret in a scrollback | Terminal shots especially. |
 | Readable at 100 % on a phone | Most of the traffic will be mobile. Zoom the app to 110–125 % *before* capturing rather than scaling the PNG up afterwards. |
 
-Identity slots to use: **Zava** · `zava.com` · `zava.onmicrosoft.com` · workspace prefix
-`Zava - ` · resource group `rg-zava-<workload>`. Full table in
+Identity slots to use: **Caldova** · `caldova.com` · `caldova.onmicrosoft.com` · workspace prefix
+`Caldova - ` · resource group `rg-caldova-<workload>`. Full table in
 [`PUBLIC_SAFETY.md`](../../PUBLIC_SAFETY.md) §1.
 
 ### Cropping is not always an option
@@ -52,7 +52,7 @@ a run ID. Shots 1 and 4 are entirely in that category: full screen plus a croppe
 them.
 
 Cropping fails when the sensitive thing **is the subject**. Shot 2 is the workspace list, so
-masking a workspace name removes the very thing being shown — rename the workspace to `Zava - …`
+masking a workspace name removes the very thing being shown — rename the workspace to `Caldova - …`
 instead, which takes seconds and requires re-running nothing. Shot 3's chart labels *are* the
 visual; if the report sits on real data, no crop saves it and the demo has to be rebuilt on sample
 data.
@@ -93,7 +93,7 @@ multi-agent system is legible*. Crop project and resource names, endpoint URLs, 
 Five shots were uploaded through the GitHub web editor. One of them had to be pulled:
 
 - The workspace was named with the author's **initials** followed by the project name, instead of
-  the `Zava - ` prefix. This is the exact pattern the `personal-workspace-prefix` scanner rule
+  the `Caldova - ` prefix. This is the exact pattern the `personal-workspace-prefix` scanner rule
   exists to catch, and the scanner never saw it, because it was pixels.
 - The item list underneath carried a **real 32-character tenant GUID**, repeated three times, as the
   auto-generated suffix on ontology child items (`ONT_..._graph_<guid>`).

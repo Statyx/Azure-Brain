@@ -42,11 +42,11 @@ test_suite = [
     {
         "id": "T001",
         "category": "simple_lookup",
-        "question": "What is the total revenue for Zava Ltd?",
+        "question": "What is the total revenue for Caldova Ltd?",
         "expected_query_type": "DAX",  # DAX, SQL, or KQL
         "expected_tables": ["fact_sales", "dim_customers"],
         "expected_measures": ["Total Revenue"],
-        "expected_answer_contains": "Zava",
+        "expected_answer_contains": "Caldova",
         "expected_answer_range": {"min": 0, "max": 1e12},
         "should_succeed": True,
     },

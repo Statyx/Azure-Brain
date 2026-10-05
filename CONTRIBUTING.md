@@ -61,7 +61,7 @@ If you are unsure which label applies, it is `doc`.
 
 Read [`PUBLIC_SAFETY.md`](PUBLIC_SAFETY.md) once, in full. The short version:
 
-- The example company is always **Zava**. No customer name, ever, including in a commit message.
+- The example company is always **Caldova**. No customer name, ever, including in a commit message.
 - GUIDs in docs and samples are **visibly fake**: `a0000000-0000-4000-a000-00000000000a`.
   Never paste one from a real tenant, even an expired one.
 - No path containing an account name. Use `$PSScriptRoot`, `%USERPROFILE%`, or a relative path.

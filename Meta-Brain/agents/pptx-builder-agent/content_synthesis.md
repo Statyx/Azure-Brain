@@ -96,9 +96,9 @@ Before generating code, produce a structured outline. This is the handoff to the
 ### Outline Template
 ```yaml
 project:
-  name: "Zava Financial Platform"
+  name: "Caldova Financial Platform"
   subtitle: "Construction Cost Estimate (CCE) Validation"
-  workspace: "Zava - Financial Platform"
+  workspace: "Caldova - Financial Platform"
 
 sources:
   - icon: CSV

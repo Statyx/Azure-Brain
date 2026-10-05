@@ -50,10 +50,10 @@ Everything produced with this brain is authored so it can be published without a
 redaction pass. There is no anonymisation step before sharing — get it right the
 first time.
 
-- **The company is always `Zava`.** Never a real customer, never your employer,
-  never your own initials as a prefix. Derived names: `zava.com`,
-  `zava.onmicrosoft.com`, workspace `Zava - <Domain>`, resource group
-  `rg-zava-<workload>`, repo `Zava-<Domain>`.
+- **The company is always `Caldova`.** Never a real customer, never your employer,
+  never your own initials as a prefix. Derived names: `caldova.com`,
+  `caldova.onmicrosoft.com`, workspace `Caldova - <Domain>`, resource group
+  `rg-caldova-<workload>`, repo `Caldova-<Domain>`.
 - **GUIDs in docs and samples must be visibly fake** —
   `a0000000-0000-4000-a000-00000000000a`. Never paste a workspace, capacity,
   item, subscription or tenant ID copied from a real tenant. Documented public
