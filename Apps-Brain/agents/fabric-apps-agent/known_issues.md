@@ -448,3 +448,20 @@ Do not make InPrivate or a storage-policy change the permanent workaround.
 replaced their old values, normal Edge sign-in and live DAX passed, and an uncached browser
 question returned both data and contract sources in 75.4 seconds. The user independently
 confirmed normal Edge worked; tests passed with `sessionStorage` unchanged.
+
+### 20. `assetAccess: protected` makes the hosted URL return 401 — a host check must accept it
+
+**Context**: Rayfin 1.35.1 (`rayfin.yml` → `assetAccess: protected`), Fabric App static hosting, 2026-09-24.
+**Symptom**: the upload and the Rayfin deploy both succeed, but a post-deploy smoke check that
+expects `GET <hosting URL>` → 200 fails with **401**, so the deploy script reports failure.
+**Root cause**: with `assetAccess: protected` the static host requires a Fabric-authenticated
+session for every asset; an anonymous probe is rejected by design. The 401 proves the host is
+up and protected, not that the deployment is broken.
+**Fix**: in the host-verification step, treat **401 as reachable** (alongside 200/3xx) when
+`assetAccess` is `protected`; keep failing on 404/5xx and network errors. Validate the real
+content through browser sign-in, not through the anonymous probe. After a redeploy the URL is
+unchanged — a stale UI is the browser cache (hard refresh, Ctrl+F5).
+**Evidence**: the redeploy with Rayfin 1.35.1 returned 401 on the hosting URL and failed the
+200-only check; with 401 accepted, `deploy_all.py --app-only` completed, reported
+"Hosting and redirects verified" at the same URL. Browser rendering of the new build was not
+re-checked in that session.
