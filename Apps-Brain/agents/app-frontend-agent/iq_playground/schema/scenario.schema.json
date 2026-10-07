@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/lujeanne_microsoft/copilot-iq-playground/schema/scenario.schema.json",
+  "title": "Copilot IQ Playground scenario",
+  "description": "A scripted, deterministic business scenario played back by the Copilot IQ Playground. One file per business use case. The playground engine renders it; it never invents content at runtime.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "title", "persona", "agents", "governance", "shell", "tracks"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Stable slug, also used as the scenario route."
+    },
+    "title": { "type": "string" },
+    "summary": {
+      "type": "string",
+      "description": "One-paragraph business framing shown on the scenario picker."
+    },
+    "industry": { "type": "string" },
+    "template": {
+      "type": "boolean",
+      "description": "Marks the scenario as a starter template made of placeholders rather than a real use case. The picker labels it and offers it for download."
+    },
+    "persona": {
+      "type": "object",
+      "required": ["role"],
+      "additionalProperties": false,
+      "properties": {
+        "role": { "type": "string", "description": "Job title of the person running the scenario." },
+        "goal": { "type": "string" },
+        "approverRole": {
+          "type": "string",
+          "description": "Role of the human who must sign off. Never a real person's name — the engine resolves {{approverName}} from the demo profile at render time."
+        }
+      }
+    },
+    "trigger": {
+      "type": "object",
+      "description": "The business event that starts the scenario.",
+      "required": ["kind", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["competitive-signal", "demand-shift", "incident", "planning-cycle", "inbound-request"] },
+        "description": { "type": "string" },
+        "detectedBy": { "$ref": "#/$defs/iqLayer" }
+      }
+    },
+    "agents": {
+      "type": "array",
+      "description": "The specialist agents orchestrated in this scenario.",
+      "items": {
+        "type": "object",
+        "required": ["name", "sub", "color"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "sub": { "type": "string", "description": "One-line description of what the agent is responsible for." },
+          "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+          "iq": { "$ref": "#/$defs/iqLayer" }
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "description": "The human-in-the-loop checkpoint. A scenario with autonomous execution and no approval threshold is rejected as unrealistic.",
+      "required": ["approvalThreshold"],
+      "additionalProperties": false,
+      "properties": {
+        "approvalThreshold": { "type": "string" },
+        "policySource": { "type": "string" },
+        "auditRetention": { "type": "string" }
+      }
+    },
+    "shell": {
+      "type": "object",
+      "description": "Chrome of the Copilot-style surface for this scenario.",
+      "additionalProperties": false,
+      "properties": {
+        "conversationHistory": { "type": "array", "items": { "type": "string" } },
+        "suggestedChips": { "type": "array", "items": { "type": "string" } },
+        "upcomingTasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title", "subtitle"],
+            "additionalProperties": false,
+            "properties": {
+              "title": { "type": "string" },
+              "subtitle": { "type": "string" },
+              "action": { "type": ["string", "null"], "description": "Track id launched when the task is clicked." }
+            }
+          }
+        },
+        "tryThese": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "color"],
+            "additionalProperties": false,
+            "properties": {
+              "label": { "type": "string" },
+              "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+            }
+          }
+        }
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Independent scripted paths through the scenario. Each track is a list of scenes; the user advances one scene per click.",
+      "items": { "$ref": "#/$defs/track" }
+    },
+    "coworkSession": {
+      "$ref": "#/$defs/coworkSession",
+      "description": "Optional autonomous agent session replay (timed, auto-advancing) shown in the Cowork view."
+    },
+    "artifacts": {
+      "type": "object",
+      "description": "Scenario-specific artifacts the shell opens in side panels and modals: the approval authorization record.",
+      "additionalProperties": false,
+      "properties": {
+        "authorization": { "type": "object" }
+      }
+    }
+  },
+  "$defs": {
+    "iqLayer": {
+      "enum": ["work", "web", "fabric", "foundry", "none"],
+      "description": "Which Microsoft IQ layer answers this step. work = Microsoft 365 collaboration context; web = external market and competitor signals; fabric = business data, ontology and forecasting; foundry = agent grounding and knowledge retrieval; none = a system of record or policy check that is not an IQ layer."
+    },
+    "sourceSystem": {
+      "enum": ["fabric", "foundry", "web", "governance", "email", "teams", "meeting"]
+    },
+    "sourceRef": {
+      "type": "object",
+      "description": "A grounded citation. Every factual claim an agent makes must carry one — an unsourced assertion is what makes a demo feel fake.",
+      "required": ["id", "label", "system", "detail"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "system": { "$ref": "#/$defs/sourceSystem" },
+        "detail": { "type": "string" }
+      }
+    },
+    "thinkingStep": {
+      "type": "object",
+      "required": ["label", "sub"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "type": "string" },
+        "sub": { "type": "string" },
+        "durationMs": { "type": "integer", "minimum": 500, "maximum": 10000, "description": "How long this step stays on screen, in ms. Defaults to 1400." }
+      }
+    },
+    "scenarioOption": {
+      "type": "object",
+      "description": "A decision option offered to the user. Provide at least three, with exactly one badged 'Recommended', so the user makes a real choice rather than watching a single happy path.",
+      "required": ["id", "title", "body"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "badge": { "type": "string" },
+        "supportedBy": { "type": "string", "description": "Which analysis backs this option." },
+        "body": { "type": "string", "description": "Markdown." },
+        "response": { "type": "string", "description": "Markdown. Assistant reply when this (non-recommended) option is picked: explains the risk and steers back to the recommended option." },
+        "responseSources": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } }
+      }
+    },
+    "choice": {
+      "type": "object",
+      "required": ["label", "user", "assistant"],
+      "properties": {
+        "label": { "type": "string", "description": "Text of the suggested-reply button." },
+        "user": { "type": "string", "description": "The user message. Empty when proactive is true." },
+        "assistant": { "type": "string", "description": "The agent reply, in markdown." },
+        "chain": { "type": "string", "description": "Bullet-separated list of the agents that collaborated on this turn." },
+        "mention": { "type": "string" },
+        "proactive": { "type": "boolean", "description": "Plays as an unprompted agent notification rather than a reply." },
+        "autoTriggerOnly": { "type": "boolean", "description": "Not offered as a button; only fired from inside a previous message." },
+        "chainNext": { "type": "boolean", "description": "Auto-continues into the next scene once revealed." },
+        "reflection": { "type": "string", "description": "Collapsible reasoning shown above the reply." },
+        "thinkingSteps": { "type": "array", "items": { "$ref": "#/$defs/thinkingStep" } },
+        "sources": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+        "scenarios": { "type": "array", "items": { "$ref": "#/$defs/scenarioOption" } },
+        "followupTopic": { "type": "string" },
+        "opensModal": { "const": "approval-policy" }
+      }
+    },
+    "track": {
+      "type": "object",
+      "required": ["id", "label", "scenes"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "label": { "type": "string" },
+        "scenes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["choices"],
+            "additionalProperties": false,
+            "properties": {
+              "choices": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/choice" } }
+            }
+          }
+        }
+      }
+    },
+    "coworkSession": {
+      "type": "object",
+      "required": ["tasks", "events"],
+      "additionalProperties": false,
+      "properties": {
+        "skillsUsed": { "type": "array", "items": { "type": "string" } },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "title"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "integer" },
+              "title": { "type": "string" }
+            }
+          }
+        },
+        "events": {
+          "type": "array",
+          "description": "Timed replay events. duration is the delay in milliseconds before the next event.",
+          "items": {
+            "type": "object",
+            "required": ["kind", "duration"],
+            "properties": {
+              "kind": { "enum": ["thinking", "step", "assistant", "taskUpdate", "image", "slides", "deliverable"] },
+              "duration": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

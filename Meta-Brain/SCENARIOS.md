@@ -47,6 +47,7 @@ the agent's `instructions.md` says **how**, and wins on its own domain.
 | `ontology-addon` | `M-ONTO` | 1–2 h | Graph traversals over dimensions that already exist |
 | `cicd-setup` | `M-CICD` | 1–2 h | Dev → Prod promotion from Git |
 | `migration-wave` | `B3` | 4–6 w | An existing BO / Databricks / Synapse estate landed in Fabric |
+| `iq-playground` | `M-IQPLAY` | 2–3 h | Copilot Chat–style IQ story: Work, Web, Fabric and Foundry IQ, a decision, an approval, an action |
 
 **No row fits?** → [§2.5 Build a custom scenario](#25-no-preset-fits--build-a-custom-scenario).
 
@@ -344,6 +345,19 @@ Smoke tests (structure, storyline metrics, row counts) + pre-deployment report l
 
 ---
 
+**`M-IQPLAY` — IQ playground (Copilot-style scripted story)** · 2–3 h · agent `app-frontend-agent` (Apps-Brain)
+**Attaches to:** any exit state — Fabric App runtime by default, where it replaces an "IQ" page in the app.
+
+A scripted, Copilot Chat–style conversation that walks the audience through Work IQ, Web IQ,
+Fabric IQ and Foundry IQ to a decision, an approval and an action. The engine is a template —
+see [`iq_playground/README.md`](../Apps-Brain/agents/app-frontend-agent/iq_playground/README.md)
+for integration and [`iq_playground/AUTHORING.md`](../Apps-Brain/agents/app-frontend-agent/iq_playground/AUTHORING.md)
+for writing a scenario. **One scenario JSON per demo; the engine is copied as-is, never forked per demo.**
+**Gate:** `validateScenario` returns `[]` · the JSON validates against the schema · light-only rendering checked under both host themes · deployed app hard-refreshed and the new bundle confirmed.
+**Watch out:** prompts are information needs, never "start X IQ" · no stage-direction wording (*simulated*, *demo*, *reset*) · counts consistent from question to answer · one product name throughout · compact landing. Details in `app-frontend-agent/known_issues.md` entries 23–29.
+
+---
+
 ### 2.4 Attach graph
 
 Read an arrow as *"needs the exit state of"*. Modules with no incoming arrow attach anywhere.
@@ -368,6 +382,7 @@ graph LR
     MFLOW["M-FLOW · Task Flow"]:::any
     MTEST["M-TEST · Quality gate"]:::any
     MMON["M-MON · Monitoring"]:::any
+    MIQPLAY["M-IQPLAY · IQ playground"]:::any
     class MCICD any
     classDef any fill:#eee,stroke:#999,stroke-dasharray: 4 3
 ```

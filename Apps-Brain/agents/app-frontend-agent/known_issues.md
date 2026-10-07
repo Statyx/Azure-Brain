@@ -449,3 +449,128 @@ profile is no longer used before removing it; never delete the user's everyday p
 1432 and 1076-pixel viewports without horizontal overflow. A later 2187-pixel inner width
 corresponded to 2172 pixels of content plus a 15-pixel vertical scrollbar. No CSS change
 was needed. The user subsequently confirmed the published site worked in ordinary Edge.
+
+---
+
+## 23. A chat playground inherits the host's dark theme and becomes unreadable
+
+**Context** ? IQ playground (Copilot Chat?style, module `M-IQPLAY`) ported into a Fabric App
+whose shell supports light and dark themes. Observed 2026-09-22.
+
+**Symptom** ? in dark mode, some cards kept a white background while text switched to light
+grey; chips and source badges lost contrast. The page no longer looked like Copilot Chat.
+
+**Root cause** ? the engine was written for a white surface, but host-level `dark:` utilities
+and CSS variables leaked into it. Half the surface followed the host theme, half did not.
+
+**Fix** ? make the playground a light-only island: a white root container with explicit
+foreground colours, and no `dark:` variants inside the engine. The Copilot Chat look is the
+point of the demo; do not attempt to theme it.
+
+**Evidence** ? consuming-app commit `60850d0` (white, light-only style). After the change the
+page rendered identically with the host in light and dark mode.
+
+---
+
+## 24. Stage-direction wording ("simulated", "demo", "reset") breaks the illusion
+
+**Context** ? IQ playground scenario text and shell controls, 2026-09-22.
+
+**Symptom** ? badges and labels such as "simulated", "demo data" and a prominent "Reset demo"
+button. The user's feedback: everyone knows it is a demo; repeating it makes it look fake.
+
+**Root cause** ? authoring-time labels that helped the builder were shipped to the audience.
+
+**Fix** ? no meta wording in any audience-facing string. The end-of-flow control is a quiet
+"New conversation"-style action, not a "reset". `AUTHORING.md` in `iq_playground/` lists the
+banned words; review scenario JSON for them before publishing.
+
+**Evidence** ? consuming-app commit `60850d0` (demo/simulated/reset wording removed).
+
+---
+
+## 25. "Start Work IQ" is not a prompt ? every prompt must be an information need
+
+**Context** ? IQ playground suggestion chips, one per IQ (Work IQ, Web IQ, Fabric IQ?),
+2026-09-22.
+
+**Symptom** ? chips read "Start Work IQ" / "Start Web IQ". They demonstrate nothing: the
+audience sees a tool being launched, not a question being answered.
+
+**Root cause** ? prompts were written from the builder's view (which IQ to show) instead of
+the user's view (what they need to know).
+
+**Fix** ? write each prompt as a concrete question that **only that IQ can answer**: Work IQ ?
+something in mail, meetings or chats; Web IQ ? something public and recent; Fabric IQ ?
+something in governed data. If the question could be answered by another IQ, rewrite it.
+
+**Evidence** ? consuming-app commit `596c5db` (information-need prompts).
+
+---
+
+## 26. The count in the question must match the count in the answer
+
+**Context** ? IQ playground scripted answers, 2026-09-22.
+
+**Symptom** ? the prompt asked for **2** items; the scripted answer listed **3** Fabrikam
+records. The user caught it immediately during a run-through.
+
+**Root cause** ? prompt and answer were edited separately; nothing checks that they agree.
+
+**Fix** ? when a prompt states a number, the answer, its table and its cards must show exactly
+that number. Re-read every prompt/answer pair together after any edit.
+
+**Evidence** ? observed during the session's run-through and corrected in the scenario JSON.
+**Status:** no automated check exists yet; manual review only.
+
+---
+
+## 27. Use one product name for the assistant everywhere
+
+**Context** ? IQ playground inside a branded app, 2026-09-22.
+
+**Symptom** ? the header said "<Brand> IQ" while the chat attribution said
+"Microsoft 365 Copilot". The user could not tell which product was speaking.
+
+**Root cause** ? the engine's default assistant label and the host page title came from two
+places.
+
+**Fix** ? the assistant name is a single scenario field, used by the header, the landing and
+every answer attribution. Never hardcode a product name in the engine.
+
+**Evidence** ? observed during the session; fixed by sourcing every label from the scenario.
+
+---
+
+## 28. The landing screen must be compact ? size it for the first glance
+
+**Context** ? IQ playground landing (greeting, "what can I do", suggested prompts, IQ chips),
+2026-09-22.
+
+**Symptom** ? oversized suggestion cards and chips dominated the first screen. The user
+accepted the large type once a conversation was under way, but not on the landing.
+
+**Fix** ? keep the greeting and the "what can I do" text as they are; shrink the suggestions
+and chips (smaller type, tighter padding, one compact row/grid) so the input box stays the
+focus, as in Copilot Chat.
+
+**Evidence** ? consuming-app commit `164877a` (compact landing), confirmed by the user.
+
+---
+
+## 29. "The old build is still there" is usually a cached bundle, not a failed deploy
+
+**Context** ? Fabric App redeploy of the IQ playground, 2026-09-22.
+
+**Symptom** ? after a successful deploy, the user still saw the previous UI and asked whether
+the address had changed.
+
+**Root cause** ? the browser served the previously cached HTML/bundle; the address and the
+deployment were both fine.
+
+**Fix** ? before debugging the deploy, hard-refresh (or open a private window) and check that
+the loaded asset filename hash matches the new build output. Only if the hash is old after a
+hard refresh is the deploy itself suspect.
+
+**Evidence** ? observed during the session: after a hard refresh the new UI appeared with the
+same address and no redeploy.

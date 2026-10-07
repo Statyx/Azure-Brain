@@ -1,0 +1,616 @@
+{
+  "schemaVersion": 1,
+  "id": "caldova-media",
+  "title": "Caldova Media — Q3 close & delivery compensation",
+  "summary": "Q3 delivery closes with three advertisers outside contract tolerance. Copilot reconciles delivered vs planned volume in Fabric, reads the contract clauses in Foundry, pulls the account context from Work IQ and the market calendar from the web, then drafts a governed delivery compensation plan for Finance sign-off.",
+  "industry": "Media & Advertising",
+  "persona": {
+    "role": "Account Director",
+    "goal": "Close Q3 delivery cleanly: settle over- and under-delivery per contract and keep the advertiser relationships intact before the QBR.",
+    "approverRole": "Head of Finance"
+  },
+  "trigger": {
+    "kind": "planning-cycle",
+    "description": "Q3 2026 delivery is closed. Three advertisers ended the quarter outside the 5% contractual tolerance and the delivery compensation decisions must be settled before the Q4 plans are approved.",
+    "detectedBy": "fabric"
+  },
+  "agents": [
+    {
+      "name": "Caldova Media Agent",
+      "sub": "Orchestrator · Foundry",
+      "color": "#0f7a6c",
+      "iq": "foundry"
+    },
+    {
+      "name": "Delivery Analyst",
+      "sub": "Fabric data agent · delivery & pacing",
+      "color": "#c23fa0",
+      "iq": "fabric"
+    },
+    {
+      "name": "Contracts Agent",
+      "sub": "Foundry IQ · advertiser contracts",
+      "color": "#2e8fd6",
+      "iq": "foundry"
+    },
+    {
+      "name": "Work context",
+      "sub": "Work IQ · mail, Teams, meetings",
+      "color": "#1c8a56",
+      "iq": "work"
+    },
+    {
+      "name": "Market signals",
+      "sub": "Web · advertiser calendars",
+      "color": "#b5641f",
+      "iq": "web"
+    }
+  ],
+  "governance": {
+    "approvalThreshold": "Any customer credit, penalty or invoice release is drafted by agents but executed only after Head of Finance approval.",
+    "policySource": "Caldova Media commercial policy — delivery compensation & billing adjustments",
+    "auditRetention": "Every recommendation, source and approval is logged with the Q3 close record."
+  },
+  "shell": {
+    "conversationHistory": [
+      "Q3 close — delivery compensation review",
+      "Contoso Mobility Q4 plan",
+      "Litware Retail QBR prep",
+      "Pacing alerts — September"
+    ],
+    "suggestedChips": [
+      "Suggested",
+      "Which advertisers missed Q3 tolerance?",
+      "Contoso contract terms",
+      "Litware QBR prep"
+    ],
+    "openerChip": "Which advertisers missed Q3 tolerance?",
+    "upcomingTasks": [
+      {
+        "title": "Q3 close — delivery compensation decisions",
+        "subtitle": "Due before Q4 plan approval"
+      },
+      {
+        "title": "Prepare the Litware Retail QBR",
+        "subtitle": "Explain the Q3 over-delivery",
+        "action": "qbr-prep"
+      }
+    ],
+    "tryThese": [
+      {
+        "label": "Reconcile Q3 delivery vs plan",
+        "color": "#c23fa0"
+      },
+      {
+        "label": "Check delivery compensation clauses",
+        "color": "#2e8fd6"
+      },
+      {
+        "label": "Draft the Finance approval",
+        "color": "#0f7a6c"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "id": "default",
+      "label": "Q3 close & delivery compensation",
+      "scenes": [
+        {
+          "choices": [
+            {
+              "label": "Ask Copilot which advertisers closed Q3 outside tolerance",
+              "user": "Q3 is closed. Which advertisers ended the quarter outside contract tolerance, and by how much?",
+              "assistant": "",
+              "chain": "Delivery Analyst",
+              "thinkingSteps": [
+                {
+                  "label": "Querying Q3 delivery vs plan",
+                  "sub": "Fabric · semantic model Caldova Media delivery",
+                  "durationMs": 3000
+                },
+                {
+                  "label": "Comparing variance to the 5% tolerance",
+                  "sub": "Per advertiser, per market",
+                  "durationMs": 3000
+                },
+                {
+                  "label": "Flagging advertisers outside tolerance",
+                  "sub": "3 of 5 advertisers",
+                  "durationMs": 3000
+                }
+              ],
+              "report": {
+                "reasoningSteps": 3,
+                "scanSummary": "I compared Q3 2026 delivered impressions with the approved plans for every advertiser. Three advertisers ended the quarter outside the 5% contractual tolerance.",
+                "items": [
+                  {
+                    "title": "Contoso Mobility — Spain · +12.0%",
+                    "source": "Fabric · Delivery Analyst (Live)",
+                    "quote": "Planned 286,404,580 impressions, delivered 320,773,136 across CMP-0041 Contoso EV ES 2026-Q3 Performance and CMP-0046 Contoso Fleet ES 2026-Q3 Performance.",
+                    "note": "Over-delivery above 10% — a contractual credit may apply."
+                  },
+                  {
+                    "title": "Litware Retail — United Kingdom · +11.0%",
+                    "source": "Fabric · Delivery Analyst (Live)",
+                    "quote": "Planned 225,945,766 impressions, delivered 250,799,805 across CMP-0068 Litware Home GB 2026-Q3 Loyalty and CMP-0072 Litware Fashion GB 2026-Q3 Performance.",
+                    "note": "Over-delivery comparable to Contoso — contract terms to check."
+                  },
+                  {
+                    "title": "Fabrikam Beauty — Italy · −8.0%",
+                    "source": "Fabric · Delivery Analyst (Snapshot)",
+                    "quote": "Planned ≈140M impressions, delivered ≈129M (aggregate, Q3 snapshot).",
+                    "note": "Under-delivery beyond tolerance — a penalty may apply."
+                  }
+                ],
+                "verdictIntro": "Adventure Works Travel stays within 5% and Northwind Foods is assessed annually. Three cases need a decision:",
+                "verdictList": [
+                  "Contoso Mobility (ES): +12.0% over-delivery",
+                  "Litware Retail (GB): +11.0% over-delivery",
+                  "Fabrikam Beauty (IT): −8.0% under-delivery"
+                ]
+              },
+              "sources": [
+                {
+                  "id": "fab-delivery",
+                  "label": "Q3 delivery vs plan",
+                  "system": "fabric",
+                  "detail": "Caldova Media delivery model · Live · as of 2026-10-15"
+                },
+                {
+                  "id": "fab-fabrikam",
+                  "label": "Fabrikam Q3 aggregate",
+                  "system": "fabric",
+                  "detail": "Snapshot · aggregate only"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "label": "Ask CaldovaIQ what the contracts say",
+              "user": "Contoso and Litware over-delivered by more than 10%, Fabrikam under-delivered. What do their contracts say for each of them?",
+              "assistant": "Three advertisers, three different treatments. Contoso Mobility's contract (ZM-ADV-001-2026) grants a credit, Litware Retail's explicitly excludes any compensation for over-delivery, and Fabrikam Beauty's triggers a penalty for under-delivery.",
+              "chain": "Caldova Media Agent → Contracts Agent",
+              "mention": "CaldovaIQ",
+              "reflection": "**Contoso Mobility — ZM-ADV-001-2026 → credit**\n- Art. 5.2: approved plans are the contracted volume.\n- Art. 6.1: excess above 5% is not billable.\n- Art. 6.2: above 10%, a credit of 50% of the media value of the excess at the channel net rate, applied to the next quarter and issued within 45 days — **without any request from the advertiser**.\n- Art. 6.4: assessed per market, no compensation between markets.\n\n**Litware Retail — ZM-ADV-004-2026 → excluded**\n- Art. 6.1: no compensation for over-delivery.\n- Art. 6.2: the advertiser cannot claim any benefit from over-delivery.\n- Art. 6.3: nothing is billed above the budget.\n- Art. 9.2: claims are closed after 120 days.\n\n**Fabrikam Beauty — Art. 6.2 → penalty**\n- Under-delivery beyond tolerance costs 2% of the net media budget.",
+              "thinkingSteps": [
+                {
+                  "label": "@CaldovaIQ hands your question to Caldova Media Agent",
+                  "sub": "The orchestrator picks the right specialist",
+                  "durationMs": 3000
+                },
+                {
+                  "label": "Caldova Media Agent → Contracts Agent",
+                  "sub": "Contracts Agent · Foundry IQ — the advertiser contracts knowledge base",
+                  "durationMs": 3200
+                },
+                {
+                  "label": "Reading Contoso, Litware and Fabrikam contracts",
+                  "sub": "Delivery compensation clauses — Art. 5, 6 and 9",
+                  "durationMs": 3000
+                },
+                {
+                  "label": "Comparing the three treatments",
+                  "sub": "Credit · no compensation · penalty",
+                  "durationMs": 2800
+                }
+              ],
+              "sources": [
+                {
+                  "id": "ctr-contoso",
+                  "label": "ZM-ADV-001-2026 — Contoso Mobility",
+                  "system": "foundry",
+                  "detail": "Art. 5.2, 6.1, 6.2, 6.4 · Live"
+                },
+                {
+                  "id": "ctr-litware",
+                  "label": "ZM-ADV-004-2026 — Litware Retail",
+                  "system": "foundry",
+                  "detail": "Art. 6.1, 6.2, 6.3, 9.2 · Live"
+                },
+                {
+                  "id": "ctr-fabrikam",
+                  "label": "Fabrikam Beauty contract",
+                  "system": "foundry",
+                  "detail": "Art. 6.2 · Snapshot"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "label": "Has anyone already told Contoso about the Q3 shortfall?",
+              "user": "Before I call Contoso — has anyone already told them about the Q3 shortfall? What did Finance, Ad ops and the account leads say about these three accounts this month?",
+              "assistant": "Not yet — nobody has told Contoso. The Q3 delivery gaps were already raised in last week's Q3 close review, Ad ops flagged Fabrikam in Teams, and Finance has prepared the Contoso Spain credit calculation — validation is still pending. Litware's QBR is next week, so the window to go first is now.",
+              "chain": "Work context",
+              "reflection": "**Who is involved**\n- **Marta Gil** — Contoso Mobility account lead, Spain. Received the Finance calculation on 2026-10-12.\n- **Elena Ruiz** — Litware Retail account lead, UK. QBR in preparation.\n- **Sarah Bennett** — Finance, billing adjustments.\n- **James Carter** — Ad operations, Q4 trafficking.\n\n**Recent meetings**\n- **Q3 delivery close review** — 2026-10-09 · Sales, Ad ops, Finance. Decision: quantify the gap per campaign before any customer contact. Action on Sarah Bennett.\n- **Litware Retail QBR prep** — 2026-10-14 · Elena Ruiz, James Carter. Open point: how to present the Q3 over-delivery when the contract grants no compensation.\n\n**Teams threads**\n- **#ad-ops-q4** — 2026-10-11 · James Carter: \"Fabrikam Beauty ran short on prime-time slots in September. Q4 inventory is tight, so a re-run has to be booked this week.\"\n- **Contoso account channel** — 2026-10-13 · Marta Gil: \"Contoso's marketing director asked about Q3 reach on Friday's call. I'd rather come to them first with a proposal.\"\n\n**Email trail**\n> \"The Contoso Spain Q3 credit calculation is prepared and has been sent to the account lead. Validation is still pending.\" — Finance, 2026-10-12\n\n**What this tells us**\nThe Q3 gaps are known internally, nobody has told the customers yet, and two accounts are asking. The window to act first is this week.",
+              "thinkingSteps": [
+                {
+                  "label": "Reading meeting recaps",
+                  "sub": "Work IQ · Q3 delivery close review · Litware QBR prep",
+                  "durationMs": 3000
+                },
+                {
+                  "label": "Scanning Teams threads",
+                  "sub": "#ad-ops-q4 · Contoso account channel · last 30 days",
+                  "durationMs": 3000
+                },
+                {
+                  "label": "Searching mail",
+                  "sub": "Contoso, Litware, Fabrikam · Finance and account leads",
+                  "durationMs": 2500
+                },
+                {
+                  "label": "Finding the Finance note",
+                  "sub": "FIN-CONTOSO-01",
+                  "durationMs": 2500
+                }
+              ],
+              "sources": [
+                {
+                  "id": "work-meeting-q3",
+                  "label": "Q3 delivery close review — recap",
+                  "system": "meeting",
+                  "detail": "Teams meeting · 2026-10-09 · Sales, Ad ops, Finance"
+                },
+                {
+                  "id": "work-meeting-litware",
+                  "label": "Litware Retail QBR prep — recap",
+                  "system": "meeting",
+                  "detail": "Teams meeting · 2026-10-14 · Elena Ruiz, James Carter"
+                },
+                {
+                  "id": "work-teams-adops",
+                  "label": "#ad-ops-q4 — Fabrikam prime-time shortfall",
+                  "system": "teams",
+                  "detail": "James Carter · 2026-10-11"
+                },
+                {
+                  "id": "work-teams",
+                  "label": "Contoso account channel",
+                  "system": "teams",
+                  "detail": "Marta Gil · 2026-10-13"
+                },
+                {
+                  "id": "work-finance",
+                  "label": "Finance note — Contoso Spain credit",
+                  "system": "email",
+                  "detail": "FIN-CONTOSO-01 · 2026-10-12"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "label": "Is anything coming up on the market side for Contoso and Litware?",
+              "user": "Is anything coming up publicly for Contoso and Litware this autumn that could help us time the compensation?",
+              "assistant": "Yes, and the timing helps: the Contoso credit lands in Q4, right when Contoso runs its EV roadshow in Spain (2–15 November). Litware Home's promotion runs 26 October – 8 November, ahead of its QBR.",
+              "chain": "Market signals",
+              "thinkingSteps": [
+                {
+                  "label": "Searching advertiser announcements",
+                  "sub": "Web · Contoso Mobility, Litware Retail",
+                  "durationMs": 3000
+                },
+                {
+                  "label": "Mapping to Q4 inventory",
+                  "sub": "Spain and United Kingdom",
+                  "durationMs": 3000
+                }
+              ],
+              "sources": [
+                {
+                  "id": "web-contoso",
+                  "label": "Contoso EV roadshow Spain, 2–15 Nov",
+                  "system": "web",
+                  "detail": "Public announcement"
+                },
+                {
+                  "id": "web-litware",
+                  "label": "Litware Home promotion, 26 Oct – 8 Nov",
+                  "system": "web",
+                  "detail": "Public announcement"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "label": "Build the delivery compensation plan — Fabric IQ + Foundry IQ",
+              "proactive": true,
+              "user": "",
+              "assistant": "Here are three ways to settle Q3. All of them respect the contracts; they differ on how proactive we are with Contoso.",
+              "chain": "Caldova Media Agent → Delivery Analyst → Contracts Agent",
+              "scenarios": [
+                {
+                  "id": "minimal",
+                  "title": "Scenario 1 — Contract minimum",
+                  "body": "Issue the Contoso credit within the 45-day window, apply the Fabrikam penalty, no action on Litware. Lowest effort, but Contoso hears about the credit only from the invoice.",
+                  "supportedBy": "Supported by Foundry IQ (Contoso contract) · Foundry IQ (Fabrikam contract)",
+                  "response": "That works contractually, but it carries a relationship risk: Contoso would learn about the credit only from the invoice, after Finance already flagged it on 2026-10-12. It also misses the EV roadshow in Spain (2–15 Nov), where the credit could become visible bonus inventory. I'd recommend Scenario 2.",
+                  "responseSources": [
+                    { "id": "ctr-contoso", "label": "ZM-ADV-001-2026 — Contoso Mobility", "system": "foundry", "detail": "Art. 5.2, 6.1, 6.2, 6.4 · Live" },
+                    { "id": "work-finance", "label": "Finance note — Contoso Spain credit", "system": "email", "detail": "FIN-CONTOSO-01 · 2026-10-12" },
+                    { "id": "web-contoso", "label": "Contoso EV roadshow Spain, 2–15 Nov", "system": "web", "detail": "Public announcement" }
+                  ]
+                },
+                {
+                  "id": "recommended",
+                  "title": "Scenario 2 — Recommended",
+                  "badge": "Recommended",
+                  "body": "Apply the Contoso credit as Q4 bonus inventory on the EV roadshow (2–15 Nov), announced proactively by Marta Gil. Apply the Fabrikam penalty per Art. 6.2. For Litware, no compensation (Art. 6.1) but a transparent explanation at the QBR.",
+                  "supportedBy": "Supported by Fabric IQ (delivery vs. contract) · Foundry IQ (Contoso contract) · Foundry IQ (Litware contract) · Work IQ (Finance note) · Web IQ (Contoso EV launch)"
+                },
+                {
+                  "id": "goodwill",
+                  "title": "Scenario 3 — Goodwill for everyone",
+                  "body": "Credit both Contoso and Litware. Commercially generous, but Litware's contract excludes it — it creates a precedent outside policy.",
+                  "supportedBy": "Supported by Foundry IQ (Litware contract)",
+                  "response": "Generous, but risky: Art. 6.1 of the Litware contract excludes any compensation for over-delivery. Crediting Litware would set a precedent outside policy that other advertisers could invoke. I'd recommend Scenario 2 — same goodwill for Contoso, transparency for Litware.",
+                  "responseSources": [
+                    { "id": "ctr-litware", "label": "ZM-ADV-004-2026 — Litware Retail", "system": "foundry", "detail": "Art. 6.1, 6.2, 6.3, 9.2 · Live" }
+                  ]
+                }
+              ],
+              "sources": [
+                {
+                  "id": "fab-delivery",
+                  "label": "Q3 delivery vs plan",
+                  "system": "fabric",
+                  "detail": "Caldova Media delivery model · Live · as of 2026-10-15"
+                },
+                {
+                  "id": "ctr-contoso",
+                  "label": "ZM-ADV-001-2026 — Contoso Mobility",
+                  "system": "foundry",
+                  "detail": "Art. 5.2, 6.1, 6.2, 6.4 · Live"
+                },
+                {
+                  "id": "ctr-litware",
+                  "label": "ZM-ADV-004-2026 — Litware Retail",
+                  "system": "foundry",
+                  "detail": "Art. 6.1, 6.2, 6.3, 9.2 · Live"
+                },
+                {
+                  "id": "ctr-fabrikam",
+                  "label": "Fabrikam Beauty contract",
+                  "system": "foundry",
+                  "detail": "Art. 6.2 · Snapshot"
+                },
+                {
+                  "id": "work-finance",
+                  "label": "Finance note — Contoso Spain credit",
+                  "system": "email",
+                  "detail": "FIN-CONTOSO-01 · 2026-10-12"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "label": "Governance check",
+              "proactive": true,
+              "autoTriggerOnly": true,
+              "user": "",
+              "assistant": "The recommended plan includes a customer credit and a penalty, so it needs sign-off from {{approverName}}, {{approverTitle}}, before anything is executed. Would you like me to request the approval on your behalf?",
+              "chain": "Caldova Media Agent",
+              "person": {
+                "name": "{{approverName}}",
+                "title": "{{approverTitle}}",
+                "sub": "Approver · billing adjustments",
+                "location": "Caldova Media · Finance",
+                "initials": "{{approverInitials}}",
+                "color": "#0f7a6c",
+                "pronoun": "them",
+                "possessive": "their"
+              },
+              "sources": [
+                {
+                  "id": "gov-policy",
+                  "label": "Delivery compensation & billing adjustment policy",
+                  "system": "governance",
+                  "detail": "Approval required for any credit, penalty or invoice release"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "label": "Request approval from {{approverFirstName}}",
+              "user": "Yes, request approval from {{approverFirstName}}.",
+              "assistant": "Here is the draft. Nothing is sent to Contoso, Litware or Fabrikam until {{approverFirstName}} approves.",
+              "chain": "Caldova Media Agent",
+              "emailDraft": {
+                "to": "{{approverName}} <{{approverEmail}}>",
+                "cc": "Sarah Bennett",
+                "subject": "Approval needed — Q3 delivery compensation plan (Contoso, Litware, Fabrikam)",
+                "bodyParagraphs": [
+                  "Hi {{approverFirstName}},",
+                  "Q3 delivery is closed and three advertisers ended outside the 5% tolerance. I'd like your approval on the following plan:",
+                  "• Contoso Mobility (ES, +12.0%): contractual credit per ZM-ADV-001-2026 Art. 6.2, applied as Q4 bonus inventory on the EV roadshow (2–15 Nov). Finance's calculation is ready and awaiting validation.",
+                  "• Litware Retail (GB, +11.0%): no compensation per ZM-ADV-004-2026 Art. 6.1; we will explain the over-delivery at the QBR.",
+                  "• Fabrikam Beauty (IT, −8.0%): penalty of 2% of the net media budget per Art. 6.2.",
+                  "All figures come from the Q3 delivery model in Fabric and the contracts in Foundry IQ.",
+                  "Thanks,\n{{userName}}"
+                ],
+                "references": [
+                  {
+                    "id": "ZM-ADV-001-2026",
+                    "label": "Contoso Mobility contract",
+                    "system": "foundry",
+                    "detail": "Art. 6.2 — compensation credit when delivery is below the guaranteed threshold"
+                  },
+                  {
+                    "id": "ZM-ADV-004-2026",
+                    "label": "Litware Retail contract",
+                    "system": "foundry",
+                    "detail": "Art. 6.1 — no compensation clause triggered"
+                  },
+                  {
+                    "id": "FIN-CONTOSO-01",
+                    "label": "Finance note — Contoso Spain credit",
+                    "system": "email",
+                    "detail": "Finance computation of the Contoso Spain credit"
+                  }
+                ]
+              },
+              "followupTopic": "Q3 delivery compensation approval"
+            },
+            {
+              "label": "Review approval policy",
+              "user": "",
+              "assistant": "",
+              "chain": "",
+              "opensModal": "approval-policy"
+            },
+            {
+              "label": "No, I'll contact them myself",
+              "user": "No, I'll handle it myself.",
+              "assistant": "Understood. The plan, its sources and the draft stay attached to the quarter-close record so you can pick them up anytime.",
+              "chain": "Caldova Media Agent"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qbr-prep",
+      "label": "Litware Retail QBR prep",
+      "scenes": [
+        {
+          "choices": [
+            {
+              "label": "Prepare the Litware QBR message",
+              "user": "Help me prepare how we explain the Q3 over-delivery at the Litware Retail QBR.",
+              "assistant": "Litware received 11.0% more impressions than planned, but its contract excludes any compensation. Here are three ways to present it.",
+              "chain": "Caldova Media Agent → Delivery Analyst → Contracts Agent",
+              "scenarios": [
+                {
+                  "id": "footnote",
+                  "title": "Option 1 — Footnote",
+                  "body": "Mention the over-delivery as a line in the delivery slide. Minimal, but Litware may discover the comparison with other advertisers later.",
+                  "supportedBy": "Supported by Fabric IQ (delivery vs. contract)",
+                  "response": "A footnote is low effort, but Litware may later spot the +11.0% when comparing with other advertisers — and a buried number reads as something hidden. Option 2 frames it openly as added reach at no cost (Art. 6.1 and 6.3), tied to the Litware Home promotion (26 Oct – 8 Nov).",
+                  "responseSources": [
+                    { "id": "fab-delivery", "label": "Q3 delivery vs plan", "system": "fabric", "detail": "Caldova Media delivery model · Live" },
+                    { "id": "ctr-litware", "label": "ZM-ADV-004-2026 — Litware Retail", "system": "foundry", "detail": "Art. 6.1, 6.3 · Live" },
+                    { "id": "web-litware", "label": "Litware Home promotion, 26 Oct – 8 Nov", "system": "web", "detail": "Public announcement" }
+                  ]
+                },
+                {
+                  "id": "recommended",
+                  "title": "Option 2 — Recommended",
+                  "badge": "Recommended",
+                  "body": "Present the +11.0% transparently as added reach at no cost, cite Art. 6.1 and 6.3 (no compensation, nothing billed above budget), and tie it to the Litware Home promotion (26 Oct – 8 Nov).",
+                  "supportedBy": "Supported by Fabric IQ (delivery vs. contract) · Foundry IQ (Litware contract) · Web IQ (Litware Home promo)"
+                },
+                {
+                  "id": "separate",
+                  "title": "Option 3 — Separate note",
+                  "body": "Send a dedicated note before the QBR. Clear, but it gives the topic more weight than the contract does.",
+                  "supportedBy": "Supported by Foundry IQ (Litware contract)",
+                  "response": "A dedicated note is clear, but it signals an issue where the contract sees none: Art. 6.1 excludes compensation, so a standalone note invites a negotiation. I'd recommend Option 2 — cover it inside the QBR, linked to the Litware Home promotion (26 Oct – 8 Nov).",
+                  "responseSources": [
+                    { "id": "ctr-litware", "label": "ZM-ADV-004-2026 — Litware Retail", "system": "foundry", "detail": "Art. 6.1, 6.3 · Live" },
+                    { "id": "web-litware", "label": "Litware Home promotion, 26 Oct – 8 Nov", "system": "web", "detail": "Public announcement" }
+                  ]
+                }
+              ],
+              "sources": [
+                {
+                  "id": "fab-delivery",
+                  "label": "Q3 delivery vs plan",
+                  "system": "fabric",
+                  "detail": "Caldova Media delivery model · Live"
+                },
+                {
+                  "id": "ctr-litware",
+                  "label": "ZM-ADV-004-2026 — Litware Retail",
+                  "system": "foundry",
+                  "detail": "Art. 6.1, 6.3 · Live"
+                },
+                {
+                  "id": "web-litware",
+                  "label": "Litware Home promotion, 26 Oct – 8 Nov",
+                  "system": "web",
+                  "detail": "Public announcement"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "label": "Loop in the account lead",
+              "proactive": true,
+              "autoTriggerOnly": true,
+              "user": "",
+              "assistant": "Elena Ruiz owns the Litware Retail relationship and is preparing the QBR — would you like me to contact her on your behalf?",
+              "chain": "Work context",
+              "person": {
+                "name": "Elena Ruiz",
+                "title": "Account Lead",
+                "sub": "Litware Retail",
+                "location": "Caldova Media · London",
+                "initials": "ER",
+                "color": "#1c8a56",
+                "pronoun": "her",
+                "possessive": "her"
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "label": "Yes, draft the email to Elena",
+              "user": "Yes, please draft it.",
+              "assistant": "Here is the draft for Elena.",
+              "chain": "Caldova Media Agent",
+              "emailDraft": {
+                "to": "Elena Ruiz <elena.ruiz@caldovamedia.example>",
+                "cc": "Marta Gil",
+                "subject": "Litware QBR — how we present the Q3 over-delivery",
+                "bodyParagraphs": [
+                  "Hi Elena,",
+                  "Litware Retail ended Q3 at +11.0% delivered vs plan (Fabric delivery model). The contract ZM-ADV-004-2026 excludes any compensation (Art. 6.1) and nothing is billed above budget (Art. 6.3).",
+                  "I suggest we present it transparently at the QBR as added reach at no cost, and connect it to the Litware Home promotion (26 Oct – 8 Nov).",
+                  "Marta, copying you since Contoso is handled differently under its own contract — good to keep our messages consistent.",
+                  "Thanks,\n{{userName}}"
+                ],
+                "references": [
+                  {
+                    "id": "ZM-ADV-004-2026",
+                    "label": "Litware Retail contract",
+                    "system": "foundry",
+                    "detail": "Art. 6.1 — no compensation clause triggered"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "No, I'll talk to her myself",
+              "user": "No, I'll talk to Elena myself.",
+              "assistant": "Sounds good. The recommended message and its sources are saved with the QBR prep.",
+              "chain": "Caldova Media Agent"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
