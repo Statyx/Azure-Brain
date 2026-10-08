@@ -574,3 +574,31 @@ hard refresh is the deploy itself suspect.
 
 **Evidence** ? observed during the session: after a hard refresh the new UI appeared with the
 same address and no redeploy.
+
+## 30. Shrink text in one surface by overriding the Tailwind v4 `--text-*` variables on its container
+
+**Context** — Fab-ServiceDesk-IQ, Zava IQ playground (`.iq-playground` root), Tailwind v4
+configured in CSS, 2026-09-24. The user found the IQ chat text "too big" and asked to reduce it
+"a little" — only there.
+
+**Symptom** — the obvious levers are wrong: changing `html { font-size }` shrinks the whole
+console; `zoom` / `transform: scale` also scales layout, spacing and fixed overlays.
+
+**Root cause** — in Tailwind v4 the default text utilities emit `font-size: var(--text-*)`, so the
+size is resolved at the element through CSS custom properties that cascade.
+
+**Fix** — redefine the scale on the scoped container only (~0.9x):
+`.iq-playground { --text-xs: .6875rem; --text-sm: .8125rem; --text-base: .9375rem; --text-lg: 1rem;
+--text-xl: 1.125rem; --text-2xl: 1.3125rem; --text-3xl: 1.625rem; }`. Two exceptions need an
+explicit rule: tokens declared in `@theme inline` (e.g. `--text-2xs`) compile to literals, and
+arbitrary `text-[...]` values are untouched. Line-heights are unitless ratios, so they follow.
+
+**User preferences (standing)** — the IQ chat surface is compact; it auto-scrolls to the newest
+content while a turn plays out (typing, thinking steps, answer, cards) — one `useEffect` on the
+conversation container calling `scrollTo({ top: scrollHeight, behavior: "smooth" })` keyed on
+the turn state — then stops, so the presenter can scroll back up freely. Transitions between
+steps are click-paced; nothing auto-launches the next agent.
+
+**Evidence** — `app-zava-service-desk/src/main.css` (`.iq-playground` override) and
+`features/iq-playground/engine/PlaygroundShell.tsx`; build OK, vitest 100/100, lint 0 errors.
+Rendered result not visually re-checked in that session.

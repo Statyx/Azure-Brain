@@ -465,3 +465,33 @@ unchanged — a stale UI is the browser cache (hard refresh, Ctrl+F5).
 200-only check; with 401 accepted, `deploy_all.py --app-only` completed, reported
 "Hosting and redirects verified" at the same URL. Browser rendering of the new build was not
 re-checked in that session.
+
+### 21. Restoring `rayfin.yml` right after `rayfin up` fails on OneDrive with `OSError [Errno 22]`
+
+**Context**: Rayfin CLI deploy from a repo under OneDrive for Business (Windows), deploy script
+that temporarily rewrites `rayfin/rayfin.yml` with tenant values and restores the tenant-neutral
+file in a `finally`, 2026-09-24.
+**Symptom**: the publish succeeds, then the restore write raises `OSError: [Errno 22] Invalid
+argument` and the repo is left with the tenant-specific `rayfin.yml`.
+**Root cause**: the Rayfin CLI rewrites `rayfin.yml` during `rayfin up`; OneDrive picks the change
+up and holds the file for a few seconds while it syncs, so the immediate write is rejected.
+**Fix**: restore with retries — compare first and write only when the content differs, then
+retry on `OSError` (e.g. 5 attempts, 2 s apart) and warn instead of crashing if it still fails.
+Always check `git status` on `rayfin.yml` after a deploy.
+**Evidence**: Fab-ServiceDesk-IQ `fabric/app/deploy_app.py` → `restore_rayfin_yml()`, called from
+`main()`'s `finally`; pytest 344 passed.
+
+### 22. "Deploy it" means deploy what changed, not re-run the whole pipeline
+
+**Context**: a demo whose workspace is already fully deployed and working; the user asked to
+"deploy" a few app/UI changes, 2026-09-24.
+**Symptom**: running the full idempotent `deploy_all.py` re-walked every Fabric step and
+republished the app — long, noisy, and it exposed the user's working workspace to unrelated
+risk. The user objected: only the latest changes should have been deployed.
+**Root cause**: "idempotent" is not "free"; a full run still touches every artifact.
+**Fix (standing user rule)**: map the diff to artifacts and run only those steps — an app/UI
+change is `python -m fabric.app.deploy_app` (or `deploy_all.py --app-only`); a data or model
+change runs only its own package's `deploy_<artifact>` module. Run the full pipeline only for a
+fresh workspace or when explicitly asked "tout redéployer".
+**Evidence**: Fab-ServiceDesk-IQ session, 2026-09-24 (commit `ca2547e` deployed via full run;
+user feedback recorded).

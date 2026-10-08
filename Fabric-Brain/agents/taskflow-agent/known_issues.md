@@ -66,3 +66,16 @@ incomplete, which made `prepare data` look unsafe.
 as *"Prepare data"* on the canvas (`Fab-Marketing-Campaign` workspace, 2026-07-30).
 **Still unconfirmed by a real export:** `general`, `mirror data`, `distribute data`,
 `develop data`. Verify by exporting before relying on them.
+
+### 2026-09-24 — No separate files→Delta task when a notebook is the ingestion layer
+
+**Extends:** "Design & Behavior".
+**What changed:** a user design rule, not a product change. When the project's ingestion is a
+notebook that lands files directly as Delta tables, the task flow has **no** extra "transform
+files to Delta" task — the notebook task *is* the ingestion layer and is assigned to it.
+**Standing rule:** every demo project ships a task flow and the deploy pipeline always generates
+it (one package, registered in `deploy_all.py`). There is still no REST API for task flows:
+generate the JSON and import it in the portal (UI-only step, documented in `DEPLOYMENT.md`).
+**Evidence:** Fab-ServiceDesk-IQ `fabric/taskflow/` package and tests (2026-09-24); user
+instruction "don't do a step for the transform from files to delta tables, I put the notebook as
+the ingestion layer".
