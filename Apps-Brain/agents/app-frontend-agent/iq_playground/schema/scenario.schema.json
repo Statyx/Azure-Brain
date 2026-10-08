@@ -146,6 +146,46 @@
         "detail": { "type": "string" }
       }
     },
+    "reportChartBar": {
+      "type": "object",
+      "required": ["label", "value", "display"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": "number", "minimum": 0 },
+        "display": { "type": "string", "description": "The figure as Fabric formats it, e.g. '34.0%'." },
+        "previous": { "type": "number", "minimum": 0 },
+        "previousDisplay": { "type": "string" },
+        "target": { "type": "number", "minimum": 0 },
+        "breach": { "type": "boolean" },
+        "detail": { "type": "string" }
+      }
+    },
+    "reportChartKpi": {
+      "type": "object",
+      "required": ["label", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "tone": { "enum": ["alert", "neutral"] }
+      }
+    },
+    "reportChart": {
+      "type": "object",
+      "description": "A Power BI-style card drawn under a Fabric IQ answer: KPI tiles, then bars against the prior period and a dashed target. Every value is copied from a Fabric measure; the UI only scales widths.",
+      "required": ["title", "source", "axisMax", "bars"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "source": { "type": "string", "description": "The report or semantic model the figures come from." },
+        "axisMax": { "type": "number", "exclusiveMinimum": 0 },
+        "targetLabel": { "type": "string" },
+        "kpis": { "type": "array", "items": { "$ref": "#/$defs/reportChartKpi" } },
+        "bars": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/reportChartBar" } }
+      }
+    },
     "thinkingStep": {
       "type": "object",
       "required": ["label", "sub"],
@@ -188,7 +228,8 @@
         "sources": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
         "scenarios": { "type": "array", "items": { "$ref": "#/$defs/scenarioOption" } },
         "followupTopic": { "type": "string" },
-        "opensModal": { "const": "approval-policy" }
+        "opensModal": { "const": "approval-policy" },
+        "chart": { "$ref": "#/$defs/reportChart" }
       }
     },
     "track": {

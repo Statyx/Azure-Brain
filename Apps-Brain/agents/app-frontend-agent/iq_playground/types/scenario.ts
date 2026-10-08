@@ -13,6 +13,39 @@ export type Report = {
   verdictList: string[];
 };
 
+/** One bar of a report visual. Every figure is copied from a Fabric measure: `value`, `previous`
+ *  and `target` only size the bars, and `display` / `detail` are what the audience reads. */
+export type ReportChartBar = {
+  label: string;
+  value: number;
+  display: string;
+  previous?: number;
+  previousDisplay?: string;
+  target?: number;
+  /** Breach status as returned by the semantic model; the renderer never compares value to target. */
+  breach?: boolean;
+  detail?: string;
+};
+
+export type ReportChartKpi = {
+  label: string;
+  value: string;
+  tone?: "alert" | "neutral";
+};
+
+/** A Power BI-style visual rendered under an answer, to show the same figures live in a report. */
+export type ReportChart = {
+  title: string;
+  subtitle?: string;
+  source: string;
+  /** Upper bound of the axis, in the same unit as the bar values. */
+  axisMax: number;
+  axisLabel?: string;
+  targetLabel?: string;
+  kpis?: ReportChartKpi[];
+  bars: ReportChartBar[];
+};
+
 export type ThinkingStep = {
   label: string;
   sub: string;
@@ -75,6 +108,8 @@ export type Choice = {
   chain: string;
   mention?: string;
   report?: Report;
+  /** Report visual shown under the answer; copied onto the assistant message at commit. */
+  chart?: ReportChart;
   thinkingSteps?: ThinkingStep[];
   /** Full markdown "reflection" the agent worked through before writing its final message (e.g. a
    *  competitor research brief) \u2014 rendered as a collapsible "Thinking" block above the assistant text. */
@@ -113,6 +148,7 @@ export type Message = {
   chain?: string;
   mention?: string;
   report?: Report;
+  chart?: ReportChart;
   reflection?: string;
   sources?: SourceRef[];
   scenarios?: ScenarioOption[];

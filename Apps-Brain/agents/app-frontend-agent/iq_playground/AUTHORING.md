@@ -90,6 +90,19 @@ Each rule below fixes a defect the user actually saw.
 14. **Compact density from the start.** Chat text runs at ~0.77x the host console scale (scoped
     `--text-*` override on the playground root, see `known_issues.md` #30). Do not ship the
     default size and wait for the "too big" remark.
+15. **Every Fabric IQ answer ships a report chart card.** Put a `chart` on the Fabric choice
+    (`ReportChartCard` in `engine/cards.tsx`): KPI tiles, then one bar per entity against the
+    prior period and a dashed target line, red when `breach` is true, with the source report
+    named in the caption and a Power BI badge. It reminds the audience the figure also lives in
+    a report. The data sits on the choice in `scenario.json` and is copied to the message at
+    commit. Every value is copied from a Fabric measure; the TSX only scales widths. Never put a
+    contract, credit or penalty figure on the chart: that belongs to the Foundry answer. The
+    validator rule "report charts are drawable" plus one test asserting the figures guard it.
+    Keep the card at `text-xs`/`text-2xs` like the rest of the chat.
+    Evidence: Fab-ServiceDesk-IQ 2026-09-25, user request "glisser un dashboard like en plus de
+    la réponse textuelle … qui rappelle qu'on a ces chiffres au travers de rapport", then "à
+    intégrer dans le brain pour chaque fois que je te demande cette expérience d'IQ"; vitest
+    101/101, pytest 344, lint and build green, `deploy_app` exit 0.
 
 ### Demo collaboration defaults
 

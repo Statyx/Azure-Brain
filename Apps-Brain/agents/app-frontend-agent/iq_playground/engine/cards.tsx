@@ -1,6 +1,6 @@
 
 import { Fragment, useEffect, useState, type ReactNode } from "react";
-import type { AuthorizationStatus, EmailDraft, PersonRef, Report, ScenarioOption, SourceRef, CoworkEvent, CoworkTaskStatus, CoworkTask } from "../types/scenario";
+import type { AuthorizationStatus, EmailDraft, PersonRef, Report, ReportChart, ScenarioOption, SourceRef, CoworkEvent, CoworkTaskStatus, CoworkTask } from "../types/scenario";
 import { IconCheck, IconChevronDown, IconCopy, IconDownload, IconInfo, IconMail, IconMic, IconMore, IconPlus, IconRefresh, IconSend, IconShield, IconSparkle, IconThumbDown, IconThumbUp } from "./icons";
 import { sourceSystemMeta } from "./sourceMeta";
 export function ReportView({ report }: { report: Report }) {
@@ -32,6 +32,87 @@ export function ReportView({ report }: { report: Report }) {
         ))}
       </ol>
     </div>
+  );
+}
+
+/* ---------- Report visual under an answer ---------- */
+
+const REPORT_ALERT = "#c50f1f";
+const REPORT_OK = "#c23fa0";
+
+/** A Power BI-style card: KPI tiles, then one bar per row against a dashed target line. It draws
+ *  what Fabric already computed — positions are scaled from the scenario values, nothing is derived. */
+export function ReportChartCard({ chart }: { chart: ReportChart }) {
+  const pct = (v: number) => `${Math.max(0, Math.min(100, (v / chart.axisMax) * 100))}%`;
+  return (
+    <figure className="mt-3 overflow-hidden rounded-lg border border-hairline bg-white" aria-label={chart.title}>
+      <div className="flex items-center justify-between gap-3 border-b border-hairline px-3 py-2">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold text-ink">{chart.title}</p>
+          {chart.subtitle && <p className="text-2xs text-ink-muted">{chart.subtitle}</p>}
+        </div>
+        <span className="flex shrink-0 items-center gap-1.5 text-2xs text-ink-muted">
+          <span className="grid h-4 w-4 place-items-center rounded-sm bg-[#f2c811] text-2xs font-bold text-black" aria-hidden>
+            ▮
+          </span>
+          Power BI
+        </span>
+      </div>
+
+      {chart.kpis && chart.kpis.length > 0 && (
+        <div className="grid gap-px border-b border-hairline bg-hairline" style={{ gridTemplateColumns: `repeat(${chart.kpis.length}, minmax(0, 1fr))` }}>
+          {chart.kpis.map((kpi) => (
+            <div key={kpi.label} className="bg-white px-3 py-2">
+              <p className="text-2xs text-ink-muted">{kpi.label}</p>
+              <p className="text-sm font-semibold" style={{ color: kpi.tone === "alert" ? REPORT_ALERT : undefined }}>
+                {kpi.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="space-y-3 px-3 py-3">
+        {chart.bars.map((bar) => {
+          const breach = bar.breach === true;
+          return (
+            <div key={bar.label}>
+              <div className="flex items-baseline justify-between gap-2 text-2xs">
+                <span className="font-semibold text-ink">{bar.label}</span>
+                <span className="text-ink-muted">{bar.detail}</span>
+              </div>
+              <div className="relative mt-1 h-4 rounded-sm bg-surface">
+                {bar.previous !== undefined && (
+                  <div className="absolute inset-y-0 left-0 rounded-sm bg-black/10" style={{ width: pct(bar.previous) }} title={bar.previousDisplay} />
+                )}
+                <div
+                  className="absolute inset-y-1 left-0 rounded-sm"
+                  style={{ width: pct(bar.value), background: breach ? REPORT_ALERT : REPORT_OK }}
+                />
+                {bar.target !== undefined && (
+                  <div className="absolute -inset-y-0.5 w-0 border-l-2 border-dashed border-ink" style={{ left: pct(bar.target) }} />
+                )}
+              </div>
+              <div className="mt-0.5 flex items-baseline gap-2 text-2xs">
+                <span className="font-semibold" style={{ color: breach ? REPORT_ALERT : undefined }}>{bar.display}</span>
+                {bar.previousDisplay && <span className="text-ink-muted">prior period {bar.previousDisplay}</span>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <figcaption className="flex flex-wrap items-center justify-between gap-2 border-t border-hairline bg-surface px-3 py-1.5 text-2xs text-ink-muted">
+        <span className="flex items-center gap-3">
+          <span className="flex items-center gap-1"><span className="inline-block h-2 w-3 rounded-sm" style={{ background: REPORT_ALERT }} />below target</span>
+          <span className="flex items-center gap-1"><span className="inline-block h-2 w-3 rounded-sm bg-black/10" />prior period</span>
+          {chart.targetLabel && (
+            <span className="flex items-center gap-1"><span className="inline-block h-3 w-0 border-l-2 border-dashed border-ink" />{chart.targetLabel}</span>
+          )}
+        </span>
+        <span>{chart.source}</span>
+      </figcaption>
+    </figure>
   );
 }
 

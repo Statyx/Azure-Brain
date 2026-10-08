@@ -102,6 +102,31 @@ export const narrativeRules: Rule[] = [
         .map((t) => `upcoming task "${t.title}" launches track "${t.action}", which does not exist.`);
     },
   },
+  {
+    name: "report charts are drawable",
+    check: (s) =>
+      (s.tracks ?? []).flatMap((t) =>
+        t.scenes.flatMap((scene) =>
+          scene.choices.flatMap((c) => {
+            const chart = c.chart;
+            if (!chart) return [];
+            const problems: string[] = [];
+            const where = `chart "${chart.title}" in choice "${c.label}"`;
+            if (!chart.source?.trim()) problems.push(`${where} names no source report.`);
+            if (!(Number.isFinite(chart.axisMax) && chart.axisMax > 0)) problems.push(`${where} needs a positive axisMax.`);
+            if (!chart.bars?.length) problems.push(`${where} has no bars.`);
+            for (const bar of chart.bars ?? []) {
+              for (const v of [bar.value, bar.previous, bar.target]) {
+                if (v !== undefined && !(Number.isFinite(v) && v >= 0 && v <= chart.axisMax))
+                  problems.push(`${where}: bar "${bar.label}" has a value outside 0–${chart.axisMax}.`);
+              }
+              if (!bar.display?.trim()) problems.push(`${where}: bar "${bar.label}" has no display figure.`);
+            }
+            return problems;
+          }),
+        ),
+      ),
+  },
 ];
 
 /** Structural checks. The CI gate uses the full JSON Schema; this is the subset the browser needs

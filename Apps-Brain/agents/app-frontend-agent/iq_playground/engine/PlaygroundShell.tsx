@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import type { Choice, Message, PersonRef, Scenario, ScenarioOption, SourceRef, ThinkingStep, CoworkTaskStatus } from "../types/scenario";
 import { IconAssistant, IconChat, IconChevronDown, IconEdit, IconFolder, IconGrid, IconInfo, IconLibrary, IconMenu, IconMic, IconMore, IconPlus, IconSearch, IconSettings, IconShield, IconSparkle, IconTasks, IconWave } from "./icons";
 import { DEFAULT_DEMO_PROFILE, DemoProfile, getProfileServerSnapshot, getProfileSnapshot, nameInitials, profileTokens, resolveTokens, storeProfile, subscribeProfile } from "./profile";
-import { AgentAvatar, ApprovalPolicyModal, CoworkTaskView, EmailDraftCard, getIdentity, IconClose, MessageActionBar, PersonCard, renderDraftWithMention, renderMarkdown, ReportView, ScenarioCarousel, SourceChips, SourcePanel } from "./cards";
+import { AgentAvatar, ApprovalPolicyModal, CoworkTaskView, EmailDraftCard, getIdentity, IconClose, MessageActionBar, PersonCard, renderDraftWithMention, renderMarkdown, ReportChartCard, ReportView, ScenarioCarousel, SourceChips, SourcePanel } from "./cards";
 /* ---------- Page ---------- */
 
 export default function PlaygroundShell({ scenario }: { scenario: Scenario }) {
@@ -202,6 +202,7 @@ const scenes = tracks[0].scenes;
         chain: choice.chain,
         mention: choice.mention,
         report: choice.report,
+        chart: choice.chart,
         reflection: choice.reflection,
         sources: choice.sources,
         scenarios: choice.scenarios,
@@ -1123,6 +1124,8 @@ const scenes = tracks[0].scenes;
                         ) : (
                           <span className="whitespace-pre-line">{msg.text}</span>
                         )}
+
+                        {msg.chart && <ReportChartCard chart={msg.chart} />}
 
                         {msg.reflection && (
                           <div className="mt-3 border-t border-hairline pt-3">{renderMarkdown(msg.reflection)}</div>
