@@ -602,3 +602,15 @@ steps are click-paced; nothing auto-launches the next agent.
 **Evidence** — `app-zava-service-desk/src/main.css` (`.iq-playground` override) and
 `features/iq-playground/engine/PlaygroundShell.tsx`; build OK, vitest 100/100, lint 0 errors.
 Rendered result not visually re-checked in that session.
+**Update (same day, second pass)** — 0.9x was still "too big"; the user asked for 15% less again.
+The preferred density for a chat / walkthrough surface is therefore **~0.77x the console scale**
+(0.9 x 0.85; base text ~0.8rem under a 115% `html` dial). Apply that density **up front** on any
+new chat surface instead of iterating. When asked for "N% less", scale **every** `--text-*` token
+*and* set the container `font-size` (e.g. `.iq-playground { font-size: .85rem; ... }`) in the same
+edit, so unclassed text shrinks too, plus the explicit `.text-2xs` rule. Final values used:
+`--text-xs: .584rem; --text-sm: .691rem; --text-base: .797rem; --text-lg: .85rem;
+--text-xl: .956rem; --text-2xl: 1.116rem; --text-3xl: 1.381rem; .text-2xs { font-size: .531rem }`.
+A font-only change needs only the targeted app redeploy, not the full Fabric deploy. On Windows
+with script execution disabled, call `npm.cmd` / `npx.cmd` (plain `npx` fails in PowerShell).
+**Evidence** — vitest 100/100, lint 0 errors, `vite build` OK, `python -m fabric.app.deploy_app`
+exit 0, `rayfin.yml` restored clean (`git status` showed only `main.css`, `deploy_app.py`).
