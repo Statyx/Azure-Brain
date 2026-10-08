@@ -68,6 +68,48 @@ Each rule below fixes a defect the user actually saw.
    the input box stay full size. Content can grow once the conversation starts.
 7. **Let the presenter drive.** Nothing plays until the user clicks the opener chip or types.
 8. **Hard-refresh after every deploy.** A cached bundle looks exactly like a failed deploy.
+9. **Click-paced transitions, always.** A hop to the next agent (`chainNext`) or the follow-up
+   unlocked by picking a scenario is shown as the **only** suggested reply and plays on click.
+   Never `setTimeout(startTyping, …)` into the next step: the audience saw Work IQ start "on its
+   own". The engine also blurs the clicked control and every chip is `type="button"`, so a stray
+   Space/Enter cannot fire the next step. See `known_issues.md` #31.
+10. **Auto-scroll during a turn, free scroll after it.** The conversation follows the newest
+    content while typing, thinking steps, answer and cards render, then stops, so the presenter
+    can scroll back up to walk through the result. Built into the engine (`conversationRef`).
+11. **Chip text = `<IQ layer>: <the manager's real question>`.** For example "Fabric IQ: who
+    missed the zero-touch XLA in week 38?", "Foundry IQ: what do the contracts make us owe?",
+    "Work IQ: what has the team already started?", "Web IQ: public news to raise at the reviews",
+    then a plain closing ask such as "Recommend how to close week 38 for both customers". The
+    prefix tells the audience which layer answers; the question proves why that layer is needed.
+12. **Decision options are concrete verbs with a named person.** "Yes, draft the approval request
+    to {{approverFirstName}}", "Show me the credit approval policy first", "No, I'll raise it with
+    Finance myself". Never "Option A" / "Continue".
+13. **Never write the `@mention` in a scene's `user` text.** `startTyping` prefixes it; writing it
+    yourself renders "@ZavaIQ @ZavaIQ …". Every assistant answer carries its
+    "Intelligence used" trace (the IQ layers and sources it drew on).
+14. **Compact density from the start.** Chat text runs at ~0.77x the host console scale (scoped
+    `--text-*` override on the playground root, see `known_issues.md` #30). Do not ship the
+    default size and wait for the "too big" remark.
+
+### Demo collaboration defaults
+
+How the user works on these demos, so nothing has to be corrected twice:
+
+- **Language.** Talk to the user in French, concisely. Repo, UI and brain text stay English.
+  Pre-reads and presenter notes are written in **French, keeping the English key terms**
+  (XLA, zero-touch, task flow, Data Agent, Work IQ…).
+- **Autonomy.** "GO en autonomie" means work end-to-end, validate, and report once at the end.
+- **Deploy only what changed.** On an existing workspace, a UI-only change (scenario, CSS, copy)
+  is `python -m fabric.app.deploy_app` (build + app deploy) — never the full `deploy_all`.
+  Then check `rayfin.yml` was restored, and hard-refresh (Ctrl+F5). On Windows use
+  `npm.cmd`/`npx.cmd`; a stderr-only exit code 1 can still be a success, so read the output.
+- **Every Fabric demo ships a task flow**, with the notebook as the ingestion layer (no separate
+  "files → Delta tables" step).
+- **Commit or push the demo repo only when asked.** Brain lessons are committed directly.
+
+Evidence: Fab-ServiceDesk-IQ session 2026-09-24, user corrections "la partie Work IQ s'est lancé
+sans que je clique", "pourquoi tu as besoin de tout redéployer ?", "police is still too big",
+"dans le pre read donne moi l'histoire en français".
 
 ## 4. Validation
 
@@ -105,3 +147,7 @@ people in your audience or organisation, and keep that edit out of any public re
 - [ ] The counts in every question match its answer.
 - [ ] The assistant name is the same on every screen.
 - [ ] The presenter and approver names are set in the demo profile.
+- [ ] Every transition waits for a click; nothing starts on its own after a scenario pick.
+- [ ] Each answer scrolls into view as it renders, with no manual scrolling.
+- [ ] Every chip reads `<IQ layer>: <question>`, and no `user` text contains an `@mention`.
+- [ ] Chat text is compact (~0.77x), not the default size.

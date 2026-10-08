@@ -353,6 +353,10 @@ Before handing a frontend off:
   sait que c'est simulé"); fix removed the mode selector, Read live and all simulated labels,
   guarded by a vitest asserting the rendered page matches no `simulated|fictional|not live`.
 
+**Demo defaults (2026-09-24)** `[observed]`: click-paced IQ, auto-scroll, `<IQ layer>: <question>`
+chips, ~0.77x text; UI-only change = `deploy_app` only; every demo ships a task flow; French
+with the user. Read `iq_playground/AUTHORING.md` §3 rules 9-14 + "Demo collaboration defaults".
+
 ## Handoff protocol
 
 | Next need | Agent |

@@ -32,7 +32,7 @@ run with or without a tenant.
 | [`design_tokens.md`](design_tokens.md) | Token set, semantic colours, component recipes, dark mode, a11y |
 | [`app_shell_blueprint.md`](app_shell_blueprint.md) | The three-surface screen shape to start from, with the defaults already chosen |
 | [`iq_playground/`](iq_playground/README.md) | Copilot Chat–style IQ playground template: engine, schema, sample Caldova Media scenario, authoring guide (module `M-IQPLAY`) |
-| [`known_issues.md`](known_issues.md) | 21 originally documented pitfalls; 22 as of 2026-09-21; 29 as of 2026-09-22 (IQ playground template); **30 documented pitfalls** as of 2026-09-24 (scoped Tailwind text size) |
+| [`known_issues.md`](known_issues.md) | 21 originally documented pitfalls; 22 as of 2026-09-21; 29 as of 2026-09-22 (IQ playground template); **32 documented pitfalls** as of 2026-09-24 (scoped Tailwind text size, click-paced IQ transitions, structured IQ prompts) |
 
 ## The eight rules, in one line each
 

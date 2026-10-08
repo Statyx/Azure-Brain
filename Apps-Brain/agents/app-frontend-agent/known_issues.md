@@ -614,3 +614,54 @@ A font-only change needs only the targeted app redeploy, not the full Fabric dep
 with script execution disabled, call `npm.cmd` / `npx.cmd` (plain `npx` fails in PowerShell).
 **Evidence** — vitest 100/100, lint 0 errors, `vite build` OK, `python -m fabric.app.deploy_app`
 exit 0, `rayfin.yml` restored clean (`git status` showed only `main.css`, `deploy_app.py`).
+
+## 31. IQ playground — the next agent started without a click (Work IQ "launched on its own")
+
+**Context** — Fab-ServiceDesk-IQ, Zava IQ playground built from the `iq_playground` engine,
+2026-09-24.
+
+**Symptom** — after picking the recommended scenario, or when a step handed off to the next
+agent, the next turn (Work IQ) started by itself about 700 ms later. The presenter had not
+clicked anything, and a Space/Enter pressed while the last chip still had focus could fire it too.
+
+**Root cause** — `chainNext` and `handleScenarioSelect` scheduled
+`setTimeout(() => startTyping(nextChoice), 700)` for `autoTriggerOnly` choices. The clicked chip
+kept keyboard focus, and the chips had no `type="button"`.
+
+**Fix** (backported into `iq_playground/engine/PlaygroundShell.tsx`, so new demos inherit it):
+- an `awaitingStep` state; `chainNext` and `handleScenarioSelect` call `setAwaitingStep(nextChoice)`
+  instead of the timer; `visibleChoices` shows only `awaitingStep` while it is set;
+- `startTyping` clears `awaitingStep` and blurs `document.activeElement`; `resetDemo` clears it;
+- every choice button is `type="button"`;
+- a `conversationRef` on the message list with two effects: smooth scroll to the bottom on each
+  turn change (messages, thinking step, typing, email send, awaiting step, scenario), and an
+  instant scroll while the assistant draft types. When the turn ends nothing scrolls, so the
+  presenter can scroll back up freely.
+
+**Evidence** — Fab-ServiceDesk-IQ: vitest 100/100, lint 0 errors, `vite build` OK, deployed with
+`python -m fabric.app.deploy_app`; the user clicked through the flow and then moved on to font
+size only.
+
+## 32. IQ playground — vague chips and a doubled `@mention` weakened the IQ story
+
+**Context** — Fab-ServiceDesk-IQ scenario `scenario.json`, 2026-09-24, commit `3e646d7`.
+
+**Symptom** — the chips read like commands ("Start Work IQ"), so the audience could not tell
+which IQ layer answered or why it was needed. The user bubble showed "@ZavaIQ @ZavaIQ …".
+Decision options were generic.
+
+**Root cause** — the scene `user` text already contained `@ZavaIQ`, and `startTyping` prefixes the
+mention again. Chip wording had been written as stage cues, not as the manager's questions.
+
+**Fix** — the pattern now in `AUTHORING.md` §3 rules 11-13:
+- chips are `<IQ layer>: <real manager question>`: "Fabric IQ: who missed the zero-touch XLA in
+  week 38?", "Foundry IQ: what do the contracts make us owe?", "Work IQ: what has the team
+  already started?", "Web IQ: public news to raise at the reviews", then "Recommend how to close
+  week 38 for both customers";
+- decision options are concrete verbs naming the person: "Yes, draft the approval request to
+  {{approverFirstName}}", "Show me the credit approval policy first", "No, I'll raise it with
+  Finance myself";
+- no `@mention` in `user` text; every answer carries the "Intelligence used" trace.
+
+**Evidence** — commit `3e646d7`, CI run 37693748356 green, vitest 100/100, lint 0 errors, build
+OK, pytest 327 passed.
