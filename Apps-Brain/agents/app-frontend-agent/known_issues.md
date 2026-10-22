@@ -450,6 +450,28 @@ profile is no longer used before removing it; never delete the user's everyday p
 corresponded to 2172 pixels of content plus a 15-pixel vertical scrollbar. No CSS change
 was needed. The user subsequently confirmed the published site worked in ordinary Edge.
 
+**Update 2026-10-22 — the same symptom can be a real shell cap.** In the Zava IQ Fabric App,
+the browser viewport was not emulated, but the walkthrough still stayed small on a large screen.
+The page imposed both `md:max-w-[1400px]` and
+`md:h-[min(860px,calc(100dvh-7rem))]`. In addition, the host `<main>` was not a flex container,
+so the page's `min-h-full flex-1` could not propagate the available height.
+
+After measuring the viewport, compare it with the root and walkthrough bounds. If the viewport
+grows while those bounds stop at an explicit CSS maximum, remove the cap rather than changing
+browser settings. The verified full-screen contract is:
+
+- on the IQ route, the app shell uses `h-dvh min-h-0 overflow-hidden`;
+- every ancestor between that shell and the walkthrough uses `flex min-h-0 flex-1`;
+- the walkthrough frame has `w-full flex-1 min-h-0` with no fixed desktop max-width/max-height;
+- the message/sidebar panes own scrolling, so the document itself does not scroll.
+
+**Evidence** — with a local `897 x 1308` browser viewport, the corrected app measured `1308px`
+high, the `<main>` and IQ root both measured `1187.45px`, the frame extended from `138.94px` to
+`1289.61px`, and `body.scrollHeight` remained `1308px`. The consuming app then passed 344 Python
+tests, 102 Vitest tests, lint with 0 errors, a production build, and
+`python -m fabric.app.deploy_app` exited 0. This extends rather than replaces the rule above:
+measure first; when the measured viewport is already correct, inspect the flex chain and CSS caps.
+
 ---
 
 ## 23. A chat playground inherits the host's dark theme and becomes unreadable

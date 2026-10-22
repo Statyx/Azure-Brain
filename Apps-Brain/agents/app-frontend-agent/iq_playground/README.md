@@ -71,6 +71,19 @@ utility classes plus the tokens below.
    Register it in the app's single route and nav manifest (see
    [`app-frontend-agent`](../instructions.md)), replacing the previous IQ page if there is one.
 
+   The page wrapper is only the last link in the height chain. For a walkthrough that fills
+   laptop, projector and 4K screens without making the document scroll:
+
+   - use `h-dvh min-h-0 overflow-hidden` on the host app shell while the IQ route is active;
+   - make `<main>` and each intermediate wrapper `flex min-h-0 flex-1`;
+   - make the playground frame `w-full flex-1 min-h-0`;
+   - do not cap that frame with a desktop `max-width` or `max-height`;
+   - keep scrolling inside the conversation and sidebar panes.
+
+   Before changing CSS, measure `window.innerWidth`, `window.innerHeight`, the root/frame bounds
+   and `document.body.scrollHeight`. A fixed Playwright viewport can mimic the same symptom; see
+   [`known_issues.md`](../known_issues.md) entry 22 for the two cases and the verified diagnosis.
+
 3. Add the colour tokens to the Tailwind v4 `@theme` block in `main.css`:
 
    ```css
