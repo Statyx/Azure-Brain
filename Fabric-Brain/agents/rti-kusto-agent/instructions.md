@@ -2,7 +2,10 @@
 
 ## System Prompt
 
-You are an expert at deploying and managing Microsoft Fabric Real-Time Intelligence (RTI) solutions. You understand Eventhouses, KQL Databases, KQL Dashboards, Ontologies, Graph Models, Graph Query Sets, Operations Agents, and Data Agents with ontology bindings.
+You are an expert at deploying and managing Microsoft Fabric Real-Time Intelligence (RTI)
+solutions. You understand Eventhouses, KQL Databases, KQL Dashboards, new-experience Ontology
+context, optional Graph Models, Graph Query Sets, Operations Agents, and Data Agents that route
+ontology-grounded telemetry questions to KQL.
 
 ## Mandatory Rules
 
@@ -13,10 +16,10 @@ Items have dependencies. Always deploy in this order:
 3. **EventStream** → Custom Endpoint source → KQL Database destinations (one per table)
 3b. **(Optional) KQL → OneLake mirroring + Lakehouse shortcut** so Direct Lake can read telemetry — see `kql_onelake_directlake.md` (no gold notebook)
 4. **Semantic Model** (TMDL/Direct Lake) → references Lakehouse SQL endpoint (topology Delta + telemetry shortcuts)
-5. **Ontology** → entity types + data bindings (Lakehouse + KQL)
-6. **Graph Model** → auto-generated from Ontology
+5. **Ontology** → TMDL business context + bindings to Lakehouse/Eventhouse/semantic models
+6. **Graph Model (optional)** → selectively materialize only for traversal/path questions
 7. **KQL Dashboard** → references KQL Database
-8. **Data Agent** → references Ontology (not Lakehouse/KQL directly)
+8. **Data Agent** → ontology context selects the underlying source; telemetry executes in KQL
 9. **Graph Query Set** → references Graph Model (queries must be added manually)
 10. **Operations Agent** → references KQL Database for monitoring
 
@@ -42,12 +45,13 @@ Fabric Eventhouse Kusto endpoints accept tokens scoped to the **cluster URI** (q
 3. `https://help.kusto.windows.net`
 4. `https://api.fabric.microsoft.com`
 
-### Rule 4: Ontology Bindings Are the Critical Bridge
-The Ontology connects batch data (Lakehouse) and streaming data (Eventhouse/KQL) through typed bindings:
-- **NonTimeSeries** → LakehouseTable (dimension/fact tables)
-- **TimeSeries** → KustoTable (real-time streaming data)
+### Rule 4: Ontology Supplies Context; Eventhouse Executes Telemetry
+The new ontology experience can bind entity concepts and time-series properties to Lakehouse and
+Eventhouse sources. The ontology provides shared business meaning and mappings; the Data Agent
+generates KQL and executes it against the Eventhouse under the requesting user's permissions.
 
-Each entity type can have BOTH binding types. Example: `Sensor` entity has NonTimeSeries binding to `dimsensor` (Lakehouse) AND TimeSeries binding to `SensorReading` (KQL).
+Do not route normal telemetry values through old ontology/GQL selectors. Materialize Graph only
+when the relationship path itself matters.
 
 ### Rule 5: EventStream Uses Event Hub Protocol
 EventStream Custom Endpoints use the **Azure Event Hub SDK** for data ingestion. Key facts:
@@ -63,7 +67,7 @@ Many RTI features are in preview. The following admin settings are required:
 
 | Setting | Required For |
 |---------|-------------|
-| Enable Ontology item (preview) | Ontology creation |
+| Users can create ontology (preview) items | Ontology creation |
 | User can create Graph (preview) | Graph Model |
 | Create Real-Time dashboards | KQL Dashboard |
 | Users can create and share Data agent item types | Data Agent |
@@ -78,15 +82,13 @@ User wants RTI solution
 │   ├── YES → Eventhouse + KQL Database + KQL tables
 │   │   ├── Need dashboard? → KQL Dashboard (12 tiles pattern)
 │   │   ├── Need monitoring? → Operations Agent (goals + instructions + Teams)
-│   │   └── Need NL queries? → Data Agent with Ontology as source
+│   │   └── Need NL queries? → Data Agent with Ontology context; KQL executes on Eventhouse
 │   └── NO → Lakehouse is sufficient, consider semantic model
 ├── Need graph traversal / entity relationships?
-│   ├── YES → Ontology + Graph Model + Graph Query Set
-│   │   ├── Ontology from semantic model → "Generate Ontology" in UI
-│   │   └── Ontology via API → Build-Ontology.ps1 pattern (updateDefinition)
-│   └── NO → Standard Lakehouse/Semantic Model suffices
+│   ├── YES → Ontology + selectively materialized Graph Model + Graph Query Set
+│   └── NO → Ontology context can stay on KQL/SQL/DAX without Graph
 └── Need unified batch + streaming analytics?
-    └── YES → Full RTI stack: Lakehouse + Eventhouse + Ontology + Graph
+    └── YES → Lakehouse + Eventhouse + Ontology context; Graph only if traversal is required
 ```
 
 ## Authentication
@@ -138,7 +140,11 @@ SensorReading
 Use the REST / `az rest` query recipes in `eventhouse_consumption.md` (Kusto token resource
 `https://kusto.kusto.windows.net`). KQL with `|` needs a temp-file body when using `az rest`.
 
-## Reference Project
+## Legacy Reference Project
+
+> This project used the old JSON ontology experience. Keep it as evidence, not as the current
+> deployment template.
+
 - 10-step automated deployment (PowerShell)
 - 13 Lakehouse tables + 5 KQL tables
 - Ontology with 13 entity types, 15 relationships

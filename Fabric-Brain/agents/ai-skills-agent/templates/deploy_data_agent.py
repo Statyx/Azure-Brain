@@ -1,7 +1,7 @@
 """
-Deploy a Fabric Data Agent — Template Script
+Deploy a Fabric Data Agent — Definition-Based Template Script
 
-Creates or updates a Data Agent with full definition:
+Creates or updates a Data Agent with a definition shape observed on the earlier runtime:
   1. AI instructions (from a markdown file)
   2. Data source binding (semantic model, lakehouse, warehouse, or KQL DB)
   3. Few-shot examples (from a JSON file)
@@ -16,7 +16,12 @@ Usage:
 IMPORTANT: Agents deployed with --draft-only are NOT visible/testable in the
 Fabric portal. Always publish (default) unless you have a specific reason not to.
 
-Customize the CONFIG section below for your project.
+This template is not the source of truth for the new Ontology-as-context integration. It also
+predates the current semantic-model guidance that places AI Instructions and Verified Answers in
+Prep for AI. Before reusing it, configure a working agent in the target runtime, call
+getDefinition, and reconcile the emitted parts.
+
+Customize the CONFIG section below for your project only after that check.
 """
 
 import argparse

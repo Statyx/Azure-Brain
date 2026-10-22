@@ -9,12 +9,14 @@
 | **F8** | 8 | 16 | ~$1,040 | Small production |
 | **F16** | 16 | 32 | ~$2,080 | Medium production, RTI |
 | **F32** | 32 | 64 | ~$4,160 | Large production |
-| **F64** | 64 | 128 | ~$8,320 | Enterprise, Data Agents with Ontology |
+| **F64** | 64 | 128 | ~$8,320 | Enterprise concurrency and heavy workloads |
 | **F128** | 128 | 256 | ~$16,640 | Large enterprise |
 | **F256** | 256 | 512 | ~$33,280 | Very large enterprise |
 
 > **Trial capacity** = F64 equivalent but with limitations (no SPN, limited features).
-> **Data Agents with Ontology source** require F64 minimum.
+> There is no current documented F64 floor for a Data Agent using Ontology context. Ontology
+> MCP is documented for paid F2+ capacity. Size production from measured Ontology Discovery,
+> child Eventhouse/Graph operations, AI reasoning, concurrency, and regional support.
 
 ---
 
@@ -74,7 +76,7 @@ Q: What is the primary workload?
 │   └── Heavy streaming (>100 events/s) → F16 ($2,080/mo)
 │
 ├── Full platform (BI + RTI + Ontology + Data Agent)
-│   └── F64 minimum ($8,320/mo) — required for Ontology Data Agent
+│   └── Start from measured load; F2+ is the documented ontology/MCP floor, not an F64 mandate
 │
 └── Enterprise (50+ users, heavy Spark, multiple domains)
     └── F128+ ($16,640+/mo) — consider multiple capacities

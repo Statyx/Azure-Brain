@@ -68,12 +68,12 @@ domains:
         purpose: Data Activator (Reflex) — real-time alerts/triggers, AttributeTrigger/EventTrigger rules, Teams/Email/Fabric item actions
 
   06-iq:
-    description: Intelligence — Ontology (semantic layer) and Graph (traversal engine), GQL, entity reasoning
+    description: Fabric IQ — TMDL ontology context plus optional Graph traversal
     agents:
       - name: ontology-agent
-        purpose: Entity types, properties, data bindings, relationships, contextualizations, NL2Ontology, Ontology MCP server (preview) — the business/semantic layer (generates a Graph Model, owned by graph-agent)
+        purpose: New TMDL ontology experience — entities, properties, relationships, metrics, rules, namespaces, inheritance, source bindings, Ontology agent, Data Agent context, MCP, and old-experience migration
       - name: graph-agent
-        purpose: Graph in Microsoft Fabric — Graph Model definition (graphType/dataSources/graphDefinition), GQL (ISO/IEC 39075), graph algorithms, Graph Query Sets, RefreshGraph, Execute Query API, NL2GQL Data Agents, standalone + ontology-backed graphs, empty-graph-after-API fix
+        purpose: Graph in Microsoft Fabric — optional ontology projections and standalone Graph Models, GQL, algorithms, Graph Query Sets, RefreshGraph, Execute Query API, NL2GQL, and the old-ontology empty-graph workaround
 
   07-fabric-quality:
     description: Fabric-specific report validation
@@ -95,7 +95,7 @@ domains:
 # - cicd-fabric vs fabric-cli: cicd owns Git+pipelines+stages; cli owns fab commands+job execution
 # - cicd-fabric vs workspace-admin: admin creates pipelines (REST POST); cicd manages pipeline stages
 # - ontology vs rti-kusto: ontology owns entity types+GQL; rti-kusto owns KQL DB+dashboards
-# - ontology vs graph: ontology owns the SEMANTIC layer (entity types, bindings, relationships, NL2Ontology, MCP server) + generates the Graph Model; graph owns the Graph Model item itself (definition, GQL, algorithms, RefreshGraph, Execute Query, NL2GQL, standalone graphs, empty-graph-after-API fix)
+# - ontology vs graph: ontology owns governed business context and source routing; graph owns the optional materialized traversal layer, GQL, refresh, and standalone graphs
 # - data-activator vs rti-eventstream: activator owns Reflex rules/alerts/actions; eventstream owns ingestion topology (create Eventstream w/ Activator destination first, then wire the rule)
 # - data-activator vs monitoring: activator owns real-time business alerts (Reflex); monitoring owns admin/capacity/audit operational dashboards
 # - orchestrator vs lakehouse: orchestrator owns scheduling+pipelines; lakehouse owns table ops+optimization

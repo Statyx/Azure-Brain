@@ -111,7 +111,7 @@ run goes back into the model via the run sheet, so the next demo is cheaper.
 
 | Agent | What it does |
 | --- | --- |
-| [ontology](agents/ontology-agent/) | Entity types, bindings, contextualizations, NL2Ontology |
+| [ontology](agents/ontology-agent/) | New TMDL ontology context — entities, relationships, metrics/rules, source bindings, Data Agent + MCP |
 | [graph](agents/graph-agent/) | Graph Model, GQL (ISO/IEC 39075), algorithms, `RefreshGraph`, NL2GQL |
 
 ### ✅ Fabric Quality (1)

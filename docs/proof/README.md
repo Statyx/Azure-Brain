@@ -95,16 +95,18 @@ Five shots were uploaded through the GitHub web editor. One of them had to be pu
 - The workspace was named with the author's **initials** followed by the project name, instead of
   the `Caldova - ` prefix. This is the exact pattern the `personal-workspace-prefix` scanner rule
   exists to catch, and the scanner never saw it, because it was pixels.
-- The item list underneath carried a **real 32-character tenant GUID**, repeated three times, as the
-  auto-generated suffix on ontology child items (`ONT_..._graph_<guid>`).
+- The old-experience item list underneath carried a **real 32-character tenant GUID**, repeated
+  three times, as the auto-generated suffix on ontology child items
+  (`ONT_..._graph_<guid>`).
 
 Both gates were green while that image was live on a public repo. Two lessons, both now rules above:
 
 1. **A leak in an image passes every automated check you have.** The only control is a human reading
    the picture before it is committed.
-2. **Auto-generated item names carry GUIDs.** Ontology and graph child items append the workspace or
-   item id to their display name, so a workspace item list is one of the most leak-prone screens in
-   Fabric. Crop it, or capture the task flow view instead.
+2. **Generated item names can carry GUIDs.** The captured old Ontology/Graph experience appended
+   workspace or item IDs to child display names. Do not generalize that legacy child-graph model
+   to new TMDL ontologies, but still treat every workspace item list as leak-prone: inspect and
+   crop it, or capture the task flow view instead.
 
 The image was only ever an `<img src>` pointing at GitHub's `user-attachments` CDN, so nothing
 entered git history and no rewrite was needed. Had it been committed, it would have been permanent.

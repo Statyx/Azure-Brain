@@ -7,15 +7,20 @@
 | Type | Value in JSON | Query Language | Best For |
 |------|--------------|----------------|----------|
 | Semantic Model | `semantic_model` | DAX | Pre-built measures, star schema, business logic |
-| Lakehouse (tables) | `lakehouse-tables` | SQL (Spark) | Raw/curated Delta tables |
-| Lakehouse (full) | `lakehouse` | SQL + file access | Tables + unstructured files |
+| Lakehouse (tables) | `lakehouse-tables` | T-SQL | Delta tables through the SQL analytics endpoint |
+| Lakehouse (full) | `lakehouse` | T-SQL + file access | Tables + unstructured files on legacy runtime shapes |
 | Data Warehouse | `data_warehouse` | T-SQL | Enterprise DW, complex joins |
 | KQL Database | `kusto` | KQL | Log analytics, time series |
-| GraphQL | `graph` | GraphQL | Graph relationships |
-| **Ontology** | `ontology` | **GQL** | **Knowledge graph: entities + relationships, multi-hop RCA / impact** |
+| Graph Model | `graph` | GQL | Relationship traversal and graph analytics |
+| **Ontology context** | Portal/current emitted definition | **T-SQL, KQL, or DAX** | Governed entities, relationships, mappings, and routing to underlying sources |
 | Mirrored Database | `mirrored_database` | SQL | External DB mirrors |
 
-> **Ontology source** (`type: "ontology"`, folder prefix `ontology-{name}`, `artifactId` = ontology item id): accepted by `updateDefinition` (202 Succeeded, no 400) as of 2026-06 — see `../ontology-agent/`. fewshots `query` = GQL strings. Owned by `ontology-agent`.
+> **Correction — new ontology experience.** The old reverse-engineered
+> `type: "ontology"` + GQL few-shot pattern belongs to the old ontology runtime. The current
+> documented integration uses ontology as read-only context, then executes a native query against
+> an associated underlying source. Microsoft doesn't yet document a stable hand-authored
+> ontology-context definition part; capture a working current item with `getDefinition` before
+> automating it.
 
 ---
 
@@ -40,7 +45,9 @@ Do you have a semantic model with DAX measures?
                        ⚠️ Need schema descriptions for accuracy
 ```
 
-**Recommendation**: When possible, always use a **semantic model** as the data source. The DAX measures encapsulate business logic, making the agent dramatically more accurate.
+**Recommendation**: Prefer governed execution: a semantic model for trusted metrics, SQL/KQL for
+source-native detail, Graph for true traversal, and Ontology context to make the shared business
+meaning and source routing reusable.
 
 ---
 
@@ -61,6 +68,10 @@ Files/Config/draft/semantic-model-SM_Finance/fewshots.json
 | Lakehouse | `lakehouse-` | `lakehouse-MyLakehouse` |
 | Data Warehouse | `data_warehouse-` | `data_warehouse-SalesWarehouse` |
 | KQL Database | `kusto-` | `kusto-LogsDB` |
+| Graph Model | `graph-` | `graph-SupplyChain` |
+
+Ontology-context folder/part naming for the new experience is not currently documented. Do not
+invent it from the old `ontology-{name}` evidence.
 
 ---
 
@@ -246,71 +257,44 @@ Files/Config/draft/
 - Semantic model for curated metrics + lakehouse for raw data exploration
 - Different domains (finance model + HR model)
 
-**Caution**: The agent may struggle to pick the right source for cross-domain questions. Use `dataSourceInstructions` to guide routing.
+**Limit**: a Data Agent supports up to five sources.
+
+**Caution**: The agent may struggle to pick the right source for cross-domain questions. Use
+supported source descriptions/instructions and ontology mappings to guide routing. One question
+is not guaranteed to execute a federated cross-source join.
 
 ---
 
-## Pattern — Dual-source: Ontology (GQL) + Semantic Model (DAX)
+## Pattern — Ontology context + native execution + optional Graph
 
-This is the reusable **RTI Operations / Digital Twin** Data Agent: one agent answers both
-*"how do things connect / who is impacted"* (topology, root-cause, impact) **and**
-*"what is the number"* (live telemetry metrics), by combining **two** sources with an explicit
-routing rule. Proven on the Live Event Operations and Network Operations demos — see the
-`digital-twin` preset in `../../../Meta-Brain/SCENARIOS.md` (this pattern is module `M-AGENT`).
+This is the current reusable **RTI Operations / Digital Twin** pattern:
 
-**Why two sources?** The ontology is unbeatable for multi-hop RCA/impact via GQL, but the Fabric
-IQ TimeSeries selector may return empty telemetry *values* in a Data Agent (see
-`../rti-kusto-agent/ontology.md`). So topology → ontology (GQL), numbers → semantic model (DAX)
-over the telemetry (mirrored to Direct Lake via `../rti-kusto-agent/kql_onelake_directlake.md`).
+| Layer | Purpose | Execution |
+| --- | --- | --- |
+| Ontology context | Shared entities, synonyms, relationships, rules, metrics, mappings | No general-purpose query endpoint |
+| Eventhouse | Fresh telemetry and time-series detail | KQL |
+| SQL source | Relational detail and joins | T-SQL |
+| Semantic model | Governed KPIs and calculations | DAX |
+| Optional Graph Model | Multihop paths, reachability, blast radius | GQL |
 
-| Source | `type` | Query lang | Answers |
-|--------|--------|-----------|---------|
-| Ontology (knowledge graph) | `ontology` | GQL | topology, relationships, root-cause, **impact** (who/what is affected) |
-| Semantic model (Direct Lake) | `semantic_model` | DAX | **live telemetry numbers**: occupancy, wait, density, counts, rankings |
+### Routing instruction
 
-### Folder layout (each source = its own folder, in both draft + published)
-
-```
-Files/Config/{draft,published}/
-├── ontology-<OntologyName>/
-│   ├── datasource.json      (type "ontology", artifactId = ontology id, fewshots = GQL)
-│   └── fewshots.json
-└── semantic-model-<ModelName>/
-    ├── datasource.json      (type "semantic_model", artifactId = model id, elements = table/column/measure tree)
-    └── fewshots.json        (fewshots = EVALUATE DAX)
-```
-
-### The routing rule (put it in BOTH `aiInstructions` and each `dataSourceInstructions`)
-
-Top-level `aiInstructions` must state the split plainly, e.g.:
-
-> *"Answer by querying a source, never from general knowledge. If the question asks for a
-> **number / metric / ranking** (occupancy, wait, density, comfort, counts, capacities) →
-> use the **Semantic Model (DAX)** and reuse the existing measures. If it asks **how things
-> connect or who is impacted** → use the **Ontology (GQL)**. For 'detect then impact'
-> questions: get the number from the Semantic Model, then traverse impact in the Ontology."*
-
-Then reinforce per source with `dataSourceInstructions`:
-
-- **Ontology source**: *"Use for TOPOLOGY, RELATIONSHIPS, ROOT-CAUSE and IMPACT (GQL). Node
-  label = entity name, edge label = relationship name. Do NOT use for telemetry numbers — use
-  the semantic model."*
-- **Semantic model source**: *"Use for ALL live telemetry numbers and aggregates. ALWAYS reuse
-  the existing DAX measures; NEVER recompute from raw columns or filter the KPI column (the
-  measures already filter it). Group with `dim_*[name]`."*
+> *"Use the ontology context to interpret business terms and select the relevant source. Query
+> Eventhouse with KQL for telemetry, the semantic model with DAX for governed KPIs, and SQL
+> sources with T-SQL for relational detail. Use Graph/GQL only when the user asks about a
+> relationship path, reachability, dependency, or impact chain. Never answer from general
+> knowledge, and do not assume a federated join across sources."*
 
 ### Reusable rules
 
-1. **List the key DAX measures by name** in `aiInstructions` — the orchestrator uses them when
-   reformulating the question. Without the list it may recompute from raw columns.
-2. **Remove telemetry few-shots from the ontology source** — keep the ontology few-shots pure
-   topology GQL; put all number few-shots on the semantic model as `EVALUATE` DAX.
-3. **Both sources must be emitted in draft AND published** — draft-only agents are invisible in
-   the portal.
-4. **`elements` tree** on the semantic model source = `semantic_model.table` →
-   `semantic_model.column` / `semantic_model.measure` (see the multi-source folder layout below).
-5. Validate the routing end-to-end: one number question (must trace `analyze_semantic_model`,
-   DAX) and one impact question (must trace `analyze_ontology`, GQL).
+1. Put shared terminology, synonyms, mappings, metrics, and rules in the ontology.
+2. Put engine-specific join/filter guidance on the eligible mounted underlying source.
+3. Configure semantic-model AI behavior through Prep for AI and Verified Answers.
+4. Attach Graph only when traversal is a required scenario; ontology context alone doesn't mean
+   every question should use GQL.
+5. Split "detect then impact" into explicit stages if one Data Agent question can't safely span
+   the KQL/DAX result and graph traversal.
+6. Validate one question per engine and confirm the generated native query in run steps.
 
 ---
 

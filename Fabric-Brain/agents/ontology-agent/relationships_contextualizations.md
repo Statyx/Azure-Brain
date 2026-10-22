@@ -1,4 +1,9 @@
-# Relationships & Contextualizations
+# Relationships & Contextualizations — Old Experience Only
+
+> **Legacy scope.** `RelationshipTypes/{id}` and
+> `Contextualizations/{guid}.json` belong to the retiring JSON ontology experience.
+> New-experience relationships use `relationships.tmdl` for physical TOM relationships and
+> `entityRelationships.tmdl` for business relationships. See `new_experience_tmdl.md`.
 
 ---
 

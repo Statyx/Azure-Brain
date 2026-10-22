@@ -1,4 +1,10 @@
-# Graph Model Deployment & GQL — Ontology Graph from the API (preview)
+# Graph Model Deployment & GQL — Old-Experience Workaround
+
+> **Legacy scope.** This workaround applies to old JSON ontologies whose API deployment left
+> the automatically generated child Graph Model empty. In the new TMDL experience, graph
+> materialization is optional, selective, and initiated through **Manage graph**. Do not apply
+> this workaround to a new-experience ontology. See `instructions.md` and
+> `../graph-agent/instructions.md`.
 
 > ⚠️ **Moved.** This workaround is now owned by **`graph-agent`** — canonical reference:
 > `../graph-agent/graph_definition_api.md`. Kept here as a legacy pointer for ontology context.

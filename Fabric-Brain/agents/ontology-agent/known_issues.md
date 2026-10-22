@@ -1,5 +1,64 @@
 # Known Issues & Gotchas — Ontology Agent
 
+## Current new-experience issues
+
+### 1. Old and new items share the same item type
+
+Both generations use `type: "Ontology"`. Inspect `getDefinition`:
+
+- `database.tmdl` / `entities/*.tmdl` = new experience.
+- `definition.json` / `EntityTypes/*` = old experience.
+
+Never send old JSON parts to a new item or TMDL parts to an old item.
+
+### 2. Ontology is context; Data Agent executes on the source
+
+The current Data Agent integration generates T-SQL, KQL, or DAX against an underlying source.
+It doesn't execute normal questions "against the ontology using GQL." Attach a Graph Model
+separately when GQL traversal is required.
+
+### 3. Context refresh is not immediate
+
+The Data Agent retrieves updated ontology context on a cadence that can take up to 10 minutes.
+Use the manual **Refresh** action when validating a recent ontology change.
+
+### 4. No federated cross-source guarantee
+
+A question routes to a relevant underlying source. Do not assume one question joins data across
+Lakehouse, Eventhouse, and semantic models. Split the question or orchestrate the sequence.
+
+### 5. Semantic-model grounding has two different consumers
+
+The ontology agent can use semantic-model grounding and execute DAX. A Fabric Data Agent does not
+automatically reuse all semantic-model grounding carried by the ontology. Attach the semantic
+model directly when the Data Agent must run DAX.
+
+### 6. Graph is optional
+
+The new experience doesn't materialize an instance graph by default. Use **Manage graph** only for
+relationship-path questions. Graph projection requires eligible bound entities and entity keys;
+current source eligibility is narrower than ontology binding eligibility.
+
+### 7. Binding limitations
+
+- One static binding per entity type.
+- Static Lakehouse data must use managed tables.
+- Unsupported Delta column mapping blocks graph/binding scenarios.
+- Time-series bindings require a valid timestamp column and supported source types.
+- Upstream schema or data changes require explicit validation and downstream refresh.
+
+### 8. Old experience retirement
+
+The old ontology experience retires on **January 31, 2027**. Use the in-product copy action and
+reconnect consumers to the new item ID. See `migration_old_to_new.md`.
+
+---
+
+## Legacy old-experience evidence
+
+> Everything below this line describes the retiring JSON experience unless a section explicitly
+> says otherwise. It is retained because the traces and workarounds remain useful during migration.
+
 ---
 
 ## Tenant Admin Settings
@@ -280,17 +339,18 @@ connected to what"*; the model answers *"how many / how much"*. Tested 2026-07.
 
 ---
 
-## Deployment Order (Strict)
+## Legacy old-experience deployment order
 
-Always follow this sequence — ontology items depend on previous steps:
+For the retiring JSON experience only, the observed sequence was:
 
 ```
 1. Lakehouse → CSV upload → Spark notebook creates Delta tables
 2. Eventhouse → KQL Database → KQL tables (via Kusto REST)
 3. Ontology → entity types + data bindings + relationships + contextualizations
-4. Graph Model → auto-generated from Ontology (refresh if needed)
+4. Graph Model → old-experience refresh path
 5. Graph Query Set → create via API → add queries in UI
-6. Data Agent → source = Ontology (capacity floor unverified — test on your SKU)
+6. Data Agent → old ontology source contract (capacity floor unverified)
 ```
 
-> **Never skip steps.** Deploying step 3 before steps 1–2 causes binding validation errors.
+> For a new TMDL item, follow `new_experience_tmdl.md` and `data_agent_context.md` instead.
+> Source schemas still need to exist before their bindings are validated.

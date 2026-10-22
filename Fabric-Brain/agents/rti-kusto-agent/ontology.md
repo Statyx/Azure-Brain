@@ -1,4 +1,11 @@
-# Ontology — Entity Types, Relationships & Data Bindings
+# Ontology — Old-Experience RTI Evidence
+
+> **Legacy scope.** This file documents the retiring JSON ontology experience and the behavior
+> of old ontology-bound Data Agents. The new TMDL experience uses ontology as context and routes
+> normal telemetry questions to the underlying KQL source. Read
+> `../ontology-agent/instructions.md` and `../ontology-agent/data_agent_context.md` first.
+>
+> Keep the traces below as migration evidence; do not use the old part layout for a new item.
 
 ## Overview
 
@@ -251,9 +258,11 @@ Invoke-WebRequest -Uri "$apiBase/workspaces/$WorkspaceId/items/$OntologyId/updat
 
 The Oil & Gas Refinery ontology has **59 parts** (13 entity types + 15 relationships + bindings + contextualizations + platform + definition.json).
 
-## Graph Model
+## Graph Model in the old experience
 
-The Graph Model is **auto-generated** from the Ontology when you click "Refresh graph model" in the preview. It can also be created programmatically as a separate Fabric item, but typically the ontology handles this.
+This old-experience workflow exposed **Refresh graph model** from the ontology. Do not carry that
+assumption into a new TMDL ontology: graph materialization is optional and selective through
+**Manage graph**, and the resulting Graph Model is owned by `graph-agent`.
 
 ## Generate Ontology from Semantic Model
 

@@ -34,7 +34,8 @@ lakehouse source is wrong — substitute rule #1:
 | `lakehouse-tables`, `lakehouse` | `ALWAYS query the lakehouse tables using SQL` | `doc` |
 | `data_warehouse` | `ALWAYS query the warehouse using T-SQL` | `doc` |
 | `kusto` | `ALWAYS query the KQL database using KQL` | `doc` |
-| `ontology` | `ALWAYS query the ontology using GQL` | `doc` |
+| `graph` | `ALWAYS query the Graph Model using GQL` | `doc` |
+| Ontology context | `Use ontology context to select and query the relevant underlying source in its native language` | `doc` |
 
 Languages come from the source table in `datasource_configuration.md`. Only the DAX
 wording has been observed working; the others are derived from that table and have

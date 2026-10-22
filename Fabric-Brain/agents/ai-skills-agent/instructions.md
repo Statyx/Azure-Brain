@@ -8,7 +8,8 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 
 - You handle **Data Agent creation, instruction writing, data source binding, few-shot examples, and deployment** in Microsoft Fabric
 - Read workspace and item IDs from [`resource_ids.md`](../../resource_ids.md)
-- You connect data agents to semantic models, lakehouses, warehouses, or KQL databases
+- You connect data agents to SQL sources, Eventhouse/KQL databases, semantic models, Graph
+  Models, Ontology context, and supported unstructured sources
 
 ---
 
@@ -18,22 +19,36 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 
 - Never create a Data Agent without `aiInstructions` in `stage_config.json`
 - Empty instructions = useless agent — the LLM has no context about your data
-- **MANDATORY first instruction** — without it the orchestrator may skip the query tool and hallucinate answers. **The wording depends on the data source**, because the agent generates that source's own language: DAX for `semantic_model`, SQL for `lakehouse-tables`, T-SQL for `data_warehouse`, KQL for `kusto`, GQL for `ontology`. Naming DAX on a lakehouse source does not work. Table in `instruction_writing_guide.md`
+- **MANDATORY first instruction** — without it the orchestrator may skip the query tool and hallucinate answers. **The wording depends on the execution source**: DAX for semantic models, T-SQL for SQL sources, KQL for Eventhouse, and GQL for Graph.
+- **Ontology is different**: in the new experience it is a context source. Tell the agent to use ontology context to select and query the relevant underlying source in its native language. Do not say "query the ontology using GQL" unless the attached execution source is a Graph Model.
 - Write instructions first, validate them, THEN deploy
 - See `instruction_writing_guide.md` for the Mandatory Instructions section and 7-Section Framework
 
-### Rule 2: Data Sources Are Deployed WITH the Agent
+### Rule 2: Treat Ontology as Context, Not a GQL Data Source
 
-- Include `datasource.json` in the initial definition parts — no need for a separate step
-- The `datasource.json` requires the exact `artifactId` and `workspaceId` of the data source
-- Use `build_elements()` from `model.bim` to auto-select all tables/columns/measures
-- Without elements, the agent may not see any tables in the portal
+- Direct data sources can be represented in Data Agent definition parts when their emitted
+  schema is known.
+- The current ontology integration loads a read-only ontology context and routes to associated
+  underlying SQL/KQL/DAX sources.
+- Mount an eligible underlying source when you need source-specific instructions,
+  descriptions, or example queries.
+- Microsoft doesn't currently document a stable hand-authored ontology-context part shape.
+  Configure one working item in the portal, retrieve its definition, and preserve the emitted
+  parts before automating.
+- A Data Agent supports up to five sources. Do not assume cross-source joins inside one question.
 
-### Rule 3: Few-Shot Examples Are Critical for Quality
+See `../ontology-agent/data_agent_context.md`.
 
-- Data Agents with few-shot examples produce dramatically better results
-- Each example needs: `id` (UUID), `question` (natural language), `query` (DAX/SQL/KQL)
-- Minimum 5 examples covering different query patterns; aim for 10–15
+### Rule 3: Configuration Is Source-Dependent
+
+- SQL and Eventhouse sources support source instructions, descriptions, and example queries.
+- Graph supports source instructions, descriptions, and GQL examples.
+- Semantic models are configured primarily through **Prep for AI**: AI Data Schema, AI
+  Instructions, and Verified Answers. Do not assume Data-Agent-local descriptions or few-shots
+  apply to the current semantic-model runtime.
+- Ontology keeps shared definitions, synonyms, relationships, metrics, rules, mappings, and
+  bindings. Supplemental examples/instructions belong to eligible mounted underlying sources.
+- Validate every example or Verified Answer against the execution engine before publishing.
 
 ### Rule 4: ALWAYS Publish — Draft-Only Agents Are Invisible
 
@@ -60,21 +75,23 @@ You are **ai-skills-agent**, the specialized agent for creating, configuring, an
 ```text
 1. Define the agent's purpose and audience
    │
-2. Identify the data source(s)
+2. Identify the data source(s) and context
    │  ├─ Semantic Model → Get artifactId from workspace items
-   │  ├─ Lakehouse → Get artifactId + decide tables vs files
+   │  ├─ SQL source → Lakehouse/Warehouse/SQL/Mirrored DB
    │  ├─ Warehouse → Get artifactId + schema selection
-   │  └─ KQL Database → Get artifactId
+   │  ├─ KQL Database → Get artifactId
+   │  ├─ Graph Model → GQL execution
+   │  └─ Ontology → context over associated underlying sources
    │
 3. Write AI instructions (see instruction_writing_guide.md)
    │
-4. Write few-shot examples (see fewshot_examples.md)
+4. Configure source-specific examples or Verified Answers where supported
    │
 5. Build definition parts:
    │  a. data_agent.json (schema version)
    │  b. draft/stage_config.json (AI instructions)
-   │  c. draft/{type}-{name}/datasource.json (data source config)
-   │  d. draft/{type}-{name}/fewshots.json (few-shot examples)
+   │  c. source parts captured from the current runtime
+   │  d. examples only for source types that support them
    │
 6. Deploy via REST API: POST /v1/workspaces/{wsId}/items
    │  IMPORTANT: Include published/ parts + publish_info.json
@@ -189,6 +206,9 @@ GET  /v1/workspaces/{wsId}/items?type=DataAgent
 | DAX query errors in agent responses | Wrong measure/column names in few-shots | Cross-check all names against model.bim |
 | Agent ignores instructions | Instructions too long or contradictory | Simplify, use clear headers, test incrementally |
 | Data source shows "not connected" in portal | artifactId or workspaceId mismatch | Verify IDs match the actual Fabric item |
+| Ontology questions generate GQL for normal metrics | Old ontology-as-GQL guidance | Use ontology as context and route to native T-SQL/KQL/DAX; attach Graph only for traversal |
+| Ontology context is stale | Context refresh cadence | Manually refresh; automatic refresh can take up to 10 minutes |
+| Cross-source question is incomplete | No federated execution guarantee | Split the question or orchestrate multiple source-scoped calls |
 
 ---
 
@@ -197,6 +217,7 @@ GET  /v1/workspaces/{wsId}/items?type=DataAgent
 - Data Agent definition structure: `definition_structure.md`
 - How to write great instructions: `instruction_writing_guide.md`
 - Data source configuration: `datasource_configuration.md`
+- Ontology context contract: `../ontology-agent/data_agent_context.md`
 - Capacity SKU, region and tenant prerequisites: `capacity_and_region.md`
 - Few-shot example patterns: `fewshot_examples.md`
 - Known issues & gotchas: `known_issues.md`

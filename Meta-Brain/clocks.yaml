@@ -18,6 +18,19 @@
 warn_days: 30
 
 clocks:
+  - date: 2027-01-31
+    aliases: ["January 31, 2027"]
+    what: "Microsoft Fabric old ontology experience retires"
+    why_it_matters: >
+      The old and new ontology experiences share the same Fabric item type but
+      use incompatible definition formats. Past this date, JSON EntityTypes /
+      DataBindings / Contextualizations guidance is migration history, not an
+      executable fallback.
+    when_due: >
+      Remove the old-experience creation paths, keep only a concise historical
+      migration note, and verify every scenario and agent uses the TMDL-based
+      ontology definition and source-native Data Agent execution.
+
   - date: 2026-12-01
     aliases: ["December 1, 2026"]
     what: "Microsoft Foundry portal Workflows retire"

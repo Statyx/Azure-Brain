@@ -1,68 +1,54 @@
-# ontology-agent — Fabric Ontology & Graph Agent
+# ontology-agent — Fabric IQ Ontology
 
 ## Identity
 
-**Name**: ontology-agent  
-**Scope**: Everything related to creating, deploying, and querying Fabric Ontologies, Graph Models, Graph Query Sets, and Data Agents bound to an Ontology. Owns the entity-relationship modeling layer that bridges batch (Lakehouse) and streaming (Eventhouse/KQL) data.  
-**Version**: 1.0
+**Scope:** the new TMDL-based Fabric Ontology experience: governed business context over live
+Fabric sources, ontology-agent authoring, Data Agent context, optional graph materialization,
+MCP consumption, ALM, and migration from the old experience.
 
-## What This Agent Owns
+## What this agent owns
 
-| Domain | Fabric Items | Key APIs / Tools |
-|--------|-------------|------------------|
-| **Ontology Definition** | Ontology item, `.platform`, `definition.json` | Fabric REST API `POST /items` + `updateDefinition` |
-| **Entity Types** | Entity type schemas, properties, timeseries properties | `EntityTypes/{id}/definition.json` |
-| **Data Bindings** | NonTimeSeries (Lakehouse), TimeSeries (KQL) | `EntityTypes/{id}/DataBindings/{guid}.json` |
-| **Relationships** | Relationship type schemas, source/target entity links | `RelationshipTypes/{id}/definition.json` |
-| **Contextualizations** | FK mappings between related entities | `RelationshipTypes/{id}/Contextualizations/{guid}.json` |
-| **Graph Model** | Graph Model (auto-generated from Ontology) | Fabric UI → "Refresh graph model" |
-| **Graph Query Set** | GQL queries (ISO/IEC 39075) | Fabric REST API (create) + UI (add queries) |
-| **Data Agent (ontology-bound)** | DataAgent with Ontology as source | Fabric REST API `POST /dataAgents` |
-| **MCP Server (preview)** | Ontology exposed as an MCP endpoint | `https://api.fabric.microsoft.com/v1/mcp/dataPlane/workspaces/<ws>/items/<ontology>/ontologyEndpoint` |
+| Domain | Current artifact |
+| --- | --- |
+| Ontology definition | TMDL/TMSL++ parts, Git integration, `getDefinition` / `updateDefinition` |
+| Business model | Entities, properties, relationships, metrics, rules, namespaces, inheritance |
+| Source grounding | Bindings to Lakehouse, Eventhouse/KQL, Warehouse, SQL, Mirrored DB, semantic models |
+| Ontology agent | Discover → draft → validate → preview → apply |
+| Data Agent integration | Ontology as governed context over underlying source-native queries |
+| MCP | Ontology MCP endpoint and interactive-agent consumption |
+| Migration | Old JSON experience → new TMDL experience |
 
-## What This Agent Does NOT Own
+Graph Model definition, refresh, GQL, and Graph Query Sets are owned by `graph-agent`.
 
-- Lakehouse creation / CSV upload / Delta tables → defer to `agents/orchestrator-agent/`
-- Eventhouse / KQL Database / KQL tables → defer to `agents/rti-kusto-agent/`
-- KQL Dashboard → defer to `agents/rti-kusto-agent/`
-- Operations Agent → defer to `agents/rti-kusto-agent/`
-- Semantic Model / DAX → defer to `agents/semantic-model-agent/`
-- Data Agent WITHOUT ontology (e.g. semantic model source) → defer to `agents/ai-skills-agent/`
-- Report creation → defer to `agents/report-builder-agent/`
+## Load order
 
-## Files
+1. `instructions.md`
+2. `new_experience_tmdl.md`
+3. `versioning.md` for Git, lineage-safe changes, and promotion
+4. `data_agent_context.md` when a Data Agent is involved
+5. `mcp_ontology.md` when MCP is involved
+6. `migration_old_to_new.md` for old items
+7. `known_issues.md`
 
-| File | Purpose |
-|------|---------|
-| `instructions.md` | **LOAD FIRST** — Mandatory rules, decision trees, deployment sequence, API reference |
-| `entity_types_bindings.md` | Entity type definitions, properties, value types, ID allocation, NonTimeSeries & TimeSeries data bindings |
-| `relationships_contextualizations.md` | Relationship types, contextualizations (FK mapping), FK resolution strategies |
-| `mcp_ontology.md` | Consume the ontology as an MCP server (preview) — endpoint URL, `.vscode/mcp.json`, agent mode, demo checklist |
+## Legacy files
 
-> **Graph internals (GQL, building/refreshing the Graph Model, the empty-graph-after-API fix) moved to `graph-agent`** — see `../graph-agent/gql_reference.md` and `../graph-agent/graph_definition_api.md`.
-| `known_issues.md` | Ontology-specific gotchas, tenant settings, capacity requirements, binding validation |
+The following files document the old ontology experience and must not drive a new project:
 
-## Quick Start (for a new session)
+- `entity_types_bindings.md`
+- `relationships_contextualizations.md`
+- `graph_model_deployment.md`
+- the old-experience sections of `known_issues.md`
 
-1. Read `instructions.md` — mandatory ontology architecture context & rules
-2. Read `entity_types_bindings.md` — entity type schemas + data bindings
-3. Read `relationships_contextualizations.md` — relationships & FK mapping
-4. Read `../graph-agent/gql_reference.md` (graph-agent) — GQL queries for graph traversal
-5. Reference `known_issues.md` when debugging
+They remain for migration, evidence, and maintenance until the old experience retires.
 
-## Key Insight
+## Key insight
 
-> **The Ontology is the unifier.** It bridges Lakehouse (batch) and Eventhouse (streaming)
-> data through typed entity bindings, enabling a single knowledge graph over both.
-> Entity types define the schema; data bindings connect to actual tables; relationships
-> create the graph; contextualizations resolve the FKs.
+> Ontology unifies **business meaning and source routing**. It does not force every question
+> through a graph. SQL/KQL/DAX remain the normal execution engines; Graph/GQL is an optional,
+> selective traversal layer.
 
-## Cross-References
+## Official sources
 
-| Topic | Agent | File |
-|-------|-------|------|
-| Lakehouse tables that ontology binds to | orchestrator-agent | `ingestion.md` |
-| KQL tables that ontology binds to | rti-kusto-agent | `eventhouse_kql.md` |
-| KQL language for time-series queries | rti-kusto-agent | `kql_language.md` |
-| Data Agent instruction writing | ai-skills-agent | `instruction_writing_guide.md` |
-| Fabric REST API patterns | root | `fabric_api.md` |
+- [Ontology overview](https://learn.microsoft.com/fabric/iq/ontology/overview)
+- [TMDL ontology definition](https://learn.microsoft.com/rest/api/fabric/articles/item-management/definitions/ontology-definition)
+- [Ontology as Data Agent context](https://learn.microsoft.com/fabric/data-science/data-agent-ontology-sources)

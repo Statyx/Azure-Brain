@@ -41,6 +41,71 @@
 
 rules:
 
+  - id: fabric-ontology-old-json-default
+    kind: superseded
+    recorded: 2026-10-14
+    summary: >-
+      "A Fabric Ontology definition is definition.json + EntityTypes/DataBindings/
+      RelationshipTypes/Contextualizations" as the default authoring model.
+    replaced_by: >-
+      New ontology items use the TMDL/TMSL++ experience: database.tmdl, model.tmdl,
+      tables, entities, entityRelationships, namespaces, metrics and rules. The old
+      JSON layout is migration-only and retires 2027-01-31.
+    authority: Fabric-Brain/agents/ontology-agent/instructions.md
+    authority_anchor: 'New ontology items use the \*\*TMDL-based definition\*\*'
+    evidence: >-
+      Microsoft Learn "Ontology definition (TMDL/new experience)" and "What is
+      ontology" retrieved 2026-10-14. The new experience is the default; the old
+      experience retires January 31, 2027.
+    adjacency:
+      file: Fabric-Brain/agents/ontology-agent/instructions.md
+      near: 'New ontology items use'
+      must_contain: 'TMDL-based definition'
+      within_lines: 2
+
+  - id: fabric-ontology-data-agent-gql-default
+    kind: superseded
+    recorded: 2026-10-14
+    summary: >-
+      "A Data Agent bound to an ontology queries that ontology using GQL" as the
+      default Ontology integration and routing rule.
+    replaced_by: >-
+      In the new experience, Ontology is a governed context source. The Data Agent
+      selects an associated underlying source and executes T-SQL, KQL or DAX.
+      GQL belongs to an attached/materialized Graph Model for traversal questions.
+    authority: Fabric-Brain/agents/ontology-agent/data_agent_context.md
+    authority_anchor: 'Ontology is \*\*not\*\* the query execution endpoint'
+    evidence: >-
+      Microsoft Learn "Use Ontology as context in Fabric data agent" and "Add and
+      configure data sources in Fabric data agent", retrieved 2026-10-14.
+    adjacency:
+      file: Fabric-Brain/agents/ai-skills-agent/instructions.md
+      near: '\*\*Ontology is different\*\*'
+      must_contain: 'context source'
+      within_lines: 2
+
+  - id: fabric-ontology-automatic-graph
+    kind: superseded
+    recorded: 2026-10-14
+    summary: >-
+      "Every ontology automatically generates/materializes its Graph Model" as a
+      mandatory deployment step.
+    replaced_by: >-
+      New ontologies are graph-ready but do not automatically materialize instance
+      data. Use Manage graph to select an eligible subset only when traversal is a
+      real requirement; Graph Model lifecycle and GQL belong to graph-agent.
+    authority: Fabric-Brain/agents/ontology-agent/instructions.md
+    authority_anchor: 'instance data is \*\*not automatically materialized\*\*'
+    evidence: >-
+      Microsoft Learn new ontology experience and Graph integration documentation,
+      retrieved 2026-10-14. Graph projection is selective and source eligibility is
+      narrower than ontology binding eligibility.
+    adjacency:
+      file: Fabric-Brain/agents/ontology-agent/instructions.md
+      near: 'Every ontology is graph-ready'
+      must_contain: 'not automatically materialized'
+      within_lines: 2
+
   - id: company-name-zava
     kind: superseded
     recorded: 2026-10-05

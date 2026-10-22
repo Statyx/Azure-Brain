@@ -1,9 +1,12 @@
 # Build & Push a Graph Model Definition via REST (+ the empty-ontology-graph fix)
 
-> Use this when building a **standalone** graph from a Lakehouse via the API, **or** when an
-> ontology was deployed via REST and its child Graph Model is **empty** (the ontology→graph
-> generation only fires on a UI schema-save). Verified end-to-end on the CCE demo (12 nodes,
-> 17 edges). Reference script: `Financial_Platform/src/deploy_graph.py`.
+> Use this for a **standalone** graph from a Lakehouse via the API. The empty-ontology-graph
+> section applies only to the retiring old JSON ontology experience. A new TMDL ontology uses
+> **Manage graph** for selective materialization; do not push a handcrafted child definition as
+> its default workflow.
+>
+> The old workaround was verified end to end on the CCE demo (12 nodes, 17 edges). Reference
+> script: `Financial_Platform/src/deploy_graph.py`.
 
 ---
 
@@ -15,7 +18,7 @@
 | `GraphNotRefreshable: Graph doesn't have valid content and cannot be refreshed.` | RefreshGraph job |
 | Editor shows **"Build a graph", Nodes(0) Edges(0)** | Graph Model (Model mode) |
 
-**Root cause** (ontology case): `updateDefinition` on the Ontology item does **not** trigger the
+**Old-experience root cause**: `updateDefinition` on the JSON Ontology item does **not** trigger the
 ontology→GraphModel generation (a UI save does). No ontology-side job regenerates it (all
 `jobType` values return `InvalidJobType`). Fix: build the Graph Model definition yourself and push
 it directly.

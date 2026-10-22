@@ -7,7 +7,8 @@
 property graph over OneLake data. Owns the Graph Model definition, GQL querying, graph
 algorithms, Graph Query Sets, the Execute Query API, RefreshGraph ingestion, and Data Agents
 that use a **graph** as their source (NL2GQL). Works whether the graph is **standalone**
-(built directly from a Lakehouse) or **ontology-backed** (generated from an Ontology).
+(built directly from a Lakehouse) or a focused projection selectively materialized from an
+Ontology.
 **Version**: 1.0 · **Status**: Preview
 
 ## What This Agent Owns
@@ -28,11 +29,11 @@ that use a **graph** as their source (NL2GQL). Works whether the graph is **stan
 - KQL / Eventhouse time-series → `agents/rti-kusto-agent/`
 - Semantic model / Power BI → `agents/semantic-model-agent/`, `agents/report-builder-agent/`
 
-> **Boundary with ontology-agent**: ontology = the *business / semantic* layer (what things
-> mean, NL2Ontology). graph = the *storage & traversal* engine (how nodes/edges are stored
-> and queried with GQL). An ontology **generates** a Graph Model; this agent owns that Graph
-> Model's definition, refresh, and GQL — including the **API-only graph-population workaround**
-> when an ontology is deployed via REST (which leaves the graph empty).
+> **Boundary with ontology-agent**: ontology = the business-context layer; graph = the optional
+> storage/traversal engine for relationship-path questions. The new ontology experience is
+> graph-ready but doesn't materialize instance data by default. This agent owns the selected
+> Graph projection, refresh, and GQL. The API-only empty-child-graph workaround is old-experience
+> migration guidance.
 
 ## Files
 
@@ -46,16 +47,16 @@ that use a **graph** as their source (NL2GQL). Works whether the graph is **stan
 ## Quick Start
 
 1. Read `instructions.md` — graph item model + build sequence
-2. Building a graph from a Lakehouse, or fixing an empty ontology graph? → `graph_definition_api.md`
+2. Building a standalone graph, or fixing an old-experience empty ontology graph? → `graph_definition_api.md`
 3. Writing queries? → `gql_reference.md`
 4. Stuck? → `known_issues.md`
 
 ## Key Insight
 
 > **The graph is the traversal engine.** Nodes = rows of a key table; edges = rows of an FK
-> table mapping source-key → target-key. Once ingested (RefreshGraph), GQL does multi-hop
-> joins natively — no SQL joins, no copies, directly on OneLake. An ontology can sit on top
-> to add business meaning + NL2Ontology, but the graph works standalone too.
+> table mapping source-key → target-key. Once ingested, GQL does multi-hop traversal natively.
+> Ontology supplies business meaning and can selectively project eligible concepts into Graph,
+> but normal ontology-backed questions can still execute directly on SQL/KQL/DAX sources.
 
 ## Cross-References
 - `agents/ontology-agent/` — the semantic layer that generates a graph + NL2Ontology + MCP server

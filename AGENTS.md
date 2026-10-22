@@ -125,7 +125,7 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | Eventhouse, KQL database, KQL dashboards | `rti-kusto-agent` | Fabric |
 | EventStream ingestion, CDC, source→destination routing | `rti-eventstream-agent` | Fabric |
 | Real-time **alerts / triggers** (Reflex, Teams/Email actions) | `data-activator-agent` | Fabric |
-| Ontology — entity types, bindings, contextualizations, NL2Ontology | `ontology-agent` | Fabric |
+| Ontology — new TMDL experience, metrics/rules, source bindings, Data Agent context, MCP | `ontology-agent` | Fabric |
 | Graph Model, GQL, graph algorithms, `RefreshGraph`, NL2GQL | `graph-agent` | Fabric |
 | BusinessObjects → Fabric migration | `migration-bo-agent` | Fabric |
 | Databricks → Fabric migration | `migration-databricks-agent` | Fabric |
@@ -159,7 +159,7 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | `orchestrator-agent` (Fabric) vs `project-orchestrator-agent` (Meta) | Fabric one owns **Data Pipelines**; Meta one owns the **whole project pipeline** across agents |
 | `cicd-fabric-agent` vs `fabric-cli-agent` | CI/CD owns Git + pipelines + stages; CLI owns `fab` commands + job execution |
 | `cicd-fabric-agent` vs `workspace-admin-agent` | Admin **creates** pipelines (REST POST); CI/CD **manages** their stages |
-| `ontology-agent` vs `graph-agent` | Ontology owns the **semantic layer**; Graph owns the **Graph Model item**, GQL, refresh |
+| `ontology-agent` vs `graph-agent` | Ontology owns governed **business context + source routing**; Graph owns the optional materialized traversal layer, GQL and refresh |
 | `data-activator-agent` vs `rti-eventstream-agent` | Activator owns rules/alerts/actions; EventStream owns the **ingestion topology** |
 | `data-activator-agent` vs `monitoring-agent` | Activator = real-time **business** alerts; monitoring = **admin/capacity/audit** |
 | `pixel-design-agent` vs `testing-agent` | Pixel = Fabric-report layout rules; testing = generic pytest framework |
@@ -203,8 +203,8 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 | 05-real-time-intelligence | `rti-kusto-agent` | Eventhouse, KQL databases, KQL dashboards, Operations Agent |
 | 05-real-time-intelligence | `rti-eventstream-agent` | EventStreams, real-time ingestion, CDC patterns, source routing |
 | 05-real-time-intelligence | `data-activator-agent` | Reflex — real-time alerts/triggers, Teams/Email/Fabric item actions |
-| 06-iq | `ontology-agent` | Entity types, bindings, relationships, contextualizations, NL2Ontology, MCP server |
-| 06-iq | `graph-agent` | Graph Model definition, GQL (ISO/IEC 39075), algorithms, `RefreshGraph`, NL2GQL |
+| 06-iq | `ontology-agent` | New TMDL ontology, entities, relationships, metrics, rules, namespaces, source bindings, Data Agent context, MCP, migration |
+| 06-iq | `graph-agent` | Optional ontology projections + standalone Graph Models, GQL, algorithms, Graph Query Sets, `RefreshGraph`, NL2GQL |
 | 07-fabric-quality | `pixel-design-agent` | Pre-deployment report validation — layout bounds, overlaps, font sizing |
 | 08-migration | `migration-bo-agent` | BusinessObjects → Fabric — 5-stage framework, 119 BO→DAX mappings |
 | 08-migration | `migration-databricks-agent` | Databricks → Fabric — `dbutils`→`notebookutils`, UC→Lakehouse, DBFS→OneLake |

@@ -1,13 +1,13 @@
 # MCP Ontology — Consume an Ontology as an MCP Server
 
-> Source: [Use Ontology MCP Server — Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-use-ontology-mcp-server) (preview, last updated 2026-05).
+> Source: [Consume ontology as an MCP server — Microsoft Fabric](https://learn.microsoft.com/fabric/iq/ontology/how-to-use-ontology-mcp-server).
 
 ## What it is
 
-A deployed **Ontology (preview) item** can be exposed as an **MCP server**. Any MCP-capable client
-(VS Code agent mode, Claude, etc.) can then discover and query the knowledge graph through the MCP
-protocol — entity types, relationships, and graph traversal — without writing GQL by hand. This turns
-the ontology into a live tool for an AI orchestrator.
+A deployed **Ontology (preview) item** can be exposed as an **MCP server**. An MCP-capable client
+can discover and interact with governed ontology context through the protocol. The new experience
+can route work to bound sources and, when materialized, to Graph; do not describe MCP as graph-only
+or assume every request becomes GQL.
 
 > This is the **consumption / runtime** counterpart to the authoring this agent already owns. You still
 > design + deploy the ontology (entity types, bindings, relationships, contextualizations) via the
@@ -19,7 +19,7 @@ the ontology into a live tool for an AI orchestrator.
   MCP-server path: "a paid F2 or higher Fabric capacity". (A separate Data Agent *bound to* an ontology
   source has no documented SKU floor — see `known_issues.md`; verify empirically.)
 - **Ontology item (preview) enabled** on the Fabric tenant (Admin → tenant settings → "Ontology item (preview)").
-- A **deployed ontology item** with entity types + relationships (an empty ontology exposes nothing useful).
+- A **deployed ontology item** with useful definitions and bindings.
 
 ## Forming the MCP server URL
 
@@ -100,16 +100,16 @@ Create `.vscode/mcp.json` in the project folder:
 
 | Goal | Use |
 |------|-----|
-| Let an AI agent explore/query the graph in natural language, live | **Ontology MCP server** (this file) |
+| Let an external AI agent consume governed ontology context | **Ontology MCP server** (this file) |
 | Hand-written GQL graph traversal queries | Graph Query Set / GQL (`graph_queries.md`) |
-| Natural-language Q&A surfaced to end users in Fabric | Data Agent bound to the ontology (capacity floor unverified) |
+| Natural-language Q&A surfaced to end users in Fabric | Data Agent using ontology as context |
 | Time-series detail behind an entity | Eventhouse/KQL via `rti-kusto-agent` |
 
 ## Demo-project checklist (since you'll be showing this)
 
-1. **Authoring** (this agent): deploy ontology — entity types, NonTimeSeries/TimeSeries bindings,
-   relationships, contextualizations. Refresh the graph model.
-2. **Verify** the graph is non-empty (at least one relationship resolves — empty graph = MCP returns nothing useful).
+1. **Authoring** (this agent): deploy the new TMDL ontology with entities, relationships,
+   definitions, synonyms, rules/metrics where relevant, and source bindings.
+2. **Verify** at least one representative ontology question resolves against its intended source.
 3. **Capacity**: ensure F2+ active for the MCP server (Learn-confirmed). Resume if paused:
    `az fabric capacity resume --capacity-name <name> --resource-group <rg>`.
 4. **Tenant setting**: "Ontology item (preview)" must be ON for the tenant.
@@ -121,7 +121,7 @@ Create `.vscode/mcp.json` in the project folder:
 - **Preview feature** — behaviour and URL shape may change; re-verify against the Learn doc.
 - **Interactive auth only** — no documented SP flow for the MCP endpoint; the signed-in user must have access to the ontology.
 - **Capacity gating** — MCP server needs F2+ (Learn-confirmed); the bound Data Agent path has no documented floor (verify empirically).
-- An **empty/relationship-less ontology** exposes nothing meaningful — model the graph first.
+- An empty or unbound ontology exposes little useful business context.
 
 ## Cross-References
 

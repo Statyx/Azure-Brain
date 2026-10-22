@@ -2,13 +2,17 @@
 
 > ⚠️ **Moved.** GQL and Graph-Model internals are now owned by **`graph-agent`** — canonical
 > reference: `../graph-agent/gql_reference.md`. This file is kept as a legacy pointer.
+>
+> The statements below describe the old ontology experience. In the new TMDL experience,
+> Graph is an optional, selectively materialized execution layer; an ontology does not
+> automatically materialize every instance into a graph.
 
 
 ---
 
 ## Overview
 
-GQL (Graph Query Language) is the ISO/IEC 39075 standard for querying property graphs. In Fabric, GQL queries run against the **Graph Model** generated from an Ontology. Queries are stored in a **Graph Query Set** item.
+GQL (Graph Query Language) is the ISO/IEC 39075 standard for querying property graphs. In this old experience, GQL queries ran against the **Graph Model** exposed from an Ontology. Queries are stored in a **Graph Query Set** item.
 
 > **API Limitation**: Graph Query Sets can be created via API, but **queries must be added manually in the Fabric UI portal**.
 
@@ -16,7 +20,7 @@ GQL (Graph Query Language) is the ISO/IEC 39075 standard for querying property g
 
 ## Graph Model
 
-The Graph Model is **auto-generated** from the Ontology:
+The old experience treated the Graph Model as generated from the Ontology:
 - Each entity type becomes a **node type**
 - Each relationship type becomes an **edge type**
 - Properties from entity types become node properties
@@ -26,9 +30,9 @@ The Graph Model is **auto-generated** from the Ontology:
 
 **Option 1 — Fabric UI**: Open the Ontology → click "Refresh graph model"
 
-**Option 2 — From Semantic Model**: Fabric UI → open Semantic Model → "Generate Ontology" → creates entity types + initial relationships → Graph Model auto-generates
+**Option 2 — From Semantic Model**: Fabric UI → open Semantic Model → "Generate Ontology" → creates entity types + initial relationships → old graph path becomes available
 
-**Option 3 — API**: Create the Ontology with `updateDefinition` → the Graph Model regenerates automatically when bindings are valid.
+**Option 3 — API**: Create the old Ontology with `updateDefinition` → use its legacy graph refresh path when bindings are valid.
 
 ---
 

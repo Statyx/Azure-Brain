@@ -15,7 +15,7 @@
 
 | Issue | Symptom | Workaround |
 |-------|---------|------------|
-| **Missing "always query" rule** | Agent answers some questions from general knowledge with hallucinated data (no query generated) | Add a mandatory first instruction naming **the source's own query language** — DAX for `semantic_model`, SQL for `lakehouse-tables`, T-SQL for `data_warehouse`, KQL for `kusto`, GQL for `ontology`. Naming DAX on a non-semantic-model source does not work. Table in instruction_writing_guide.md |
+| **Missing "always query" rule** | Agent answers some questions from general knowledge with hallucinated data (no query generated) | Add a mandatory first instruction naming the execution source: DAX for semantic models, T-SQL for SQL sources, KQL for Eventhouse, GQL for Graph. For new-experience Ontology, instruct the agent to use ontology context to select and query the relevant underlying source. |
 | Instructions too long | Agent ignores later sections | Keep under 5,000 chars; move data descriptions to datasource.json |
 | Instructions in wrong language | Agent responds in unexpected language | Write instructions in the primary response language |
 | Contradictory instructions | Agent behaves inconsistently | Review for conflicts; test each rule independently |
@@ -25,6 +25,10 @@
 | **Descriptions not in diagnostic export** | Prep for AI configs NOT visible in diagnostic JSON — can't audit via API | Check descriptions separately in Power BI Desktop or via MCP `manage_semantic` tool. Diagnostics only show `description: null` for schema elements |
 
 ## Few-Shot Examples
+
+> **Current-runtime scope:** SQL, Eventhouse, and Graph support Data-Agent-local example queries.
+> Semantic models use Prep for AI **Verified Answers**. Ontology-specific examples are configured
+> on eligible mounted underlying sources, not as old ontology/GQL few-shots.
 
 | Issue | Symptom | Workaround |
 |-------|---------|------------|
@@ -158,6 +162,12 @@ agent built from the **same definition** answered in 2 s. It answered because it
 in flight, not because the production item was broken. A delete-and-recreate of a healthy
 item was attempted on that basis. **Before concluding an item is damaged, confirm no run
 is in flight on it.**
+
+## Old-experience ontology/GQL evidence
+
+> The ontology-specific traces below were captured against the old ontology-as-GQL runtime. Keep
+> them as migration evidence; do not treat `trace.analyze_ontology` or GQL routing as the current
+> new-experience Data Agent architecture.
 
 ## The agent invents enum values it reads in the question (3 Aug 2026)
 

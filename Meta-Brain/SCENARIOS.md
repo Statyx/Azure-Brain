@@ -197,22 +197,22 @@ module cannot run — that is the whole dependency system.
 
 ---
 
-**`M-ONTO` — Ontology & Graph** · 1–2 h · agents `ontology-agent` → `graph-agent`
-**Attaches to:** `B1` exit (Delta dimensions). Optionally `B2` exit, for TimeSeries bindings.
+**`M-ONTO` — Ontology context (+ optional Graph)** · 1–2 h · agents `ontology-agent` → `graph-agent` only when needed
+**Attaches to:** `B1` exit (semantic model and/or Delta tables). Optionally `B2` exit for Eventhouse/time-series grounding.
 
-1. Map dimension tables → entity types. Assign **deterministic** GUIDs (`uuid5` of the entity name) so re-runs are idempotent.
-2. Create the ontology item, then entity types + properties.
-3. **NonTimeSeries** bindings → Lakehouse dimensions.
-4. **TimeSeries** bindings → KQL streaming tables — only if `B2` ran.
-5. Relationships (parent-child, assignment, action), then a contextualization per relationship.
-6. Create the Graph Model, then **`RefreshGraph`**.
-7. Graph Query Set + GQL smoke queries.
+1. Create a **new-experience TMDL ontology** — generate from the semantic model or use the ontology agent's Discover → Draft → Validate flow.
+2. Review entity types, properties, keys, synonyms, and stable lineage tags.
+3. Bind concepts to the live sources: Lakehouse/SQL, Eventhouse/KQL, semantic-model metrics.
+4. Review relationships and add business rules, metrics, namespaces, or inheritance where they add shared meaning.
+5. Test one native query per source: T-SQL/SQL, KQL, and DAX as applicable.
+6. If and only if the business question needs traversal, use **Manage graph** to select eligible entities/relationships, materialize, refresh, and add GQL smoke queries.
+7. Validate MCP or Data Agent consumption against the same ontology context.
 
-**Gate:** `MATCH (n) RETURN labels(n), count(*)` returns every entity type with a non-zero count · `MATCH (n)-[r]->(m) RETURN n, r, m LIMIT 10` returns rows · at least 2 relationship types traversable · one domain query works ("all sensors in zone X").
+**Gate:** `getDefinition` round-trips TMDL · entities and relationships are grounded in the intended sources · one KQL/SQL/DAX question returns validated data · if Graph is in scope, the selected projection has non-zero nodes/edges and one multihop query works.
 
-**Watch out:** the order above is strict and violations fail **silently** — you get an ontology that deploys clean and a graph that returns nothing. And deploying the ontology does *not* populate the graph: `RefreshGraph` (step 6) is a separate call people forget.
+**Watch out:** the ontology is the business-context layer, not a mandatory graph copy. The old JSON `NonTimeSeries`/`TimeSeries` part layout and automatic-child-graph assumptions are migration-only.
 
-**Customize:** NonTimeSeries only is a complete, useful module — the graph works without any RTI.
+**Customize:** an ontology with no materialized Graph is a complete, useful module for shared business vocabulary, source routing, metrics, rules, MCP, and Data Agent context.
 
 ---
 
@@ -232,22 +232,25 @@ module cannot run — that is the whole dependency system.
 ---
 
 **`M-AGENT` — Data Agent (natural-language Q&A)** · 45 min single-source, +30 min dual · agent `ai-skills`
-**Attaches to:** `B1` exit (AI-ready semantic model) and/or `M-ONTO` (ontology).
+**Attaches to:** `B1` exit (AI-ready semantic model), SQL/KQL sources, and/or `M-ONTO` (ontology context).
 
 1. AI-readiness audit on the source — P0 issues must be 0 *before* writing a word of instructions.
 2. Instructions, following the 7-section framework (`ai-skills-agent/instruction_writing_guide.md`).
-3. 10–15 few-shot examples, spanning easy / medium / hard / edge / impossible.
-4. Build the definition parts: `stage_config.json`, `datasource.json`, `fewshots.json`, `publish_info.json`.
+3. Configure examples where the source supports them; for semantic models use Prep for AI Verified Answers.
+4. Build or capture the current runtime definition parts; ontology context is portal-first until its public hand-authored part shape is documented.
 5. Deploy **both** the draft and the published stage.
 6. Test 5 questions, one of which must be unanswerable.
 
-**Dual-source routing rule** (when both a semantic model and an ontology are attached):
-*numbers* → semantic model (DAX) · *topology, root cause, impact* → ontology (GQL). Write that rule
-into the instructions explicitly; the agent will not infer it.
+**Ontology routing rule:** ontology supplies governed business meaning and source mappings;
+questions execute on the selected underlying source: KPIs → semantic model/DAX, telemetry →
+Eventhouse/KQL, relational detail → T-SQL. Attach Graph/GQL only for explicit path, dependency,
+reachability, or blast-radius questions.
 
-**Gate:** 4/5 questions correct · the impossible one is declined, not hallucinated · a number question traces `analyze_semantic_model`, an impact question traces `analyze_ontology`.
+**Gate:** 4/5 questions correct · the impossible one is declined, not hallucinated · each test
+shows the intended source-native query · no test assumes a federated cross-source join.
 
-**Watch out:** the Fabric IQ TimeSeries selector can come back empty. That is why the dual-source pattern routes numbers to DAX and keeps the ontology for connections.
+**Watch out:** adding an ontology doesn't grant source permissions, doesn't make Graph mandatory,
+and doesn't make one question federate across sources. Refresh ontology context after changes.
 
 ---
 
@@ -392,7 +395,7 @@ cosmetic, each arrow is a hard dependency:
 
 ```
 workspace → lakehouse (topology dims) → eventhouse + KQL tables → preload telemetry →
-ontology (NonTimeSeries + TimeSeries) → graph build + RefreshGraph →
+ontology context (TMDL + source bindings) → optional graph materialization + refresh →
 KQL mirroring policy + shortcut → RE-load telemetry → semantic model (Direct Lake) →
 KQL dashboard → data agent (dual-source; needs the model ID) → operations agent →
 activator → report → portal

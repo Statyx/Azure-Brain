@@ -137,8 +137,13 @@ Binds a Fabric item (semantic model, lakehouse, warehouse, etc.) to the agent.
 | `data_warehouse` | Synapse Data Warehouse |
 | `kusto` | KQL Database (Eventhouse) |
 | `graph` | GraphQL API |
-| `ontology` | Ontology (knowledge graph; folder `ontology-{name}`, fewshots = GQL) |
+| `ontology` | **Old-runtime evidence only.** Do not hand-author this as the new ontology-context contract. |
 | `mirrored_database` | Mirrored Database |
+
+> **New ontology experience:** Ontology is a context source over associated underlying sources,
+> and normal execution uses T-SQL, KQL, or DAX. The public documentation doesn't currently
+> specify a stable hand-authored definition-part shape for this integration. Configure a working
+> current item, use `getDefinition`, and preserve the emitted parts before automating.
 
 ### Elements Array
 

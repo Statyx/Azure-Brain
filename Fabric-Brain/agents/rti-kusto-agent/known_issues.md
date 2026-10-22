@@ -26,7 +26,7 @@ These settings must be enabled in the **Fabric Admin Portal** → **Tenant setti
 | Graph Model | F2 | Preview feature |
 | Graph Query Set | F2 | Preview feature |
 | Operations Agent | F2 | Trial may work |
-| Data Agent (Ontology source) | **F64** | Will NOT work on Trial or lower |
+| Data Agent with Ontology context | *Verify current SKU docs* | No ontology-specific F64 floor is documented; do not hard-code one |
 | Semantic Model (Direct Lake) | F2 | Trial may work |
 
 ## API Limitations
@@ -37,10 +37,10 @@ These settings must be enabled in the **Fabric Admin Portal** → **Tenant setti
 | KQL Database | ✅ (auto) | N/A | Created with Eventhouse |
 | KQL Tables | ✅ (Kusto REST) | N/A | Use `.create-merge table` |
 | KQL Dashboard | ✅ | ✅ | `RealTimeDashboard.json` |
-| Ontology | ✅ | ✅ | Entity types + bindings |
-| Graph Model | ❌ | ❌ | Auto-generated from Ontology |
+| Ontology | ✅ | ✅ | New items use TMDL/TMSL++ definition parts |
+| Graph Model | Check current Graph API | Check current Graph API | Optional selective materialization via **Manage graph** |
 | Graph Query Set | ✅ (create only) | ❌ | **Queries must be added in UI** |
-| Data Agent | ✅ | ✅ | Source = Ontology or Semantic Model |
+| Data Agent | ✅ | ✅ | Ontology is context; execution uses underlying SQL/KQL/DAX sources |
 | Operations Agent | ✅ | ✅ | **Knowledge Source must be added in UI** |
 | Semantic Model | ✅ (Fabric API) | ✅ | TMDL or TMSL definition |
 
@@ -163,11 +163,14 @@ $bodyStr = '{"definition":{"parts":[' + $partsJson + ']}}'
 **Problem**: Ontology deployment fails with "binding validation error".
 
 **Root causes**:
-- Property IDs in binding don't match entity type definition
 - Source table doesn't exist yet (Lakehouse tables not created)
 - Column names in binding don't match actual table columns
+- New experience: TMDL partition/source metadata, key, relationship, or lineage reference is invalid
+- Old experience only: property IDs in JSON bindings don't match the entity definition
 
-**Fix**: ALWAYS create Lakehouse tables and KQL tables BEFORE deploying the Ontology. Verify column names exactly match between source tables and property bindings.
+**Fix**: Create and validate the source schema before deploying its ontology binding. For a new
+item, inspect the TMDL/TMSL++ parts and preserve lineage tags. Use old property-ID checks only when
+`getDefinition` proves that the item is the retiring JSON generation.
 
 ### 9. KQL Database Not Ready After Eventhouse Creation
 **Problem**: KQL table creation fails immediately after Eventhouse creation.
@@ -181,10 +184,13 @@ do {
 } while (-not $kqlDb)
 ```
 
-### 10. DeterministicGuid Collisions
+### 10. Old-experience DeterministicGuid Collisions
 **Problem**: Two different seed strings produce the same MD5-derived GUID.
 
-**Fix**: Use descriptive, unique seed strings with prefixes:
+**Scope**: Retiring JSON ontology binding/contextualization IDs only. New TMDL ontologies use
+stable lineage tags; follow `ontology-agent/new_experience_tmdl.md`.
+
+**Fix for old items**: Use descriptive, unique seed strings with prefixes:
 ```
 "NonTimeSeries-{entityTypeId}"
 "TimeSeries-{entityTypeId}"
@@ -204,9 +210,9 @@ Always follow this sequence — items depend on previous steps:
 6. Data Injection (Event Hub SDK → EventStream → KQL tables)
 7. Semantic Model (Direct Lake over Lakehouse)
 8. KQL Dashboard (tiles query KQL Database)
-9. Ontology (binds to both Lakehouse + KQL Database)
-10. Graph Query Set (manual queries in UI)
-11. Data Agent (source = Ontology)
+9. Ontology (TMDL context over Lakehouse/KQL/semantic sources)
+10. Data Agent (Ontology context + eligible execution sources)
+11. Optional Graph Model + Graph Query Set for traversal questions
 12. Operations Agent (+ manual Knowledge Source)
 ```
 
@@ -276,4 +282,3 @@ decide whether to raise.
 
 **Evidence:** observed during an automated Eventhouse deploy — same script, same payload, failing
 immediately after the policy command and succeeding on retry.
-

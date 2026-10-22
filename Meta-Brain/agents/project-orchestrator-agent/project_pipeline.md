@@ -185,38 +185,43 @@
 
 **What happens**:
 - Create Data Agent via REST API (`POST /items` type `DataAgent`)
-- Write aiInstructions with measures list and business context
-- Add few-shot examples for common questions
-- Bind to semantic model data source (portal step — no API)
+- Write aiInstructions with routing and business context
+- Configure the semantic model through Prep for AI (AI Data Schema, instructions, Verified Answers)
+- Add source-specific examples only where the selected source supports them
+- Bind the required execution sources and optional Ontology context
 - Include "ALWAYS query the semantic model using DAX" instruction
 
 **Depends on**: Step 7 (semantic model must exist as data source)
 
-> **⚠️ Ontology option**: If the project uses RTI (Step 10) and needs entity graph queries, insert **Step 9b: Ontology & Graph** before or after the Data Agent. See below.
+> **Ontology option**: Insert Step 9b when shared business context, cross-source vocabulary, or
+> relationship modeling is needed. A materialized graph is a separate optional decision.
 
 ---
 
-## Step 9b: Ontology & Graph (Conditional)
+## Step 9b: Ontology Context (+ Optional Graph)
 
 **Agent**: `ontology-agent`  
 **Input**: Domain model (Step 1), Lakehouse dimension tables (Step 4), KQL streaming tables (Step 10)  
-**Output**: Ontology with entity types, bindings, relationships, Graph Query Set  
+**Output**: New-experience TMDL ontology; optional materialized Graph + Graph Query Set
 
-**When to include**: Projects with RTI (Step 10) that need entity relationships, graph traversal, or an Operations Agent.
+**When to include**: Projects needing governed business vocabulary, source mappings, reusable
+metrics/rules, Data Agent context, MCP consumption, or graph traversal.
 
 **What happens**:
-- Define entity types matching domain model entities (deterministic GUIDs for idempotency)
-- Create NonTimeSeries bindings → Lakehouse dimension tables
-- Create TimeSeries bindings → KQL streaming tables (if RTI enabled)
-- Define relationships between entities (parent-child, assignment, action)
-- Create contextualizations linking relationships to data
-- Generate Graph Model + Graph Query Set for ad-hoc graph exploration
+- Generate the new TMDL ontology from the semantic model or use Ontology agent discovery
+- Review entities, properties, keys, lineage tags, synonyms, metrics, and rules
+- Bind concepts to Lakehouse/SQL, Eventhouse/KQL, and semantic-model sources
+- Define business relationships over the physical source relationships
+- Validate native T-SQL/KQL/DAX questions
+- If traversal is required, selectively materialize Graph, refresh it, and create a Graph Query Set
 
-**Strict deployment order**: Lakehouse tables + KQL tables must exist **before** creating bindings.
+**Strict deployment order**: source items and schemas must exist before binding; Graph
+materialization happens only after the ontology model and eligible keys are validated.
 
-**Naming**: Ontology = `ONT_{ProjectName}`, Graph Model = `GM_{ProjectName}`
+**Naming**: Ontology = `ONT_{ProjectName}`; Graph Model = `GM_{ProjectName}` only when materialized
 
-**Depends on**: Step 4 (Lakehouse dims) + Step 10 (KQL tables, if TimeSeries bindings needed)
+**Depends on**: whichever source items the ontology binds (for example Step 4 Lakehouse tables
+and Step 10 KQL tables for telemetry entities)
 
 ---
 

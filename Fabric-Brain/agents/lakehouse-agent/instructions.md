@@ -468,5 +468,5 @@ SELECT TOP 20 * FROM dbo.fact_sales;
 ## Cross-References
 | EventStream → Lakehouse destination | eventstream-agent | `sources_destinations.md` |
 | Semantic Model over Lakehouse (Direct Lake) | semantic-model-agent | `model_deployment.md` |
-| Ontology NonTimeSeries bindings | ontology-agent | `entity_types_bindings.md` |
+| New-experience ontology source bindings | ontology-agent | `new_experience_tmdl.md` |
 | Fabric CLI file operations | fabric-cli-agent | `commands_reference.md` |

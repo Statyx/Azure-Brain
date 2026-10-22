@@ -328,5 +328,5 @@ EventStreams provide native Apache Kafka endpoints (built on Azure Event Hubs):
 | KQL Database creation | rti-kusto-agent | `eventhouse_kql.md` |
 | KQL table schemas | rti-kusto-agent | `eventhouse_kql.md` |
 | Lakehouse as destination | lakehouse-agent | `instructions.md` |
-| Ontology TimeSeries bindings to KQL | ontology-agent | `entity_types_bindings.md` |
+| Ontology bindings/context over KQL | ontology-agent | `new_experience_tmdl.md` |
 | Pipeline scheduling to trigger ingestion | orchestrator-agent | `pipelines.md` |

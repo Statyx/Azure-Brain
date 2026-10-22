@@ -1,4 +1,12 @@
-kusto-agent# Entity Types & Data Bindings
+kusto-agent# Entity Types & Data Bindings — Old Experience Only
+
+> **Legacy scope.** This file documents the retiring entity-type JSON ontology experience:
+> `EntityTypes/{id}`, `entityIdParts`, and `NonTimeSeries` / `TimeSeries` binding JSON.
+> It must not be used to create a new ontology. The current default is the TMDL-based
+> experience documented in `instructions.md` and `new_experience_tmdl.md`.
+>
+> The old experience retires on **January 31, 2027**. Keep this file only for maintenance,
+> evidence, and migration.
 
 ---
 
