@@ -466,6 +466,24 @@ unchanged — a stale UI is the browser cache (hard refresh, Ctrl+F5).
 "Hosting and redirects verified" at the same URL. Browser rendering of the new build was not
 re-checked in that session.
 
+**Update (2026-10-29) — the host gate and the app's MSAL session are separate.** An anonymous
+request with `Accept: text/html` returned HTTP 200 containing Fabric's **"Sign in to continue"**
+page and `secureItemEmbed`; the same URL with `Accept: application/json` returned 401. Thus
+neither a 200 HTML response nor a 401 proves that the deployed app or its sign-in flow works.
+Inspect which gate is on screen before diagnosing MSAL or changing tenant permissions. In the
+same incident the portal's Lakehouse UI also stalled while workspace and Lakehouse REST calls
+returned 200; no root cause for the portal stall was established.
+
+An application-side attempt used a shared MSAL `localStorage` cache, bounded silent SSO,
+tenant-checked account selection and preserved claims challenges, without forcing a fresh
+credential prompt for every silent error. This is a deliberate storage/security trade-off, not
+a universal migration requirement: the earlier `sessionStorage` result in #19 remains valid.
+A nominal SPA refresh-token lifetime is not a guarantee of 24 hours of seamless access, and
+neither cache setting bypasses Fabric hosting authentication or Conditional Access.
+**Evidence**: the two anonymous responses above were rechecked on 2026-10-29; the MSAL unit
+tests covered silent timeouts, claims and cross-tab recovery. The frontend was published, but
+the authenticated browser journey and improvement in repeated prompts were **not verified**.
+
 ### 21. Restoring `rayfin.yml` right after `rayfin up` fails on OneDrive with `OSError [Errno 22]`
 
 **Context**: Rayfin CLI deploy from a repo under OneDrive for Business (Windows), deploy script
@@ -495,3 +513,13 @@ change runs only its own package's `deploy_<artifact>` module. Run the full pipe
 fresh workspace or when explicitly asked "tout redéployer".
 **Evidence**: Fab-ServiceDesk-IQ session, 2026-09-24 (commit `ca2547e` deployed via full run;
 user feedback recorded).
+
+**Update (2026-10-29) — static assets only.** For an already provisioned Rayfin 1.35.1
+AppBackend, `rayfin up staticapp deploy --skip-build` successfully published frontend-only
+changes twice. Build first; never deploy an old `dist`. Verify the fresh bundle contains the
+intended changes, the production bindings match the approved state, and the active deployment
+record matches the intended tenant, workspace, item and hosting URL. Supply the tenant-scoped
+Fabric token and target to the child process rather than trusting a cached CLI login; never log
+or persist the token. An anonymous host response proves reachability, not authenticated browser
+rendering. **Evidence**: two successful static deployment results, passing frontend and Python
+tests, and a production build; authenticated browser verification remained open.

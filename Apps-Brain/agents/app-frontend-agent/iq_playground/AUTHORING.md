@@ -76,6 +76,8 @@ Each rule below fixes a defect the user actually saw.
 10. **Auto-scroll during a turn, free scroll after it.** The conversation follows the newest
     content while typing, thinking steps, answer and cards render, then stops, so the presenter
     can scroll back up to walk through the result. Built into the engine (`conversationRef`).
+    **Update (2026-10-29):** for a tall structured response, keep its beginning in view rather
+    than landing at its chart. Verified in a consuming app, not yet in this template; see §6.
 11. **Chip text = `<IQ layer>: <the manager's real question>`.** For example "Fabric IQ: who
     missed the zero-touch XLA in week 38?", "Foundry IQ: what do the contracts make us owe?",
     "Work IQ: what has the team already started?", "Web IQ: public news to raise at the reviews",
@@ -103,6 +105,9 @@ Each rule below fixes a defect the user actually saw.
     la réponse textuelle … qui rappelle qu'on a ces chiffres au travers de rapport", then "à
     intégrer dans le brain pour chaque fois que je te demande cette expérience d'IQ"; vitest
     101/101, pytest 344, lint and build green, `deploy_app` exit 0.
+    **Update (2026-10-29):** when a native chat-flow visual is requested, put the text first
+    and an unframed chart below it; retain a discreet Power BI signature. This was verified in
+    a consuming app, not yet backported to this template; see §6 for evidence and safeguards.
 
 ### Demo collaboration defaults
 
@@ -164,3 +169,33 @@ people in your audience or organisation, and keep that edit out of any public re
 - [ ] Each answer scrolls into view as it renders, with no manual scrolling.
 - [ ] Every chip reads `<IQ layer>: <question>`, and no `user` text contains an `@mention`.
 - [ ] Chat text is compact (~0.77x), not the default size.
+
+## 6. Conversational visuals and pacing — 2026-10-29
+
+**Correction to §3 rules 10 and 15:** a framed report-card layout is not mandatory when the
+presenter wants the visual to feel native to Copilot Chat. In that case, put the explanation
+first and an unframed chart immediately below it in the same response. Keep a small Power BI
+signature beside the heading and keep the IQ badge and individual sources inspectable. Do not
+describe an app-drawn visual as an embedded Power BI report or a live query; explain its actual
+provenance in the presenter notes. If a mockup is requested, show it at realistic scale and
+wait for approval before changing the application.
+
+For a signed variance chart, show the baseline, both tolerance limits, explicit signed values
+and the count of **all** breaches, above and below the band. With the convention used in this
+scenario, values exactly on a limit remain inside tolerance. Validate the chart's bounds,
+scaling and breach flags, and provide an accessible text equivalent; do not rely on colour
+alone. When a structured response is taller than the viewport, start the view at its beginning
+rather than automatically landing on the chart at the bottom, then release scrolling.
+
+For this presenter's click-paced IQ walkthrough, the four multi-step thinking sequences were
+shortened to **three seconds total per sequence**, distributing the time across the steps,
+not three seconds per step. Test the sum and the actual step transitions. The separate
+question and answer typing animations can make the elapsed time from the click longer; do not
+promise a three-second click-to-answer time.
+
+**Evidence:** the user approved the full-size mockup; the consuming app's
+`iqPlaygroundVisual.test.tsx` checked the chart, accessible values, response-start scrolling and
+three-second transitions, and `iq.test.tsx` checked the four duration totals. The local browser
+preview showed the text above the three signed bars; frontend tests (134) and Python tests
+(319) passed and the app was published. Authenticated browser verification remained open.
+This pattern was implemented in the consuming app, not yet backported into this template.
