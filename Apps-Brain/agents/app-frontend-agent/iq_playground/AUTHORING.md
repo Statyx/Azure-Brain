@@ -199,3 +199,18 @@ three-second transitions, and `iq.test.tsx` checked the four duration totals. Th
 preview showed the text above the three signed bars; frontend tests (134) and Python tests
 (319) passed and the app was published. Authenticated browser verification remained open.
 This pattern was implemented in the consuming app, not yet backported into this template.
+
+### Inline web citations — 2026-10-29
+
+When presenting external context in a conversational answer, identify the Web IQ layer near the
+answer and explain what each signal changes for the decision, rather than listing dates alone.
+If the presenter requests sources in the text, place a clickable citation immediately beside
+the corresponding statement. Its accessible name should identify the source, and activating it
+should open inspectable source details. Keep the IQ badge, but avoid duplicating a complete
+set of inline citations below it; retain a source list as a fallback if a source is not cited.
+
+An in-app source preview is not an external hyperlink or evidence of a live web search. Do not
+invent a publisher or URL; the presenter notes must accurately explain the provenance.
+**Evidence:** in the consuming app, the presenter requested clickable sources in the text; the
+`iqPlaygroundVisual.test.tsx` tests cover the citation-to-source mapping, accessible names,
+source preview and fallback. The pattern is local to that app and is not yet in this template.
