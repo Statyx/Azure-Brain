@@ -172,3 +172,35 @@ explanation ended, leaving zero idle time after Fabric. All 17 original voice cl
 were preserved; decoded AAC correlations for their sampled windows were at least
 0.999798. The typing and answer-writing negative controls were not classified as idle.
 These signal, event and frame checks do not establish a human playback review.
+
+**Correction (2026-10-30, after viewer review):** The earlier permission to start the
+next question while explaining the current result is not a suitable default. The
+viewer rejected that revision: work-context activity had started while the voice was
+still explaining contract obligations. Detecting motion and eliminating silent freezes
+does not establish narrative coherence.
+
+Use the strict order **finish the current explanation -> introduce the next experience
+and its purpose -> begin that experience's visible action**. Keep the current result
+visible until its explanation ends. Introduce the next engine before changing its
+title/colour or typing its question. A bridge can continue over the new action after
+that introduction; the previous result explanation cannot. Replace an existing weak
+bridge rather than stacking a new bridge onto it. Do not recover speed by anticipating
+the next task or accelerating the recording.
+
+For precise handoffs, the Speech SDK's word-boundary events can measure the end of the
+approved introducing phrase in the actual synthesized clip. With a custom endpoint,
+construct `SpeechConfig(endpoint=...)`, then set `authorization_token` separately:
+passing both `auth_token` and `endpoint` to its constructor raises
+`ValueError: cannot specify both auth_token and endpoint or host when constructing SpeechConfig`.
+The observed custom-subdomain synthesis endpoint used the
+`/tts/cognitiveservices/websocket/v1` path. This successfully preserved the approved
+NeuralHD voice and default delivery while yielding word timings for all new bridges.
+
+**Evidence:** The new capture finished the contract explanation at 82.83 seconds,
+began the work-context bridge at 83.30 seconds and started its next action at
+87.42 seconds, after the measured engine introduction. All eight handoffs had this
+order. Four negative controls were rejected: next action before the previous
+explanation ends, next title before its introduction, bridge overlapping the previous
+explanation, and an added narrated confirmation recap. The shortened ending proceeded
+from full confirmation directly to one approved closing sentence, with an approximately
+1.8-second final image rather than the previous five-second hold.
