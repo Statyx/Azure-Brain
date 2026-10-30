@@ -231,3 +231,40 @@ Seven negative controls rejected premature actions/titles, overlapping bridges, 
 extra confirmation recap, waiting for writing completion, speaking before recognition
 and late structured details. The seventeen previously approved voice clips were reused;
 no narration wording, voice delivery or application source was changed.
+
+**Correction (2026-10-30, silence during animated launches):** The preceding green
+257.66-second revision still failed viewer review. After introductory speech, native
+typing/thinking continued for roughly 6-11 seconds without narration. The motion guard
+accepted those intervals because they were not frozen. Progressive result narration
+alone therefore did not fix the launch-to-result handoff.
+
+**Root cause:** The bridge named its purpose late, then the capture mostly finished
+that bridge before dispatching or observing the native launch. The next explanation
+correctly waited for readable evidence, but almost all question entry, retrieval and
+early reveal happened in silence. Beginning the readable-text wait after bridge
+completion also prevented useful overlap with the bridge's own approved words.
+
+**Fix:** Replace the affected bridge with approved purpose-first copy. Finish the prior
+result, introduce the current purpose, then dispatch its action while the rest of the
+bridge explains the current check. Measure native action-to-readable latency and the
+actual spoken gate. Observe coherent visible text during bridge playback; preserve
+brief recognition and start its explanation before writing finishes. Keep structured
+details and human decisions gated separately. Do not repair this with faster speech,
+faster footage, cuts through interactions or premature next-task activity.
+
+Add a separate decoded-audio launch-silence guard, independent of screen motion.
+The worked acceptance cap was 1.5 seconds at introduction/result boundaries, not at
+deliberate reading/review pauses. Require it to reject the known moving/loading failure
+that the old silent/static guard accepted. Review a short audiovisual trial when the
+viewer says the feeling cannot be judged from text; do not treat trial approval as
+authorization to change all remaining copy.
+
+**Evidence:** The old comparison boundary contained 11.0259 seconds of measured
+decoded-audio silence despite an empty silent/static failure list. The authorized
+42.36-second continuous trial reduced launch silence to 0.4125 seconds, retained
+0.64 seconds of visible-text recognition and started explanation 0.875 seconds before
+writing ended. Cards committed 1.391 seconds after speech began, before the
+option-specific details needed them. The original result clip's SHA-256 was unchanged;
+both sampled AAC correlations exceeded 0.99998. The viewer replied "parfait", then
+explicitly authorized the complete extension. The trial's measured signals and viewer
+approval do not constitute a full-version real-time playback review.

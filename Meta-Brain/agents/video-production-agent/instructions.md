@@ -138,3 +138,31 @@ still require Rule 1. In the observed revision, 0.6-0.8 seconds after a readable
 gave recognition time without waiting for writing to finish. This is a measured example,
 not a mandatory duration for every application. See the response-lifecycle procedure in
 [production_workflow.md](production_workflow.md) and the dated clarification in issue 8.
+
+## Launch silence correction - 2026-10-30
+
+The recognition/handoff contract above remains necessary but is not sufficient.
+A moving screen can still contain an awkward, long silence after an introduction.
+Typing, thinking and streaming are not exemptions from an audio launch-gap check.
+
+Introduce the current operation and purpose early, then continue meaningful approved
+bridge narration over that operation's question entry and retrieval. Observe readable
+answer text while the bridge is still playing; do not begin waiting for it only after
+the whole bridge has ended. Preserve recognition time and ongoing-writing/card gates.
+Never compensate by starting the next task under the previous result explanation.
+
+Measure actual exported-audio silence at each introduction-to-result boundary,
+including unchanged introductions and the final sending-to-closing transition.
+The worked viewer-approved trial used a 1.5-second cap for launch silence, not for
+intentional option reading, draft review or the final hold. Calibrate this separate
+guard with a rejected moving/loading passage; a silent/static detector alone misses it.
+When the viewer cannot judge written timing, obtain approval for one bounded audiovisual
+trial before a full remake. Approval of that excerpt is not full-copy authorization.
+
+**Evidence:** The earlier motion guard accepted a passage with 11.0259 seconds of
+decoded speech silence during active UI. A continuous 42.36-second comparison trial,
+using the same approved voice and unchanged result clip, reduced that boundary to
+0.4125 seconds. It retained 0.64 seconds of recognition and began explanation 0.875
+seconds before writing ended. The viewer explicitly accepted the excerpt, then
+separately authorized full production. This is evidence for that trial and feedback,
+not a claim that the full extension has already received a human playback review.

@@ -153,3 +153,38 @@ approved voice clips. Its six progressively written answers started commentary
 still remaining. The atomic report was handled separately. Seven intentionally invalid
 fixtures were rejected by their expected semantic guards; the timeline preflight passed.
 This establishes the measured event contract, not a human real-time playback review.
+
+## 7. Cover the current launch, not merely its static waits
+
+This corrects an incomplete acceptance criterion in section 6: visible motion does not
+make a long post-introduction speech gap acceptable.
+
+1. Measure the spoken purpose gate, the complete normalized bridge, and native
+   action-to-readable latency, including pointer motion, picker, typing and retrieval.
+2. Introduce the current purpose before its title/action, but let the remaining bridge
+   explain what is being checked while that same operation runs.
+3. Schedule dispatch near `bridge_end + breathing_space - launch_latency - recognition`,
+   never before the actual spoken-purpose gate. Use observed latency and retain
+   real-time state checks; do not assume every question or session has identical timing.
+4. Observe a coherent visible prefix during bridge playback. Start result commentary
+   after both the bridge and recognition interval, while writing is still in progress.
+   If a short bridge cannot cover the lifecycle, obtain approval for replacement copy;
+   do not silently accelerate the voice/UI or start an unintroduced next task.
+5. Before full export, build the PCM timeline and short transition excerpts. Check
+   launch silence independently of screen motion, then repeat against the encoded audio.
+   Include unchanged bridges and the sending-to-closing transition in the measured set.
+6. Preserve deliberate option-reading and human-review intervals separately. Positioning
+   a pointer under the completed draft review can remove avoidable post-intro travel;
+   clicking still waits for the spoken sending introduction and closing for confirmation.
+7. Prove the guard rejects a known moving/loading passage with excessive speech silence,
+   even when the previous silent/static guard accepted it. Do not waive it as animated UI.
+8. Use a short audiovisual trial when the viewer cannot assess written timing. Record
+   trial approval, full-production authorization and full-version feedback separately.
+
+**Evidence (2026-10-30):** The old motion guard accepted 11.0259 seconds of active-loading
+speech silence. A 42.36-second continuous comparison trial had 0.4125 seconds at the
+same narrative boundary, below its proposed 1.5-second cap. Recognition was 0.64 seconds;
+explanation began 0.875 seconds before writing ended and option cards arrived 1.391
+seconds after commentary started. Both encoded-audio sample correlations exceeded
+0.99998. The viewer approved the excerpt and separately authorized the extension.
+Mechanical checks and that bounded viewer feedback are not full-version human review.
