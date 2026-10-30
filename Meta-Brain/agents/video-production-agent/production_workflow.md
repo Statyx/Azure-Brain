@@ -110,3 +110,46 @@ For the narrative framework and preflight command, also read
 
 For GitHub README embedding, defer to
 [project-presentation-agent](../project-presentation-agent/visual_presentation.md).
+
+## 6. Reusable response-recognition and handoff contract
+
+Apply this procedure alongside sections 1-5, not as permission to anticipate the next task.
+
+1. Freeze approved copy, voice settings and native UI inventory. For a timing-only
+   revision, hash the existing voice clips and reuse them rather than synthesizing again.
+2. Read the actual response lifecycle before choosing a narration trigger. Establish
+   whether the answer is atomic, progressively written, or a written summary followed
+   by cards. Distinguish the first readable evidence, writing end, card commit and
+   interactive readiness; do not map them all to `ready`.
+3. Finish the preceding result explanation and introduce the next purpose before its
+   title/colour/action. Measure an introduction from actual speech word timings when
+   available. Do not start the next question under the previous result explanation.
+4. For the current progressive reply, observe a coherent prefix in the visible UI.
+   Allow a brief recognition interval, then recheck that writing is still in progress
+   before starting its approved explanation. Record the observed writing end separately.
+   The worked capture used 0.6 seconds, or 0.8 seconds for a short public-context summary.
+   Atomic reports instead need their own readable-result gate.
+5. Budget structured-card arrival against the **spoken clauses that need its details**.
+   A known fact or a generic opening may accompany the remaining reveal, but a summary
+   alone cannot justify unseen recipients, figures or option-specific fields. Keep
+   comparison focus aligned with each option and leave approval/draft review explicit.
+6. Observe timing-sensitive state changes with sufficiently frequent polling. In the
+   worked browser capture, frame-polled DOM commitment avoided counting an assertion
+   retry delay as late card arrival. A DOM event is still not the first encoded frame:
+   calibrate the raw capture offset and inspect decoded image sequences at the cue.
+7. Preserve natural interaction speed and approved speech. Remove fixed storyboard
+   minimum waits, not meaningful recognition or review time. Do not use a motion-only
+   guard as proof of coherent transitions. After full confirmation, retain only the
+   approved short closing and its intentional composed hold.
+8. Before delivery, reject deliberate regressions: early next action, early title,
+   overlapping bridge, extra post-confirmation recap, commentary after writing,
+   commentary before recognition, and late structured details. Also check the rendered
+   audio, endpoints and calibrated silent/static detector; review long speech gaps in
+   their actual UI context rather than treating every gap as either an error or reading time.
+
+**Evidence (2026-10-30):** A continuous 257.66-second capture retained all seventeen
+approved voice clips. Its six progressively written answers started commentary
+0.625-0.828 seconds after observed readable text, with 0.328-5.531 seconds of writing
+still remaining. The atomic report was handled separately. Seven intentionally invalid
+fixtures were rejected by their expected semantic guards; the timeline preflight passed.
+This establishes the measured event contract, not a human real-time playback review.

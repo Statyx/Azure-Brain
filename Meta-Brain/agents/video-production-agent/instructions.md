@@ -113,3 +113,28 @@ than rendering the picture again, and verify stream identity and the final audio
 
 See [production_workflow.md](production_workflow.md) for executable checks and
 [known_issues.md](known_issues.md) for the observed evidence behind these rules.
+
+## Pacing clarification - 2026-10-30
+
+Apply these constraints together; fixing one must not undo the others:
+
+- Keep the opening purpose-first and proportionate. Explain the everyday workflow
+  and distinguish the authoritative data/calculation platform from its access interface.
+- Finish the current explanation, introduce the next experience and its purpose, then
+  change its title/colour or begin its action. Do not recover speed with next-task typing.
+- Within the **current** reply, do not universally wait for the complete answer.
+  Let a coherent, relevant piece of text become readable, allow a brief recognition
+  interval, then explain it while writing continues. Do not speak on the first character.
+- Treat streamed text, completed writing, committed structured cards and ready controls
+  as different states. A summary is not evidence that an unseen card field exists.
+  Gate each substantive claim on supporting visible evidence, not merely a message count.
+- Keep alternatives, the chosen decision, human approval, draft review and the final
+  action understandable. After full confirmation, prefer the approved short closing
+  over a second confirmation narration or another long value recap.
+
+A timing-only request reuses the already approved words, voice and delivery; it does not
+require new synthesis or another copy-approval loop. Changed words, figures or visuals
+still require Rule 1. In the observed revision, 0.6-0.8 seconds after a readable prefix
+gave recognition time without waiting for writing to finish. This is a measured example,
+not a mandatory duration for every application. See the response-lifecycle procedure in
+[production_workflow.md](production_workflow.md) and the dated clarification in issue 8.

@@ -204,3 +204,30 @@ explanation ends, next title before its introduction, bridge overlapping the pre
 explanation, and an added narrated confirmation recap. The shortened ending proceeded
 from full confirmation directly to one approved closing sentence, with an approximately
 1.8-second final image rather than the previous five-second hold.
+
+**Clarification (2026-10-30, progressive reply recognition):** The corrected handoff
+order remains mandatory, but it does not mean waiting for the **current** answer to
+finish writing before explaining it. The viewer requested earlier commentary, then
+clarified that the first readable content should register briefly before the voice starts.
+
+In the observed UI, only the assistant summary streams. Reflection, option/person cards
+and the email draft appear on commit after writing; the atomic report does not stream.
+The committed-message selector therefore cannot identify first readable text. Observe a
+coherent partial prefix, allow recognition time, verify it is still partial, then start
+the current-result narration. Record full writing, actual DOM commit and ready controls
+separately. Frame-polled commit detection avoids mistaking an assertion's polling delay
+for UI latency. Verify encoded images too; DOM timing alone is not a visibility proof.
+
+Do not introduce unseen structured details merely because the summary is visible. Use
+claim-specific card-arrival budgets and keep the first option in focus before its
+detailed explanation. Preserve the prior-result/next-purpose/action ordering, explicit
+human decision and draft review, and short confirmation-to-closing sequence.
+
+**Evidence:** The revised continuous take was 257.66 seconds at 1x. All six non-atomic
+replies began narration after 0.625-0.828 seconds of readable-text recognition and
+before writing ended, with leads of 0.328-5.531 seconds. The public-context, option and
+draft cards committed 0.797, 1.406 and 1.735 seconds after their commentary started.
+Seven negative controls rejected premature actions/titles, overlapping bridges, an
+extra confirmation recap, waiting for writing completion, speaking before recognition
+and late structured details. The seventeen previously approved voice clips were reused;
+no narration wording, voice delivery or application source was changed.
