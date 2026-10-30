@@ -110,3 +110,28 @@ switching to a lower-quality narrator.
 `/tts/cognitiveservices/v1` endpoint. The working format and delivery settings are
 recorded in [production_workflow.md](production_workflow.md); this is not proof of
 availability for other resources.
+
+## 7. A capture composition makes an otherwise working app lose Web Crypto
+
+**Symptom:** A localhost application works in a normal browser page but renders no
+controls when embedded in a Playwright composition. MSAL reports
+`crypto_nonexistent`.
+
+**Root cause:** In the observed recording setup, `page.set_content()` left the parent
+at an opaque `about:blank` origin. The embedded localhost app consequently reported
+`isSecureContext === false` and had no `crypto.subtle`. A localhost child URL alone
+did not establish a trustworthy ancestor context.
+
+**Fix:** Serve the capture composition from the same localhost origin as the app.
+A Playwright route can fulfill a dedicated composition URL with the wrapper HTML;
+navigate to that URL before loading the app iframe. Keep normal browser security
+enabled, and assert both the app opener and `isSecureContext && !!crypto.subtle`
+before starting the timed recording. A title band outside the iframe can then reserve
+space without covering app controls or changing application code.
+
+**Evidence:** A 2026-10-30 browser probe reproduced `crypto_nonexistent` and zero
+embedded buttons with the `about:blank` parent; direct navigation exposed the app
+opener. A paired probe measured `{secure: false, webCrypto: false}` before the change
+and `{secure: true, webCrypto: true}` with the same-origin parent, where the expected
+opener became visible. This verifies that local capture setup, not arbitrary remote
+embedding or a production authentication flow.
