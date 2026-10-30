@@ -135,3 +135,40 @@ opener. A paired probe measured `{secure: false, webCrypto: false}` before the c
 and `{secure: true, webCrypto: true}` with the same-origin parent, where the expected
 opener became visible. This verifies that local capture setup, not arbitrary remote
 embedding or a production authentication flow.
+
+## 8. Storyboard estimates become dead-air minimum durations
+
+**Symptom:** A technically valid walkthrough sits silently on a completed result for
+several seconds before continuing. A green timeline preflight does not reject the
+empty wait because its speech-gap findings are warnings.
+
+**Root cause:** The observed capture waited for fixed storyboard end times after the
+measured narration and required interaction had already finished. Optional source
+metadata visits were also serialized after narration. Treating every warning as
+"reading time" preserved dead air rather than the flow of work.
+
+**Fix:** Schedule from measured speech and observed UI states, not minimum scene
+deadlines. Let useful actions accompany the existing approved words. The next question
+may start typing while the previous result remains visible and its explanation ends;
+do not hide that result or assert new figures before their supporting text appears.
+Distinguish a visible supporting summary from a fully committed result card. Omit
+optional metadata detours when they add no evidence needed by the spoken story.
+
+Add a regression check for intervals that are both silent and visually idle. Calibrate
+it against the rejected passage and against genuine typing and answer writing:
+codec noise can defeat a naive freeze detector, while a coarse mean-difference
+threshold can mistake a few changing letters for a frozen screen. In the observed
+1080p H.264 export, comparing adjacent grayscale frames, ignoring pixel differences
+of 40/255 or less and requiring 99.999% unchanged pixels in the chat/input crop caught
+the idle passage without flagging the active controls. These are calibrated example
+parameters, not universal thresholds. Only the explicit closing hold was exempt,
+including up to 250 ms of trailing silence in the normalized final voice clip.
+
+**Evidence:** On 2026-10-30, the rejected 303.375-second recording had an 8.3105-second
+silent, idle overlap after the Fabric explanation. The revised continuous recording
+was 219.109 seconds at 1x, with no active-interaction cuts and no detected interior
+silent/idle overlap of at least 2.8 seconds. The next question began before the prior
+explanation ended, leaving zero idle time after Fabric. All 17 original voice clips
+were preserved; decoded AAC correlations for their sampled windows were at least
+0.999798. The typing and answer-writing negative controls were not classified as idle.
+These signal, event and frame checks do not establish a human playback review.
