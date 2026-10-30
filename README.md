@@ -8,6 +8,9 @@ specialised "brains", one per technology domain, plus cross-cutting meta-tooling
 ![Version](https://img.shields.io/github/v/tag/Statyx/Azure-Brain?style=for-the-badge&label=version&color=purple)
 [![CI](https://img.shields.io/github/actions/workflow/status/Statyx/Azure-Brain/no-client-leak.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/Statyx/Azure-Brain/actions/workflows/no-client-leak.yml)
 
+> Catalog update, 2026-10-29: there are now 43 active agents, including six in Meta-Brain.
+> Earlier badges and counts below predate the addition of the video production agent.
+
 **Contents:** [What this is](#what-this-is) ·
 [Watch it](#what-you-learn-building-is-always-lost) ·
 [What it produces](#-what-it-produces) ·
@@ -129,6 +132,7 @@ If you'd rather be pointed straight at a starting file:
 | Find out **why it did that** | Foundry | [`foundry-observability-agent`](Foundry-Brain/agents/foundry-observability-agent/instructions.md) — a trace is the only place a multi-agent system is legible |
 | Build a whole project **end to end** | Meta | [`SCENARIOS.md`](Meta-Brain/SCENARIOS.md) — pick a preset (`base + modules`), or compose your own; [`project-orchestrator-agent`](Meta-Brain/agents/project-orchestrator-agent/instructions.md) drives the 12 steps |
 | Write tests, a deck, a diagram, a README | Meta | [`Meta-Brain/README.md`](Meta-Brain/README.md) |
+| Create or revise a narrated product or screen-recorded demo video | Meta | [`video-production-agent`](Meta-Brain/agents/video-production-agent/instructions.md) |
 
 **Something broke?** [`known_issues.md`](known_issues.md), then
 [`ERROR_RECOVERY.md`](ERROR_RECOVERY.md) — decision trees by HTTP status. Most errors you will hit

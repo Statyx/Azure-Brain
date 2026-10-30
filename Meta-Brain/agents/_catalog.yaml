@@ -1,5 +1,6 @@
 # Agent Catalog — Meta-Brain
 # 5 cross-cutting agents (testing, presentation, orchestration, diagrams)
+# Catalog update, 2026-10-29: six active agents, including video production.
 # Part of Azure-Brain umbrella (see ../../README.md)
 # Last updated: 2026-05-20
 
@@ -20,6 +21,8 @@ domains:
         purpose: HTML architecture diagrams with base64 SVG icons (303 icons — Fabric + Azure)
       - name: project-presentation-agent
         purpose: GitHub repo best practices — README authoring, badges, repo structure
+      - name: video-production-agent
+        purpose: Narrated product and demo videos — storyboard approval, continuous capture, synchronized voice, editable sources and quality gates
 
   meta-orchestration:
     description: End-to-end project orchestration across multiple agents

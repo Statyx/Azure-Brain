@@ -1,0 +1,19 @@
+{
+  "duration": 32.0,
+  "speech": [
+    { "id": "use-case", "start": 0.2, "end": 7.0 },
+    { "id": "transition", "start": 7.5, "end": 10.0 },
+    { "id": "option", "start": 11.6, "end": 17.0, "visual": "option-card" },
+    { "id": "approval", "start": 17.5, "end": 23.0 },
+    { "id": "conclusion", "start": 25.0, "end": 30.0 }
+  ],
+  "visuals": [
+    { "id": "option-card", "start": 11.4, "end": 17.3 }
+  ],
+  "actions": [
+    { "id": "writing", "start": 8.0, "end": 11.0 },
+    { "id": "approval", "start": 17.5, "end": 23.0 },
+    { "id": "send", "start": 23.5, "end": 24.5 }
+  ],
+  "cuts": [7.5, 17.5, 30.5]
+}

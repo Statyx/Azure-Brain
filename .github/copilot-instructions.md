@@ -12,6 +12,10 @@ Five brains live at the root:
 - [`Foundry-Brain/`](../Foundry-Brain/) — 7 active of 11 catalogued agents for Microsoft Foundry: agent service, tool catalog, knowledge (Foundry IQ), observability, governance (guardrails + evaluations), multi-agent orchestration, and the Fabric bridge (Fabric data agent + Fabric IQ). **Read [`Foundry-Brain/generation_map.md`](../Foundry-Brain/generation_map.md) first** — two agent generations ship side by side and the older one retires 2027-03-31.
 - [`Meta-Brain/`](../Meta-Brain/) — 5 cross-cutting agents + shared infrastructure (testing, PPTX, HTML diagrams, project orchestration, README authoring).
 
+> Catalog update, 2026-10-29: Meta-Brain now has six agents; the added
+> [`video-production-agent`](../Meta-Brain/agents/video-production-agent/instructions.md)
+> owns narrated product and demo video production. Earlier counts below predate this addition.
+
 > **Agent folder layout differs per brain.** Fabric-Brain, Meta-Brain, Foundry-Brain and
 > Apps-Brain are flat (`agents/<agent>/`). Database-Brain is nested by domain
 > (`agents/<NN-domain>/<agent>/`). Tooling that walks agents must handle both depths.

@@ -1,5 +1,8 @@
 # AGENTS.md — Azure-Brain
 
+> Catalog update, 2026-10-29: `video-production-agent` is the sixth Meta-Brain agent and the
+> 43rd active agent overall. Earlier counts retained below predate this addition.
+
 **This repository is a knowledge base, not an application.** It contains no build, no runtime,
 no entry point to execute. Its content is a set of *agent instruction files* that an AI coding
 agent reads on demand to perform Microsoft Fabric / Azure data & AI work correctly.
@@ -151,6 +154,7 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | HTML architecture diagram with Fabric/Azure icons | `architecture-design-agent` | Meta |
 | README / repo presentation / badges | `project-presentation-agent` | Meta |
 | Build a whole Fabric project end to end (12-step pipeline) | `project-orchestrator-agent` | Meta |
+| Create, revise or synchronize a narrated product, marketing or screen-recorded demo video | `video-production-agent` | Meta |
 
 ### Frequently confused pairs
 
@@ -172,6 +176,7 @@ and domain-specific companion files. Some hold scripts, Bicep templates or JSON 
 | `foundry-orchestration-agent` (Foundry) vs `project-orchestrator-agent` (Meta) | Foundry one orchestrates **agents at runtime**; Meta one orchestrates the **build** of a project across brains |
 | `foundry-fabric-bridge-agent` (Foundry) vs `ai-skills-agent` (Fabric) | Fabric **creates/publishes** the Data Agent; Foundry **consumes** it as a tool and never mutates it |
 | `foundry-governance-agent` vs `foundry-observability-agent` | Governance = *may this happen?* (guardrails) and *was it good?* (evaluations); observability = *what actually happened?* (traces). The multi-agent hop is seen only by traces |
+| `video-production-agent` vs `project-presentation-agent` | Video production owns the audiovisual deliverable and its editable sources; project presentation owns README placement and GitHub embedding |
 
 Full boundary notes live in each brain's `agents/_catalog.yaml`.
 
@@ -292,6 +297,8 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 
 ### Meta-Brain — 5 agents · `Meta-Brain/agents/<agent>/instructions.md`
 
+> Catalog update, 2026-10-29: this index now contains six Meta-Brain agents.
+
 | Domain | Agent | Purpose |
 |---|---|---|
 | meta-quality | `testing-agent` | 3-tier test taxonomy (smoke/integration/regression), visual validator, pytest scaffolding |
@@ -299,6 +306,7 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 | meta-presentation | `architecture-design-agent` | HTML architecture diagrams with base64 SVG icons (Fabric + Azure) |
 | meta-presentation | `project-presentation-agent` | GitHub repo best practices — README authoring, badges, repo structure |
 | meta-orchestration | `project-orchestrator-agent` | End-to-end 12-step project builder, industry configs, agent coordination |
+| meta-presentation | `video-production-agent` | Narrated demo and product videos — continuous capture, voice synchronization and quality gates |
 
 ---
 

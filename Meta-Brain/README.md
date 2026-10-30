@@ -2,6 +2,9 @@
 
 **5 cross-cutting agents + shared infrastructure** — testing, PowerPoint generation, HTML architecture diagrams, project orchestration, README authoring.
 
+> Catalog update, 2026-10-29: Meta-Brain now has six agents, including
+> `video-production-agent`; the earlier counts and badge predate that addition.
+
 > Part of the [**Azure-Brain**](../README.md) umbrella. For Fabric-specific agents see [`../Fabric-Brain/`](../Fabric-Brain/README.md).
 
 ![Agents](https://img.shields.io/badge/agents-5-blue?style=for-the-badge)
@@ -32,6 +35,7 @@ Some agents and knowledge are **not Fabric-specific** — they help build, test,
 | [pptx-builder-agent](agents/pptx-builder-agent/) | PowerPoint architecture diagrams — 5-phase pipeline, helper functions, quality gates |
 | [architecture-design-agent](agents/architecture-design-agent/) | HTML architecture diagrams with base64 SVG icons (303 icons — Fabric + Azure) |
 | [project-presentation-agent](agents/project-presentation-agent/) | GitHub repo best practices — README authoring, badges, repo structure |
+| [video-production-agent](agents/video-production-agent/) | Narrated product and demo videos — continuous capture, voice synchronization, reusable sources and quality gates |
 
 ### 🎬 Orchestration
 
