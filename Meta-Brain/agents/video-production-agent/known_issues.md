@@ -268,3 +268,13 @@ option-specific details needed them. The original result clip's SHA-256 was unch
 both sampled AAC correlations exceeded 0.99998. The viewer replied "parfait", then
 explicitly authorized the complete extension. The trial's measured signals and viewer
 approval do not constitute a full-version real-time playback review.
+
+**Reusable enforcement (2026-10-30):** The observations above now have an executable,
+application-neutral implementation in [check_demo.py](tools/check_demo.py), entered via
+[demo_recipe.md](demo_recipe.md). Keep selectors/capture and project evidence in the
+consuming workspace. Neutral accepted/rejected fixtures and
+[regression tests](../../tests/test_video_demo.py) prevent a valid cue sheet or active
+animation from hiding actual launch silence. **Evidence:** the targeted demo and
+existing timeline suites passed 65 tests, including independently generated audio
+and full white/black media-decode controls. This is mechanical evidence, not playback
+approval or a guarantee that every spoken claim was instrumented.

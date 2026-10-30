@@ -260,3 +260,29 @@ rules:
       near: 'resources all resolve'
       must_contain: 'Correction 2026-09-21'
       within_lines: 5
+
+  - id: video-moving-ui-gap-exemption
+    kind: conditional
+    recorded: 2026-10-30
+    condition: >-
+      An editorial gap warning outside a declared launch may be justified by
+      deliberate reading or meaningful action. Animated launch activity cannot
+      exempt the independently measured launch-silence cap selected for the brief.
+    summary: >-
+      The general three-second speech-gap warning is not an acceptance rule for
+      silence during typing, loading or progressive response launches.
+    replaced_by: >-
+      Keep general warnings and explicit reading intervals, but enforce the
+      project-neutral measured handoff contract and independent launch audio guard.
+    authority: Meta-Brain/agents/video-production-agent/demo_recipe.md
+    authority_anchor: 'A launch silence cap cannot be waived by animated UI'
+    evidence: >-
+      A prior motion guard accepted 11.0259 seconds of active-loading silence.
+      A viewer-approved rhythm trial reduced its boundary to 0.4125 seconds.
+      Generic regression tests reject launch silence despite valid cue metadata.
+    enforced_by: Meta-Brain/tests/test_video_demo.py
+    adjacency:
+      file: Meta-Brain/agents/video-production-agent/storytelling_playbook.md
+      near: 'action may justify a gap'
+      must_contain: 'launch silence cap cannot be waived'
+      within_lines: 10

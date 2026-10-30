@@ -166,3 +166,13 @@ using the same approved voice and unchanged result clip, reduced that boundary t
 seconds before writing ended. The viewer explicitly accepted the excerpt, then
 separately authorized full production. This is evidence for that trial and feedback,
 not a claim that the full extension has already received a human playback review.
+
+## Executable interactive-demo recipe - 2026-10-30
+
+For interactive workflows, load [demo_recipe.md](demo_recipe.md) before applying the
+older storytelling examples. Use its generic [checker](tools/check_demo.py) for
+preflight and final-media guards; keep the application-specific event adapter outside
+the Brain. Its explicit profile separates launch failures from intentional reading
+and legacy warning gaps. A metadata-only pass is not final-media verification, and
+neither is a claim of human playback review, complete claim coverage or live calls.
+Retain Rule 1 approval, voice-preservation and source-rebuild gates separately.

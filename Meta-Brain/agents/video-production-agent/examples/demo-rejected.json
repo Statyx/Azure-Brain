@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "description": "Synthetic rejected Caldova launch: typing continues during a 2.3-second narration gap.",
+  "duration": 20.5,
+  "audio_content": "voice_only",
+  "profile": {
+    "duration_cap_seconds": 25,
+    "opening_cap_seconds": 5,
+    "recognition_seconds": 0.6,
+    "progressive_lead_seconds": 0.15,
+    "launch_silence_cap_seconds": 1.5,
+    "closing_cap_seconds": 8,
+    "confirmation_to_closing_cap_seconds": 1.5,
+    "confirmation_to_end_cap_seconds": 12.5,
+    "final_hold_min_seconds": 1,
+    "final_hold_max_seconds": 2,
+    "gap_warning_seconds": 3,
+    "duration_tolerance_seconds": 0.12,
+    "silence_noise_db": -45,
+    "silence_min_seconds": 0.05,
+    "endpoint_min_luma": 20,
+    "endpoint_window_seconds": 0.4
+  },
+  "format": {
+    "width": 1280,
+    "height": 720,
+    "fps": 25,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "audio_channels": 2,
+    "audio_sample_rate": 48000
+  },
+  "speech": [
+    {"id": "opening", "start": 0.2, "end": 3},
+    {"id": "lookup-bridge", "start": 3.4, "end": 6},
+    {"id": "lookup-result", "start": 8.3, "end": 12.5},
+    {"id": "send-bridge", "start": 13, "end": 15},
+    {"id": "closing", "start": 16.1, "end": 19}
+  ],
+  "visuals": [],
+  "actions": [
+    {"id": "lookup", "start": 4.5, "end": 9.2, "activity": "animated typing and loading"},
+    {"id": "send", "start": 13.8, "end": 16}
+  ],
+  "cuts": [],
+  "review_pauses": [],
+  "steps": [
+    {
+      "id": "lookup",
+      "previous": "opening",
+      "bridge": "lookup-bridge",
+      "result": "lookup-result",
+      "action": "lookup",
+      "purpose_at": 4,
+      "title_at": 4.1,
+      "response": {
+        "mode": "progressive",
+        "readable_at": 7.6,
+        "writing_end": 8.9,
+        "structured_at": 9,
+        "ready_at": 9.2
+      },
+      "claims": [
+        {"id": "summary", "kind": "text", "spoken_at": 8.3, "visible_at": 7.6},
+        {"id": "option-detail", "kind": "structured", "spoken_at": 9.5, "visible_at": 9.1}
+      ]
+    },
+    {
+      "id": "send",
+      "previous": "lookup-result",
+      "bridge": "send-bridge",
+      "result": "closing",
+      "action": "send",
+      "purpose_at": 13.6,
+      "title_at": null,
+      "response": {"mode": "confirmation", "confirmed_at": 16},
+      "claims": []
+    }
+  ],
+  "closing": {"cue": "closing"}
+}

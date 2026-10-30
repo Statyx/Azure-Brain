@@ -41,3 +41,12 @@ The workflow incorporates an observed 2026-10-29 narrated product-demo iteration
 a cut with missing writing and reasoning was rejected; a continuous wide-frame
 recapture was retimed to speech; approved transition phrases were added without
 changing the video stream. Details and limits are in [known_issues.md](known_issues.md).
+
+## Current interactive-demo entry point - 2026-10-30
+
+After the mandatory instructions, use [demo_recipe.md](demo_recipe.md) **before**
+applying the older general pacing examples. It provides the current production path,
+application-adapter boundary, measured event contract and executable
+[check_demo.py](tools/check_demo.py), with [accepted](examples/demo-accepted.json)
+and [rejected](examples/demo-rejected.json) neutral examples. Historical iterations
+remain evidence, not alternative recipes. The general timeline checker is unchanged.

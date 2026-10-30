@@ -80,6 +80,11 @@ bridge over an empty wait when it adds meaning. Never insert narration over exis
 words. Also inspect for silence **inside** a voice clip: declared clip boundaries
 alone cannot detect it.
 
+**Correction 2026-10-30:** This editorial warning does not relax an agreed hard gate:
+a launch silence cap cannot be waived by animated UI. Use the current
+[interactive-demo recipe](demo_recipe.md) and its independent decoded-audio guard;
+keep deliberate reading/review separate from introductions and launch activity.
+
 ## 5. Fast path: preflight, preview, then render
 
 1. Write and approve the full board and copy once; explicitly include the intended

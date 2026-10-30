@@ -188,3 +188,14 @@ explanation began 0.875 seconds before writing ended and option cards arrived 1.
 seconds after commentary started. Both encoded-audio sample correlations exceeded
 0.99998. The viewer approved the excerpt and separately authorized the extension.
 Mechanical checks and that bounded viewer feedback are not full-version human review.
+
+## 8. Reusable implementation - 2026-10-30
+
+The current operational entry point is [demo_recipe.md](demo_recipe.md), not a copy of
+an earlier production's scripts. [check_demo.py](tools/check_demo.py) reuses the timeline
+checker and adds project-neutral lifecycle, recognition, visibility, short-ending and
+independently decoded launch-audio gates. It also checks final format, full decode and
+non-black endpoints. Use the neutral examples and regression tests before mapping a
+new application's measured events; do not encode selectors or scene counts in the tool.
+Approval, source-speech preservation, actual 1x continuity and rebuild remain separate
+requirements of the workflow above.
