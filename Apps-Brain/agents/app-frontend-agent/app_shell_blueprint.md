@@ -60,6 +60,11 @@ Three rules that are not negotiable, because each cost a redesign:
 
 **Default:** `content: 1fr` + `assistant: 22rem` (`24rem` at `xl`). Fixed, not fractional.
 
+> **Correction, 2026-11-04:** A pinned rail is one option, not a mandatory default for every
+> data app. When the main work is on several full-width screens and the assistant is secondary,
+> a globally available drawer closed by default is a verified alternative. This also supersedes
+> the pinned-rail entries in §§8–9; see §10 for state, accessibility and evidence.
+
 A fraction (`1.05fr / 1fr`) **shares** growth, so the conversation pane widens with the window and
 the app reads as "a chat that happens to have charts". A rail **assigns** growth. Decide
 deliberately which pane is allowed to grow — for a data app it is the content.
@@ -155,3 +160,30 @@ unreadable.
 - [ ] A test pins **family coverage** of the openers.
 - [ ] Latency measured and written down before any caching is designed.
 - [ ] No component hardcodes a colour or a text size.
+
+---
+
+## 10. Correction (2026-11-04) — a global drawer is another shell pattern
+
+**Context:** Zava Media's data screens and its separate IQ experience need their full width;
+the general assistant is useful across routes but is not the primary surface on every page.
+
+- Provide a persistent, labelled edge trigger; start closed and open the drawer on a contextual
+  question. Keep the question's visible label separate from the prompt sent to the agent.
+- Put conversation, draft, open state and in-flight request handling in a provider **above the
+  routes**, not in the drawer content. Closing or navigating can unmount that content without
+  losing the thread, draft or pending answer.
+- Bound the overlay to the viewport (`width: min(24rem, 100vw)` in the observed implementation).
+  Make the trigger and close control keyboard-accessible with names, `aria-expanded` and
+  `aria-controls`; on open focus the close control, and on close or Escape restore focus to the
+  trigger. Do not treat this non-modal drawer as a modal or claim it traps focus.
+- Test closed/open state on every route, contextual opening, navigation with an existing thread,
+  draft restoration, and an answer completing after the drawer closes. Test the latter with a
+  controlled asynchronous response, and distinguish that from an actual live-agent verification.
+
+**Evidence:** `Fab-Zava-Media/app/src/components/AssistantDrawer.tsx`,
+`AssistantProvider.tsx`, `main.css` and `app/src/__tests__/preview.test.tsx`; the frontend suite
+passed **157 tests**. Seven preview routes were exercised in the component tests, including
+focus restoration and an asynchronously completed **mocked** agent response. Desktop and mobile
+open/closed layouts were inspected locally. After deployment, the user confirmed the updated
+Portfolio in an authenticated browser; a new live assistant conversation was not re-exercised.

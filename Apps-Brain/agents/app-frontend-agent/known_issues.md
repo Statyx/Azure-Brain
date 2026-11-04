@@ -30,6 +30,16 @@ matches it.
 ramp + semantic tokens + toggle writing `.dark` on `<html>` + `color-scheme: dark`). See
 [`design_tokens.md`](design_tokens.md) §5.
 
+**Additional failure, 2026-11-04 `[observed]`** — the header stayed dark in light mode, and
+the theme chosen by the toggle did not reliably survive reload. The header had fixed dark
+background/foreground values in both themes; the pre-paint script read a different storage key
+from the hook. Define all header foreground, background and interaction tokens per theme; use
+the same storage key in the script and hook and test it. Composite translucent backgrounds over
+their surfaces when calculating contrast. **Evidence:** Zava Media `app/index.html`,
+`app/src/hooks/useTheme.ts`, `app/src/main.css`, `app/src/__tests__/tokens.test.ts` and
+`preview.test.tsx`; frontend suite **157 passed**. See [`design_tokens.md`](design_tokens.md)
+§8.10 for the scope of browser verification.
+
 ---
 
 ## 3. Hex values pasted back over `oklch`
@@ -266,6 +276,15 @@ Ship **3 starters, then 3 chips** after each answer, minus what was already aske
 
 **Related** — the markdown renderer stopped hardcoding `text-sm`; the container owns text size in
 one place. A component that sets its own size cannot be reused at another scale.
+
+**Correction, 2026-11-04 `[observed]`** — pinning the assistant open is not mandatory when
+full-width work screens are primary. A globally available drawer closed by default preserved
+the Zava Media content area while contextual questions still opened the assistant. Store the
+conversation, draft and in-flight work above the routes; restore focus on close and Escape.
+**Evidence:** Zava Media `app/src/components/AssistantDrawer.tsx`, `AssistantProvider.tsx` and
+`app/src/__tests__/preview.test.tsx`; seven preview routes and an asynchronous mocked answer
+were covered by the **157-passing-test** frontend suite. See
+[`app_shell_blueprint.md`](app_shell_blueprint.md) §10 for the limits of live verification.
 
 ---
 

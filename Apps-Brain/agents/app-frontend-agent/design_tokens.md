@@ -436,3 +436,31 @@ the unlayered retrofit block, `.auth-bg`), `src/components/AppShell.tsx` (84px h
 `src/components/ThemeToggle.tsx`. Contrast figures are those recorded in the source comments by the
 author of that pass.
 
+---
+
+### 8.10 Correction (2026-11-04) — theme the complete header and its first paint
+
+The fixed dark header in §§8.2, 8.4, 8.6 and the checklist is a **design choice**, not a universal
+rule. In Zava Media, the user wanted the header to follow the selected light or dark interface,
+including on an IQ page whose content remains white. Keep the old fixed-dark variant when it suits
+the product; do not inherit it automatically.
+
+**Pattern `[observed]`:** define header-specific background, primary text, muted text, border and
+hover tokens in **both** themes. Apply them to the title, navigation, user label, dividers and
+controls, not only the header background. Keep selected navigation distinguishable. For translucent
+headers, composite the background over the actual page surfaces before calculating WCAG contrast;
+test normal and muted text at **4.5:1 or higher** and test the selected text against its accent.
+
+The pre-React script and theme hook must read/write the **same storage key**. A stale key can
+make a theme toggle appear to work while the saved choice is lost on reload. Apply `data-theme`
+and `color-scheme` before the first paint, tolerate unavailable storage, and test that the key
+used by the script matches the exported hook key. Exercise switching on ordinary and special
+surfaces, and retain the active navigation state.
+
+**Evidence:** `Fab-Zava-Media/app/src/main.css`, `components/AppShell.tsx`, `hooks/useTheme.ts`,
+`app/index.html`, `app/src/__tests__/tokens.test.ts` and `preview.test.tsx`. Tests calculate
+contrast against both the page surface and white under each translucent header, verify the
+selected accent and storage-key match, and exercise light/dark switching on Delivery and IQ;
+the frontend suite passed **157 tests**. Local browser inspection covered light/dark headers
+on Delivery and IQ and a mobile dark header; the user confirmed the deployed light Portfolio
+in an authenticated browser.
