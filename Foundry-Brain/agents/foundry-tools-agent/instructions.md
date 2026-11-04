@@ -43,6 +43,11 @@ The one thing to get right:
    between a run that pauses for a human and one that does not.
 5. **Pre-approve interactively before running any workflow.** Approval cannot be granted inside a
    workflow preview — see the gate section. This is an operational rule, not a preference.
+   > **Correction, 2026-11-04:** This observation applies to the historical Foundry portal
+   > workflow preview, not every orchestration runtime. For Agent Framework or Logic Apps,
+   > verify the actual approval flow and preserve the required human consent; never infer that
+   > blanket pre-approval is appropriate. The portal workflow surface retires 2026-12-01; see
+   > [`../../generation_map.md`](../../generation_map.md).
 6. **Prefer a named project connection over inline credentials or GUIDs.** Connections are what
    makes an agent script portable across environments.
 7. **Changing tools means a new agent version.** Tools are part of the definition passed to

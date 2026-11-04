@@ -58,6 +58,10 @@ The one thing to get right:
 8. **Approve the tool before running any workflow.** Tool approval cannot be completed inside the
    workflow preview. Microsoft says so in the lab's own note. This is an operational gate, not
    a nicety — see the approval section.
+   > **Correction, 2026-11-04:** This gate was observed for the historical portal workflow
+   > preview, not every orchestration runtime. Check the actual runtime's approval flow and
+   > preserve required human consent; do not assume blanket pre-approval. The portal workflow
+   > surface retires 2026-12-01; see [`../../generation_map.md`](../../generation_map.md).
 
 ---
 

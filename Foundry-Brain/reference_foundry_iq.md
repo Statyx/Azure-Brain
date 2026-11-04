@@ -1,5 +1,12 @@
 # Reference implementation — Foundry IQ over Fabric (Zava retail)
 
+> **Correction, 2026-11-04:** Reuse the observed architecture, not the portal workflow as a
+> new-workflow template. The portal designer and in-portal execution retire **2026-12-01**.
+> Microsoft recommends Agent Framework (code or declarative YAML) for new workflows; export
+> existing definitions and validate their migration, including hosted-agent deployment.
+> Logic Apps is a visual alternative; A2A is for lightweight handoffs. This supersedes the
+> older portal-demo recommendation below. See [`generation_map.md`](generation_map.md).
+
 > **What this is.** A complete, observed, end-to-end Foundry system: four agents, a Foundry IQ
 > knowledge base with three heterogeneous sources, a Fabric data agent called as a tool, and a
 > workflow that routes between them. Captured from the Microsoft **"Building Foundry IQ"** lab

@@ -40,6 +40,13 @@ despite living on the current doc tree. They may be used to *stage* a visual dem
 never be written as the recommended architecture. Code-first orchestration goes to **Microsoft
 Agent Framework**.
 
+> **Correction, 2026-11-04:** Do not create a new portal workflow even for a demo. Microsoft
+> recommends Agent Framework for new workflows, using code or declarative YAML; export existing
+> portal definitions and validate migration, including hosted deployment. The portal designer
+> and in-portal execution retire, not YAML in general. Logic Apps is a visual alternative; A2A
+> is for lightweight handoffs. This supersedes the demo exception above; see
+> [`../../generation_map.md`](../../generation_map.md).
+
 ### Rule 3: A sub-agent is NOT callable until incoming A2A is explicitly enabled
 
 Creating an agent does not expose it. Enabling requires an **agent card** *and* the **A2A

@@ -1,5 +1,14 @@
 # Reference workflow — `Microsoft-IQ-Workflow`
 
+> **Correction, 2026-11-04:** This is a historical portal example, not a starter for new
+> workflows. The Foundry portal designer and in-portal execution retire **2026-12-01**;
+> YAML itself does not. Export existing definitions and assess them for Agent Framework
+> (code or declarative YAML, optionally hosted in Foundry); validate compatibility rather
+> than assuming a mechanical conversion. Logic Apps is an alternative visual designer and
+> A2A serves lightweight agent handoffs. This supersedes the older "don't inherit YAML" and
+> portal-demo recommendations in [Longevity](#longevity). See
+> [Microsoft's migration guide](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow#migration-guide).
+
 **A complete, observed, seven-agent orchestration in Microsoft Foundry.**
 Kept as a **reusable demo asset**: this is the diagram to put on screen when explaining what a
 multi-agent system actually does, because every box maps to a real line of YAML.

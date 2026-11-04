@@ -13,6 +13,13 @@
 
 ## ⚠️ Read first
 
+> **Correction, 2026-11-04:** Foundry's portal workflow designer and in-portal execution retire
+> **2026-12-01**, not all YAML or hosted-agent orchestration. Use Microsoft Agent Framework
+> for new workflows; export and assess existing YAML for migration. Logic Apps is a visual
+> alternative, and A2A is for lightweight agent handoffs. This supersedes the older
+> recommendation below to stage new demos on portal Workflows.
+> [Microsoft Learn](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow#migration-guide).
+
 Microsoft Foundry ships **two agent generations side by side**, with two doc trees — and
 **three separate retirement clocks**, one of which fires in December 2026 on the *current*
 tree. Following the wrong tutorial means writing code against a dying API.

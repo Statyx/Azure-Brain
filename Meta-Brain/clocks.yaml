@@ -6,7 +6,9 @@
 #
 # This registry is the alarm. `Meta-Brain/tests/test_clocks.py` fails when a
 # clock is due within `warn_days` or already passed, so the repo gets a heads-up
-# window instead of quietly shipping a wrong instruction.
+# window instead of quietly shipping a wrong instruction. After the warning has
+# been reviewed and the guidance updated, an evidenced acknowledgement can close
+# that warning only until the deadline. The clock fails again on the date itself.
 #
 # It deliberately does NOT list the files that mention each date — that list
 # would rot. The test discovers them live and prints them in the failure.
@@ -33,14 +35,20 @@ clocks:
 
   - date: 2026-12-01
     aliases: ["December 1, 2026"]
-    what: "Microsoft Foundry portal Workflows retire"
+    what: "Microsoft Foundry portal workflow designer and execution retire"
     why_it_matters: >
-      Foundry-Brain routes multi-agent orchestration through Workflows in
-      several places. Past this date the guidance sends an agent to a surface
-      that no longer exists.
+      Foundry-Brain includes lab examples built on the portal designer and
+      execution surface. After this date those examples must not direct readers
+      to an unsupported surface; Agent Framework and hosted orchestration remain.
     when_due: >
-      Rewrite the Workflows guidance in the past tense, point orchestration at
-      the A2A tool / Toolbox path, and update Foundry-Brain/generation_map.md.
+      Verify the current Microsoft guidance, update the portal-specific prose
+      and examples for the post-retirement state, and reassess this clock.
+    warning_acknowledged:
+      date: 2026-11-04
+      reason: >
+        Reviewed Microsoft's migration guidance and corrected the affected
+        Foundry guidance; the post-retirement review remains due on the date.
+      evidence: Foundry-Brain/generation_map.md
 
   - date: 2027-03-31
     aliases: ["March 31, 2027"]

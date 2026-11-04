@@ -304,6 +304,12 @@ captured into a variable that the next agent never read — every agent read
 ⚠️ **Portal Workflows retire 2026-12-01.** Fine for a demo before then; rebuild in
 **Microsoft Agent Framework** for anything meant to last.
 
+> **Correction, 2026-11-04:** This skeleton documents a past portal lab, not a template for
+> new workflows, including demos. The portal designer and in-portal execution retire; YAML
+> itself does not. Export existing YAML and validate compatibility with Agent Framework and
+> its hosted-agent path rather than assuming a rewrite is necessary. See
+> [`../../generation_map.md`](../../generation_map.md).
+
 ```yaml
 kind: workflow
 trigger:

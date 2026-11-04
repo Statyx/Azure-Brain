@@ -10,6 +10,12 @@
 > **No trace was ever displayed to us.** Field names, span shapes, latency/token attributes and
 > the OpenTelemetry surface are **not recorded here** — because we have not seen them.
 > The *reading doctrine* below is this brain's own, derived from its correction log.
+>
+> **Correction, 2026-11-04:** Portal workflow tracing and preview instructions below describe
+> a historical lab surface; the portal workflow designer and in-portal execution retire
+> 2026-12-01. Do not assume their navigation or approval behavior applies to an Agent Framework
+> or Logic Apps runtime. Verify that runtime's tracing and consent flow separately; see
+> [`../../generation_map.md`](../../generation_map.md).
 
 ---
 

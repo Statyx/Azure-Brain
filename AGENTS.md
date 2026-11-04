@@ -261,6 +261,13 @@ Paths are relative to the repo root. Read `instructions.md`; it names its own co
 
 ### Foundry-Brain — 7 active / 11 catalogued · `Foundry-Brain/agents/<agent>/instructions.md`
 
+> **Correction, 2026-11-04:** The Foundry portal workflow designer and in-portal execution
+> retire **2026-12-01**; declarative YAML and code-based orchestration are not universally
+> retired. Microsoft recommends Agent Framework for new workflows, with Logic Apps as a visual
+> alternative and A2A for lightweight handoffs. Export and assess existing YAML for migration.
+> This supersedes older workflow-specific guidance below; see
+> [`Foundry-Brain/generation_map.md`](Foundry-Brain/generation_map.md).
+
 > ⚠️ **Read [`Foundry-Brain/generation_map.md`](Foundry-Brain/generation_map.md) and
 > [`Foundry-Brain/orchestration_patterns.md`](Foundry-Brain/orchestration_patterns.md) before
 > any Foundry work.** Two agent generations ship side by side —

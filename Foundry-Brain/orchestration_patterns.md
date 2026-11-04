@@ -1,5 +1,14 @@
 # Orchestration Patterns — supervisor + connected agents/tools
 
+> **Correction, 2026-11-04:** The portal workflow designer and in-portal execution retire on
+> **2026-12-01**. The workflow examples below are historical, not a path for new workflows.
+> Use Microsoft Agent Framework (code or declarative YAML) for new workflows; export and
+> assess existing YAML for migration, including to a hosted agent. For a visual low-code
+> alternative consider Logic Apps; use A2A for lightweight agent handoffs, not as a substitute
+> for every workflow. This supersedes claims below that portal YAML itself expires or that a
+> demo should be built on the retiring portal. See the sourced
+> [migration guidance](generation_map.md).
+
 > **Prerequisite:** read [`generation_map.md`](generation_map.md) first. It records why the
 > classic pattern is gone and which clocks are running.
 > **Status:** documented from Microsoft Learn on 2026-08-04. Treat every code shape below as

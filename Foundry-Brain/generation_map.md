@@ -1,5 +1,17 @@
 # Generation Map — Microsoft Foundry agents
 
+> **Correction, 2026-11-04 — workflow retirement and migration.** This note supersedes older
+> workflow-specific recommendations and quotations below. On **2026-12-01**, the Foundry
+> portal's visual workflow designer and in-portal workflow execution retire; this does **not**
+> mean that all YAML or code-based orchestration retires. For **new** workflows, Microsoft
+> recommends **Microsoft Agent Framework**, with code or declarative YAML. Before retirement,
+> export existing workflow YAML and assess it for migration; Microsoft says many definitions
+> can be reused with minimal changes and run through Agent Framework as a hosted agent, but
+> compatibility must be validated. Azure Logic Apps is an alternative for a visual low-code
+> process. A2A is an option for lightweight agent-to-agent handoffs, not a universal workflow
+> replacement. This update is documentation-based, not a tenant migration proof.
+> [Microsoft Learn: migration guide](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow#migration-guide).
+
 > **Read this before writing or following any Foundry instruction file.**
 > Established 2026-08-04 from Microsoft Learn. Re-check the retirement date and the
 > `foundry-classic` URL prefix before every demo — this is the fastest-moving surface
