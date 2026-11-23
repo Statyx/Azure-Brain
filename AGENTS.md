@@ -364,6 +364,14 @@ its own domain**.
     > `kind: conditional` — both are valid, the old one only under its written `condition`.
     > Entries are enforced on every run by `Meta-Brain/tests/test_superseded.py`.
 
+14. **Use [Microsoft Skills for Fabric](https://github.com/microsoft/skills-for-fabric) as the
+    maintained operational baseline for Fabric.** Check upstream before duplicating API,
+    authentication, query-language, item-definition or workload execution guidance.
+    Azure-Brain adds the project layer: architecture decisions, scenario composition,
+    cross-workload handoffs, repository constraints, safety rules and evidence-backed field
+    experience. If local evidence conflicts with upstream, investigate the version difference
+    and record a dated correction; never create a silent permanent fork.
+
 Conventions: Python 3.12+ with `pathlib` and type hints · UTF-8 everywhere, **no BOM**
 (`[System.IO.File]::WriteAllText()` in PowerShell, never `Out-File` for JSON) · conventional
 commits (`feat(energy):`, `fix(core):`, `docs(brain):`).

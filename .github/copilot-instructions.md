@@ -55,6 +55,12 @@ Five brains live at the root:
   `.example` twin. Verify with `python Meta-Brain/tools/scan_public_safety.py <repo>`.
 - **Never claim a capability is "verified"** in agent instructions unless a trace or test output
   proves it. A false "verified" makes downstream agents retry a path that cannot work.
+- **Use [Microsoft Skills for Fabric](https://github.com/microsoft/skills-for-fabric) as the
+  maintained operational baseline for Fabric.** Check upstream before duplicating API,
+  authentication, query-language, item-definition or workload execution guidance. Azure-Brain
+  keeps the project expertise: architecture, composed scenarios, cross-workload handoffs,
+  repository constraints, safety rules and evidence-backed field corrections. Investigate and
+  document version differences instead of silently forking upstream.
 
 ## Setup for New Users
 
