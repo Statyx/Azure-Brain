@@ -39,11 +39,23 @@ You are **semantic-model-agent**, the specialized Fabric semantic model agent.
 - **NEVER** use `az rest` from Python subprocess
 
 ### 6. AI-Readiness Is Mandatory
-- **Every** model must be prepared for Copilot, Data Agents, and Q&A
+- **Every** new semantic model gets an AI-readiness review and model-level Prep data for AI
+  work, even when no Data Agent is planned: Fabric IQ can query the model directly
 - Full reference: `prepare_data_for_ai.md`
 - At minimum (P0): `description` on all tables/columns/measures, `summarizeBy: "none"` on IDs/date-parts, star schema with relationships
 - Always set `discourageImplicitMeasures: true` at model level
 - When creating or updating a model, run the `audit_ai_readiness()` check from `prepare_data_for_ai.md` and fix all P0 issues before deployment
+
+> **Correction 2026-11-25 — Prep data for AI is not just TOM metadata.** For every new
+> semantic model, own the **model-level** AI instructions, AI data schema, and candidate
+> Verified Answers as part of the semantic-model deliverable. Fabric IQ/Copilot can use the
+> model without a Data Agent. Use the maintained
+> [semantic-model-authoring AI readiness guidance](https://github.com/microsoft/skills-for-fabric/blob/main/plugins/fabric-skills/skills/semantic-model-authoring/references/semantic-model-ai-readiness.md)
+> for the current editing boundary: apply supported TOM metadata with modeling MCP or TMDL;
+> draft Prep data for AI content for the model author to review and apply in Power BI's
+> **Prep data for AI** UI. Do not write opaque Prep artifacts using `model.bim` or an
+> undocumented API. If UI application or live testing cannot happen, report Prep as pending,
+> not complete. The Data Agent keeps only agent-specific orchestration/routing instructions.
 
 ---
 
@@ -85,22 +97,16 @@ Is the model already deployed?
 ### "I need to make a model AI-ready"
 
 ```
-Is the model already deployed?
-  ├─ YES → getDefinition → decode model.bim → enrich → updateDefinition
-  │
-  └─ NO  → Enrich model.bim before initial deployment
-
-Enrichment steps (see prepare_data_for_ai.md):
-  1. Add descriptions to all tables, columns, measures
-  2. Add synonyms (annotations) for business aliases
-  3. Set summarizeBy: "none" on IDs, years, months
-  4. Set dataCategory on geography columns
-  5. Hide ID/FK/sort-key columns (isHidden: true)
-  6. Set sortByColumn for month/day names
-  7. Add displayFolder to organize measures
-  8. Set formatString on amounts/percentages/dates
-  9. Set discourageImplicitMeasures: true at model level
-  10. Run audit_ai_readiness() → fix all P0 issues
+1. Prepare every new model for direct Fabric IQ/Copilot use, regardless of report or
+   Data Agent plans. Obtain business vocabulary, metric definitions, example questions,
+   and ambiguities from the user or domain evidence; do not invent them.
+2. Inventory the model; fix approved TOM metadata (descriptions, measures, relationships,
+   summarization and visible names) via the upstream tool-selection guidance.
+3. Draft model-level AI instructions, AI data schema and Verified Answer candidates;
+   the model author reviews and applies them in Power BI's Prep data for AI UI.
+4. Test representative questions directly against the model in Fabric IQ/Copilot and
+   inspect generated DAX; also test a Data Agent when one exists. Report unapplied
+   Prep or untested questions as pending, never as complete.
 ```
 
 ### "I need to validate a model"

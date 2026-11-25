@@ -142,7 +142,8 @@
 
 **Agent**: `semantic-model-agent`  
 **Input**: `semantic-model.json` (tables, measures, relationships)  
-**Output**: Semantic model definition (TMDL or model.bim), deployed to workspace  
+**Output**: Semantic model definition (TMDL or model.bim), deployed to workspace;
+model-level Prep data for AI configuration or a clearly pending handoff
 
 **What happens**:
 - Generate table definitions from Gold Lakehouse schema
@@ -151,6 +152,11 @@
 - Auto-generate Date dimension with fiscal year support
 - Set Direct Lake mode pointing to Gold Lakehouse
 - Add `///` TMDL descriptions for NL2DAX accuracy
+- For every semantic model, have `semantic-model-agent` gather business questions and
+  draft AI instructions, an AI data schema and Verified Answer candidates **for the model**;
+  the model author reviews and applies them in Power BI Prep data for AI, then tests
+  direct Fabric IQ/Copilot questions even if there is no Data Agent
+- Do not mark model-level Prep complete based on descriptions or Data Agent instructions alone
 
 **Naming**: `SM_<CompanyName>` or `<CompanyName>Model`
 
@@ -185,8 +191,10 @@
 
 **What happens**:
 - Create Data Agent via REST API (`POST /items` type `DataAgent`)
-- Write aiInstructions with routing and business context
-- Configure the semantic model through Prep for AI (AI Data Schema, instructions, Verified Answers)
+- Write aiInstructions for Data Agent tool use, routing and response behavior; do not copy all
+  model-specific metric and vocabulary rules from Prep data for AI
+- Confirm the model-level Prep data for AI handoff from Step 7 was applied and tested; if
+  unavailable, report it as pending rather than substituting Data Agent instructions
 - Add source-specific examples only where the selected source supports them
 - Bind the required execution sources and optional Ontology context
 - Include "ALWAYS query the semantic model using DAX" instruction

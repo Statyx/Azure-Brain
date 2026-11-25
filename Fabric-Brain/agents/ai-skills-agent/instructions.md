@@ -46,6 +46,13 @@ See `../ontology-agent/data_agent_context.md`.
 - Semantic models are configured primarily through **Prep for AI**: AI Data Schema, AI
   Instructions, and Verified Answers. Do not assume Data-Agent-local descriptions or few-shots
   apply to the current semantic-model runtime.
+- The `semantic-model-agent` owns the model's metric definitions, business vocabulary, AI
+  instructions, AI data schema and Verified Answer proposals. Have the model author review
+  and apply Prep artifacts in Power BI's supported UI; do not claim a `model.bim` update or
+  Data Agent `aiInstructions` applied them. Preserve existing Prep artifacts.
+- Keep Data Agent `aiInstructions` for its own query-tool use, source routing, refusal and
+  response behavior; do not duplicate the model's full business context. If Prep has not been
+  applied or tested, disclose that dependency before claiming conversational AI readiness.
 - Ontology keeps shared definitions, synonyms, relationships, metrics, rules, mappings, and
   bindings. Supplemental examples/instructions belong to eligible mounted underlying sources.
 - Validate every example or Verified Answer against the execution engine before publishing.

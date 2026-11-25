@@ -2,7 +2,16 @@
 
 ## Overview
 
-A semantic model becomes AI-ready when it includes enough metadata for **Copilot**, **Data Agents**, and **Q&A** to understand business meaning, choose correct aggregations, and present results properly. All properties below live in `model.bim` (TMSL JSON) and can be deployed via the REST API `updateDefinition`.
+A semantic model becomes AI-ready when it includes enough metadata for **Copilot** and
+**Data Agents** to understand business meaning, choose correct aggregations, and present results.
+
+> **Correction 2026-11-25:** The older claim that *all* AI-readiness properties below live in
+> `model.bim` is false for **Prep data for AI**. TOM descriptions, measures and summarization
+> can be edited with supported modeling tools; AI instructions, AI data schema and Verified
+> Answers are separate model-level, user-configured Prep artifacts. Follow the maintained
+> [Skills for Fabric AI-readiness guide](https://github.com/microsoft/skills-for-fabric/blob/main/plugins/fabric-skills/skills/semantic-model-authoring/references/semantic-model-ai-readiness.md)
+> for supported editing routes. Do not serialize or replace opaque Prep artifacts through a
+> guessed `model.bim`/REST payload; preserve existing artifacts during unrelated updates.
 
 ### Where AI-Readiness Fits in the Instruction Pipeline
 
@@ -11,13 +20,44 @@ When a Data Agent uses a semantic model, there are **two separate instruction sy
 | Layer | System | Where to Configure | Controls |
 |-------|--------|-------------------|----------|
 | **Orchestrator** (tool routing + formatting) | Data Agent Instructions | `stage_config.json::aiInstructions` | Whether DAX tool is called, question reformulation, response formatting |
-| **DAX Generation** (query accuracy) | **Prep for AI** (this file) | Semantic model properties | Which queries are generated, business terminology, measure selection |
+| **DAX Generation** (query accuracy) | **Prep data for AI + TOM metadata** | Semantic model: Prep data for AI UI and supported TOM tools | Business terms, AI-visible schema, measure selection, source-specific instructions |
 
 **Key insight**: Prep for AI controls DAX **accuracy**, but without the Data Agent instruction `"ALWAYS query the semantic model using DAX"`, the orchestrator may skip DAX entirely and hallucinate answers.
 
-**Both systems must be configured for a working agent.**
+**Always review the model-level layer.** Fabric IQ/Copilot can consume the semantic model
+directly without a Data Agent, so prepare the model even for a report-first project.
+If business definitions or a report visual needed for a Verified Answer are unavailable,
+draft what is supported and record the remaining Prep work as pending; never invent them.
+Prep artifacts belong to the semantic model and are reusable across consumers; keep
+Data Agent instructions for tool use, routing, response format and agent-specific constraints.
 
-See `agents/ai-skills-analysis-agent/semantic_model_best_practices.md` for the full 3-Layer Model.
+See `../ai-skills-analysis-agent/semantic_model_best_practices.md` for the full 3-Layer Model.
+
+### Model-level Prep data for AI handoff (every semantic model)
+
+1. Gather real user questions, metric definitions, vocabulary, time semantics, and existing
+   reports. Inventory existing Prep settings; preserve them rather than overwrite them.
+2. Apply approved **TOM metadata** fixes (model names, descriptions, explicit measures,
+   relationships, summarization) using the supported upstream modeling route.
+3. Draft **AI instructions** for model-specific interpretation: preferred measures,
+   ambiguous business terms, date defaults, exclusions and units. Refer to actual object names;
+   keep the draft concise and do not duplicate DAX logic already encoded in measures.
+4. Recommend an **AI data schema** limited to relevant business objects and their dependencies;
+   propose synonyms. Do not just mirror all report-visible fields.
+5. Propose **Verified Answer** candidates from recurring, high-value questions. Each needs
+   an actual report visual, trigger phrases, and live verification before it can be marked done.
+6. Ask the model author to review and apply these three Prep artifacts in Power BI
+   **Prep data for AI** (service for Direct Lake; Desktop also supports Import,
+   DirectQuery, and local composite models). Confirm Q&A and Copilot prerequisites.
+7. Test representative questions directly against the model in Fabric IQ/Copilot, and
+   in the Data Agent if one consumes the model;
+   inspect generated DAX and results. Mark UI configuration and live verification **pending**
+   if unavailable. Only then consider marking the model **Approved for Copilot**.
+
+Microsoft documents AI instructions and AI data schema as saved to LSDL; this does **not**
+establish a supported agent-authored REST contract for the three Prep artifacts. After
+Git/pipeline changes to LSDL or tooling, follow the [Power BI refresh requirements](https://learn.microsoft.com/power-bi/create-reports/copilot-prepare-data-ai#considerations-and-limitations)
+for the model's storage mode. Do not claim `updateDefinition(model.bim)` alone completes Prep.
 
 ---
 
@@ -86,9 +126,11 @@ The **most important** AI-readiness feature. Copilot and Data Agents read descri
 
 ---
 
-## 2. Synonyms (`annotations[].synonyms`)
+## 2. Synonyms (TOM annotation example; Prep AI schema is separate)
 
-Synonyms bridge the gap between user vocabulary and model field names.
+Synonyms bridge the gap between user vocabulary and model field names. The example below
+is a TOM annotation from earlier model authoring; **do not** treat it as the supported
+serialization of Prep data for AI synonyms. Draft AI-schema synonyms for review in the UI.
 
 ### JSON Path
 Stored as annotations on tables, columns, and measures:
@@ -515,7 +557,7 @@ with open("model.bim", "w") as f:
 
 ---
 
-## Deploy AI-Enriched Model via API
+## Deploy TOM metadata via API (not the Prep artifacts)
 
 The enriched model.bim deploys exactly the same way as a standard model:
 
@@ -526,7 +568,9 @@ enriched = prepare_model_for_ai(model_bim, metadata)
 update_semantic_model(model_id, enriched, headers)
 ```
 
-No special API or feature flag is needed. All AI metadata is standard TMSL that Fabric accepts in `updateDefinition`.
+This example updates only TOM metadata from `model.bim`. It does **not** create AI
+instructions, AI data schema, or Verified Answers in Prep data for AI. Preserve any
+existing Prep artifacts when editing a model and use the supported UI for their changes.
 
 ---
 

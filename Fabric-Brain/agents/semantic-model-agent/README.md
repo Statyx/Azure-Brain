@@ -17,6 +17,7 @@
 | **DAX Queries** | EVALUATE, DEFINE, SUMMARIZE | Testing queries, validation |
 | **Deployment** | Fabric REST API, async operations | Create, update, get definition |
 | **Refresh** | Direct Lake, import mode | Refresh triggers, partition management |
+| **Conversational AI readiness** | TOM metadata; Prep data for AI handoff | Model-level AI instructions, AI data schema, Verified Answer candidates, live validation |
 
 ## What This Agent Does NOT Own
 
@@ -34,7 +35,7 @@
 | `dax_measures.md` | DAX reference, measure patterns, time intelligence |
 | `dax_queries.md` | DAX queries for testing, validation, debugging |
 | `relationships.md` | Star-schema patterns, relationship rules, ambiguity resolution |
-| `prepare_data_for_ai.md` | Make models AI/Copilot-ready: descriptions, synonyms, dataCategory, summarizeBy, isHidden, displayFolder, validation |
+| `prepare_data_for_ai.md` | TOM metadata plus model-level Prep data for AI review/application handoff and validation |
 | `known_issues.md` | Semantic-model-specific gotchas and fixes |
 | `templates/` | Ready-to-use model.bim templates and deployment scripts |
 

@@ -102,8 +102,8 @@ dashboard, the alert and the agent few-shots all tell that same story.
 | 4 | lakehouse | Create Lakehouse, poll for the SQL Endpoint (20 × 10 s) | 5 min | SQL Endpoint ID returned |
 | 5 | lakehouse | Upload CSVs to `Files/raw/` (OneLake DFS 3-step protocol) | 5 min | Files listed in OneLake |
 | 6 | lakehouse | Spark notebook: CSV → Delta in `Tables/` | 15 min | `SELECT COUNT(*)` matches expected rows for every table |
-| 7 | semantic-model | `model.bim` in Direct Lake: tables, relationships, DAX, a `description` on **every** table/column/measure, `discourageImplicitMeasures: true`, `summarizeBy: none` on IDs and date parts | 20 min | Deploy succeeds, `getDefinition` round-trips |
-| 8 | semantic-model | Validate: `EVALUATE {1}` + spot-check each measure; AI-readiness audit | 10 min | No measure blank · P0 issues = 0 |
+| 7 | semantic-model | Direct Lake model: tables, relationships, DAX, descriptions, `discourageImplicitMeasures: true`, `summarizeBy: none` on IDs/date parts; always draft model-level AI instructions, AI data schema and Verified Answer candidates for review in Prep data for AI | 20 min + Prep review | Deploy succeeds, `getDefinition` round-trips; Prep application is tracked separately |
+| 8 | semantic-model | Validate: `EVALUATE {1}` + spot-check each measure; AI-readiness audit; confirm Prep was applied in Power BI and test direct Fabric IQ/Copilot questions | 10 min + live AI tests | No measure blank · P0 issues = 0 · Prep marked complete only after UI application and live validation |
 | 9 | report-builder | Design the page layout in the **report format** axis | 15 min | Structure ready — run `M-TEST` here, before deploying |
 | 10 | report-builder | Deploy + verify | 15 min | Report opens < 5 s, every visual renders, slicers filter the page |
 
@@ -234,7 +234,8 @@ module cannot run — that is the whole dependency system.
 **`M-AGENT` — Data Agent (natural-language Q&A)** · 45 min single-source, +30 min dual · agent `ai-skills`
 **Attaches to:** `B1` exit (AI-ready semantic model), SQL/KQL sources, and/or `M-ONTO` (ontology context).
 
-1. AI-readiness audit on the source — P0 issues must be 0 *before* writing a word of instructions.
+1. AI-readiness audit on the source — P0 issues must be 0; for a semantic model,
+   confirm its model-level Prep data for AI was reviewed/applied or declare that step pending.
 2. Instructions, following the 7-section framework (`ai-skills-agent/instruction_writing_guide.md`).
 3. Configure examples where the source supports them; for semantic models use Prep for AI Verified Answers.
 4. Build or capture the current runtime definition parts; ontology context is portal-first until its public hand-authored part shape is documented.

@@ -1,6 +1,18 @@
 # Instruction Writing Guide — How to Write Great Data Agent Instructions
 
-This is the **most important file** for Data Agent quality. The `aiInstructions` field in `stage_config.json` is the system prompt that shapes every response the agent produces.
+This guide covers **Data Agent behavior**. The `aiInstructions` field in
+`stage_config.json` shapes the agent's tool routing and responses.
+
+> **Correction 2026-11-25:** The older seven-section template below placed
+> semantic-model metric definitions, vocabulary, table schemas and business rules in
+> Data Agent instructions. When a semantic model is the source, put reusable
+> model-specific interpretation in the model's **Prep data for AI** AI instructions
+> and AI data schema, and define calculations as explicit DAX measures. The
+> `semantic-model-agent` owns that handoff (`../semantic-model-agent/prepare_data_for_ai.md`).
+> Keep `aiInstructions` concise and agent-specific: call the source, choose between
+> sources, handle missing data, format results. Apply the domain-heavy sections below
+> only where the underlying source has no equivalent model-level configuration;
+> they are examples, not a requirement to duplicate Prep.
 
 ---
 
@@ -54,7 +66,9 @@ measures to reuse. Drop it, or replace it with a schema-specific rule.
 
 ### Available Measures List
 
-After the critical rules, **list all key DAX measures** available in the model. This helps the orchestrator reference them when reformulating questions:
+When a specific cross-source routing ambiguity remains, mention the few relevant
+**existing** DAX measures by exact name. The complete measure catalog and metric
+definitions belong to the semantic model, not to this prompt:
 
 ```markdown
 AVAILABLE MEASURES (use these, do not recalculate):
@@ -63,7 +77,8 @@ AVAILABLE MEASURES (use these, do not recalculate):
 - Customers: [Active Customers], [Churn Rate %]
 ```
 
-The orchestrator reformulates user questions before sending them to the DAX tool. When it knows about `[Total Revenue]`, it can reformulate "what's our revenue?" into "Calculate [Total Revenue] for 2025" — which helps the DAX tool select the right measure.
+Do not duplicate the model's Prep AI instructions or list every measure here. Validate
+that a reference to `[Total Revenue]` actually routes to the source before keeping it.
 
 ---
 
@@ -117,7 +132,11 @@ Describe the tables, their purpose, and approximate scale. The agent can discove
 
 ### Section 3: Key Metrics & Calculations
 
-This is **critical**. Define how to calculate every important metric. Without this, the agent will guess — and guess wrong.
+**Semantic-model correction:** Do not define metric formulas here when the source has
+explicit DAX measures. The example below describes older agent-only instructions;
+for a semantic model, place metric definitions in DAX, document measure choice and
+terminology in model-level Prep for AI, and leave only cross-source routing in the
+Data Agent.
 
 ```markdown
 ## Key Metrics
@@ -141,7 +160,7 @@ This is **critical**. Define how to calculate every important metric. Without th
 
 - Use exact column/measure names from the semantic model
 - Specify direction: "Favorable = Actual < Budget **for expenses**" (revenue is opposite)
-- Include the formula, not just the name
+- For a semantic model, use a validated DAX measure instead of duplicating its formula here
 - Cover edge cases: "If Revenue = 0, return N/A for margin"
 
 ### Section 4: Response Format Rules
